@@ -1,6 +1,10 @@
 package com.workshop.model.userModel;
 
 import com.workshop.model.*;
+import com.workshop.model.orderModel.Orders;
+import com.workshop.model.productModel.ProductReview;
+import com.workshop.model.productModel.Products;
+import com.workshop.model.productModel.ProductsReports;
 import com.workshop.model.storeModel.Store;
 import com.workshop.model.storeModel.StoreFollowers;
 import com.workshop.model.storeModel.StoreReports;
@@ -53,6 +57,18 @@ public class User extends BaseModel implements UserDetails  {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<StoreReports> storeReports = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<ProductReview> productReviews = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Products> products = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<ProductsReports> productsReports = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Orders> orders = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name="users_role",
