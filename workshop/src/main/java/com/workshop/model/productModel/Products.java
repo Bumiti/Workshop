@@ -50,5 +50,8 @@ public class Products extends BaseModel {
     @OneToMany(mappedBy = "products", fetch = FetchType.LAZY)
     private Set<OrderDetails> orderDetails = new HashSet<>();
 
+    @OneToMany(mappedBy = "products", fetch = FetchType.LAZY)
+    private Set<ProductPromotions> productPromotions = new HashSet<>();
+
 
 }
