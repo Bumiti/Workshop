@@ -17,21 +17,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
     private final UserRepository userRepository;
-
-    // Định nghĩa bean cho UserDetailsService để lấy thông tin người dùng
     @Bean
     public UserDetailsService userDetailsService() {
         return user_name -> userRepository.findByEmail(user_name)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
-    // Định nghĩa bean cho PasswordEncoder để mã hóa mật khẩu
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    // Định nghĩa bean cho AuthenticationProvider để xác thực người dùng
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
@@ -39,8 +33,6 @@ public class ApplicationConfig {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
-
-    // Định nghĩa bean cho AuthenticationManager để quản lý quá trình xác thực
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();

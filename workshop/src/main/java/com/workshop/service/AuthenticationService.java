@@ -22,13 +22,13 @@ public class AuthenticationService {
     private final JwtService jwtService;
     public AuthenticationResponse authenticationResponse(AuthenticationRequest authenticationRequest){
 
-
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),authenticationRequest.getPassword()));
         User user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
         List<Roles> role = null;
         if(user!=null){ role = RoleCustomerReposetory.getRole(user);}
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
         Set<Roles> set = new HashSet<>();
         role.stream().forEach(c->set.add(new Roles(c.getName())));
         user.setRoles(set);

@@ -25,6 +25,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/test/**").permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/v3/api-docs/**").permitAll()
                 .requestMatchers("/user/**").hasAnyAuthority("USER","SELLER","ADMIN")
@@ -37,7 +38,6 @@ public class SecurityConfig {
                 .and()
                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 }
