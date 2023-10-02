@@ -1,5 +1,6 @@
 package com.workshop.dao;
 
+import com.workshop.config.MapperGeneric;
 import com.workshop.dto.UserRegisterRequest;
 import com.workshop.model.userModel.Roles;
 import com.workshop.model.userModel.User;
@@ -30,13 +31,28 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     @Override
     public User SaveUser(UserRegisterRequest user) {
-        User users = new User();
-        users.setPassword(passwordEncoder.encode(user.getPassword()));
-        users.setEmail(user.getEmail());
-        users.setFull_name(user.getFull_name());
-        users.setUser_name(user.getUser_name());
+        MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
+        User usera =mapper.DTOmapToModel(user,User.class);
+        usera.setPassword(passwordEncoder.encode(user.getPassword()));
+        var result = userRepository.save(usera);
+        if(result!=null){
+            Roles roles = roleRepository.findByName("USER");
+            usera.getRoles().add(roles);
+        }
+        return result;
+    }
 
-        return userRepository.save(users);
+    @Override
+    public User SaveSeller(UserRegisterRequest user) {
+        MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
+        User usera =mapper.DTOmapToModel(user,User.class);
+        usera.setPassword(passwordEncoder.encode(user.getPassword()));
+        var result = userRepository.save(usera);
+        if(result!=null){
+            Roles roles = roleRepository.findByName("SELLER");
+            usera.getRoles().add(roles);
+        }
+        return result;
     }
 
     @Override

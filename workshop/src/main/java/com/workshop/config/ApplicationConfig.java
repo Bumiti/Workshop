@@ -1,4 +1,4 @@
-package com.workshop.configSecurity;
+package com.workshop.config;
 
 import com.workshop.reposetory.UserRepository;
 import lombok.RequiredArgsConstructor;

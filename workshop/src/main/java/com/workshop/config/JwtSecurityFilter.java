@@ -1,4 +1,4 @@
-package com.workshop.configSecurity;
+package com.workshop.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
