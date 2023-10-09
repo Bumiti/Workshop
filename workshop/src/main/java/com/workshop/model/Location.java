@@ -14,8 +14,8 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="location")
 @Accessors(chain = true)
+@Table(name="location")
 public class Location extends BaseModel{
     private String name;
     private String address;

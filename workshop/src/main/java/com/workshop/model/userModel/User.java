@@ -7,6 +7,7 @@ import com.workshop.model.courseModel.CourseEnrollment;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,8 +19,8 @@ import java.util.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="users")
 @Accessors(chain = true)
+@Table(name = "users")
 public class User extends BaseModel implements UserDetails  {
 
     @Column(name="full_name")

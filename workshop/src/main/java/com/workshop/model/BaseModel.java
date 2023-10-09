@@ -2,31 +2,36 @@ package com.workshop.model;
 import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import java.sql.Timestamp;
 
-import java.util.Date;
-
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @MappedSuperclass
-@EqualsAndHashCode(callSuper = false)
-public abstract class BaseModel {
+@Data
+@EntityListeners(AuditingEntityListener.class)
+public abstract class BaseModel   {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="create_by")
-    private String create_by;
-    @Column(name="update_by",nullable = true)
-    private String update_by;
+    @CreatedBy
+    @Column(name = "created_by",updatable = false)
+    private String createdBy;
 
-    @Column(name="create_day")
-    private Date create_day;
+    @CreatedDate
+    @Column(name = "created_date",updatable = false)
+    private Timestamp createdDate;
 
-    @Column(name="update_day",nullable = true)
-    private Date update_day;
+    @LastModifiedBy
+    @Column(name = "last_modified_by",nullable = true)
+    private String lastModifiedBy;
+
+    @LastModifiedDate
+    @Column(name = "last_modified_date",nullable = true)
+    private Timestamp lastModifiedDate;
 
 
 }

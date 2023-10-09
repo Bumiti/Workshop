@@ -16,6 +16,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Date;
+
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +51,7 @@ public class UserServiceImpl implements UserService {
         MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
         User usera =mapper.DTOmapToModel(user,User.class);
         usera.setPassword(passwordEncoder.encode(user.getPassword()));
+
         var result = userRepository.save(usera);
         if(result!=null){
             Roles roles = roleRepository.findByName("SELLER");

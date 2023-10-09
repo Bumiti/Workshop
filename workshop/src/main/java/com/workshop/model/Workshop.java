@@ -12,8 +12,8 @@ import com.workshop.model.userModel.User;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="workshop")
 @Accessors(chain = true)
+@Table(name="workshop")
 public class Workshop extends BaseModel{
     private String name;
     private String description;

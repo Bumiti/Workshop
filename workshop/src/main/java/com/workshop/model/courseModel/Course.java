@@ -28,7 +28,7 @@ public class Course extends BaseModel {
     private User teacher;
 
     // Quan hệ một nhiều với học sinh đã đăng ký
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "courses")
     private List<CourseEnrollment> enrolledStudents;
 
     // Quan hệ nhiều nhiều với ưu đãi

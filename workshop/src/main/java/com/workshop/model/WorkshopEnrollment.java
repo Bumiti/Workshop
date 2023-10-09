@@ -16,8 +16,8 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="wrkshop_enrollment")
 @Accessors(chain = true)
+@Table(name="wrkshop_enrollment")
 public class WorkshopEnrollment extends BaseModel {
     private Date enrollmentDate;
     // Quan hệ một nhiều với học sinh đã đăng ký

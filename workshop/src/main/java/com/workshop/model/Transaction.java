@@ -4,6 +4,7 @@ import com.workshop.model.courseModel.CourseEnrollment;
 import com.workshop.model.userModel.User;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 @Table(name="transactions")
 public class Transaction extends BaseModel{
     private double amount;
