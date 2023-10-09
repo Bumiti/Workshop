@@ -1,15 +1,12 @@
 package com.workshop.model.userModel;
 
 import com.workshop.model.*;
-import com.workshop.model.orderModel.Orders;
-import com.workshop.model.productModel.ProductReview;
-import com.workshop.model.productModel.Products;
-import com.workshop.model.productModel.ProductsReports;
-import com.workshop.model.storeModel.Store;
-import com.workshop.model.storeModel.StoreFollowers;
-import com.workshop.model.storeModel.StoreReports;
+
+import com.workshop.model.courseModel.Course;
+import com.workshop.model.courseModel.CourseEnrollment;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +19,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="users")
+@Accessors(chain = true)
 public class User extends BaseModel implements UserDetails  {
 
     @Column(name="full_name")
@@ -32,43 +30,37 @@ public class User extends BaseModel implements UserDetails  {
     private String email;
     @Column(name="password")
     private String password;
+    private String phoneNumber;
+    private String address;
+
+    // Quan hệ một nhiều với khóa học đã tạo bởi giáo viên
+    @OneToMany(mappedBy = "teacher")
+    private List<Course> teacherCourses;
+
+    // Quan hệ một nhiều với khóa học và buổi workshop đã đăng ký
+    @OneToMany(mappedBy = "enrolledStudent")
+    private List<CourseEnrollment> enrolledCourses;
+
+    @OneToMany(mappedBy = "enrolledStudent")
+    private List<WorkshopEnrollment> enrolledWorkshops;
+
+    // Quan hệ một nhiều với danh sách ưu đãi
+    @OneToMany(mappedBy = "user")
+    private List<Discount> discounts;
 
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<UserAddresses> userAddresses = new HashSet<>();
 
-    @OneToMany(mappedBy = "reportedUser", fetch = FetchType.LAZY)
-    private Set<Report> reportedReports = new HashSet<>();
 
-    @OneToMany(mappedBy = "reporterUser", fetch = FetchType.LAZY)
-    private Set<Report> reporterReports= new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<PaymentTransactions> paymentTrans= new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<Notifications> notifications= new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<Store> stores= new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<StoreFollowers> storeFollowers = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<StoreReports> storeReports = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<ProductReview> productReviews = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<Products> products = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<ProductsReports> productsReports = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<Orders> orders = new HashSet<>();
+
 
     @ManyToMany
     @JoinTable(name="users_role",
@@ -76,11 +68,6 @@ public class User extends BaseModel implements UserDetails  {
             inverseJoinColumns = @JoinColumn(name="Roles_id"))
     private Set<Roles> roles = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name="users_coupons",
-            joinColumns = @JoinColumn(name="User_id"),
-            inverseJoinColumns = @JoinColumn(name="Coupoun_id"))
-    private Set<Coupons> coupons = new HashSet<>();
 
 
 
@@ -95,7 +82,6 @@ public class User extends BaseModel implements UserDetails  {
     public String getUsername() {
         return email;
     }
-
     @Override
     public String getPassword() {
         return password;
@@ -104,17 +90,14 @@ public class User extends BaseModel implements UserDetails  {
     public boolean isAccountNonExpired() {
         return true;
     }
-
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
-
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
     @Override
     public boolean isEnabled() {
         return true;
