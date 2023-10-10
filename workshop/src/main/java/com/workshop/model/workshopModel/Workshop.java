@@ -1,5 +1,7 @@
-package com.workshop.model;
+package com.workshop.model.workshopModel;
 
+import com.workshop.model.BaseModel;
+import com.workshop.model.Location;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -14,7 +16,7 @@ import com.workshop.model.userModel.User;
 @AllArgsConstructor
 @Accessors(chain = true)
 @Table(name="workshop")
-public class Workshop extends BaseModel{
+public class Workshop extends BaseModel {
     private String name;
     private String description;
     private double price;

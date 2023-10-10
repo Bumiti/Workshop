@@ -4,10 +4,11 @@ import com.workshop.model.*;
 
 import com.workshop.model.courseModel.Course;
 import com.workshop.model.courseModel.CourseEnrollment;
+import com.workshop.model.workshopModel.WorkshopEnrollment;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
-import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,13 +28,21 @@ public class User extends BaseModel implements UserDetails  {
     private String full_name;
     @Column(name="user_name")
     private String user_name;
+
     @Column(name="email")
+    @NaturalId(mutable = true)
     private String email;
+
     @Column(name="password")
     private String password;
+    @Column(name="phone_number")
     private String phoneNumber;
+    @Column(name="address")
     private String address;
-
+    @Column(name="isEnable")
+    private boolean isEnable = false;
+    @OneToOne(mappedBy = "user")
+    private VerificationToken verificationToken;
     // Quan hệ một nhiều với khóa học đã tạo bởi giáo viên
     @OneToMany(mappedBy = "teacher")
     private List<Course> teacherCourses;

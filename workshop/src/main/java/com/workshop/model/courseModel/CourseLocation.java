@@ -1,5 +1,7 @@
-package com.workshop.model;
+package com.workshop.model.courseModel;
 
+import com.workshop.model.BaseModel;
+import com.workshop.model.Location;
 import com.workshop.model.courseModel.Course;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -20,13 +22,13 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @Table(name="course_locations")
-public class CourseLocation extends  BaseModel{
+public class CourseLocation extends BaseModel {
 
     private Date scheduleDate;
     // Quan hệ một nhiều với khóa học
     @ManyToOne
     @JoinColumn(name = "course_id")
-    private Course course;
+    private Course course_offline;
 
     // Quan hệ một nhiều với địa điểm
     @ManyToOne

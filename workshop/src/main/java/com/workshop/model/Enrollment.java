@@ -2,6 +2,8 @@ package com.workshop.model;
 
 import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.User;
+import com.workshop.model.workshopModel.Workshop;
+import com.workshop.model.workshopModel.WorkshopEnrollment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

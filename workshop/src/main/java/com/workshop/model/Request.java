@@ -2,6 +2,7 @@ package com.workshop.model;
 
 import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.User;
+import com.workshop.model.workshopModel.Workshop;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;

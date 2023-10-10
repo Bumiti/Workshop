@@ -12,4 +12,5 @@ public interface UserService {
     Roles SaveRoles(Roles role);
     Void AddRoleToUser(String user_name,String role_name);
     User getCurrentUserDetails();
+    void saveUserVerificationToken(User user, String verificationToken);
 }

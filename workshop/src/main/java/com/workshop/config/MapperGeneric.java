@@ -23,13 +23,11 @@ public class MapperGeneric<T, U> {
                     }
                 }
             }
-
             return dto;
         } catch (Exception e) {
             throw new RuntimeException("Error mapping entity to DTO", e);
         }
     }
-
     public T DTOmapToModel(U dto, Class<T> entityClass) {
         try {
             T entity = entityClass.newInstance();
@@ -43,16 +41,13 @@ public class MapperGeneric<T, U> {
                             entityField.getType().equals(dtoField.getType())) {
                         entityField.setAccessible(true);
                         dtoField.setAccessible(true);
-
                         Object value = dtoField.get(dto);
                         entityField.set(entity, value);
-
                         entityField.setAccessible(false);
                         dtoField.setAccessible(false);
                     }
                 }
             }
-
             return entity;
         } catch (Exception e) {
             throw new RuntimeException("Error mapping DTO to entity", e);

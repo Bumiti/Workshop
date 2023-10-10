@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/test/")
-
 public class TestController {
 
     @Operation(summary ="GetMapping" )
@@ -16,10 +15,6 @@ public class TestController {
     public ResponseEntity<String>GetMapping(){
         return  ResponseEntity.ok("Check Ok");
     }
-
-
-
-
     @Operation(summary ="PutMapping" )
     @PutMapping
     public ResponseEntity<String>PutMapping(){

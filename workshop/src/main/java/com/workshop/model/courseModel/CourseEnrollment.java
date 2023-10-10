@@ -28,12 +28,10 @@ public class CourseEnrollment extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "student_id")
     private User enrolledStudent;
-
     // Quan hệ nhiều một với khóa học
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course courses;
-
     // Quan hệ một nhiều với thanh toán
     @OneToMany(mappedBy = "courseEnrollment")
     private List<Transaction> transactions;

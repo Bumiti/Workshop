@@ -36,18 +36,16 @@ public class SeedDatabase {
         }
        else
        {
+
            userService.SaveRoles(new Roles(null,"USER"));
            userService.SaveRoles(new Roles(null,"SELLER"));
            userService.SaveRoles(new Roles(null,"ADMIN"));
            userService.SaveUser(new UserRegisterRequest("NguyenAdmin","admin64",
-                   "admin64@gmail.com","12345"));
-
+                   "admin64@gmail.com","12345",true));
            userService.SaveUser(new UserRegisterRequest("NguyenSeller","seller64",
-                   "seller64@gmail.com","12345"));
-
+                   "seller64@gmail.com","12345",true));
            userService.SaveUser(new UserRegisterRequest("NguyenUser","user64",
-                   "user64@gmail.com","12345"));
-
+                   "user64@gmail.com","12345",true));
            userService.AddRoleToUser("admin64@gmail.com","ADMIN");
            userService.AddRoleToUser("seller64@gmail.com","SELLER");
            userService.AddRoleToUser("user64@gmail.com","USER");

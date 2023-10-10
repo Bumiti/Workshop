@@ -47,7 +47,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter
                 filterChain.doFilter(request,response);
 
             } catch (Exception exception){
-                response.setHeader("error",exception.getMessage());
+                response.setHeader("Error",exception.getMessage());
                 response.setStatus(FORBIDDEN.value());
                 Map<String,String> error = new HashMap<>();
                 error.put("error_message",exception.getMessage());

@@ -1,5 +1,6 @@
 package com.workshop.model;
 
+import com.workshop.model.workshopModel.Workshop;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;

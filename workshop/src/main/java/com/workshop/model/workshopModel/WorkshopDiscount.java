@@ -1,5 +1,7 @@
-package com.workshop.model;
+package com.workshop.model.workshopModel;
 
+import com.workshop.model.BaseModel;
+import com.workshop.model.Discount;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,7 +20,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @Table(name = "workshop_discounts")
-public class WorkshopDiscount extends BaseModel{
+public class WorkshopDiscount extends BaseModel {
     private Date redemptionDate;
 
     // Quan hệ một nhiều với buổi workshop

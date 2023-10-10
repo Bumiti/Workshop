@@ -15,4 +15,5 @@ public class UserRegisterRequest {
     private String user_name;
     private String email;
     private String password;
+    private boolean isEnable = false;
 }

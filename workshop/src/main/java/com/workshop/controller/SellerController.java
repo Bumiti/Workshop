@@ -31,7 +31,7 @@ public class SellerController {
            boolean result =  courseService.AddCourse(courseRequest);
            if(result){
                return ResponseEntity.status(HttpStatus.CREATED)
-                       .body( new ApiResponse<>("created","The Course has been Create ",null));
+                       .body( new ApiResponse<>(HttpStatus.CREATED.name(),"The Course has been Create ",null));
            }else{
                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>
                        ("error", "The Course cant been Create",  null));

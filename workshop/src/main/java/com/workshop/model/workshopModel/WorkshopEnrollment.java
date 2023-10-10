@@ -1,5 +1,8 @@
-package com.workshop.model;
+package com.workshop.model.workshopModel;
 
+import com.workshop.model.BaseModel;
+import com.workshop.model.Enrollment;
+import com.workshop.model.Transaction;
 import com.workshop.model.userModel.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
