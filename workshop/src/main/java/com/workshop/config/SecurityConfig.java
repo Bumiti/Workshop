@@ -26,7 +26,6 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/auth/register/verifyEmail/**").permitAll()
                 .requestMatchers("/test/**").permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/v3/api-docs/**").permitAll()
@@ -41,5 +40,7 @@ public class SecurityConfig {
                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
+
+
     }
 }

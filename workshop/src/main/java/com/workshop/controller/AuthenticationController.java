@@ -6,6 +6,8 @@ import com.workshop.dao.UserServiceImpl;
 import com.workshop.dto.UserRegisterRequest;
 import com.workshop.event.RegisterCompleteEvent;
 import com.workshop.model.userModel.User;
+import com.workshop.model.userModel.VerificationToken;
+import com.workshop.reposetory.VerificationTokenRepository;
 import com.workshop.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,11 +25,11 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationService authenticationService;
-    @Autowired
-    private UserServiceImpl userServiceimpl;
+
+    private final AuthenticationService authenticationService;
+    private final UserServiceImpl userServiceimpl;
     private final ApplicationEventPublisher publisher;
+    private  final VerificationTokenRepository verificationTokenRepository;
     @Operation(summary = "Login Validation For All Account")
     @PostMapping("")
     public ResponseEntity<ApiResponse> login(@RequestBody AuthenticationRequest authenticationRequest)
@@ -71,5 +73,23 @@ public class AuthenticationController {
             userServiceimpl.SaveSeller(userRegisterRequest);
         }
         return ResponseEntity.ok(HttpStatus.ACCEPTED);
+    }
+    @Operation(summary ="verify Email" )
+    @GetMapping("verifyEmail")
+    public String verifyEmail(@RequestParam("token") String token){
+        VerificationToken thetoken = verificationTokenRepository.findByToken(token);
+        if(thetoken.getUser().isEnable()){
+            return "This Account has already been verified,please ! Login";
+        }
+        String verification = userServiceimpl.validate(token);
+        if(verification.equalsIgnoreCase("valid")){
+            return "Email verified Successfully, You can login";
+        }
+        return "Invalid verification token";
+    }
+    @GetMapping("endpont")
+    public String endpont(){
+
+        return "endpont";
     }
 }

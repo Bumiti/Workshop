@@ -10,4 +10,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Query("select u from User u where u.email =:email and u.isEnable =true")
     Optional<User> findByEmail(String email);
+
+
 }

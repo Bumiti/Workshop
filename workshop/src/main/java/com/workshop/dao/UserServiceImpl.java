@@ -10,15 +10,15 @@ import com.workshop.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsChecker;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Calendar;
 import java.util.Optional;
 
 
@@ -101,6 +101,23 @@ public class UserServiceImpl implements UserService {
     public void saveUserVerificationToken(User user, String verificationToken) {
         var verification_token = new VerificationToken(verificationToken,user);
         verificationTokenRepository.save(verification_token);
+    }
+
+    @Override
+    public String validate(String token) {
+        VerificationToken thetoken = verificationTokenRepository.findByToken((token));
+        if(thetoken == null){
+            return "Invalid Verification Token";
+        }
+        User user = thetoken.getUser();
+        Calendar calendar = Calendar.getInstance();
+        if((thetoken.getTokenExpirationTime().getTime() - calendar.getTime().getTime())<=0){
+            verificationTokenRepository.delete(thetoken);
+            return "Token Already Expired";
+        }
+        user.setEnable(true);
+        userRepository.save(user);
+        return "valid";
     }
 
 }

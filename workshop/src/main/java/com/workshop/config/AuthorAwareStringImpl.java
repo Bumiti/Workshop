@@ -19,11 +19,15 @@ public class AuthorAwareStringImpl implements AuditorAware<String> {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof String) {
             String email = (String) authentication.getPrincipal();
-            Optional<User> userOptional = userRepository.findByEmail(email);
-            if (userOptional.isPresent()) {
-                User user = userOptional.get();
-                return Optional.of(user.getUser_name());
-            }
+           if(email.equals("anonymousUser")){
+               return Optional.of("null");
+           }else{
+               Optional<User> userOptional = userRepository.findByEmail(email);
+               if (userOptional.isPresent()) {
+                   User user = userOptional.get();
+                   return Optional.of(user.getUser_name());
+               }
+           }
         }
         return Optional.of("null");
     }

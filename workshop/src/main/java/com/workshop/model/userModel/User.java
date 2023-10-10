@@ -59,19 +59,6 @@ public class User extends BaseModel implements UserDetails  {
     private List<Discount> discounts;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     @ManyToMany
     @JoinTable(name="users_role",
             joinColumns = @JoinColumn(name="User_id"),

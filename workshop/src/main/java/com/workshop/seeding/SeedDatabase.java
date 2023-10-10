@@ -36,7 +36,6 @@ public class SeedDatabase {
         }
        else
        {
-
            userService.SaveRoles(new Roles(null,"USER"));
            userService.SaveRoles(new Roles(null,"SELLER"));
            userService.SaveRoles(new Roles(null,"ADMIN"));
