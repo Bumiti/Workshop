@@ -2,40 +2,54 @@
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import styles from './login-form.module.css';
 import * as Yup from 'yup';
-import { headers } from 'next/headers'
-
+import {signIn,useSession} from "next-auth/react"
+import { useEffect } from 'react';
 type Values = {
     email: string;
     password: string;
 };
+
 const LoginForm = () => {
+    const session = useSession();
+   
+
+    useEffect(() => {
+        console.log(session);
+         if(session.status ==="authenticated")
+    {
+        console.log("Xử lý đang kí qua mail và tự động đăng nhập ở đây");
+    }
+    if(session.status ==="loading"){
+        console.log("trả thông báo vấn đề");
+    }
+    if(session.status ==="unauthenticated"){
+        console.log("trả thông báo không thành công");
+    }
+    }, [session.status]);
+
 
     const handleSubmit = async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         const requestHeaders: HeadersInit = new Headers();
         requestHeaders.set('Content-Type', 'application/json');
         try {
             console.log(values);
-            // Gọi API đăng nhập ở đây, thay thế URL_API_LOGIN bằng URL thực tế
             const response = await fetch('http://localhost:8089/auth',
                 {
                     method: 'POST',
                     headers: requestHeaders,
-                    body: JSON.stringify(values), // Gửi dữ liệu đăng nhập
+                    body: JSON.stringify(values),
                 });
 
             if (response.ok) {
                 console.log(response);
-                // Trích xuất dữ liệu JSON từ response
                 const data = await response.json();
                 if (data.data.token) {
-                    // Lưu token vào Local Storage
                     localStorage.setItem('token', data.data.token);
                 }
                 console.log("data",data);
                 console.log("data token",data.data.token);
                 alert('Đăng nhập thành công!');
             } else {
-                // Xử lý khi đăng nhập thất bại, ví dụ hiển thị thông báo lỗi
                 alert('Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập.');
             }
         } catch (error) {
@@ -69,6 +83,8 @@ const LoginForm = () => {
                     </div>
 
                     <button type="submit" className="btn btn-primary">Login</button>
+                    <button onClick={()=>signIn("google")} >Login With Google</button>
+                    <button onClick={()=>signIn("facebook")} className="btn btn-primary">Login With FaceBook</button>
                 </Form>
             </Formik>
         </div>
