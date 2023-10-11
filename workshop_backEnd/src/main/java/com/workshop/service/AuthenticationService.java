@@ -38,4 +38,23 @@ public class AuthenticationService {
         var jwtRefreshToken = jwtService.generateRefreshToken(user,authorities);
         return AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken).build();
     }
+
+    public AuthenticationResponse OauthenticationResponse(User OUse){
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(OUse.getEmail(),OUse.getPassword()));
+        User user = userRepository.findByEmail(OUse.getEmail()).orElseThrow();
+        List<Roles> role = null;
+        if(user!=null){ role = RoleCustomerReposetory.getRole(user);}
+
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        Set<Roles> set = new HashSet<>();
+        role.stream().forEach(c->set.add(new Roles(c.getName())));
+        user.setRoles(set);
+        set.stream().forEach(i->authorities.add(new SimpleGrantedAuthority(i.getName())));
+
+        var jwtToken = jwtService.generateAccessToken(user,authorities);
+        var jwtRefreshToken = jwtService.generateRefreshToken(user,authorities);
+        return AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken).build();
+    }
 }

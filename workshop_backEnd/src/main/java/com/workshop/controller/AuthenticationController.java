@@ -30,8 +30,8 @@ public class AuthenticationController {
     private final UserServiceImpl userServiceimpl;
     private final ApplicationEventPublisher publisher;
     private  final VerificationTokenRepository verificationTokenRepository;
-    @Operation(summary = "Login Validation For All Account")
-    @PostMapping("")
+    @Operation(summary = "Login Website Account")
+    @PostMapping("/loginWeb")
     public ResponseEntity<ApiResponse> login(@RequestBody AuthenticationRequest authenticationRequest)
     {
         AuthenticationResponse response = authenticationService.authenticationResponse(authenticationRequest);
@@ -45,6 +45,34 @@ public class AuthenticationController {
                     ("error", "User not found",  null));
         }
 
+    }
+    @Operation(summary = "Login Website OAuthentication")
+    @PostMapping("/login0Authen")
+    public ResponseEntity<ApiResponse> OAuthentication(@RequestBody OAuthenticationRequest OAuthen)
+    {
+        try {
+            User user = userServiceimpl.SaveUserOAuthen(OAuthen);
+            if (user != null) {
+                AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+                authenticationRequest.setPassword(user.getEmail()).setEmail(user.getEmail());
+                try {
+                    AuthenticationResponse response = authenticationService.authenticationResponse(authenticationRequest);
+                    if (response != null) {
+                        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("success", "The data has been retrieved successfully", response));
+                    } else {
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>("error", "User not found", null));
+                    }
+                } catch (Exception authException) {
+                    // Xử lý lỗi khi gọi authenticationService.authenticationResponse
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(authException.getMessage(), "Authentication service error", null));
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>("error", "User not found", null));
+            }
+        } catch (Exception userException) {
+            // Xử lý lỗi khi gọi userServiceimpl.SaveUserOAuthen
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(userException.getMessage(), "User service error", null));
+        }
     }
     @Operation(summary ="Register Buyer" )
     @PostMapping("register/user")
@@ -60,11 +88,9 @@ public class AuthenticationController {
                     ("Error", "please check your Email Again",  null));
         }
     }
-
     private String applicationUrl(HttpServletRequest request) {
         return "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
     }
-
     @Operation(summary ="Register Seller" )
     @PostMapping("register/seller")
     public ResponseEntity<HttpStatus> registerSeller(@RequestBody UserRegisterRequest userRegisterRequest)

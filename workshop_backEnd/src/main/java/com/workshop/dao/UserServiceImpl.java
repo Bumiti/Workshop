@@ -1,5 +1,6 @@
 package com.workshop.dao;
 
+import com.workshop.authentication.OAuthenticationRequest;
 import com.workshop.config.MapperGeneric;
 import com.workshop.dto.UserRegisterRequest;
 import com.workshop.model.userModel.Roles;
@@ -31,22 +32,43 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final PasswordEncoder passwordEncoder;
+
     @Override
     public User SaveUser(UserRegisterRequest user) {
         MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
-        Optional<User> userexist  = userRepository.findByEmail(user.getEmail());
-        if(userexist.isPresent()){
+        Optional<User> userexist = userRepository.findByEmail(user.getEmail());
+        if (userexist.isPresent()) {
             throw new RuntimeException("User with email: " + user.getEmail() + "already exists");
         }
-        User usera =mapper.DTOmapToModel(user,User.class);
+        User usera = mapper.DTOmapToModel(user, User.class);
         usera.setPassword(passwordEncoder.encode(user.getPassword()));
         var result = userRepository.save(usera);
-        if(result!=null){
+        if (result != null) {
             Roles roles = roleRepository.findByName("USER");
             usera.getRoles().add(roles);
         }
         return result;
     }
+
+    @Override
+    public User SaveUserOAuthen(OAuthenticationRequest OAuthen) {
+        Optional<User> userexist = userRepository.findByEmail(OAuthen.getEmail());
+        if (userexist.isPresent()) {
+            return userexist.get();
+        } else {
+            User use = new User();
+            use.setEmail(OAuthen.getEmail()).setUser_name(OAuthen.getEmail()).setFull_name(OAuthen.getEmail())
+                    .setEnable(true)
+                    .setPassword(passwordEncoder.encode(OAuthen.getEmail()));
+            var result = userRepository.save(use);
+            if (result != null) {
+                Roles roles = roleRepository.findByName("USER");
+                use.getRoles().add(roles);
+            }
+            return result;
+        }
+    }
+
     @Override
     public User SaveSeller(UserRegisterRequest user) {
         MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
@@ -65,10 +87,12 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Error saving user: " + e.getMessage(), e);
         }
     }
+
     @Override
     public Roles SaveRoles(Roles role) {
         return roleRepository.save(role);
     }
+
     @Override
     public Void AddRoleToUser(String user_name, String role_name) {
         Optional<User> userOptional = userRepository.findByEmail(user_name);
@@ -86,6 +110,7 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
     @Override
     public User getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -99,19 +124,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUserVerificationToken(User user, String verificationToken) {
-        var verification_token = new VerificationToken(verificationToken,user);
+        var verification_token = new VerificationToken(verificationToken, user);
         verificationTokenRepository.save(verification_token);
     }
 
     @Override
     public String validate(String token) {
         VerificationToken thetoken = verificationTokenRepository.findByToken((token));
-        if(thetoken == null){
+        if (thetoken == null) {
             return "Invalid Verification Token";
         }
         User user = thetoken.getUser();
         Calendar calendar = Calendar.getInstance();
-        if((thetoken.getTokenExpirationTime().getTime() - calendar.getTime().getTime())<=0){
+        if ((thetoken.getTokenExpirationTime().getTime() - calendar.getTime().getTime()) <= 0) {
             verificationTokenRepository.delete(thetoken);
             return "Token Already Expired";
         }

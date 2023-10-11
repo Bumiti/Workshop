@@ -11,27 +11,6 @@ type Values = {
 
 const LoginForm = () => {
     const session = useSession();
-
-
-    useEffect(() => {
-        console.log(session);
-        if (session.status === "authenticated")
-           
-        {
-            // console.log("session.data :", session.data)
-            console.log("session.data.user :", session.data.user)
-            console.log("session.data.user.email :", session.data.user?.email)
-            console.log("Xử lý đang kí qua mail và tự động đăng nhập ở đây");
-        }
-        if (session.status === "loading") {
-            console.log("trả thông báo vấn đề");
-        }
-        if (session.status === "unauthenticated") {
-            console.log("trả thông báo không thành công");
-        }
-    }, [session.status]);
-
-
     const handleSubmit = async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         const requestHeaders: HeadersInit = new Headers();
         requestHeaders.set('Content-Type', 'application/json');
