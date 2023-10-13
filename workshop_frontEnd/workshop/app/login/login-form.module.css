@@ -19,6 +19,11 @@
     align-items: center; /* Căn giữa theo chiều dọc */
     padding: 2px;
 }
+
+.button{
+    background-color: #6fd2e6;
+}
+
 @media (max-width: 600px) {
     .div_media {
         grid-template-columns: repeat(1, 1fr); /* 1 cột, mỗi cột chiếm toàn bộ chiều rộng */

@@ -18,7 +18,7 @@ const handler = NextAuth({
         })
     ],
     callbacks: {
-        async session({ session ,token,user}) {
+        async session({ session}) {
             const fetchData = async (e) => {
                 const response = await fetch('http://localhost:8089/auth/login0Authen', {
                     method: 'POST',
@@ -27,19 +27,20 @@ const handler = NextAuth({
                     }),
                     body: JSON.stringify({ email: session.user.email }),
                 });
-                console.log('token',token.email);
-                console.log(user);
+                // console.log('token : ',token);
+             
                 if (response.ok) {
                     const data = await response.json();
-               
                 }
             };
 
-            // Gọi hàm fetchData mỗi khi bạn cần thực hiện yêu cầu fetch
             fetchData();
-
             return session;
         },
+        async jwt({token,user}){
+            if(user) token.role = user.role
+            return token;
+        }
     },
 })
 export { handler as GET, handler as POST };

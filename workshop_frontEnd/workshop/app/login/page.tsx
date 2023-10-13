@@ -19,7 +19,7 @@ const LoginForm = () => {
         requestHeaders.set('Content-Type', 'application/json');
         try {
             console.log(values);
-            const response = await fetch('http://localhost:8089/auth',
+            const response = await fetch('http://localhost:8089/auth/loginWeb',
                 {
                     method: 'POST',
                     headers: requestHeaders,
@@ -34,7 +34,6 @@ const LoginForm = () => {
                     const tokenusung = localStorage.getItem('token');
                     console.log("token trong local store", tokenusung)
                 }
-
                 alert('Đăng nhập thành công!');
             } else {
                 alert('Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập.');
@@ -81,7 +80,7 @@ const LoginForm = () => {
                                     <button onClick={() => signIn("github")} className='btn  btn-lg me-2'>
                                         <AiFillGithub fab="true" icon='github' />
                                     </button>
-                                    <button onClick={() => signIn("google")} className='btn  btn-lg me-2'>
+                                    <button onClick={() => signIn("google")} className={styles.button +' btn  btn-lg me-2'}>
                                         <BiLogoGmail fab="true" icon='mail' />
                                     </button>
                                 </div>
