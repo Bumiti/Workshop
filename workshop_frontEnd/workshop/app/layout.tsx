@@ -5,7 +5,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import AuthProvider from '@/app/component/Authprovider'
 import NavBar from '@/NavBar'
 
-
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {

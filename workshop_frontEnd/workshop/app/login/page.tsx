@@ -11,33 +11,20 @@ type Values = {
     email: string;
     password: string;
 };
-
 const LoginForm = () => {
-    const session = useSession();
     const handleSubmit = async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         const requestHeaders: HeadersInit = new Headers();
         requestHeaders.set('Content-Type', 'application/json');
         try {
             console.log(values);
-            const response = await fetch('http://localhost:8089/auth/loginWeb',
-                {
-                    method: 'POST',
-                    headers: requestHeaders,
-                    body: JSON.stringify(values),
-                });
-
-            if (response.ok) {
-                console.log(response);
-                const data = await response.json();
-                if (data.data.token) {
-                    localStorage.setItem('token', data.data.token);
-                    const tokenusung = localStorage.getItem('token');
-                    console.log("token trong local store", tokenusung)
-                }
-                alert('Đăng nhập thành công!');
-            } else {
-                alert('Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập.');
-            }
+            const response = await signIn("credentials",{
+                email:values.email,
+                password:values.password,
+                // redirect:true,
+                // callbackUrl:"/"
+            })
+            console.log("response",response)
+            
         } catch (error) {
             console.error('Lỗi khi gọi API đăng nhập:', error);
         } finally {
