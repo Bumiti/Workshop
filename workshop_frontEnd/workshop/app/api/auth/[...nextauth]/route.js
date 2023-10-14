@@ -3,7 +3,8 @@ import FacebookProvider from "next-auth/providers/facebook"
 import GitHubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
 import NextAuth from "next-auth/next"
-import jwt_decode from "jwt-decode"
+
+
 const handler = NextAuth({
     providers: [
         CredentialsProvider({
@@ -12,7 +13,7 @@ const handler = NextAuth({
               email: { label: "email", type: "text", placeholder: "jsmith" },
               password: { label: "Password", type: "password" }
             },
-            async authorize(credentials, req) 
+            async authorize(credentials) 
             {
                 const res = await fetch("http://localhost:8089/auth/loginWeb", {
                 method: 'POST',
@@ -22,18 +23,15 @@ const handler = NextAuth({
                     password:credentials?.password,
                 }),
               });
-              const token = await res.json()
-              if (res.ok)
+              const user = await res.json()
+              console.log(user.data);
+              if (user)
               {
-
-              const dataDecode = jwt_decode(token.data.token);
-              console.log("dataDecode ne2 ",dataDecode)
-                return { 
-                    name: dataDecode.username, 
-                    email: dataDecode.sub,
-                    id:'credentials',
-                    image:dataDecode.image,
-                };
+                user.data.user.sub = 'credentials',
+                user.data.user.id= 'credentials'
+                console.log("user.data",user.data)
+                console.log("user.data.user",user.data.user)
+                return user.data.user;
               }
               return null
             }
@@ -52,43 +50,41 @@ const handler = NextAuth({
         })
     ],
     callbacks: {
-        async session({ session,token,user}) {
-            if(token.sub !=="credentials"){
+        async jwt({token,user}){
+            return{ ...token, ...user}
+        },
+        async session({ session,token}) {
+            session.user =token;
+            // console.log("session.user =token trong session",session)
+            if(session.user.id !=='credentials')
+            {
                 const fetchData = async (e) => {
                     const response = await fetch('http://localhost:8089/auth/login0Authen', {
                         method: 'POST',
                         headers: new Headers({
                             'Content-Type': 'application/json',
                         }),
-                        body: JSON.stringify({ email: session.user.email }),
+                        body: JSON.stringify({ email: token.email }),
                     });
                     if (response.ok) {
                         const data = await response.json();
-                        const dataDecode = jwt_decode(data.data.token);
-             
-                        console.log('token : ',data.data.token);
-                        console.log('dataDecode trong session: ',dataDecode);
-                        session.user.role = dataDecode.roles;
-                        session.user.email = dataDecode.sub;
-                        session.user.name = dataDecode.username;
-                        console.log("session trong credential",session)
+                        session.user.roles = data.data.user.roles
+                        session.user.accessToken = data.data.user.accessToken
+                        session.user.refreshToken = data.data.user.refreshToken
                     }
                 };
                 await fetchData();
+                console.log("session không phải credentials  :   ",session)   
                 return session;
             }else{
-                session.user.email = token.email;
-                session.user.name = token.name;
-                session.user.image=token.picture;
-                session.user.roles=user;
-                console.log("token ngoai credential",token)
-                console.log("session ngoai credential",session)
+                console.log("user credentials",session)
                 return session;
             }
         },
     },
     pages:{
-        signIn:"/login"
+        signIn:"/login",
+
     }
 })
 export { handler as GET, handler as POST };

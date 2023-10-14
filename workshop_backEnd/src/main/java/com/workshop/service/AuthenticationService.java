@@ -28,15 +28,29 @@ public class AuthenticationService {
         if(user!=null){ role = RoleCustomerReposetory.getRole(user);}
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
         Set<Roles> set = new HashSet<>();
         role.stream().forEach(c->set.add(new Roles(c.getName())));
         user.setRoles(set);
         set.stream().forEach(i->authorities.add(new SimpleGrantedAuthority(i.getName())));
-
         var jwtToken = jwtService.generateAccessToken(user,authorities);
         var jwtRefreshToken = jwtService.generateRefreshToken(user,authorities);
-        return AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken).build();
+
+        UserResponse userResponse = new UserResponse();
+        List<String> roles = new ArrayList<>();
+        for (SimpleGrantedAuthority authority : authorities) {
+            roles.add(authority.getAuthority());
+        }
+        userResponse.setEmail(user.getEmail())
+                .setUser_name(user.getUser_name())
+                .setName(user.getFull_name())
+                .setAccessToken(jwtToken)
+                .setRefreshToken(jwtRefreshToken)
+                .setRoles(roles);
+
+        AuthenticationResponse<UserResponse> response = AuthenticationResponse.<UserResponse>builder()
+                .user(userResponse)
+                .build();
+        return response;
     }
 
     public AuthenticationResponse OauthenticationResponse(User OUse){
@@ -52,9 +66,23 @@ public class AuthenticationService {
         role.stream().forEach(c->set.add(new Roles(c.getName())));
         user.setRoles(set);
         set.stream().forEach(i->authorities.add(new SimpleGrantedAuthority(i.getName())));
-
         var jwtToken = jwtService.generateAccessToken(user,authorities);
         var jwtRefreshToken = jwtService.generateRefreshToken(user,authorities);
-        return AuthenticationResponse.builder().token(jwtToken).refreshToken(jwtRefreshToken).build();
+        UserResponse userResponse = new UserResponse();
+        List<String> roles = new ArrayList<>();
+
+        for (SimpleGrantedAuthority authority : authorities) {
+            roles.add(authority.getAuthority());
+        }
+        userResponse.setEmail(user.getEmail())
+                .setUser_name(user.getUser_name())
+                .setName(user.getFull_name())
+                .setAccessToken(jwtToken)
+                .setRefreshToken(jwtRefreshToken)
+                .setRoles(roles);
+        AuthenticationResponse<UserResponse> response = AuthenticationResponse.<UserResponse>builder()
+                .user(userResponse)
+                .build();
+        return response;
     }
 }

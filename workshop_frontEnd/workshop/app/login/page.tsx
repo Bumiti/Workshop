@@ -12,6 +12,8 @@ type Values = {
     password: string;
 };
 const LoginForm = () => {
+    const session = useSession();
+    console.log("session ngoài client :",session);
     const handleSubmit = async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         const requestHeaders: HeadersInit = new Headers();
         requestHeaders.set('Content-Type', 'application/json');
@@ -61,13 +63,13 @@ const LoginForm = () => {
                                 <button className="mb-4 w-100 btn btn-primary" type="submit">Login</button>
                                 <h2 className="lead fw-normal mb-0 me-3 text-center">Sign in with</h2>
                                 <div className={styles.div_media}>
-                                    <button onClick={() => signIn("facebook")} className='btn btn-lg me-2'>
+                                    <button onClick={() => signIn("facebook",{callbackUrl:"/"})} className='btn btn-lg me-2'>
                                         <BsFacebook fab="true" icon='facebook-f' />
                                     </button>
-                                    <button onClick={() => signIn("github")} className='btn  btn-lg me-2'>
+                                    <button onClick={() => signIn("github",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
                                         <AiFillGithub fab="true" icon='github' />
                                     </button>
-                                    <button onClick={() => signIn("google")} className={styles.button +' btn  btn-lg me-2'}>
+                                    <button onClick={() => signIn("google",{callbackUrl:"/"})} className={styles.button +' btn  btn-lg me-2'}>
                                         <BiLogoGmail fab="true" icon='mail' />
                                     </button>
                                 </div>
