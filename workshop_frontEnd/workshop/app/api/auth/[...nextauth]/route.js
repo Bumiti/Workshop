@@ -6,6 +6,7 @@ import NextAuth from "next-auth/next"
 
 
 const handler = NextAuth({
+ 
     providers: [
         CredentialsProvider({
             name: 'Credentials',
@@ -29,8 +30,8 @@ const handler = NextAuth({
               {
                 user.data.user.sub = 'credentials',
                 user.data.user.id= 'credentials'
-                console.log("user.data",user.data)
-                console.log("user.data.user",user.data.user)
+                // console.log("user.data",user.data)
+                // console.log("user.data.user",user.data.user)
                 return user.data.user;
               }
               return null
@@ -74,10 +75,10 @@ const handler = NextAuth({
                     }
                 };
                 await fetchData();
-                console.log("session không phải credentials  :   ",session)   
+                // console.log("session không phải credentials  :   ",session)   
                 return session;
             }else{
-                console.log("user credentials",session)
+                // console.log("user credentials",session)
                 return session;
             }
         },
@@ -85,6 +86,7 @@ const handler = NextAuth({
     pages:{
         signIn:"/login",
 
-    }
+    },
+    secret: process.env.NEXTAUTH_SECRET
 })
 export { handler as GET, handler as POST };

@@ -10,6 +10,12 @@ declare module "next-auth"{
             role:string;
             accessToken:string;
             refreshToken:string;
+            image:string;
         }
+    }
+}
+declare module "next-auth/jwt" {
+    interface JWT extends DefaultJWT {
+        role: string,
     }
 }
