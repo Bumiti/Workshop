@@ -9,8 +9,13 @@ import { useSession } from "next-auth/react";
 
 export default function NavBar(  ){
 
-    const session  = useSession();
-    // console.log("session ngoai trang : ",session)
+  const session = useSession();
+
+  if(session.status !!= "authenticated"){
+    console.log("Chua dang nhap nen khong co gi");
+  }else{
+    console.log("session ngoài client :",session);
+  }
     if(session.status !!= "authenticated"){
       return(
         <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">

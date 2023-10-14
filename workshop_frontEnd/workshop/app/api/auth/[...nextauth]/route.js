@@ -30,8 +30,6 @@ const handler = NextAuth({
               {
                 user.data.user.sub = 'credentials',
                 user.data.user.id= 'credentials'
-                // console.log("user.data",user.data)
-                // console.log("user.data.user",user.data.user)
                 return user.data.user;
               }
               return null

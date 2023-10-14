@@ -1,5 +1,5 @@
 'use client'
-import './globals.css'
+import './globals.css';
 import styles from '../mainPage.module.css';
 import { Container,Row,Col } from 'react-bootstrap';
 export default function Home() {

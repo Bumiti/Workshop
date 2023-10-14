@@ -12,8 +12,6 @@ type Values = {
     password: string;
 };
 const LoginForm = () => {
-    const session = useSession();
-    console.log("session ngoài client :",session);
     const handleSubmit = async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         const requestHeaders: HeadersInit = new Headers();
         requestHeaders.set('Content-Type', 'application/json');
@@ -22,8 +20,8 @@ const LoginForm = () => {
             const response = await signIn("credentials",{
                 email:values.email,
                 password:values.password,
-                // redirect:true,
-                // callbackUrl:"/"
+                redirect:true,
+                callbackUrl:"/"
             })
             console.log("response",response)
             
@@ -69,7 +67,7 @@ const LoginForm = () => {
                                     <button onClick={() => signIn("github",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
                                         <AiFillGithub fab="true" icon='github' />
                                     </button>
-                                    <button onClick={() => signIn("google",{callbackUrl:"/"})} className={styles.button +' btn  btn-lg me-2'}>
+                                    <button onClick={() => signIn("google",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
                                         <BiLogoGmail fab="true" icon='mail' />
                                     </button>
                                 </div>

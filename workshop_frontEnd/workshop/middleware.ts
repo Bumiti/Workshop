@@ -3,24 +3,24 @@ import { withAuth, NextRequestWithAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
 export default withAuth(
     function middleware(request: NextRequestWithAuth) {
-  
-        if (request.nextUrl.pathname.startsWith("/teacher")) {
-            if (request.nextauth.token?.roles && request.nextauth.token.roles.includes("SELLER")) {
-
-            } else {
+        if (request.nextUrl.pathname.startsWith("/teacher/:path*")) {
+            if (request.nextauth.token?.roles && request.nextauth.token.roles.includes("SELLER")) {} else {
                 return NextResponse.rewrite(new URL("/login", request.url));
             }
         }
-        if (request.nextUrl.pathname.startsWith("/user/")) 
-        {
-            if (request.nextauth.token?.roles && (request.nextauth.token.roles.includes("USER") || request.nextauth.token.roles.includes("SELLER"))) {
-
-            } else {
+        if (request.nextUrl.pathname.startsWith("/user/:path*")){
+            if (request.nextauth.token?.roles && (request.nextauth.token.roles.includes("USER") || request.nextauth.token.roles.includes("SELLER"))) {} 
+            else {
                 return NextResponse.rewrite(new URL("/login", request.url));
             }
         }
-    },
-    {
+        if(request.nextUrl.pathname.startsWith("/admin/:path*")){
+            if(request.nextauth.token?.roles && request.nextauth.token?.roles.includes("ADMIN")){}
+            else{
+                return NextResponse.rewrite(new URL("/login", request.url));
+            }
+        }
+    },{
         callbacks: {
             authorized: ({ token }) => !!token
         },
@@ -28,4 +28,6 @@ export default withAuth(
     }
 )
 
-export const config = { matcher: ["/teacher", "/user", "/dashboard"] }
+export const config = { matcher: ["/teacher/:path*",
+                                "/user/:path*",
+                                "/admin/:path*"] }
