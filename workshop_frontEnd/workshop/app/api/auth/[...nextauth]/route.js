@@ -2,6 +2,10 @@ import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from "next-auth/providers/facebook"
 import GitHubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
+import DiscordProvider from "next-auth/providers/discord"
+import Instagram from "next-auth/providers/instagram"
+import Reddit from "next-auth/providers/reddit"
+import LinkedIn from "next-auth/providers/linkedin"
 import NextAuth from "next-auth/next"
 
 
@@ -25,7 +29,7 @@ const handler = NextAuth({
                 }),
               });
               const user = await res.json()
-              console.log(user.data);
+              console.log(user);
               if (user)
               {
                 user.data.user.sub = 'credentials',
@@ -46,7 +50,21 @@ const handler = NextAuth({
         GitHubProvider({
             clientId: process.env.GIT_ID,
             clientSecret: process.env.GIT_SECRET,
-        })
+        }),
+        DiscordProvider({
+            clientId: process.env.DISCORD_ID,
+            clientSecret: process.env.DISCORD_SECRET,
+        }),
+        // Instagram({
+        //     clientId: process.env.FACEBOOK_ID,
+        //     clientSecret: process.env.FACEBOOK_SECRET,
+        // }),
+        // Reddit({
+            
+        // }),
+        // LinkedIn({
+            
+        // }),
     ],
     callbacks: {
         async jwt({token,user}){
@@ -54,7 +72,6 @@ const handler = NextAuth({
         },
         async session({ session,token}) {
             session.user =token;
-            // console.log("session.user =token trong session",session)
             if(session.user.id !=='credentials')
             {
                 const fetchData = async (e) => {
@@ -72,18 +89,16 @@ const handler = NextAuth({
                         session.user.refreshToken = data.data.user.refreshToken
                     }
                 };
-                await fetchData();
-                // console.log("session không phải credentials  :   ",session)   
+                await fetchData(); 
                 return session;
             }else{
-                // console.log("user credentials",session)
                 return session;
             }
         },
     },
     pages:{
         signIn:"/login",
-
+        error:"/login",
     },
     secret: process.env.NEXTAUTH_SECRET
 })

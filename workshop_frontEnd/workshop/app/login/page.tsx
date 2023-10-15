@@ -7,6 +7,10 @@ import { Container, Row, Col } from 'react-bootstrap'
 import { AiFillGithub } from "react-icons/ai"
 import { BsFacebook } from "react-icons/bs"
 import { BiLogoGmail } from "react-icons/bi"
+import { BsDiscord } from 'react-icons/bs';
+import { BsInstagram } from 'react-icons/bs';
+import { BsReddit } from 'react-icons/bs';
+import { BsLinkedin } from 'react-icons/bs';
 type Values = {
     email: string;
     password: string;
@@ -66,10 +70,23 @@ const LoginForm = () => {
                                     </button>
                                     <button onClick={() => signIn("github",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
                                         <AiFillGithub fab="true" icon='github' />
-                                    </button>
+                                    </button>                              
                                     <button onClick={() => signIn("google",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
                                         <BiLogoGmail fab="true" icon='mail' />
                                     </button>
+                                    <button onClick={() => signIn("discord",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
+                                        <BsDiscord fab="true" icon='discord' />
+                                    </button>
+                                    {/* <button onClick={() => signIn("instagram",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
+                                        <BsInstagram fab="true" icon='instagram' />
+                                    </button>
+                                    <button onClick={() => signIn("reddit",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
+                                        <BsReddit fab="true" icon='reddit' />
+                                    </button>
+                                    <button onClick={() => signIn("linkedin",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
+                                        <BsLinkedin fab="true" icon='linkedin' />
+                                    </button> */}
+
                                 </div>
                             </Form>
                         </Formik>

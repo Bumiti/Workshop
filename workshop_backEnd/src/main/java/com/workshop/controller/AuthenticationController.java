@@ -34,15 +34,16 @@ public class AuthenticationController {
     @PostMapping("/loginWeb")
     public ResponseEntity<ApiResponse> login(@RequestBody AuthenticationRequest authenticationRequest)
     {
-        AuthenticationResponse response = authenticationService.authenticationResponse(authenticationRequest);
-        if(response!=null)
-        {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>
-                    ("success", "The data has been retrieved successfully", authenticationService.authenticationResponse(authenticationRequest)));
-        }else
-        {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>
-                    ("error", "User not found",  null));
+        try {
+            AuthenticationResponse response = authenticationService.authenticationResponse(authenticationRequest);
+            if (response != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("success", "The data has been retrieved successfully", response));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>("error", "User not found", null));
+            }
+        } catch (Exception authException) {
+            // Xử lý lỗi khi gọi authenticationService.authenticationResponse
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(authException.getMessage(), "Authentication service error", null));
         }
 
     }
@@ -63,14 +64,12 @@ public class AuthenticationController {
                         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>("error", "User not found", null));
                     }
                 } catch (Exception authException) {
-                    // Xử lý lỗi khi gọi authenticationService.authenticationResponse
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(authException.getMessage(), "Authentication service error", null));
                 }
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>("error", "User not found", null));
             }
         } catch (Exception userException) {
-            // Xử lý lỗi khi gọi userServiceimpl.SaveUserOAuthen
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(userException.getMessage(), "User service error", null));
         }
     }
@@ -113,9 +112,5 @@ public class AuthenticationController {
         }
         return "Invalid verification token";
     }
-    @GetMapping("endpont")
-    public String endpont(){
 
-        return "endpont";
-    }
 }

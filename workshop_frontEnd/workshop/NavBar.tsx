@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useSession } from "next-auth/react";
+import Link from 'next/link';
 
 
 export default function NavBar(  ){
@@ -20,7 +21,9 @@ export default function NavBar(  ){
       return(
         <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+         <Link href="/">
+          <Navbar.Brand >Work shop</Navbar.Brand>
+         </Link>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
@@ -49,7 +52,9 @@ export default function NavBar(  ){
     return(   
       <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+      <Link href="/">
+          <Navbar.Brand >Work shop</Navbar.Brand>
+         </Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -71,7 +76,8 @@ export default function NavBar(  ){
           <Nav>
             <Nav.Link href="/api/auth/signout">{session.data?.user?.name}</Nav.Link>
             
-            <Navbar.Brand href="#home">
+         
+           <Navbar.Brand href="/user/infor" >
             <img
               alt=""
               src={session.data?.user?.image as string}
@@ -80,6 +86,7 @@ export default function NavBar(  ){
               className="d-inline-block align-top"
             />{' '}
           </Navbar.Brand>
+        
           <Nav.Link href="/api/auth/signout">LogOut</Nav.Link>
           </Nav>
         </Navbar.Collapse>

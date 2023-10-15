@@ -11,11 +11,10 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-public class UserRegisterRequest {
-
+public class UserInforRespone {
     private String full_name;
     private String user_name;
     private String email;
-    private String password;
+    private String image;
     private boolean isEnable = false;
 }

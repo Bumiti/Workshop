@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 import java.util.List;
@@ -22,17 +24,17 @@ import java.util.List;
 @Accessors(chain = true)
 @Table(name = "course_enrollments")
 public class CourseEnrollment extends BaseModel {
-    private Date enrollmentDate;
 
-    // Quan hệ một nhiều với học sinh đã đăng ký
+    private Date enrollmentDate;
     @ManyToOne
-    @JoinColumn(name = "student_id")
+    @JoinColumn(name = "student_id", nullable = false)
     private User enrolledStudent;
-    // Quan hệ nhiều một với khóa học
+
     @ManyToOne
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "course_id", nullable = false)
     private Course courses;
-    // Quan hệ một nhiều với thanh toán
+
     @OneToMany(mappedBy = "courseEnrollment")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Transaction> transactions;
 }
