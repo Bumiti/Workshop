@@ -15,12 +15,12 @@ import java.util.List;
 public interface CourseRepository extends JpaRepository<Course,Long> {
 
     Course findCourseById(Long id);
-    @Transactional
+
     @Modifying
     @Query("UPDATE Course u SET u.isPublic = ?2 WHERE u.id = ?1")
     void updateById(long id,boolean isPublic);
 
-    @Transactional
+
     @Modifying
     @Query("SELECT ce.enrolledStudent FROM CourseEnrollment ce WHERE ce.courses.id = :courseId")
     List<User> listUserInCourse(@Param("courseId") long courseId);
@@ -31,7 +31,7 @@ public interface CourseRepository extends JpaRepository<Course,Long> {
             "SELECT c, u FROM Course c JOIN User u ON u.id IN :studentIds " +
             "WHERE c.id = :courseId" )
     void addStudentsToCourse(@Param("courseId") long courseId, @Param("studentIds") List<Long> studentIds);
-    @Transactional
+
     @Modifying
     @Query("SELECT c FROM Course c WHERE c.teacher.id = :teacherId")
     List<Course> listCoursebyTeacherId(Long teacherId);

@@ -1,12 +1,13 @@
 package com.workshop.model;
 
+import com.workshop.model.courseModel.CourseLocation;
 import com.workshop.model.workshopModel.Workshop;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -24,4 +25,8 @@ public class Location extends BaseModel{
     // Quan hệ một nhiều với buổi workshop có thể tổ chức tại đây
     @OneToMany(mappedBy = "location")
     private List<Workshop> workshops;
+
+    @OneToMany(mappedBy = "locations")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<CourseLocation> CourseLocation;
 }

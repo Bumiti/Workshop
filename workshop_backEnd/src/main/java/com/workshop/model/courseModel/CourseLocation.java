@@ -2,18 +2,17 @@ package com.workshop.model.courseModel;
 
 import com.workshop.model.BaseModel;
 import com.workshop.model.Location;
-import com.workshop.model.courseModel.Course;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,12 +25,13 @@ public class CourseLocation extends BaseModel {
 
     private Date scheduleDate;
     // Quan hệ một nhiều với khóa học
-    @ManyToOne
-    @JoinColumn(name = "course_id")
-    private Course course_offline;
 
-    // Quan hệ một nhiều với địa điểm
     @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course courses;
+    // Quan hệ một nhiều với địa điểm
+
+    @ManyToOne
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location locations;
 }

@@ -40,12 +40,13 @@ public class Course extends BaseModel {
     private List<CourseEnrollment> enrolledStudents;
 
 
-    @OneToMany(mappedBy = "course_online")
+    @OneToMany(mappedBy = "course")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<CourseOnlineInfo> courseOnlineInfos;
+    private List<CourseMediaInfo> courseOnlineInfos;
 
-    @OneToMany(mappedBy = "course_offline")
-    private List<CourseLocation> courseLocations;
+    @OneToMany(mappedBy = "courses")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<CourseLocation> CourseLocation;
 
     // Quan hệ nhiều nhiều với ưu đãi
     @ManyToMany(mappedBy = "courses")

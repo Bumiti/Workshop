@@ -17,11 +17,12 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@Table(name="course_online_info")
-public class CourseOnlineInfo extends BaseModel {
+@Table(name="course_media_info")
+public class CourseMediaInfo extends BaseModel {
 
-    private String urlContent;
+    private String urlMedia;
+    private String urlImage;
     @ManyToOne
     @JoinColumn(name = "course_id")
-    private Course course_online;
+    private Course course;
 }
