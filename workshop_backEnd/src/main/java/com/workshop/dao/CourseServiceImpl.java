@@ -32,7 +32,7 @@ public class CourseServiceImpl implements CourseService{
         return course_exit != null;
     }
     @Override
-    public boolean AddCourse(CourseRequest courseRequest) {
+    public boolean addCourse(CourseRequest courseRequest) {
         if(courseRequest !=null){
             MapperGeneric<Course,CourseRequest> mapperGeneric = new MapperGeneric<>();
             Course course =  mapperGeneric.DTOmapToModel(courseRequest,Course.class);
@@ -45,7 +45,7 @@ public class CourseServiceImpl implements CourseService{
         }
     }
     @Override
-    public boolean UpdateCourse(Long id, CourseRequest courseRequest)
+    public boolean updateCourse(Long id, CourseRequest courseRequest)
     {
         try{
             Course course = new Course();
@@ -64,7 +64,7 @@ public class CourseServiceImpl implements CourseService{
         }
     }
     @Override
-    public boolean DeleteCourse(Long id) {
+    public boolean deleteCourse(Long id) {
         Course course = courseRepository.findCourseById(id);
         if(course.getName()!=null){
             courseRepository.delete(course);
@@ -74,7 +74,7 @@ public class CourseServiceImpl implements CourseService{
         }
     }
     @Override
-    public boolean SettingStatusCourse(Long id) {
+    public boolean settingStatusCourse(Long id) {
        try{
            Course course = courseRepository.findCourseById(id);
            if (course!=null) {
@@ -91,7 +91,7 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public List<UserInforRespone> ListStudentByCourse(Long id) {
+    public List<UserInforRespone> listStudentByCourse(Long id) {
         try{
             Course course = courseRepository.findCourseById(id);
             if(course !=null){
@@ -113,7 +113,7 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public List<CourseRespones> ListCourse() {
+    public List<CourseRespones> listCourse() {
         User teacher = userService.getCurrentUserDetails();
         List<Course> courses = courseRepository.listCoursebyTeacherId(teacher.getId());
         List<CourseRespones> CourseList = new ArrayList<>();
@@ -135,6 +135,7 @@ public class CourseServiceImpl implements CourseService{
                 studentEnrollments.add(studentEnrollment);
             }
             courseResponse.setStudentEnrollments(studentEnrollments);
+
             List<CourseRespones.CourseInfoMedia> courseInfoMediaList = new ArrayList<>();
             for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos())
             {

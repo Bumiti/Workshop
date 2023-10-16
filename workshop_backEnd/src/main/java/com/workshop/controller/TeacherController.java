@@ -4,8 +4,6 @@ import com.workshop.config.ApiResponse;
 import com.workshop.dto.CourseRequest;
 import com.workshop.dto.CourseRespones;
 import com.workshop.dto.UserInforRespone;
-import com.workshop.model.courseModel.Course;
-import com.workshop.model.userModel.User;
 import com.workshop.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -29,7 +27,7 @@ public class TeacherController {
     @GetMapping("ListCourseByTeacherId")
     public ResponseEntity<ApiResponse>ListCourseByTeacherId(){
         try{
-          List<CourseRespones>ListCourse = courseService.ListCourse();
+          List<CourseRespones>ListCourse = courseService.listCourse();
           System.out.print(ListCourse);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse<>("success", "List of ListCourse", ListCourse));
@@ -44,7 +42,7 @@ public class TeacherController {
     public ResponseEntity<ApiResponse> ListStudentByCourser(@PathVariable Long id)
     {
         try {
-            List<UserInforRespone> ListStudent = courseService.ListStudentByCourse(id);
+            List<UserInforRespone> ListStudent = courseService.listStudentByCourse(id);
             if (ListStudent != null && !ListStudent.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ApiResponse<>("success", "List of Students", ListStudent));
@@ -63,7 +61,7 @@ public class TeacherController {
     public ResponseEntity<ApiResponse> AddCourse(@RequestBody CourseRequest courseRequest)
     {
         if(courseRequest!=null){
-           boolean result =  courseService.AddCourse(courseRequest);
+           boolean result =  courseService.addCourse(courseRequest);
            if(result){
                return ResponseEntity.status(HttpStatus.CREATED)
                        .body( new ApiResponse<>(HttpStatus.CREATED.name(),"The Course has been Create ",null));
@@ -81,7 +79,7 @@ public class TeacherController {
     public ResponseEntity<ApiResponse> UpdateCourse(@PathVariable Long id,@RequestBody CourseRequest courseRequest)
     {
         if(id!=null && courseRequest !=null){
-            boolean result =  courseService.UpdateCourse(id,courseRequest);
+            boolean result =  courseService.updateCourse(id,courseRequest);
             if(result){
                 return ResponseEntity.status(HttpStatus.CREATED)
                         .body( new ApiResponse<>(HttpStatus.CREATED.name(),"The Course has been Update ",null));
@@ -98,7 +96,7 @@ public class TeacherController {
     @DeleteMapping("DeleteCourse/{id}")
     public ResponseEntity<ApiResponse> deleteCourse(@PathVariable Long id){
         if(id!=null ){
-            boolean result =  courseService.DeleteCourse(id);
+            boolean result =  courseService.deleteCourse(id);
             if(result){
                 return ResponseEntity.status(HttpStatus.ACCEPTED)
                         .body( new ApiResponse<>(HttpStatus.ACCEPTED.name(),"The Course has been Delete ",null));

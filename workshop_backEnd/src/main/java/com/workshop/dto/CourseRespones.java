@@ -1,5 +1,6 @@
 package com.workshop.dto;
 
+import com.workshop.model.BaseModel;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -25,6 +26,7 @@ public class CourseRespones {
     private List<StudentEnrollment> studentEnrollments;
     private List<CourseInfoMedia> courseInfoMedia;
     private List<CourseLocation> courseLocations;
+    private String Teacher;
     public static class StudentEnrollment {
         private Long id;
         private String name;

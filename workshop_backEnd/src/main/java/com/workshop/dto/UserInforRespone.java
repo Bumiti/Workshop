@@ -1,5 +1,6 @@
 package com.workshop.dto;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,8 @@ public class UserInforRespone {
     private String full_name;
     private String user_name;
     private String email;
+    private String phoneNumber;
+    private String address;
     private String image;
-    private boolean isEnable = false;
+    private boolean isEnable ;
 }

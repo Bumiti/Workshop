@@ -41,6 +41,8 @@ public class User extends BaseModel implements UserDetails  {
     private String address;
     @Column(name="isEnable")
     private boolean isEnable = false;
+    @Column(name="image_url")
+    private String image_url;
     @OneToOne(mappedBy = "user")
     private VerificationToken verificationToken;
     // Quan hệ một nhiều với khóa học đã tạo bởi giáo viên

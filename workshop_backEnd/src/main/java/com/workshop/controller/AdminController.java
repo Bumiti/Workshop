@@ -1,16 +1,12 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
+import com.workshop.dao.AdminServiceImpl;
 import com.workshop.dao.UserServiceImpl;
-import com.workshop.dto.CourseRequest;
-import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.User;
 import com.workshop.service.CourseService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Fetch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,26 +20,63 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private AdminServiceImpl adminService;
     @Autowired
     private CourseService courseService;
-    @GetMapping("info")
-    public ResponseEntity<User> adminPage()
+    @GetMapping("listCourse")
+    public ResponseEntity<ApiResponse> listCourse()
     {
-        User user =  userService.getCurrentUserDetails();
-            return ResponseEntity.ok(user);
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body( new com.workshop.config.ApiResponse<>("ACCEPTED","The Course Status has been Chance ",adminService.ListCourse()));
     }
-    @PostMapping ("aa")
-    public ResponseEntity<User> Add()
+    @GetMapping("listWorkshop")
+    public ResponseEntity<ApiResponse> listWorkshop()
     {
-        User user =  userService.getCurrentUserDetails();
-        return ResponseEntity.ok(user);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body( new com.workshop.config.ApiResponse<>("ACCEPTED","The Course Status has been Chance ",adminService.ListWorkshop()));
     }
-    @PostMapping ("ActiveCourse")
-    public ResponseEntity<ApiResponse> Add(@RequestParam Long id)
+    @GetMapping("listStudent")
+    public ResponseEntity<ApiResponse> listStudent()
+    {
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body( new com.workshop.config.ApiResponse<>("ACCEPTED","The Course Status has been Chance ",adminService.ListStudent()));
+    }
+    @GetMapping("listTeacher")
+    public ResponseEntity<ApiResponse> listTeacher()
+    {
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body( new com.workshop.config.ApiResponse<>("ACCEPTED","The Course Status has been Chance ",adminService.ListTeacher()));
+    }
+
+
+
+
+
+
+
+
+
+
+    @PostMapping ("activeTeacher")
+    public ResponseEntity<ApiResponse> activeTeacher(@RequestParam Long id)
+    {
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body( new com.workshop.config.ApiResponse<>("ACCEPTED","The Course Status has been Chance ",null));
+    }
+    @PostMapping ("activeWorkshop")
+    public ResponseEntity<ApiResponse> activeWorkshop(@RequestParam Long id)
+    {
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body( new com.workshop.config.ApiResponse<>("ACCEPTED","The Course Status has been Chance ",null));
+    }
+    @PostMapping ("activeCourse")
+    public ResponseEntity<ApiResponse> activeCourse(@RequestParam Long id)
     {
         if(id!=null){
-            boolean result =  courseService.SettingStatusCourse(id);
+            boolean result =  courseService.settingStatusCourse(id);
             if(result){
                 return ResponseEntity.status(HttpStatus.ACCEPTED)
                         .body( new com.workshop.config.ApiResponse<>("ACCEPTED","The Course Status has been Chance ",null));
