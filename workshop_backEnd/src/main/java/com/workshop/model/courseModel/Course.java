@@ -26,7 +26,7 @@ public class Course extends BaseModel {
     private Timestamp startDate;
     private Timestamp endDate;
     private int student_count;
-    private boolean isPublic;
+    private boolean isPublic = false;
     private String type;
 
     // Quan hệ nhiều một với giáo viên

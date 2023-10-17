@@ -24,15 +24,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthenticationController {
-
-
     private final AuthenticationService authenticationService;
     private final UserServiceImpl userServiceimpl;
     private final ApplicationEventPublisher publisher;
     private  final VerificationTokenRepository verificationTokenRepository;
+    private String applicationUrl(HttpServletRequest request) {
+        return "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+    }
     @Operation(summary = "Login Website Account")
     @PostMapping("/loginWeb")
-    public ResponseEntity<ApiResponse> login(@RequestBody AuthenticationRequest authenticationRequest)
+    public ResponseEntity<ApiResponse> webAuthentication(@RequestBody AuthenticationRequest authenticationRequest)
     {
         try {
             AuthenticationResponse response = authenticationService.authenticationResponse(authenticationRequest);
@@ -42,7 +43,6 @@ public class AuthenticationController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>("error", "User not found", null));
             }
         } catch (Exception authException) {
-            // Xử lý lỗi khi gọi authenticationService.authenticationResponse
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(authException.getMessage(), "Authentication service error", null));
         }
 
@@ -73,7 +73,7 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(userException.getMessage(), "User service error", null));
         }
     }
-    @Operation(summary ="Register Buyer" )
+    @Operation(summary ="Đăng ký User bằng Role" )
     @PostMapping("register/user")
     public ResponseEntity<ApiResponse> registerUser(@RequestBody UserRegisterRequest userRegisterRequest, final HttpServletRequest request)
     {
@@ -87,19 +87,8 @@ public class AuthenticationController {
                     ("Error", "please check your Email Again",  null));
         }
     }
-    private String applicationUrl(HttpServletRequest request) {
-        return "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
-    }
-    @Operation(summary ="Register Seller" )
-    @PostMapping("register/seller")
-    public ResponseEntity<HttpStatus> registerSeller(@RequestBody UserRegisterRequest userRegisterRequest)
-    {
-        if(userRegisterRequest!=null){
-            userServiceimpl.SaveSeller(userRegisterRequest);
-        }
-        return ResponseEntity.ok(HttpStatus.ACCEPTED);
-    }
-    @Operation(summary ="verify Email" )
+
+    @Operation(summary ="Xác thực Register bằng Mail" )
     @GetMapping("verifyEmail")
     public String verifyEmail(@RequestParam("token") String token){
         VerificationToken thetoken = verificationTokenRepository.findByToken(token);

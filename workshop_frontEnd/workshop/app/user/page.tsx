@@ -1,15 +1,12 @@
 'use client'
-
-import styles from './login-form.module.css';
 import { Container, Row, Col } from 'react-bootstrap'
-const teacher = () => {
+const User = () => {
     return (
         <Container>
-            <div className={styles.login_box + ' p-3'}>
+            <div className={' p-3'}>
                 <h1>User page</h1>
             </div>
         </Container>
-
     )
 }
-export default teacher;
+export default User;

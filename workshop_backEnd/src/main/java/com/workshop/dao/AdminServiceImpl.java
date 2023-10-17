@@ -1,15 +1,11 @@
 package com.workshop.dao;
 
-import com.workshop.dto.CourseRespones;
-import com.workshop.dto.UserInforRespone;
-import com.workshop.model.courseModel.Course;
-import com.workshop.model.courseModel.CourseEnrollment;
-import com.workshop.model.courseModel.CourseLocation;
-import com.workshop.model.courseModel.CourseMediaInfo;
+
+import com.workshop.dto.*;
+import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.User;
 import com.workshop.model.workshopModel.Workshop;
-import com.workshop.reposetory.CourseRepository;
-import com.workshop.reposetory.UserRepository;
+import com.workshop.reposetory.*;
 import com.workshop.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,10 +19,12 @@ public class AdminServiceImpl implements AdminService {
     private UserRepository userRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private  WorkShopRepository workShopRepository;
     @Override
-    public List<UserInforRespone> ListStudent() {
+    public List<UserInforRespone> listAccountByRole(String role) {
         List<UserInforRespone>listUserInforRespone =new ArrayList<>();
-        List<User> ListUser = userRepository.findUsersByRoleName("USER");
+        List<User> ListUser = userRepository.findUsersByRoleName(role);
         for(User user :ListUser){
             UserInforRespone userInforRespone = new UserInforRespone();
             userInforRespone.setAddress(user.getAddress())
@@ -42,26 +40,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<UserInforRespone> ListTeacher() {
-
-        List<UserInforRespone>listUserInforRespone =new ArrayList<>();
-        List<User> ListUser = userRepository.findUsersByRoleName("SELLER");
-        for(User user :ListUser){
-            UserInforRespone userInforRespone = new UserInforRespone();
-            userInforRespone.setAddress(user.getAddress())
-                    .setUser_name(user.getUser_name())
-                    .setFull_name(user.getFull_name())
-                    .setImage(user.getImage_url())
-                    .setPhoneNumber(user.getPhoneNumber())
-                    .setEnable(user.isEnable());
-            listUserInforRespone.add(userInforRespone);
-        }
-        return listUserInforRespone ;
-
-    }
-
-    @Override
-    public List<CourseRespones> ListCourse() {
+    public List<CourseRespones> listCourse() {
          List<Course> courses = courseRepository.findAll();
         List<CourseRespones> CourseList = new ArrayList<>();
         for (Course course : courses) {
@@ -112,7 +91,10 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Workshop> ListWorkshop() {
-        return null;
+    public List<WorkshopRespones> listWorkshop() {
+        List<Workshop>listWorkshop = workShopRepository.findAll();
+        List<WorkshopRespones>workshopResponesList = new ArrayList<>();
+
+        return workshopResponesList;
     }
 }

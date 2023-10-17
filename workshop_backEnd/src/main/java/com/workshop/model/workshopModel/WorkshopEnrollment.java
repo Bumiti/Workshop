@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-@Table(name="wrkshop_enrollment")
+@Table(name="workshop_enrollment")
 public class WorkshopEnrollment extends BaseModel {
     private Date enrollmentDate;
     // Quan hệ một nhiều với học sinh đã đăng ký
@@ -33,7 +33,7 @@ public class WorkshopEnrollment extends BaseModel {
     @JoinColumn(name = "workshop_id")
     private Workshop workshop;
 
-    // Quan hệ một nhiều với thanh toán
+    // Quan hệ một nhiều với Transaction
     @OneToMany(mappedBy = "workshopEnrollment")
     private List<Transaction> payments;
 

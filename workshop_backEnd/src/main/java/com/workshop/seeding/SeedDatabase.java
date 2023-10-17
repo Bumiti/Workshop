@@ -46,33 +46,31 @@ public class SeedDatabase {
            userService.SaveRoles(new Roles(null,"SELLER"));
            userService.SaveRoles(new Roles(null,"ADMIN"));
            userService.SaveUser(new UserRegisterRequest("NguyenAdmin","admin64",
-                   "admin64@gmail.com","12345",true));
-           userService.SaveUser(new UserRegisterRequest("NguyenSeller","seller64",
-                   "seller64@gmail.com","12345",true));
-           userService.SaveUser(new UserRegisterRequest("NguyenUser","user64",
-                   "user64@gmail.com","12345",true));
-           userService.SaveUser(new UserRegisterRequest("NguyenUser1", "user1",
-                   "user1@gmail.com", "12345", true));
-           userService.SaveUser(new UserRegisterRequest("NguyenUser2", "user2",
-                   "user2@gmail.com", "12345", true));
-           userService.SaveUser(new UserRegisterRequest("NguyenUser3", "user3",
-                   "user3@gmail.com", "12345", true));
-           userService.SaveUser(new UserRegisterRequest("NguyenSeller1", "seller1",
-                   "seller1@gmail.com", "12345", true));
-           userService.SaveUser(new UserRegisterRequest("NguyenSeller2", "seller2",
-                   "seller2@gmail.com", "12345", true));
-           userService.AddRoleToUser("admin64@gmail.com","ADMIN");
-           userService.AddRoleToUser("seller64@gmail.com","SELLER");
-           userService.AddRoleToUser("seller1@gmail.com", "SELLER");
-           userService.AddRoleToUser("seller2@gmail.com", "SELLER");
-           userService.AddRoleToUser("user64@gmail.com","USER");
-           userService.AddRoleToUser("user1@gmail.com", "USER");
-           userService.AddRoleToUser("user2@gmail.com", "USER");
-           userService.AddRoleToUser("user3@gmail.com", "USER");
+                   "admin64@gmail.com","12345","ADMIN",true));
 
+           userService.SaveUser(new UserRegisterRequest("teacher01","teacher01",
+                   "teacher01@gmail.com","12345","SELLER",true));
+           userService.SaveUser(new UserRegisterRequest("teacher02","teacher02",
+                   "teacher02@gmail.com","12345","SELLER",true));
+           userService.SaveUser(new UserRegisterRequest("teacher03","teacher03",
+                   "teacher03@gmail.com","12345","SELLER",true));
+           userService.SaveUser(new UserRegisterRequest("teacher04","teacher04",
+                   "teacher04@gmail.com","12345","SELLER",true));
+           userService.SaveUser(new UserRegisterRequest("teacher05","teacher05",
+                   "teacher05@gmail.com","12345","SELLER",true));
 
-
-
+           userService.SaveUser(new UserRegisterRequest("student01","student01",
+                   "student01@gmail.com","12345","USER",true));
+           userService.SaveUser(new UserRegisterRequest("student02","student02",
+                   "student02@gmail.com","12345","USER",true));
+           userService.SaveUser(new UserRegisterRequest("student03","student03",
+                   "student03@gmail.com","12345","USER",true));
+           userService.SaveUser(new UserRegisterRequest("student04","student04",
+                   "student04@gmail.com","12345","USER",true));
+           userService.SaveUser(new UserRegisterRequest("student05","student05",
+                   "student05@gmail.com","12345","USER",true));
+           userService.SaveUser(new UserRegisterRequest("NguyenUser","student06",
+                   "student06@gmail.com","12345","USER",true));
 
            createSeedStatusFile();
        }

@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
         usera.setPassword(passwordEncoder.encode(user.getPassword()));
         var result = userRepository.save(usera);
         if (result != null) {
-            Roles roles = roleRepository.findByName("USER");
+            Roles roles = roleRepository.findByName(user.getRole());
             usera.getRoles().add(roles);
         }
         return result;
@@ -82,8 +82,6 @@ public class UserServiceImpl implements UserService {
             }
             return result;
         } catch (DataAccessException e) {
-            // Handle database-related exceptions here, e.g., DataIntegrityViolationException
-            // Log the error or throw a custom exception if needed
             throw new RuntimeException("Error saving user: " + e.getMessage(), e);
         }
     }

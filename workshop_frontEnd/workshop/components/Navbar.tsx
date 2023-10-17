@@ -36,8 +36,7 @@ export default function Navbar() {
     } else {
       return (
         <div className={`${styles.gradientbutton} user-menu`}>
-          <img
-           
+          <img 
             src={session.user.image}
             alt={session.user.name}
             onClick={() => {
@@ -53,7 +52,7 @@ export default function Navbar() {
                 </label>
                 <ul tabIndex={0} className={`${styles.dropdownCustom} menu menu-compact dropdown-content p-2 shadow text-black bg-gray-50 rounded-box w-52`}>
                   <li  >
-                    <Link className={styles.LinkDropDown} href="/profile">Profile</Link>
+                    <Link className={styles.LinkDropDown} href="/user/profile">Profile</Link>
                   </li>
                   <li><Link href="" className={styles.LinkDropDown} onClick={handleSignout}>Log Out</Link></li>
                   <li><Link className={styles.LinkDropDown} href={"/order/view-orders"}>My Orders</Link></li>

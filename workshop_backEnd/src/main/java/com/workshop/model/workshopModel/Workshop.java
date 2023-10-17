@@ -22,7 +22,8 @@ public class Workshop extends BaseModel {
     private double price;
     private Date date;
     private Date time;
-    private boolean isApproved;
+    private String type;
+    private boolean isApproved = false;
 
     // Quan hệ nhiều một với giáo viên tổ chức
     @ManyToOne
