@@ -7,6 +7,7 @@ import com.workshop.dto.UserInforRespone;
 import com.workshop.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequestMapping("/seller/")
 @RequiredArgsConstructor
 @SecurityRequirement(name ="bearerAuth")
+@Tag(name = "Teacher Controller", description = "Controller Manager Teacher Service")
 public class TeacherController {
 
 @Autowired

@@ -23,4 +23,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "WHERE r.name = ?1", nativeQuery = true)
     List<User> findUsersByRoleName(String roleName);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE User u SET u.isEnable = CASE WHEN u.isEnable = true THEN false ELSE true END WHERE u.id = :id")
+    int chanceStatusAccountById(Long id);
+
 }

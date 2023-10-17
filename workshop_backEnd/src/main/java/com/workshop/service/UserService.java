@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface UserService {
     User SaveUser(UserRegisterRequest user);
     User SaveUserOAuthen(OAuthenticationRequest OAuthen);
-    User SaveSeller(UserRegisterRequest user);
     Roles SaveRoles(Roles role);
     Void AddRoleToUser(String user_name,String role_name);
     User getCurrentUserDetails();

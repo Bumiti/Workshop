@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class AdminServiceImpl implements AdminService {
 
@@ -20,14 +22,26 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
-    private  WorkShopRepository workShopRepository;
+    private WorkShopRepository workShopRepository;
+
+    @Override
+    public boolean chanceIsEnableWithRoleAndId(Long Id) {
+        try {
+            int result = userRepository.chanceStatusAccountById(Id);
+            return result > 0;
+        }
+        catch (Exception exception) {
+            throw new RuntimeException("Error: " + exception);
+        }
+    }
+
     @Override
     public List<UserInforRespone> listAccountByRole(String role) {
-        List<UserInforRespone>listUserInforRespone =new ArrayList<>();
+        List<UserInforRespone> listUserInforRespone = new ArrayList<>();
         List<User> ListUser = userRepository.findUsersByRoleName(role);
-        for(User user :ListUser){
+        for (User user : ListUser) {
             UserInforRespone userInforRespone = new UserInforRespone();
-            userInforRespone.setAddress(user.getAddress())
+            userInforRespone.setAddress(user.getAddress()).setId(user.getId())
                     .setUser_name(user.getUser_name())
                     .setFull_name(user.getFull_name())
                     .setImage(user.getImage_url())
@@ -36,12 +50,12 @@ public class AdminServiceImpl implements AdminService {
             listUserInforRespone.add(userInforRespone);
 
         }
-        return listUserInforRespone ;
+        return listUserInforRespone;
     }
 
     @Override
     public List<CourseRespones> listCourse() {
-         List<Course> courses = courseRepository.findAll();
+        List<Course> courses = courseRepository.findAll();
         List<CourseRespones> CourseList = new ArrayList<>();
         for (Course course : courses) {
             CourseRespones courseResponse = new CourseRespones();
@@ -55,8 +69,7 @@ public class AdminServiceImpl implements AdminService {
                     .setTeacher(course.getTeacher().getUser_name())
             ;
             List<CourseRespones.StudentEnrollment> studentEnrollments = new ArrayList<>();
-            for (CourseEnrollment enrollment : course.getEnrolledStudents())
-            {
+            for (CourseEnrollment enrollment : course.getEnrolledStudents()) {
                 CourseRespones.StudentEnrollment studentEnrollment = new CourseRespones.StudentEnrollment();
                 studentEnrollment.setId(enrollment.getEnrolledStudent().getId());
                 studentEnrollment.setName(enrollment.getEnrolledStudent().getUser_name());
@@ -65,8 +78,7 @@ public class AdminServiceImpl implements AdminService {
             courseResponse.setStudentEnrollments(studentEnrollments);
 
             List<CourseRespones.CourseInfoMedia> courseInfoMediaList = new ArrayList<>();
-            for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos())
-            {
+            for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos()) {
                 CourseRespones.CourseInfoMedia courseInfoMedia = new CourseRespones.CourseInfoMedia();
                 courseInfoMedia.setId(courseMediaInfo.getId());
                 courseInfoMedia.setUrlMedia(courseMediaInfo.getUrlMedia());
@@ -74,8 +86,7 @@ public class AdminServiceImpl implements AdminService {
             }
             courseResponse.setCourseInfoMedia(courseInfoMediaList);
             List<CourseRespones.CourseLocation> courseLocations = new ArrayList<>();
-            for (CourseLocation courseLocation : course.getCourseLocation())
-            {
+            for (CourseLocation courseLocation : course.getCourseLocation()) {
                 CourseRespones.CourseLocation location = new CourseRespones.CourseLocation();
                 location.setId(courseLocation.getId());
                 location.setScheduleDate(courseLocation.getScheduleDate());
@@ -92,8 +103,8 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<WorkshopRespones> listWorkshop() {
-        List<Workshop>listWorkshop = workShopRepository.findAll();
-        List<WorkshopRespones>workshopResponesList = new ArrayList<>();
+        List<Workshop> listWorkshop = workShopRepository.findAll();
+        List<WorkshopRespones> workshopResponesList = new ArrayList<>();
 
         return workshopResponesList;
     }

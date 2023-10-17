@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class UserInforRespone {
+    private Long id;
     private String full_name;
     private String user_name;
     private String email;

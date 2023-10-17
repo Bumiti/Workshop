@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface AdminService {
+    boolean chanceIsEnableWithRoleAndId(Long Id);
     List<UserInforRespone> listAccountByRole(String role);
     List<CourseRespones> listCourse();
     List<WorkshopRespones> listWorkshop();
