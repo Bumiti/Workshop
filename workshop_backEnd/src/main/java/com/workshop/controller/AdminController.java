@@ -1,18 +1,14 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
-import com.workshop.dao.AdminServiceImpl;
-import com.workshop.dto.CourseRespones;
-import com.workshop.dto.UserInforRespone;
-import com.workshop.dto.WorkshopRespones;
-import com.workshop.model.workshopModel.Workshop;
+import com.workshop.dao.*;
+import com.workshop.dto.*;
 import com.workshop.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,7 +46,7 @@ public class AdminController {
     @GetMapping("listWorkshop")
     public ResponseEntity<ApiResponse> listWorkshop() {
         try {
-            List<WorkshopRespones> workshops = adminService.listWorkshop();
+            List<WorkShopRespone> workshops = adminService.listWorkshop();
             if (workshops.isEmpty()) {
                 return handleResponse(HttpStatus.NOT_FOUND, "No workshops found", null);
             } else {
@@ -87,22 +83,6 @@ public class AdminController {
             return handleResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", null);
         }
     }
-
-//    @PostMapping("activeWorkshop")
-//    public ResponseEntity<ApiResponse> activeWorkshop(@RequestParam Long id) {
-//        try {
-//            // Xử lý logic activeWorkshop ở đây
-//            boolean result = true; // Giả sử xử lý thành công
-//            if (result) {
-//                return handleResponse(HttpStatus.ACCEPTED, "Workshop has been activated", null);
-//            } else {
-//                return handleResponse(HttpStatus.BAD_REQUEST, "Failed to activate workshop", null);
-//            }
-//        } catch (Exception e) {
-//            return handleResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", null);
-//        }
-//    }
-
     @PostMapping("activeCourse")
     public ResponseEntity<ApiResponse> activeCourse(@RequestParam Long id) {
         try {

@@ -2,6 +2,7 @@ package com.workshop.model;
 
 import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.User;
+import com.workshop.model.workshopModel.WorkshopDiscount;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,12 +24,13 @@ public class Discount extends BaseModel{
     private String description;
     private int remainingUses;
 
-    // Quan hệ một nhiều với người dùng đã được cấp ưu đãi
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    // Quan hệ nhiều nhiều với các khóa học
+    @OneToMany(mappedBy = "discount")
+    private List<WorkshopDiscount> workshopDiscounts;
+
     @ManyToMany
     @JoinTable(
             name = "discount_course",

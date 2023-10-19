@@ -30,10 +30,12 @@ public class Workshop extends BaseModel {
     @JoinColumn(name = "teacher_id")
     private User teacher;
 
-    // Quan hệ một nhiều với học sinh đã đăng ký
+
     @OneToMany(mappedBy = "workshop")
     private List<WorkshopEnrollment> enrolledStudents;
 
+    @OneToMany(mappedBy = "workshop")
+    private List<WorkshopDiscount> workshopDiscounts;
     // Quan hệ một nhiều với địa điểm tổ chức
     @ManyToOne
     @JoinColumn(name = "location_id")

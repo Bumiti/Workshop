@@ -4,7 +4,6 @@ package com.workshop.dao;
 import com.workshop.dto.*;
 import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.User;
-import com.workshop.model.workshopModel.Workshop;
 import com.workshop.reposetory.*;
 import com.workshop.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,9 +90,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<WorkshopRespones> listWorkshop() {
-        List<Workshop>listWorkshop = workShopRepository.findAll();
-        List<WorkshopRespones>workshopResponesList = new ArrayList<>();
+    public List<WorkShopRespone> listWorkshop() {
+
+        List<WorkShopRespone>workshopResponesList = new ArrayList<>();
 
         return workshopResponesList;
     }

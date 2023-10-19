@@ -1,5 +1,6 @@
 package com.workshop.reposetory;
 
+import com.workshop.dto.WorkShopRespone;
 import com.workshop.model.workshopModel.Workshop;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,5 +15,14 @@ public interface WorkShopRepository extends JpaRepository<Workshop,Long> {
     @Modifying
     @Query("UPDATE Workshop w SET w.isApproved = ?2 WHERE w.id = ?1")
     void updateById(long id,boolean isPublic);
+    @Transactional
+    @Modifying
+    @Query("SELECT w from Workshop w join w.teacher t join w.enrolledStudents st join w.location l join w.workshopDiscounts")
+    List<Workshop> getListWorkShop();
+
+    @Transactional
+    @Modifying
+    @Query("insert into Workshop")
+    int AddWorkShop(WorkShopRespone workshopRespones);
 
 }

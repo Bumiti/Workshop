@@ -2,8 +2,10 @@ package com.workshop.seeding;
 
 import com.workshop.dto.CourseRequest;
 import com.workshop.dto.UserRegisterRequest;
+import com.workshop.model.Location;
 import com.workshop.model.userModel.Roles;
 import com.workshop.service.CourseService;
+import com.workshop.service.LocationService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class SeedDatabase {
     private UserService userService;
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private LocationService locationService;
     private static final String SEED_STATUS_FILE_PATH = "seed_status.txt";
     private boolean isSeedCompleted() {
         return new File(SEED_STATUS_FILE_PATH).exists();
@@ -71,6 +75,9 @@ public class SeedDatabase {
                    "student05@gmail.com","12345","USER",true));
            userService.SaveUser(new UserRegisterRequest("NguyenUser","student06",
                    "student06@gmail.com","12345","USER",true));
+           locationService.AddLocation(new Location("Adora Plaza","Quận 1","Trung Tâm",null,null));
+           locationService.AddLocation(new Location("BlackPear Plaza","Quận 2","Trung Tâm",null,null));
+           locationService.AddLocation(new Location("VinCom Plaza","Quận 3","Trung Tâm",null,null));
 
            createSeedStatusFile();
        }

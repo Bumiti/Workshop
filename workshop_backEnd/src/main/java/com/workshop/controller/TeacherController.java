@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/seller/")
 @RequiredArgsConstructor
 @SecurityRequirement(name ="bearerAuth")
-public class TeacherController {
+public class  TeacherController {
 
 @Autowired
     private CourseService courseService;

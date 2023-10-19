@@ -2,8 +2,7 @@ package com.workshop.service;
 
 import com.workshop.dto.CourseRespones;
 import com.workshop.dto.UserInforRespone;
-import com.workshop.dto.WorkshopRespones;
-import com.workshop.model.workshopModel.Workshop;
+import com.workshop.dto.WorkShopRespone;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,5 +11,5 @@ import java.util.List;
 public interface AdminService {
     List<UserInforRespone> listAccountByRole(String role);
     List<CourseRespones> listCourse();
-    List<WorkshopRespones> listWorkshop();
+    List<WorkShopRespone> listWorkshop();
 }
