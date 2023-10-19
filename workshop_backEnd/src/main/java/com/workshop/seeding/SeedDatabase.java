@@ -1,9 +1,10 @@
 package com.workshop.seeding;
 
-import com.workshop.dto.CourseRequest;
+
 import com.workshop.dto.UserRegisterRequest;
 import com.workshop.model.Location;
 import com.workshop.model.userModel.Roles;
+import com.workshop.reposetory.CourseRepository;
 import com.workshop.service.CourseService;
 import com.workshop.service.LocationService;
 import jakarta.annotation.PostConstruct;
@@ -14,8 +15,7 @@ import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.Timestamp;
-import java.util.Date;
+
 
 @Service
 public class SeedDatabase {
@@ -23,9 +23,9 @@ public class SeedDatabase {
     @Autowired
     private UserService userService;
     @Autowired
-    private CourseService courseService;
-    @Autowired
     private LocationService locationService;
+
+
     private static final String SEED_STATUS_FILE_PATH = "seed_status.txt";
     private boolean isSeedCompleted() {
         return new File(SEED_STATUS_FILE_PATH).exists();
@@ -81,5 +81,6 @@ public class SeedDatabase {
 
            createSeedStatusFile();
        }
+
     }
 }

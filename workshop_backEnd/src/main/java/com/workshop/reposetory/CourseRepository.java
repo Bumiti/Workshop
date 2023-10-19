@@ -47,7 +47,9 @@ public interface CourseRepository extends JpaRepository<Course,Long> {
             ", c.type = :#{#course.type} WHERE c.id = :Id")
     void updateCourse(@Param("Id") Long Id, @Param("course") Course course);
 
-
-
+    @Transactional
+    @Modifying
+    @Query("UPDATE Course c SET c.isPublic = CASE WHEN c.isPublic = true THEN false ELSE true END WHERE c.id = :id")
+    int chanceStatusCourseById(Long id);
 
 }

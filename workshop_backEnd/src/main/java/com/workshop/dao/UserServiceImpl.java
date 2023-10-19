@@ -36,20 +36,35 @@ public class UserServiceImpl implements UserService {
     @Override
     public User SaveUser(UserRegisterRequest user) {
         MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
-        Optional<User> userexist = userRepository.findByEmail(user.getEmail());
-        if (userexist.isPresent()) {
+        Optional<User> userExist = userRepository.findByEmail(user.getEmail());
+        if (userExist.isPresent()) {
             throw new RuntimeException("User with email: " + user.getEmail() + "already exists");
         }
-        User usera = mapper.DTOmapToModel(user, User.class);
-        usera.setPassword(passwordEncoder.encode(user.getPassword()));
-        var result = userRepository.save(usera);
+        User userMapper = mapper.DTOmapToModel(user, User.class);
+        userMapper.setPassword(passwordEncoder.encode(user.getPassword()));
+        var result = userRepository.save(userMapper);
         if (result != null) {
             Roles roles = roleRepository.findByName(user.getRole());
-            usera.getRoles().add(roles);
+            userMapper.getRoles().add(roles);
         }
         return result;
     }
-
+//    @Override
+//    public User SaveSeller(UserRegisterRequest user) {
+//        MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
+//        User usera = mapper.DTOmapToModel(user, User.class);
+//        usera.setPassword(passwordEncoder.encode(user.getPassword()));
+//        try {
+//            User result = userRepository.save(usera);
+//            if (result != null) {
+//                Roles roles = roleRepository.findByName("SELLER");
+//                usera.getRoles().add(roles);
+//            }
+//            return result;
+//        } catch (DataAccessException e) {
+//            throw new RuntimeException("Error saving user: " + e.getMessage(), e);
+//        }
+//    }
     @Override
     public User SaveUserOAuthen(OAuthenticationRequest OAuthen) {
         Optional<User> userexist = userRepository.findByEmail(OAuthen.getEmail());
@@ -69,22 +84,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public User SaveSeller(UserRegisterRequest user) {
-        MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
-        User usera = mapper.DTOmapToModel(user, User.class);
-        usera.setPassword(passwordEncoder.encode(user.getPassword()));
-        try {
-            User result = userRepository.save(usera);
-            if (result != null) {
-                Roles roles = roleRepository.findByName("SELLER");
-                usera.getRoles().add(roles);
-            }
-            return result;
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Error saving user: " + e.getMessage(), e);
-        }
-    }
 
     @Override
     public Roles SaveRoles(Roles role) {
@@ -98,17 +97,15 @@ public class UserServiceImpl implements UserService {
             User user = userOptional.get();
             Roles roles = roleRepository.findByName(role_name);
             user.getRoles().add(roles);
-            // Lưu lại thông tin người dùng sau khi thêm vai trò
             userRepository.save(user);
-            // Hoặc bạn có thể sử dụng userRepository.flush() để lưu ngay lập tức mà không cần đợi cho việc lưu tự động
+
         } else {
-            // Xử lý khi không tìm thấy người dùng với user_name cụ thể
             throw new RuntimeException("Không tìm thấy người dùng với user_name: " + user_name);
-            // Bạn cần định nghĩa UserNotFoundException hoặc sử dụng một ngoại lệ phù hợp với ứng dụng của bạn
         }
         return null;
     }
 
+    //Lấy thông tin user từ token
     @Override
     public User getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -120,12 +117,14 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    //Lưu token xác thực user
     @Override
     public void saveUserVerificationToken(User user, String verificationToken) {
         var verification_token = new VerificationToken(verificationToken, user);
         verificationTokenRepository.save(verification_token);
     }
 
+    //Xử lý token xác thực user qua mail
     @Override
     public String validate(String token) {
         VerificationToken thetoken = verificationTokenRepository.findByToken((token));

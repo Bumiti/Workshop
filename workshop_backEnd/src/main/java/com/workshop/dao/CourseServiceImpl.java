@@ -75,19 +75,13 @@ public class CourseServiceImpl implements CourseService{
     }
     @Override
     public boolean settingStatusCourse(Long id) {
-       try{
-           Course course = courseRepository.findCourseById(id);
-           if (course!=null) {
-               course.setPublic(!course.isPublic());
-               courseRepository.save(course);
-               return true;
-           } else {
-               throw new RuntimeException("Course not found with ID " + id);
-           }
-       }catch (RuntimeException runtimeException){
-           System.out.println("Error: " + runtimeException.getMessage());
-           return false;
-       }
+        try {
+            int result = courseRepository.chanceStatusCourseById(id);
+            return result > 0;
+        }
+        catch (Exception exception) {
+            throw new RuntimeException("Error: " + exception);
+        }
     }
 
     @Override

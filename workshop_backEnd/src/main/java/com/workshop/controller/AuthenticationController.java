@@ -10,6 +10,7 @@ import com.workshop.model.userModel.VerificationToken;
 import com.workshop.reposetory.VerificationTokenRepository;
 import com.workshop.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication Controller", description = "Controller Manager Authentication")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final UserServiceImpl userServiceimpl;

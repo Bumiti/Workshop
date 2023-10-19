@@ -20,9 +20,9 @@ public interface WorkShopRepository extends JpaRepository<Workshop,Long> {
     @Query("SELECT w from Workshop w join w.teacher t join w.enrolledStudents st join w.location l join w.workshopDiscounts")
     List<Workshop> getListWorkShop();
 
-    @Transactional
-    @Modifying
-    @Query("insert into Workshop")
-    int AddWorkShop(WorkShopRespone workshopRespones);
+//    @Transactional
+//    @Modifying
+//    @Query("insert into Workshop")
+//    int AddWorkShop(WorkShopRespone workshopRespones);
 
 }
