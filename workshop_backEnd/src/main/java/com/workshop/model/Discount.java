@@ -1,6 +1,6 @@
 package com.workshop.model;
 
-import com.workshop.model.courseModel.Course;
+import com.workshop.model.courseModel.CourseDiscount;
 import com.workshop.model.userModel.User;
 import com.workshop.model.workshopModel.WorkshopDiscount;
 import jakarta.persistence.*;
@@ -23,7 +23,6 @@ public class Discount extends BaseModel{
     private String name;
     private String description;
     private int remainingUses;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -31,11 +30,7 @@ public class Discount extends BaseModel{
     @OneToMany(mappedBy = "discount")
     private List<WorkshopDiscount> workshopDiscounts;
 
-    @ManyToMany
-    @JoinTable(
-            name = "discount_course",
-            joinColumns = @JoinColumn(name = "discount_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
-    private List<Course> courses;
+    @OneToMany(mappedBy = "discount")
+    private List<CourseDiscount> courseDiscounts;
+
 }

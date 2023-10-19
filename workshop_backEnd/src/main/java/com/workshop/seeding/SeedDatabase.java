@@ -51,7 +51,8 @@ public class SeedDatabase {
            userService.SaveRoles(new Roles(null,"ADMIN"));
            userService.SaveUser(new UserRegisterRequest("NguyenAdmin","admin64",
                    "admin64@gmail.com","12345","ADMIN",true));
-
+           userService.SaveUser(new UserRegisterRequest("lactuong64@gmail.com","lactuong64@gmail.com",
+                   "lactuong64@gmail.com","12345","USER",true));
            userService.SaveUser(new UserRegisterRequest("teacher01","teacher01",
                    "teacher01@gmail.com","12345","SELLER",true));
            userService.SaveUser(new UserRegisterRequest("teacher02","teacher02",

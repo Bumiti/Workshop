@@ -2,24 +2,28 @@ package com.workshop.dao;
 
 import com.workshop.authentication.OAuthenticationRequest;
 import com.workshop.config.MapperGeneric;
+import com.workshop.dto.UserEditRequest;
 import com.workshop.dto.UserRegisterRequest;
 import com.workshop.model.userModel.Roles;
 import com.workshop.model.userModel.User;
+import com.workshop.model.userModel.UserAddresses;
 import com.workshop.model.userModel.VerificationToken;
 import com.workshop.reposetory.*;
 import com.workshop.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.dao.DataAccessException;
+import java.security.SecureRandom;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -42,6 +46,7 @@ public class UserServiceImpl implements UserService {
         }
         User userMapper = mapper.DTOmapToModel(user, User.class);
         userMapper.setPassword(passwordEncoder.encode(user.getPassword()));
+        userMapper.setEnable(false);
         var result = userRepository.save(userMapper);
         if (result != null) {
             Roles roles = roleRepository.findByName(user.getRole());
@@ -49,22 +54,44 @@ public class UserServiceImpl implements UserService {
         }
         return result;
     }
-//    @Override
-//    public User SaveSeller(UserRegisterRequest user) {
-//        MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
-//        User usera = mapper.DTOmapToModel(user, User.class);
-//        usera.setPassword(passwordEncoder.encode(user.getPassword()));
-//        try {
-//            User result = userRepository.save(usera);
-//            if (result != null) {
-//                Roles roles = roleRepository.findByName("SELLER");
-//                usera.getRoles().add(roles);
-//            }
-//            return result;
-//        } catch (DataAccessException e) {
-//            throw new RuntimeException("Error saving user: " + e.getMessage(), e);
-//        }
-//    }
+
+    @Override
+    public Boolean EditUser(UserEditRequest user) {
+        try{
+            Optional<User> userExist = userRepository.findByEmail(user.getEmail());
+           if(userExist.isPresent()){
+               User existingUser = userExist.get();
+               if (user.getUser_name() != null) {
+                   existingUser.setUser_name(user.getUser_name());
+               }
+               if (user.getPassword() != null) {
+                   existingUser.setPassword(user.getPassword());
+               }
+               if (user.getFull_name() != null) {
+                   existingUser.setFull_name(user.getFull_name());
+               }
+
+//               // Xóa tất cả địa chỉ người dùng hiện tại
+//               existingUser.getUserAddresses().clear();
+//                List<UserAddresses> userAddressesList = new ArrayList<>();
+//               // Lặp qua danh sách UserAddress trong UserEditRequest và thêm chúng vào existingUser
+//               if (user.getUserAddresses() != null) {
+//                   for (UserEditRequest.UserAddress userAddressDTO : user.getUserAddresses()) {
+//                       UserAddresses userAddresses = new UserAddresses();
+//                       userAddresses.setAddress(userAddressDTO)
+//                   }
+//               }
+//               existingUser.setUserAddresses(userAddressesList);
+               userRepository.save(existingUser);
+               return true;
+           }else{
+               return false;
+           }
+        }catch (Exception exception){
+            return false;
+        }
+    }
+
     @Override
     public User SaveUserOAuthen(OAuthenticationRequest OAuthen) {
         Optional<User> userexist = userRepository.findByEmail(OAuthen.getEmail());
@@ -83,8 +110,6 @@ public class UserServiceImpl implements UserService {
             return result;
         }
     }
-
-
     @Override
     public Roles SaveRoles(Roles role) {
         return roleRepository.save(role);
@@ -123,23 +148,47 @@ public class UserServiceImpl implements UserService {
         var verification_token = new VerificationToken(verificationToken, user);
         verificationTokenRepository.save(verification_token);
     }
-
-    //Xử lý token xác thực user qua mail
     @Override
     public String validate(String token) {
-        VerificationToken thetoken = verificationTokenRepository.findByToken((token));
-        if (thetoken == null) {
+        VerificationToken theToken = verificationTokenRepository.findByToken((token));
+        if (theToken == null) {
             return "Invalid Verification Token";
         }
-        User user = thetoken.getUser();
+        User user = theToken.getUser();
         Calendar calendar = Calendar.getInstance();
-        if ((thetoken.getTokenExpirationTime().getTime() - calendar.getTime().getTime()) <= 0) {
-            verificationTokenRepository.delete(thetoken);
+        if ((theToken.getTokenExpirationTime().getTime() - calendar.getTime().getTime()) <= 0) {
+            verificationTokenRepository.delete(theToken);
             return "Token Already Expired";
         }
         user.setEnable(true);
         userRepository.save(user);
         return "valid";
+    }
+
+    @Override
+    public String ResetPasswordByMail(String mail) {
+        Optional<User> user = userRepository.findByEmail(mail);
+        if(user.isPresent()){
+            User userExit = user.get();
+            String newPassword = generateRandomPassword();
+            userExit.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(userExit);
+            return newPassword;
+        }else{
+            return null;
+        }
+    }
+    private String generateRandomPassword() {
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}|;:,.<>?";
+        int length = 12;
+        SecureRandom random = new SecureRandom();
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(characters.length());
+            password.append(characters.charAt(randomIndex));
+        }
+
+        return password.toString();
     }
 
 }

@@ -76,7 +76,6 @@ public class TeacherController {
                     ("error", "The Course NO_CONTENT", null));
         }
     }
-
     @Operation(summary = "Sửa khóa Học")
     @PutMapping("course/update/{id}")
     public ResponseEntity<ApiResponse> UpdateCourse(@PathVariable Long id, @RequestBody CourseRequest courseRequest) {
@@ -112,7 +111,6 @@ public class TeacherController {
                     ("error", "The Course NO_CONTENT", null));
         }
     }
-
     @Operation(summary = "Thêm Học Sinh Vào khóa Học")
     @PostMapping("course/addListStudent/{id}/")
     public ResponseEntity<ApiResponse> AddEStudentCourse(@PathVariable Long id, @RequestBody List<Long> studentIds) {

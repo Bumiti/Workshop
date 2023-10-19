@@ -53,6 +53,9 @@ public class User extends BaseModel implements UserDetails  {
     @OneToMany(mappedBy = "enrolledStudent")
     private List<CourseEnrollment> enrolledCourses;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserAddresses> userAddresses;
+
     @OneToMany(mappedBy = "enrolledStudent")
     private List<WorkshopEnrollment> enrolledWorkshops;
 

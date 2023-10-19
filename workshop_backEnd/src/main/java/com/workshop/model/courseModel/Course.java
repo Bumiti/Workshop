@@ -49,9 +49,9 @@ public class Course extends BaseModel {
     private List<CourseLocation> CourseLocation;
 
     // Quan hệ nhiều nhiều với ưu đãi
-    @ManyToMany(mappedBy = "courses")
+    @OneToMany(mappedBy = "course")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Discount> discounts;
+    private List<CourseDiscount> courseDiscounts;
 
 
 }
