@@ -26,17 +26,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authentication Controller", description = "Controller Manager Authentication")
+@Tag(name = "Authentication Controller", description = "Quản Lý xác thực tài khoản")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final UserServiceImpl userServiceimpl;
     private final ApplicationEventPublisher publisher;
     private final VerificationTokenRepository verificationTokenRepository;
-
     private String applicationUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
-
     @Operation(summary = "Login Website Account")
     @PostMapping("/loginWeb")
     public ResponseEntity<ApiResponse<?>> webAuthentication(@RequestBody AuthenticationRequest authenticationRequest) {
@@ -50,7 +48,6 @@ public class AuthenticationController {
         } catch (Exception authException) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(authException.getMessage(), "Authentication service error", null));
         }
-
     }
 
     @Operation(summary = "Login Website OAuthentication")
@@ -80,7 +77,7 @@ public class AuthenticationController {
     }
 
     @Operation(summary = "Đăng ký User bằng Role")
-    @PostMapping("register/user")
+    @PostMapping("user/register")
     public ResponseEntity<ApiResponse<?>> registerUser(@RequestBody UserRegisterRequest userRegisterRequest, final HttpServletRequest request) {
         if (userRegisterRequest != null) {
             User user = userServiceimpl.SaveUser(userRegisterRequest);
@@ -94,7 +91,7 @@ public class AuthenticationController {
     }
 
     @Operation(summary = "Sửa thông tin User")
-    @PutMapping("edit/user")
+    @PutMapping("user/edit")
     public ResponseEntity<ApiResponse<?>> editUser(@RequestBody UserEditRequest userEditRequest) {
         try {
             boolean result = userServiceimpl.EditUser(userEditRequest);
@@ -109,11 +106,9 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
                     ("Error", "An error occurred: " + e.getMessage(), null));
         }
-
     }
-
     @Operation(summary = "Lấy lại Mật Khẩu qua Mail")
-    @PostMapping("/forgetPassword")
+    @PostMapping("user/forgetPassword")
     public ResponseEntity<ApiResponse<?>> webAuthentication(@RequestParam String Email, final HttpServletRequest request) {
         try {
             if (Email != null) {

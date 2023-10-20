@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user/")
 @RequiredArgsConstructor
 @SecurityRequirement(name ="bearerAuth")
-@Tag(name = "Student Controller", description = "Controller Manager Student Service")
+@Tag(name = "Student Controller", description = "Quản Lý Tác Vụ Học Sinh")
 public class StudentController {
 
 

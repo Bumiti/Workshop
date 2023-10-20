@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/seller/")
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
-@Tag(name = "Teacher Controller", description = "Controller Manager Teacher Service")
+@Tag(name = "Teacher Controller", description = "Quản Lý Tác Vụ Giáo Viên")
 public class TeacherController {
 
     @Autowired

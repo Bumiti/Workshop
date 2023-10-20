@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/")
 @RequiredArgsConstructor
-@Tag(name = "Admin Area Controller", description = "Controller Admin Manager Web Service")
+@Tag(name = "Admin Area Controller", description = "Quản Lý Tác Vụ Admin Service")
 @SecurityRequirement(name = "bearerAuth")
 public class AdminController {
     @Autowired
@@ -63,8 +63,7 @@ public class AdminController {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
-
-    @Operation(summary = "Thay đổi trạng thái Course")
+    @Operation(summary = "Xóa (Disable) Course")
     @DeleteMapping("course/delete")
     public ResponseEntity<ApiResponse<?>> removeCourse(@RequestParam Long id) {
         try {
@@ -82,37 +81,37 @@ public class AdminController {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
+//    @Operation(summary = "Danh Sách Workshop")
+//    @GetMapping("workShop/list")
+//    public ResponseEntity<ApiResponse<?>> listWorkshop() {
+//        try {
+//            List<WorkShopRespone> workshops = adminService.listWorkshop();
+//            if (workshops.isEmpty()) {
+//                return createResponse(HttpStatus.NOT_FOUND, "error", "No workshops found", null);
+//            } else {
+//                return createResponse(HttpStatus.ACCEPTED, "success", "List of workshops", workshops);
+//            }
+//        } catch (Exception e) {
+//            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", e.getMessage(), null);
+//        }
+//    }
 
-    @GetMapping("listWorkshop")
-    public ResponseEntity<ApiResponse<?>> listWorkshop() {
-        try {
-            List<WorkShopRespone> workshops = adminService.listWorkshop();
-            if (workshops.isEmpty()) {
-                return createResponse(HttpStatus.NOT_FOUND, "error", "No workshops found", null);
-            } else {
-                return createResponse(HttpStatus.ACCEPTED, "success", "List of workshops", workshops);
-            }
-        } catch (Exception e) {
-            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", e.getMessage(), null);
-        }
-    }
-
-    @Operation(summary = "Admin update Infor Workshop")
-    @GetMapping("workshop/updateinfor")
-    public ResponseEntity<ApiResponse<?>> checkWorkshop(@RequestBody WorkShopRequest request) {
-        try {
-            if (request != null) {
-                return createResponse(HttpStatus.ACCEPTED, "success", "List of workshops", null);
-            } else {
-                return createResponse(HttpStatus.NOT_FOUND, "error", "No workshops found", null);
-            }
-        } catch (Exception e) {
-            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", e.getMessage(), null);
-        }
-    }
+//    @Operation(summary = "Admin update Infor Workshop")
+//    @GetMapping("workshop/updateinfor")
+//    public ResponseEntity<ApiResponse<?>> checkWorkshop(@RequestBody WorkShopRequest request) {
+//        try {
+//            if (request != null) {
+//                return createResponse(HttpStatus.ACCEPTED, "success", "List of workshops", null);
+//            } else {
+//                return createResponse(HttpStatus.NOT_FOUND, "error", "No workshops found", null);
+//            }
+//        } catch (Exception e) {
+//            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", e.getMessage(), null);
+//        }
+//    }
 
     @Operation(summary = "Tìm Account bằng Role")
-    @GetMapping("listAccountByRole")
+    @GetMapping("account/listbyrole")
     public ResponseEntity<ApiResponse<?>> listAccountByRole(@RequestParam(name = "role") String role) {
         try {
             List<UserInforRespone> accounts = adminService.listAccountByRole(role);
@@ -121,14 +120,12 @@ public class AdminController {
             } else {
                 return createResponse(HttpStatus.ACCEPTED, "success", "List of " + role, accounts);
             }
-        }catch(Exception e)
-        {
+        }catch(Exception e){
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
-
     @Operation(summary = "Thay đổi trạng thái Account")
-    @PostMapping("controlAccountByRole")
+    @PostMapping("account/changeStatus")
     public ResponseEntity<ApiResponse<?>> activeUserByRole(@RequestParam Long id) {
         try {
             boolean result = adminService.chanceIsEnableWithRoleAndId(id);
