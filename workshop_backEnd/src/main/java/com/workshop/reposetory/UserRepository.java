@@ -5,6 +5,7 @@ import jakarta.persistence.Table;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -27,5 +28,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Modifying
     @Query("UPDATE User u SET u.isEnable = CASE WHEN u.isEnable = true THEN false ELSE true END WHERE u.id = :id")
     int chanceStatusAccountById(Long id);
+
+//    @Modifying
+//    @Query( "INSERT INTO users (user_name, full_name, image_url, phone_number, email, is_enable) " +
+//            "VALUES (:#{#userExit.user_name}, :#{#userExit.full_name}, :#{#userExit.image_url}, :#{#userExit.phoneNumber}, :#{#userExit.email}, true)")
+//    void saveUser(@Param("userExit") User userExit);
 
 }

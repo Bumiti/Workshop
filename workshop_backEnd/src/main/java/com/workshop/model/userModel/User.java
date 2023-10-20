@@ -37,8 +37,7 @@ public class User extends BaseModel implements UserDetails  {
     private String password;
     @Column(name="phone_number")
     private String phoneNumber;
-    @Column(name="address")
-    private String address;
+
     @Column(name="isEnable")
     private boolean isEnable = false;
     @Column(name="image_url")

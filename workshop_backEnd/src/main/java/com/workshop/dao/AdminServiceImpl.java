@@ -40,7 +40,7 @@ public class AdminServiceImpl implements AdminService {
         List<User> ListUser = userRepository.findUsersByRoleName(role);
         for (User user : ListUser) {
             UserInforRespone userInforRespone = new UserInforRespone();
-            userInforRespone.setAddress(user.getAddress()).setId(user.getId())
+            userInforRespone.setId(user.getId())
                     .setUser_name(user.getUser_name())
                     .setFull_name(user.getFull_name())
                     .setImage(user.getImage_url())

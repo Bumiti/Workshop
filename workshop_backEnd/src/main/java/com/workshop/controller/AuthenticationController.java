@@ -96,15 +96,20 @@ public class AuthenticationController {
     @Operation(summary = "Sửa thông tin User")
     @PutMapping("edit/user")
     public ResponseEntity<ApiResponse<?>> editUser(@RequestBody UserEditRequest userEditRequest) {
-        boolean result = userServiceimpl.EditUser(userEditRequest);
-        if (result) {
-
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
-                    ("Success", "Your Info Has Bean Chance", null));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
-                    ("Error", "please check Again", null));
+        try {
+            boolean result = userServiceimpl.EditUser(userEditRequest);
+            if (result) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
+                        ("Success", "Your Info Has Been Changed", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
+                        ("Error", "Please check again", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
+                    ("Error", "An error occurred: " + e.getMessage(), null));
         }
+
     }
 
     @Operation(summary = "Lấy lại Mật Khẩu qua Mail")

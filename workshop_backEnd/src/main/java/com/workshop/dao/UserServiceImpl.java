@@ -13,8 +13,11 @@ import com.workshop.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import java.security.SecureRandom;
+
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -36,7 +39,7 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final UserAddressRepository userAddressRepository;
     @Override
     public User SaveUser(UserRegisterRequest user) {
         MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
@@ -57,37 +60,45 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean EditUser(UserEditRequest user) {
-        try{
+        try {
             Optional<User> userExist = userRepository.findByEmail(user.getEmail());
-           if(userExist.isPresent()){
-               User existingUser = userExist.get();
-               if (user.getUser_name() != null) {
-                   existingUser.setUser_name(user.getUser_name());
-               }
-               if (user.getPassword() != null) {
-                   existingUser.setPassword(user.getPassword());
-               }
-               if (user.getFull_name() != null) {
-                   existingUser.setFull_name(user.getFull_name());
-               }
-
-//               // Xóa tất cả địa chỉ người dùng hiện tại
-//               existingUser.getUserAddresses().clear();
-//                List<UserAddresses> userAddressesList = new ArrayList<>();
-//               // Lặp qua danh sách UserAddress trong UserEditRequest và thêm chúng vào existingUser
-//               if (user.getUserAddresses() != null) {
-//                   for (UserEditRequest.UserAddress userAddressDTO : user.getUserAddresses()) {
-//                       UserAddresses userAddresses = new UserAddresses();
-//                       userAddresses.setAddress(userAddressDTO)
-//                   }
-//               }
-//               existingUser.setUserAddresses(userAddressesList);
-               userRepository.save(existingUser);
-               return true;
-           }else{
-               return false;
-           }
-        }catch (Exception exception){
+            if (userExist.isPresent()) {
+                User existingUser = userExist.get();
+                if (user.getUser_name() != null) {
+                    existingUser.setUser_name(user.getUser_name());
+                }
+                if (user.getFull_name() != null) {
+                    existingUser.setFull_name(user.getFull_name());
+                }
+                if (user.getImage_url() != null) {
+                    existingUser.setImage_url(user.getImage_url());
+                }
+                if (user.getPhoneNumber() != null) {
+                    existingUser.setPhoneNumber(user.getPhoneNumber());
+                }
+                List<UserAddresses> userAddressesList = new ArrayList<>();
+                for (UserEditRequest.UserAddress userAddressDTO : user.getUserAddresses()) {
+                    UserAddresses userAddresses = new UserAddresses();
+                    userAddresses.setAddress(userAddressDTO.getAddress())
+                            .setCity(userAddressDTO.getCity())
+                            .setState(userAddressDTO.getState())
+                            .setPostalCode(userAddressDTO.getPostalCode())
+                            .setUser(existingUser);
+                    userAddressesList.add(userAddresses);
+                }
+//                userAddressRepository.saveUserAddresses(userAddressesList);
+                userAddressRepository.saveAll(userAddressesList);
+                userRepository.save(existingUser);
+                return true;
+            } else {
+                String errorMessage = "User Not Found with Email: " + user.getEmail();
+                return false;
+            }
+        } catch (DataAccessException ex) {
+            String errorMessage = "DataAccessException: " + ex.getMessage();
+            return false;
+        } catch (Exception exception) {
+            String errorMessage = "exception: " + exception.getMessage();
             return false;
         }
     }
@@ -110,6 +121,7 @@ public class UserServiceImpl implements UserService {
             return result;
         }
     }
+
     @Override
     public Roles SaveRoles(Roles role) {
         return roleRepository.save(role);
@@ -148,6 +160,7 @@ public class UserServiceImpl implements UserService {
         var verification_token = new VerificationToken(verificationToken, user);
         verificationTokenRepository.save(verification_token);
     }
+
     @Override
     public String validate(String token) {
         VerificationToken theToken = verificationTokenRepository.findByToken((token));
@@ -168,16 +181,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public String ResetPasswordByMail(String mail) {
         Optional<User> user = userRepository.findByEmail(mail);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             User userExit = user.get();
             String newPassword = generateRandomPassword();
             userExit.setPassword(passwordEncoder.encode(newPassword));
             userRepository.save(userExit);
             return newPassword;
-        }else{
+        } else {
             return null;
         }
     }
+
     private String generateRandomPassword() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}|;:,.<>?";
         int length = 12;
