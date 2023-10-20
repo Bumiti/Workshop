@@ -34,8 +34,10 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public boolean addCourse(CourseRequest courseRequest) {
         if(courseRequest !=null){
+
             MapperGeneric<Course,CourseRequest> mapperGeneric = new MapperGeneric<>();
             Course course =  mapperGeneric.DTOmapToModel(courseRequest,Course.class);
+
             User user = userService.getCurrentUserDetails();
             course.setTeacher(user);
             courseRepository.save(course);

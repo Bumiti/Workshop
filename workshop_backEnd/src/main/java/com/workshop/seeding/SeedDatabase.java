@@ -4,8 +4,6 @@ package com.workshop.seeding;
 import com.workshop.dto.UserRegisterRequest;
 import com.workshop.model.Location;
 import com.workshop.model.userModel.Roles;
-import com.workshop.reposetory.CourseRepository;
-import com.workshop.service.CourseService;
 import com.workshop.service.LocationService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,32 +48,12 @@ public class SeedDatabase {
            userService.SaveRoles(new Roles(null,"SELLER"));
            userService.SaveRoles(new Roles(null,"ADMIN"));
            userService.SaveUser(new UserRegisterRequest("NguyenAdmin","admin64",
-                   "admin64@gmail.com","12345","ADMIN",true));
+                   "admin64@gmail.com","12345","0383334196","female","ADMIN",false));
            userService.SaveUser(new UserRegisterRequest("lactuong64@gmail.com","lactuong64@gmail.com",
-                   "lactuong64@gmail.com","12345","USER",true));
+                   "lactuong64@gmail.com","12345","0383334195","male","USER",false));
            userService.SaveUser(new UserRegisterRequest("teacher01","teacher01",
-                   "teacher01@gmail.com","12345","SELLER",true));
-           userService.SaveUser(new UserRegisterRequest("teacher02","teacher02",
-                   "teacher02@gmail.com","12345","SELLER",true));
-           userService.SaveUser(new UserRegisterRequest("teacher03","teacher03",
-                   "teacher03@gmail.com","12345","SELLER",true));
-           userService.SaveUser(new UserRegisterRequest("teacher04","teacher04",
-                   "teacher04@gmail.com","12345","SELLER",true));
-           userService.SaveUser(new UserRegisterRequest("teacher05","teacher05",
-                   "teacher05@gmail.com","12345","SELLER",true));
+                   "teacher01@gmail.com","12345","0383334195","male","SELLER",false));
 
-           userService.SaveUser(new UserRegisterRequest("student01","student01",
-                   "student01@gmail.com","12345","USER",true));
-           userService.SaveUser(new UserRegisterRequest("student02","student02",
-                   "student02@gmail.com","12345","USER",true));
-           userService.SaveUser(new UserRegisterRequest("student03","student03",
-                   "student03@gmail.com","12345","USER",true));
-           userService.SaveUser(new UserRegisterRequest("student04","student04",
-                   "student04@gmail.com","12345","USER",true));
-           userService.SaveUser(new UserRegisterRequest("student05","student05",
-                   "student05@gmail.com","12345","USER",true));
-           userService.SaveUser(new UserRegisterRequest("NguyenUser","student06",
-                   "student06@gmail.com","12345","USER",true));
            locationService.AddLocation(new Location("Adora Plaza","Quận 1","Trung Tâm",null,null));
            locationService.AddLocation(new Location("BlackPear Plaza","Quận 2","Trung Tâm",null,null));
            locationService.AddLocation(new Location("VinCom Plaza","Quận 3","Trung Tâm",null,null));

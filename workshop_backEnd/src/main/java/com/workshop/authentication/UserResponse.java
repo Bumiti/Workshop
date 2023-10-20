@@ -16,6 +16,8 @@ public class UserResponse {
     private String user_name;
     private String email;
     private String image;
+    private String phoneNumber;
+    private String gender;
     private List<String> roles;
     private String accessToken;
     private String refreshToken;

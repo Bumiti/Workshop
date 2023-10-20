@@ -131,5 +131,12 @@ public class TeacherController {
                     .body(new ApiResponse<>("error", "An error occurred while adding students to the course", null));
         }
     }
+    @GetMapping("teacher/info")
+    public ResponseEntity<ApiResponse<?>>teacherInfo(){
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiResponse<>("OK","Lấy thành công",null)
+        );
+    }
+
 }
 

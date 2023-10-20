@@ -33,6 +33,8 @@ public class User extends BaseModel implements UserDetails  {
     @NaturalId(mutable = true)
     private String email;
 
+    @Column(name="gender")
+    private String gender;
     @Column(name="password")
     private String password;
     @Column(name="phone_number")

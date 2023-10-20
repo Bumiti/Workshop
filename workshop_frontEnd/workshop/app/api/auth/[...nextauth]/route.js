@@ -29,9 +29,10 @@ const handler = NextAuth({
                 }),
               });
               const user = await res.json()
-              console.log(user);
+              
               if (user)
               {
+                console.log("user nè :",user.data.user);
                 user.data.user.sub = 'credentials',
                 user.data.user.id= 'credentials'
                 return user.data.user;
@@ -55,16 +56,6 @@ const handler = NextAuth({
             clientId: process.env.DISCORD_ID,
             clientSecret: process.env.DISCORD_SECRET,
         }),
-        // Instagram({
-        //     clientId: process.env.FACEBOOK_ID,
-        //     clientSecret: process.env.FACEBOOK_SECRET,
-        // }),
-        // Reddit({
-            
-        // }),
-        // LinkedIn({
-            
-        // }),
     ],
     callbacks: {
         async jwt({token,user}){
@@ -84,9 +75,12 @@ const handler = NextAuth({
                     });
                     if (response.ok) {
                         const data = await response.json();
+                        console.log("User Data :", data.data.user);
                         session.user.roles = data.data.user.roles
                         session.user.accessToken = data.data.user.accessToken
                         session.user.refreshToken = data.data.user.refreshToken
+                        session.user.gender == data.data.user.gender
+                        session.user.phoneNumber == data.data.user.phoneNumber
                     }
                 };
                 await fetchData(); 

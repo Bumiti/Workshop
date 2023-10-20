@@ -22,8 +22,8 @@ export default function Navbar() {
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
-  console.log("dropdownVisible:", dropdownVisible);
-
+  // console.log("dropdownVisible:", dropdownVisible);
+  // console.log("session:", session);
   const handleSignout = () => {
     signOut();
   };
