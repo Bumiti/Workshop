@@ -15,8 +15,7 @@ export default function CaLayout({
   return (
     <html lang="en">
       <AuthProvider>
-        <container className={inter.className}>
-        
+          <container className={inter.className}>
           {children}
           </container>
       </AuthProvider>
