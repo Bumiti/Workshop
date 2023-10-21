@@ -6,10 +6,12 @@ import About from '@/components/About';
 import Testimonials from '@/components/Rate';
 import PricingCarousel from '@/components/PricingCarousel';
 import Footer from '@/components/Footer';
+import Navbar from '@/components/Navbar';
 
 export default function Home() {
   return (
     <div>
+      <Navbar/>
       <Banner />
       <Services />
       <Card />

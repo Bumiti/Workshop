@@ -35,16 +35,17 @@ export default function Navbar() {
       );
     } else {
       return (
-        <div className={`${styles.gradientbutton} user-menu`}>
+        <div onClick={() => {
+          console.log("Image clicked");
+          toggleDropdown();
+        }}className={`${styles.gradientbutton} user-menu`}>
           <img
-           
+           width="30"
+           height="30"
+           className={styles.roundedCircle}
             src={session.user.image}
-            alt={session.user.name}
-            onClick={() => {
-              console.log("Image clicked");
-              toggleDropdown();
-            }}
           />
+          <a> {session.user.name.split(' ')[0]}</a>
           {dropdownVisible && (
             <div className={`dropdownMenu ${dropdownVisible ? 'visible' : ''}`}>
               <div className={styles.dropDown}>
@@ -53,7 +54,7 @@ export default function Navbar() {
                 </label>
                 <ul tabIndex={0} className={`${styles.dropdownCustom} menu menu-compact dropdown-content p-2 shadow text-black bg-gray-50 rounded-box w-52`}>
                   <li  >
-                    <Link className={styles.LinkDropDown} href="/profile">Profile</Link>
+                    <Link className={styles.LinkDropDown} href="/user">Profile</Link>
                   </li>
                   <li><Link href="" className={styles.LinkDropDown} onClick={handleSignout}>Log Out</Link></li>
                   <li><Link className={styles.LinkDropDown} href={"/order/view-orders"}>My Orders</Link></li>
@@ -69,8 +70,11 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    const nav = document.querySelector('nav');
-    if (nav) {
+    if (typeof document !== 'undefined') {
+      // Sử dụng document ở đây khi chạy trên trình duyệt
+      const nav = document.querySelector('nav');
+      
+      if (nav) {
       window.addEventListener('scroll', function () {
         if (window.pageYOffset > 100) {
           nav.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
@@ -80,7 +84,7 @@ export default function Navbar() {
           nav.classList.remove('shadow');
         }
       });
-    }
+    }}
   }, []);
 
   return (
