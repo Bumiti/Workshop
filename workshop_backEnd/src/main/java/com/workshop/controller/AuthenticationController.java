@@ -34,7 +34,7 @@ public class AuthenticationController {
     }
     @Operation(summary = "Đổi mật khẩu")
     @PutMapping("user/chancePassword")
-//    @PreAuthorize(hasAnyAuthority("USER","SELLER","ADMIN"))
+   @PreAuthorize("hasAnyAuthority(\"USER\",\"SELLER\",\"ADMIN\")")
     public ResponseEntity<ApiResponse<?>> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
         try {
             boolean result = userServiceimpl.ChangePassword(oldPassword, newPassword);
@@ -150,4 +150,5 @@ public class AuthenticationController {
         }
         return "Invalid verification token";
     }
+
 }

@@ -19,7 +19,15 @@
   transition: all .3s;
   text-decoration: none;
 
-}.LinkDropDown:hover{
+  }
+  .roundedCircle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%; /* Điều này làm cho ảnh trở thành hình tròn */
+    cursor: pointer; /* Để biểu thị rằng ảnh có thể được nhấp */
+  }
+  
+  .LinkDropDown:hover{
  
   color: rgb(162, 133, 198); /* Ẩn màu chữ khi hover */
  

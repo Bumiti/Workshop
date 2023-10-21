@@ -136,14 +136,12 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-
     //Lưu token xác thực user
     @Override
     public void saveUserVerificationToken(User user, String verificationToken) {
         var verification_token = new VerificationToken(verificationToken, user);
         verificationTokenRepository.save(verification_token);
     }
-
     @Override
     public String validate(String token) {
         VerificationToken theToken = verificationTokenRepository.findByToken((token));
@@ -160,7 +158,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return "valid";
     }
-
     @Override
     public String ResetPasswordByMail(String mail) {
         Optional<User> user = userRepository.findByEmail(mail);
@@ -188,6 +185,35 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public UserInforRespone userDetail() {
+        User user = getCurrentUserDetails();
+        User userFull = userRepository.findByEmailWithAddresses(user.getEmail()).get();
+
+        List<UserInforRespone.UserAddress> userAddressesList = new ArrayList<>();
+        List<String>list = new ArrayList<>();
+        for (Roles roles : userFull.getRoles()){
+            list.add(roles.getName());
+        }
+        for(UserAddresses addresses : userFull.getUserAddresses())
+        {
+            UserInforRespone.UserAddress userAddressres = new UserInforRespone.UserAddress();
+            userAddressres.setAddress(addresses.getAddress());
+            userAddressres.setCity(addresses.getCity());
+            userAddressres.setPostalCode(addresses.getPostalCode());
+            userAddressres.setState(addresses.getState());
+            userAddressesList.add(userAddressres);
+        }
+        UserInforRespone inforRespone = new UserInforRespone();
+        inforRespone
+                .setId(userFull.getId()).setPhoneNumber(userFull.getPhoneNumber())
+                .setEmail(userFull.getEmail()).setFull_name(user.getFull_name())
+                .setRoles(list).setUser_name(userFull.getUser_name())
+                .setUserAddresses(userAddressesList).setEnable(userFull.isEnable());
+
+        return inforRespone;
     }
 
     private String generateRandomPassword() {

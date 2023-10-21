@@ -1,13 +1,8 @@
 package com.workshop.dto;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.Accessors;
 
-
-import java.util.List;
+import java.util.ArrayList;
 
 @Data
 @Builder
@@ -20,8 +15,8 @@ public class UserEditRequest {
     private String email;
     private String phoneNumber;
     private String image_url;
-    private String role;
-    private List<UserAddress> userAddresses;
+    private String roles;
+    private ArrayList<UserAddress> userAddresses;
 
     public static class UserAddress {
         private String Address;
@@ -37,11 +32,9 @@ public class UserEditRequest {
         }
         public UserAddress() {
         }
-
         public String getAddress() {
             return Address;
         }
-
         public void setAddress(String address) {
             Address = address;
         }
@@ -70,4 +63,5 @@ public class UserEditRequest {
             PostalCode = postalCode;
         }
     }
+
 }

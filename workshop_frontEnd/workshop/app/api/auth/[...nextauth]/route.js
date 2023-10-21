@@ -58,7 +58,10 @@ const handler = NextAuth({
         }),
     ],
     callbacks: {
-        async jwt({token,user}){
+        async jwt({token,user,session,trigger}){
+            if(trigger === "update"&& session ?.user){
+                token.user = session.user;
+            }
             return{ ...token, ...user}
         },
         async session({ session,token}) {
@@ -66,7 +69,7 @@ const handler = NextAuth({
             if(session.user.id !=='credentials')
             {
                 const fetchData = async (e) => {
-                    const response = await fetch('http://localhost:8089/auth/login0Authen', {
+                    const response = await fetch('http://localhost:8089/auth/loginOAuthentication', {
                         method: 'POST',
                         headers: new Headers({
                             'Content-Type': 'application/json',
@@ -81,6 +84,7 @@ const handler = NextAuth({
                         session.user.refreshToken = data.data.user.refreshToken
                         session.user.gender == data.data.user.gender
                         session.user.phoneNumber == data.data.user.phoneNumber
+                        session.user.userAddresses == data.data.user.userAddresses
                     }
                 };
                 await fetchData(); 

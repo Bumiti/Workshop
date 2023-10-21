@@ -43,7 +43,7 @@ public class AdminServiceImpl implements AdminService {
             userInforRespone.setId(user.getId())
                     .setUser_name(user.getUser_name())
                     .setFull_name(user.getFull_name())
-                    .setImage(user.getImage_url())
+                    .setImage_url(user.getImage_url())
                     .setPhoneNumber(user.getPhoneNumber())
                     .setEnable(user.isEnable());
             listUserInforRespone.add(userInforRespone);

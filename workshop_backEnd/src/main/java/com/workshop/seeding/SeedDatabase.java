@@ -48,11 +48,11 @@ public class SeedDatabase {
            userService.SaveRoles(new Roles(null,"SELLER"));
            userService.SaveRoles(new Roles(null,"ADMIN"));
            userService.SaveUser(new UserRegisterRequest("NguyenAdmin","admin64",
-                   "admin64@gmail.com","12345","0383334196","female","ADMIN",false));
+                   "admin64@gmail.com","12345","0383334196","female","ADMIN",true));
            userService.SaveUser(new UserRegisterRequest("lactuong64@gmail.com","lactuong64@gmail.com",
-                   "lactuong64@gmail.com","12345","0383334195","male","USER",false));
+                   "lactuong64@gmail.com","12345","0383334195","male","USER",true));
            userService.SaveUser(new UserRegisterRequest("teacher01","teacher01",
-                   "teacher01@gmail.com","12345","0383334195","male","SELLER",false));
+                   "teacher01@gmail.com","12345","0383334195","male","SELLER",true));
 
            locationService.AddLocation(new Location("Adora Plaza","Quận 1","Trung Tâm",null,null));
            locationService.AddLocation(new Location("BlackPear Plaza","Quận 2","Trung Tâm",null,null));

@@ -11,11 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     @Query("select u from User u where u.email =:email and u.isEnable =true")
     Optional<User> findByEmail(String email);
+
+    @Transactional
+    @Query("select u from User u left join fetch u.userAddresses ua where u.email = :email and u.isEnable = true")
+    Optional<User> findByEmailWithAddresses(String email);
+
     @Transactional
     @Modifying
     @Query(value = "SELECT u.* FROM users u " +
@@ -28,10 +33,5 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Modifying
     @Query("UPDATE User u SET u.isEnable = CASE WHEN u.isEnable = true THEN false ELSE true END WHERE u.id = :id")
     int chanceStatusAccountById(Long id);
-
-//    @Modifying
-//    @Query( "INSERT INTO users (user_name, full_name, image_url, phone_number, email, is_enable) " +
-//            "VALUES (:#{#userExit.user_name}, :#{#userExit.full_name}, :#{#userExit.image_url}, :#{#userExit.phoneNumber}, :#{#userExit.email}, true)")
-//    void saveUser(@Param("userExit") User userExit);
 
 }
