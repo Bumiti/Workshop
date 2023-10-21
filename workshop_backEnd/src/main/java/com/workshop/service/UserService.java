@@ -18,4 +18,5 @@ public interface UserService {
     void saveUserVerificationToken(User user, String verificationToken);
     String validate(String token);
     String ResetPasswordByMail(String mail);
+    boolean ChangePassword(String oldPassword,String newPassword);
 }

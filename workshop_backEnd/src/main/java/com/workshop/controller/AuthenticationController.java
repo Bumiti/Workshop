@@ -3,23 +3,19 @@ package com.workshop.controller;
 import com.workshop.authentication.*;
 import com.workshop.config.ApiResponse;
 import com.workshop.dao.UserServiceImpl;
-import com.workshop.dto.UserEditRequest;
-import com.workshop.dto.UserRegisterRequest;
+import com.workshop.dto.*;
 import com.workshop.event.RegisterCompleteEvent;
 import com.workshop.event.RenewPasswordEvent;
-import com.workshop.model.userModel.User;
-import com.workshop.model.userModel.VerificationToken;
+import com.workshop.model.userModel.*;
 import com.workshop.reposetory.VerificationTokenRepository;
 import com.workshop.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -32,10 +28,26 @@ public class AuthenticationController {
     private final UserServiceImpl userServiceimpl;
     private final ApplicationEventPublisher publisher;
     private final VerificationTokenRepository verificationTokenRepository;
+
     private String applicationUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
-    @Operation(summary = "Login Website Account")
+    @Operation(summary = "Đổi mật khẩu")
+    @PutMapping("user/chancePassword")
+//    @PreAuthorize(hasAnyAuthority("USER","SELLER","ADMIN"))
+    public ResponseEntity<ApiResponse<?>> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+        try {
+            boolean result = userServiceimpl.ChangePassword(oldPassword, newPassword);
+            if (result) {
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("success", "Password has been changed", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>("failure", "Password change failed", null));
+            }
+        } catch (Exception authException) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(authException.getMessage(), "Authentication service error", null));
+        }
+    }
+    @Operation(summary = "Đăng nhập bằng tài khoản Web")
     @PostMapping("/loginWeb")
     public ResponseEntity<ApiResponse<?>> webAuthentication(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
@@ -50,7 +62,7 @@ public class AuthenticationController {
         }
     }
 
-    @Operation(summary = "Login Website OAuthentication")
+    @Operation(summary = "Đăng nhập bằng tài khoản bên thứ ba")
     @PostMapping("/loginOAuthentication")
     public ResponseEntity<ApiResponse<?>> OAuthentication(@RequestBody OAuthenticationRequest OAuthen) {
         try {
@@ -107,6 +119,7 @@ public class AuthenticationController {
                     ("Error", "An error occurred: " + e.getMessage(), null));
         }
     }
+
     @Operation(summary = "Lấy lại Mật Khẩu qua Mail")
     @PostMapping("user/forgetPassword")
     public ResponseEntity<ApiResponse<?>> webAuthentication(@RequestParam String Email, final HttpServletRequest request) {

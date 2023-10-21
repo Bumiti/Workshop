@@ -2,32 +2,21 @@ package com.workshop.dao;
 
 import com.workshop.authentication.OAuthenticationRequest;
 import com.workshop.config.MapperGeneric;
-import com.workshop.dto.UserEditRequest;
-import com.workshop.dto.UserRegisterRequest;
-import com.workshop.model.userModel.Roles;
-import com.workshop.model.userModel.User;
-import com.workshop.model.userModel.UserAddresses;
-import com.workshop.model.userModel.VerificationToken;
+import com.workshop.dto.*;
+import com.workshop.model.userModel.*;
 import com.workshop.reposetory.*;
 import com.workshop.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import java.security.SecureRandom;
-
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -57,7 +46,6 @@ public class UserServiceImpl implements UserService {
         }
         return result;
     }
-
     @Override
     public Boolean EditUser(UserEditRequest user) {
         try {
@@ -102,7 +90,6 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
-
     @Override
     public User SaveUserOAuthen(OAuthenticationRequest OAuthen) {
         Optional<User> userexist = userRepository.findByEmail(OAuthen.getEmail());
@@ -121,12 +108,10 @@ public class UserServiceImpl implements UserService {
             return result;
         }
     }
-
     @Override
     public Roles SaveRoles(Roles role) {
         return roleRepository.save(role);
     }
-
     @Override
     public Void AddRoleToUser(String user_name, String role_name) {
         Optional<User> userOptional = userRepository.findByEmail(user_name);
@@ -141,8 +126,6 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-
-    //Lấy thông tin user từ token
     @Override
     public User getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -190,6 +173,21 @@ public class UserServiceImpl implements UserService {
         } else {
             return null;
         }
+    }
+    private boolean isPasswordCorrect( String oldPassword) {
+        User user = getCurrentUserDetails();
+        return user.getPassword().equals(oldPassword);
+    }
+    @Override
+    public boolean ChangePassword(String oldPassword,String newPassword)
+    {
+        User user = getCurrentUserDetails();
+        if (user != null && isPasswordCorrect(oldPassword)) {
+            user.setPassword(newPassword);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
     private String generateRandomPassword() {
