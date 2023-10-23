@@ -2,32 +2,25 @@ package com.workshop.dao;
 
 import com.workshop.authentication.OAuthenticationRequest;
 import com.workshop.config.MapperGeneric;
-import com.workshop.dto.UserEditRequest;
-import com.workshop.dto.UserRegisterRequest;
-import com.workshop.model.userModel.Roles;
-import com.workshop.model.userModel.User;
-import com.workshop.model.userModel.UserAddresses;
-import com.workshop.model.userModel.VerificationToken;
+import com.workshop.dto.*;
+import com.workshop.model.userModel.*;
 import com.workshop.reposetory.*;
 import com.workshop.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import java.security.SecureRandom;
 
-import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -137,7 +130,6 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-    //Lấy thông tin user từ token
     @Override
     public User getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -148,14 +140,12 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-
     //Lưu token xác thực user
     @Override
     public void saveUserVerificationToken(User user, String verificationToken) {
         var verification_token = new VerificationToken(verificationToken, user);
         verificationTokenRepository.save(verification_token);
     }
-
     @Override
     public String validate(String token) {
         VerificationToken theToken = verificationTokenRepository.findByToken((token));
@@ -172,7 +162,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return "valid";
     }
-
     @Override
     public String ResetPasswordByMail(String mail) {
         Optional<User> user = userRepository.findByEmail(mail);
@@ -185,6 +174,58 @@ public class UserServiceImpl implements UserService {
         } else {
             return null;
         }
+    }
+    private boolean isPasswordCorrect( String oldPassword) {
+        User user = getCurrentUserDetails();
+        boolean isPasswordMatch = passwordEncoder.matches(oldPassword, user.getPassword());
+        return isPasswordMatch;
+    }
+    @Override
+    public boolean ChangePassword(String oldPassword,String newPassword)
+    {
+        try{
+            User user = getCurrentUserDetails();
+
+            if (user != null && isPasswordCorrect(oldPassword)) {
+                String Password = passwordEncoder.encode(newPassword);
+                long Id = user.getId();
+                userRepository.chancePasswordAccountById(Id,Password);
+                return true;
+            }else{
+                return false;
+            }
+        }catch(RuntimeException e){
+            throw new RuntimeException("Error : ",e);
+        }
+    }
+
+    @Override
+    public UserInforRespone userDetail() {
+        User user = getCurrentUserDetails();
+        User userFull = userRepository.findByEmailWithAddresses(user.getEmail()).get();
+
+        List<UserInforRespone.UserAddress> userAddressesList = new ArrayList<>();
+        List<String>list = new ArrayList<>();
+        for (Roles roles : userFull.getRoles()){
+            list.add(roles.getName());
+        }
+        for(UserAddresses addresses : userFull.getUserAddresses())
+        {
+            UserInforRespone.UserAddress userAddressres = new UserInforRespone.UserAddress();
+            userAddressres.setAddress(addresses.getAddress());
+            userAddressres.setCity(addresses.getCity());
+            userAddressres.setPostalCode(addresses.getPostalCode());
+            userAddressres.setState(addresses.getState());
+            userAddressesList.add(userAddressres);
+        }
+        UserInforRespone inforRespone = new UserInforRespone();
+        inforRespone
+                .setId(userFull.getId()).setPhoneNumber(userFull.getPhoneNumber())
+                .setEmail(userFull.getEmail()).setFull_name(user.getFull_name())
+                .setRoles(list).setUser_name(userFull.getUser_name())
+                .setUserAddresses(userAddressesList).setEnable(userFull.isEnable());
+
+        return inforRespone;
     }
 
     private String generateRandomPassword() {

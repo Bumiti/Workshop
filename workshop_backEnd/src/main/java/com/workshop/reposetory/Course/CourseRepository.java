@@ -1,4 +1,4 @@
-package com.workshop.reposetory;
+package com.workshop.reposetory.Course;
 
 import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.User;

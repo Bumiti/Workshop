@@ -5,13 +5,13 @@ import com.workshop.dto.*;
 import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.User;
 import com.workshop.reposetory.*;
+import com.workshop.reposetory.Course.CourseRepository;
 import com.workshop.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -43,7 +43,7 @@ public class AdminServiceImpl implements AdminService {
             userInforRespone.setId(user.getId())
                     .setUser_name(user.getUser_name())
                     .setFull_name(user.getFull_name())
-                    .setImage(user.getImage_url())
+                    .setImage_url(user.getImage_url())
                     .setPhoneNumber(user.getPhoneNumber())
                     .setEnable(user.isEnable());
             listUserInforRespone.add(userInforRespone);
@@ -76,14 +76,14 @@ public class AdminServiceImpl implements AdminService {
             }
             courseResponse.setStudentEnrollments(studentEnrollments);
 
-            List<CourseRespones.CourseInfoMedia> courseInfoMediaList = new ArrayList<>();
+            List<CourseRespones.CourseMediaInfo> courseInfoMediaList = new ArrayList<>();
             for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos()) {
-                CourseRespones.CourseInfoMedia courseInfoMedia = new CourseRespones.CourseInfoMedia();
+                CourseRespones.CourseMediaInfo courseInfoMedia = new CourseRespones.CourseMediaInfo();
                 courseInfoMedia.setId(courseMediaInfo.getId());
                 courseInfoMedia.setUrlMedia(courseMediaInfo.getUrlMedia());
                 courseInfoMedia.setUrlImage(courseMediaInfo.getUrlImage());
             }
-            courseResponse.setCourseInfoMedia(courseInfoMediaList);
+            courseResponse.setCourseMediaInfos(courseInfoMediaList);
             List<CourseRespones.CourseLocation> courseLocations = new ArrayList<>();
             for (CourseLocation courseLocation : course.getCourseLocation()) {
                 CourseRespones.CourseLocation location = new CourseRespones.CourseLocation();

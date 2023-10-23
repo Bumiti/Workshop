@@ -1,13 +1,10 @@
 package com.workshop.dto;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 import lombok.experimental.Accessors;
 
-
-import java.util.List;
+import java.util.ArrayList;
 
 @Data
 @Builder
@@ -20,9 +17,11 @@ public class UserEditRequest {
     private String email;
     private String phoneNumber;
     private String image_url;
-    private String role;
-    private List<UserAddress> userAddresses;
+    private String roles;
+    @JsonProperty("userAddresses")
+    private ArrayList<UserAddress> userAddresses;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public static class UserAddress {
         private String Address;
         private String City;
@@ -37,11 +36,9 @@ public class UserEditRequest {
         }
         public UserAddress() {
         }
-
         public String getAddress() {
             return Address;
         }
-
         public void setAddress(String address) {
             Address = address;
         }
@@ -70,4 +67,5 @@ public class UserEditRequest {
             PostalCode = postalCode;
         }
     }
+
 }

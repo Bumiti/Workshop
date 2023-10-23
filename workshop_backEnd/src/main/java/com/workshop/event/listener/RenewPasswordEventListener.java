@@ -41,13 +41,13 @@ public class RenewPasswordEventListener  implements ApplicationListener<RenewPas
         variables.put("password", Password);
 
 
-        String htmlContent = readHtmlTemplate("sendpassword.html");
+        String htmlContent = readHtmlTemplate("sendPassword.html");
         for (Map.Entry<String, String> entry : variables.entrySet()) {
             htmlContent = htmlContent.replace("${" + entry.getKey() + "}", entry.getValue());
         }
         MimeMessage message =javaMailSender.createMimeMessage();
         var messagehepler = new MimeMessageHelper(message);
-        messagehepler.setFrom("hquan0401.hr@gmail.com",senderName);
+        messagehepler.setFrom("workshopproject04@gmail.com",senderName);
         messagehepler.setTo(mail);
         messagehepler.setSubject(subject);
         messagehepler.setText(htmlContent,true);

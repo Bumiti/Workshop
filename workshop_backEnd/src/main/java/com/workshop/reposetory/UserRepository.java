@@ -11,12 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Transactional
     @Query("select u from User u where u.email =:email and u.isEnable =true")
     Optional<User> findByEmail(String email);
-    @Transactional
+    @Query("select u from User u left join fetch u.userAddresses ua where u.email = :email and u.isEnable = true")
+    Optional<User> findByEmailWithAddresses(String email);
+
     @Modifying
     @Query(value = "SELECT u.* FROM users u " +
             "JOIN users_role ur ON u.id = ur.user_id " +
@@ -31,12 +32,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE User u SET u.password =?2  WHERE u.id = ?1")
-    int chancePasswordAccountById(Long id,String  NewPassword);
+    @Query("UPDATE User u SET u.password =:NewPassword  WHERE u.id = :id")
+    void chancePasswordAccountById(Long id,String NewPassword);
 
-//    @Modifying
-//    @Query( "INSERT INTO users (user_name, full_name, image_url, phone_number, email, is_enable) " +
-//            "VALUES (:#{#userExit.user_name}, :#{#userExit.full_name}, :#{#userExit.image_url}, :#{#userExit.phoneNumber}, :#{#userExit.email}, true)")
-//    void saveUser(@Param("userExit") User userExit);
 
 }

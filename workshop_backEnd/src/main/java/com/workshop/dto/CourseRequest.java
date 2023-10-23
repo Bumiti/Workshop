@@ -1,10 +1,8 @@
 package com.workshop.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -22,18 +20,29 @@ public class CourseRequest {
     private Timestamp endDate;
     private int student_count;
     private String type;
+    @JsonProperty("MediaInforList")
     private List<CourseMediaInfoDTOS> MediaInforList;
-    private List<DiscountDTO> discountList;
-    private List<StudentEnrolled> studentEnrolledList;
-    public static class StudentEnrolled{
-        private String urlMedia;
-        private String urlImage;
-    }
+
+    @JsonProperty("discountDTOS")
+    private List<DiscountDTO> discountDTOS;
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class CourseMediaInfoDTOS{
         private String urlMedia;
         private String urlImage;
     }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class DiscountDTO {
+        //ngày hết hạn
+        private int quantity;
+        private Date redemptionDate;
+        //value của discount này
         private String name;
         private String description;
         private int remainingUses;

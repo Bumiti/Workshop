@@ -20,6 +20,7 @@ import java.util.List;
 @Accessors(chain = true)
 @Table(name="discount")
 public class Discount extends BaseModel{
+    private String code;
     private String name;
     private String description;
     private int remainingUses;
