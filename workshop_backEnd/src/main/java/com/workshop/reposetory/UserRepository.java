@@ -29,6 +29,11 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("UPDATE User u SET u.isEnable = CASE WHEN u.isEnable = true THEN false ELSE true END WHERE u.id = :id")
     int chanceStatusAccountById(Long id);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE User u SET u.password =?2  WHERE u.id = ?1")
+    int chancePasswordAccountById(Long id,String  NewPassword);
+
 //    @Modifying
 //    @Query( "INSERT INTO users (user_name, full_name, image_url, phone_number, email, is_enable) " +
 //            "VALUES (:#{#userExit.user_name}, :#{#userExit.full_name}, :#{#userExit.image_url}, :#{#userExit.phoneNumber}, :#{#userExit.email}, true)")

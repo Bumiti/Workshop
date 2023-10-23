@@ -57,7 +57,6 @@ public class UserServiceImpl implements UserService {
         }
         return result;
     }
-
     @Override
     public Boolean EditUser(UserEditRequest user) {
         try {
@@ -102,7 +101,6 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
-
     @Override
     public User SaveUserOAuthen(OAuthenticationRequest OAuthen) {
         Optional<User> userexist = userRepository.findByEmail(OAuthen.getEmail());
@@ -121,12 +119,10 @@ public class UserServiceImpl implements UserService {
             return result;
         }
     }
-
     @Override
     public Roles SaveRoles(Roles role) {
         return roleRepository.save(role);
     }
-
     @Override
     public Void AddRoleToUser(String user_name, String role_name) {
         Optional<User> userOptional = userRepository.findByEmail(user_name);
@@ -141,14 +137,13 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-
     //Lấy thông tin user từ token
     @Override
     public User getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof String) {
-            String email = (String) authentication.getPrincipal();
-            User user = userRepository.findByEmail(email).get();
+            String Email = (String) authentication.getPrincipal();
+            User user = userRepository.findByEmail(Email).get();
             return user;
         }
         return null;
