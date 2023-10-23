@@ -2,7 +2,8 @@ package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
 import com.workshop.dao.AdminServiceImpl;
-import com.workshop.dto.*;
+import com.workshop.dto.CourseDTO.CourseRespones;
+import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -114,7 +115,7 @@ public class AdminController {
     @GetMapping("account/listbyrole")
     public ResponseEntity<ApiResponse<?>> listAccountByRole(@RequestParam(name = "role") String role) {
         try {
-            List<UserInforRespone> accounts = adminService.listAccountByRole(role);
+            List<UserInfoResponse> accounts = adminService.listAccountByRole(role);
             if (accounts.isEmpty()) {
                 return createResponse(HttpStatus.NOT_FOUND, "error", "No account found with role " + role, null);
             } else {

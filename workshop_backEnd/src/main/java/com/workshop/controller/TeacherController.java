@@ -1,9 +1,9 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
-import com.workshop.dto.CourseRequest;
-import com.workshop.dto.CourseRespones;
-import com.workshop.dto.UserInforRespone;
+import com.workshop.dto.CourseDTO.CourseRequest;
+import com.workshop.dto.CourseDTO.CourseRespones;
+import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.service.CourseService;
 import com.workshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,10 +45,10 @@ public class TeacherController {
     @Operation(summary = "Lấy thông tin cá nhân Teacher")
     @GetMapping("/detail")
     public ResponseEntity<ApiResponse<?>> UserDetail() {
-        UserInforRespone userInforRespone = userService.userDetail();
-        if(userInforRespone!=null){
+        UserInfoResponse userInfoResponse = userService.userDetail();
+        if(userInfoResponse !=null){
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
-                    ("Success", "Your Info is ", userInforRespone));
+                    ("Success", "Your Info is ", userInfoResponse));
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>
                     ("Success", "Your Info is ", null));
@@ -59,7 +59,7 @@ public class TeacherController {
     @GetMapping("course/listStudent/{id}")
     public ResponseEntity<ApiResponse<?>> ListStudentByCourser(@PathVariable Long id) {
         try {
-            List<UserInforRespone> ListStudent = courseService.listStudentByCourse(id);
+            List<UserInfoResponse> ListStudent = courseService.listStudentByCourse(id);
             if (ListStudent != null && !ListStudent.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.OK)
                         .body(new ApiResponse<>("success", "List of Students", ListStudent));
@@ -159,5 +159,7 @@ public class TeacherController {
                     .body(new ApiResponse<>("error", "An error occurred while adding students to the course", null));
         }
     }
+
+
 }
 

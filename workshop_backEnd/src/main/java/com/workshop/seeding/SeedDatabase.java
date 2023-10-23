@@ -1,7 +1,7 @@
 package com.workshop.seeding;
 
 
-import com.workshop.dto.UserRegisterRequest;
+import com.workshop.dto.useDTO.UserRegisterRequest;
 import com.workshop.model.Location;
 import com.workshop.model.userModel.Roles;
 import com.workshop.service.LocationService;

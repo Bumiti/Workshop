@@ -2,7 +2,9 @@ package com.workshop.dao;
 
 import com.workshop.authentication.OAuthenticationRequest;
 import com.workshop.config.MapperGeneric;
-import com.workshop.dto.*;
+import com.workshop.dto.useDTO.UserEditRequest;
+import com.workshop.dto.useDTO.UserInfoResponse;
+import com.workshop.dto.useDTO.UserRegisterRequest;
 import com.workshop.model.userModel.*;
 import com.workshop.reposetory.*;
 import com.workshop.service.UserService;
@@ -11,12 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.security.SecureRandom;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -200,25 +199,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInforRespone userDetail() {
+    public UserInfoResponse userDetail() {
         User user = getCurrentUserDetails();
         User userFull = userRepository.findByEmailWithAddresses(user.getEmail()).get();
 
-        List<UserInforRespone.UserAddress> userAddressesList = new ArrayList<>();
+        List<UserInfoResponse.UserAddress> userAddressesList = new ArrayList<>();
         List<String>list = new ArrayList<>();
         for (Roles roles : userFull.getRoles()){
             list.add(roles.getName());
         }
         for(UserAddresses addresses : userFull.getUserAddresses())
         {
-            UserInforRespone.UserAddress userAddressres = new UserInforRespone.UserAddress();
+            UserInfoResponse.UserAddress userAddressres = new UserInfoResponse.UserAddress();
             userAddressres.setAddress(addresses.getAddress());
             userAddressres.setCity(addresses.getCity());
             userAddressres.setPostalCode(addresses.getPostalCode());
             userAddressres.setState(addresses.getState());
             userAddressesList.add(userAddressres);
         }
-        UserInforRespone inforRespone = new UserInforRespone();
+        UserInfoResponse inforRespone = new UserInfoResponse();
         inforRespone
                 .setId(userFull.getId()).setPhoneNumber(userFull.getPhoneNumber())
                 .setEmail(userFull.getEmail()).setFull_name(user.getFull_name())

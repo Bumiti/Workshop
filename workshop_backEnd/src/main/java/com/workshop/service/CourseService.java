@@ -1,8 +1,8 @@
 package com.workshop.service;
 
-import com.workshop.dto.CourseRequest;
-import com.workshop.dto.CourseRespones;
-import com.workshop.dto.UserInforRespone;
+import com.workshop.dto.CourseDTO.CourseRequest;
+import com.workshop.dto.CourseDTO.CourseRespones;
+import com.workshop.dto.useDTO.UserInfoResponse;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public interface CourseService {
     boolean updateCourse(Long id, CourseRequest courseRequest);
     boolean deleteCourse(Long id);
     boolean settingStatusCourse(Long id);
-    List<UserInforRespone> listStudentByCourse(Long id);
+    List<UserInfoResponse> listStudentByCourse(Long id);
     List<CourseRespones> listCourse();
     boolean AddEnrolledStudentsToCourseById(Long Course_id,List<Long> List_Student_id);
 

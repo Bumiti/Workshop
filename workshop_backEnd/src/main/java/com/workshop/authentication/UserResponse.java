@@ -1,6 +1,6 @@
 package com.workshop.authentication;
 
-import com.workshop.dto.UserEditRequest;
+import com.workshop.dto.useDTO.UserEditRequest;
 import lombok.*;
 import lombok.experimental.Accessors;
 

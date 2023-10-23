@@ -20,9 +20,9 @@ import java.util.List;
 @Accessors(chain = true)
 @Table(name="discount")
 public class Discount extends BaseModel{
-    private String code;
     private String name;
     private String description;
+    private int valueDiscount ;
     private int remainingUses;
     @ManyToOne
     @JoinColumn(name = "user_id")

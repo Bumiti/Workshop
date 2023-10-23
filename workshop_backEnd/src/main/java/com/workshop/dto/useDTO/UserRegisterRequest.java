@@ -1,4 +1,4 @@
-package com.workshop.dto;
+package com.workshop.dto.useDTO;
 
 import lombok.*;
 import lombok.experimental.Accessors;

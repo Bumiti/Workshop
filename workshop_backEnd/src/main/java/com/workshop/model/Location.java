@@ -22,6 +22,7 @@ public class Location extends BaseModel{
     private String name;
     private String address;
     private String description;
+
     // Quan hệ một nhiều với buổi workshop có thể tổ chức tại đây
     @OneToMany(mappedBy = "location")
     private List<Workshop> workshops;

@@ -1,11 +1,13 @@
-package com.workshop.dto;
+package com.workshop.dto.CourseDTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.workshop.model.BaseModel;
+import jakarta.annotation.Nullable;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -26,11 +28,17 @@ public class CourseRespones {
     private String Teacher;
     private boolean isPublic;
     @JsonProperty("studentEnrollments")
-    private List<StudentEnrollment> studentEnrollments;
+    @Nullable
+    @Builder.Default
+    private List<StudentEnrollment> studentEnrollments= Collections.emptyList();
     @JsonProperty("courseMediaInfos")
-    private List<CourseMediaInfo> courseMediaInfos;
+    @Nullable
+    @Builder.Default
+    private List<CourseMediaInfo> courseMediaInfos= Collections.emptyList();
     @JsonProperty("courseLocations")
-    private List<CourseLocation> courseLocations;
+    @Nullable
+    @Builder.Default
+    private List<CourseLocation> courseLocations= Collections.emptyList();
     @Getter
     @Setter
     @AllArgsConstructor

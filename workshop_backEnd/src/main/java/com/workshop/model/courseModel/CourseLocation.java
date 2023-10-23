@@ -22,8 +22,8 @@ import java.util.List;
 @Accessors(chain = true)
 @Table(name="course_locations")
 public class CourseLocation extends BaseModel {
-
-    private Date scheduleDate;
+    private String Area;
+    private Date schedule_Date;
     // Quan hệ một nhiều với khóa học
 
     @ManyToOne
@@ -32,6 +32,6 @@ public class CourseLocation extends BaseModel {
     // Quan hệ một nhiều với địa điểm
 
     @ManyToOne
-    @JoinColumn(name = "location_id", nullable = false)
+    @JoinColumn(name = "location_id", nullable = true)
     private Location locations;
 }

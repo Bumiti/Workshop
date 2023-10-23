@@ -24,6 +24,7 @@ import java.util.Date;
 public class CourseDiscount extends BaseModel {
     private Date redemptionDate;
     private int quantity;
+    private String code;
     // Quan hệ một nhiều với khóa học
     @ManyToOne
     @JoinColumn(name = "course_id")

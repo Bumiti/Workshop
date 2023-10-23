@@ -3,7 +3,8 @@ package com.workshop.controller;
 import com.workshop.authentication.*;
 import com.workshop.config.ApiResponse;
 import com.workshop.dao.UserServiceImpl;
-import com.workshop.dto.*;
+import com.workshop.dto.useDTO.UserEditRequest;
+import com.workshop.dto.useDTO.UserRegisterRequest;
 import com.workshop.event.RegisterCompleteEvent;
 import com.workshop.event.RenewPasswordEvent;
 import com.workshop.model.userModel.*;
@@ -15,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.*;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 

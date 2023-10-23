@@ -1,13 +1,12 @@
-package com.workshop.dto;
-
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+package com.workshop.dto.useDTO;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nullable;
+import lombok.*;
 import lombok.experimental.Accessors;
 
-
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -15,18 +14,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-public class UserInforRespone {
-    private Long id;
+public class UserEditRequest {
     private String full_name;
     private String user_name;
     private String email;
     private String phoneNumber;
     private String image_url;
-    private String gender;
-    private List<String> roles;
-    private boolean isEnable ;
-    private List<UserAddress> userAddresses;
+    private String roles;
 
+    @JsonProperty("userAddresses")
+    @Nullable
+    @Builder.Default
+    private List<UserAddress> userAddresses = Collections.emptyList();
+
+    @Getter
     public static class UserAddress {
         private String Address;
         private String City;
@@ -41,35 +42,22 @@ public class UserInforRespone {
         }
         public UserAddress() {
         }
-        public String getAddress() {
-            return Address;
-        }
+
         public void setAddress(String address) {
             Address = address;
-        }
-
-        public String getCity() {
-            return City;
         }
 
         public void setCity(String city) {
             City = city;
         }
 
-        public String getState() {
-            return State;
-        }
-
         public void setState(String state) {
             State = state;
-        }
-
-        public int getPostalCode() {
-            return PostalCode;
         }
 
         public void setPostalCode(int postalCode) {
             PostalCode = postalCode;
         }
     }
+
 }

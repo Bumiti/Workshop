@@ -2,6 +2,8 @@ package com.workshop.dao;
 
 
 import com.workshop.dto.*;
+import com.workshop.dto.CourseDTO.CourseRespones;
+import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.User;
 import com.workshop.reposetory.*;
@@ -35,21 +37,21 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<UserInforRespone> listAccountByRole(String role) {
-        List<UserInforRespone> listUserInforRespone = new ArrayList<>();
+    public List<UserInfoResponse> listAccountByRole(String role) {
+        List<UserInfoResponse> listUserInfoResponse = new ArrayList<>();
         List<User> ListUser = userRepository.findUsersByRoleName(role);
         for (User user : ListUser) {
-            UserInforRespone userInforRespone = new UserInforRespone();
-            userInforRespone.setId(user.getId())
+            UserInfoResponse userInfoResponse = new UserInfoResponse();
+            userInfoResponse.setId(user.getId())
                     .setUser_name(user.getUser_name())
                     .setFull_name(user.getFull_name())
                     .setImage_url(user.getImage_url())
                     .setPhoneNumber(user.getPhoneNumber())
                     .setEnable(user.isEnable());
-            listUserInforRespone.add(userInforRespone);
+            listUserInfoResponse.add(userInfoResponse);
 
         }
-        return listUserInforRespone;
+        return listUserInfoResponse;
     }
 
     @Override
@@ -88,7 +90,7 @@ public class AdminServiceImpl implements AdminService {
             for (CourseLocation courseLocation : course.getCourseLocation()) {
                 CourseRespones.CourseLocation location = new CourseRespones.CourseLocation();
                 location.setId(courseLocation.getId());
-                location.setScheduleDate(courseLocation.getScheduleDate());
+                location.setScheduleDate(courseLocation.getSchedule_Date());
                 location.setName(courseLocation.getLocations().getName());
                 location.setAddress(courseLocation.getLocations().getAddress());
                 location.setDescription(courseLocation.getLocations().getName());

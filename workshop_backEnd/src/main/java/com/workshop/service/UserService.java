@@ -1,9 +1,9 @@
 package com.workshop.service;
 
 import com.workshop.authentication.OAuthenticationRequest;
-import com.workshop.dto.UserEditRequest;
-import com.workshop.dto.UserInforRespone;
-import com.workshop.dto.UserRegisterRequest;
+import com.workshop.dto.useDTO.UserEditRequest;
+import com.workshop.dto.useDTO.UserInfoResponse;
+import com.workshop.dto.useDTO.UserRegisterRequest;
 import com.workshop.model.userModel.Roles;
 import com.workshop.model.userModel.User;
 import org.springframework.stereotype.Repository;
@@ -20,5 +20,5 @@ public interface UserService {
     String validate(String token);
     String ResetPasswordByMail(String mail);
     boolean ChangePassword(String oldPassword,String newPassword);
-    UserInforRespone userDetail();
+    UserInfoResponse userDetail();
 }
