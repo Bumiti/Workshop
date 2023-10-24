@@ -1,10 +1,11 @@
 package com.workshop.reposetory.User;
 import com.workshop.model.userModel.User;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
-
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u from User u where u.email =:email and u.isEnable =true")

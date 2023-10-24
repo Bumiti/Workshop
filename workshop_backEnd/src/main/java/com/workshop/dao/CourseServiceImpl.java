@@ -3,6 +3,7 @@ package com.workshop.dao;
 import com.workshop.config.MapperGeneric;
 import com.workshop.dto.CourseDTO.CourseRequest;
 import com.workshop.dto.CourseDTO.CourseRespones;
+import com.workshop.dto.CourseDTO.CourseUpdateRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.model.Discount;
 import com.workshop.model.Location;
@@ -14,6 +15,8 @@ import com.workshop.reposetory.Course.CourseMediaInfoRepository;
 import com.workshop.reposetory.Course.CourseRepository;
 import com.workshop.reposetory.DiscountRepository;
 import com.workshop.service.CourseService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,21 +28,15 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService{
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private CourseDiscountRepository courseDiscountRepository;
-    @Autowired
-    private DiscountRepository discountRepository;
-    @Autowired
-    private CourseMediaInfoRepository courseMediaInfoRepository;
-    @Autowired
-    private UserServiceImpl userService;
-    @Autowired
-    private CourseLocationRepository courseLocationRepository;
-
-
+    private final CourseRepository courseRepository;
+    private final CourseDiscountRepository courseDiscountRepository;
+    private final DiscountRepository discountRepository;
+    private final CourseMediaInfoRepository courseMediaInfoRepository;
+    private final UserServiceImpl userService;
+    private final CourseLocationRepository courseLocationRepository;
     boolean isCourse(Long Id){
         Course course_exit = courseRepository.findCourseById(Id);
         return course_exit != null;
@@ -70,22 +67,23 @@ public class CourseServiceImpl implements CourseService{
             }
             //Add Discount into Course
             for(CourseRequest.DiscountDTO discountDTO :discountDTOSList){
-                Discount discount = new Discount();
-                discount.setDescription(discountDTO.getDescription())
-                        .setName(discountDTO.getName())
-                        .setRemainingUses(discountDTO.getRemainingUses()).setValueDiscount(discountDTO.getValueDiscount());
-                discountRepository.save(discount);
-                for(int i=0;i<discountDTO.getQuantity();i++){
-                    CourseDiscount courseDiscount = new CourseDiscount();
-                    UUID randomUUID = UUID.randomUUID();
-                    String randomDiscountCode = randomUUID.toString();
-                    courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getQuantity())
-                            .setDiscount(discount).setCourse(course);
-                    courseDiscountRepository.save(courseDiscount);
+                if(discountDTO.getQuantity()>0){
+                    Discount discount = new Discount();
+                    discount.setDescription(discountDTO.getDescription())
+                            .setName(discountDTO.getName())
+                            .setRemainingUses(discountDTO.getQuantity())
+                            .setValueDiscount(discountDTO.getValueDiscount());
+                    discountRepository.save(discount);
+                    for(int i=0;i<discountDTO.getQuantity();i++){
+                        CourseDiscount courseDiscount = new CourseDiscount();
+                        UUID randomUUID = UUID.randomUUID();
+                        String randomDiscountCode = randomUUID.toString();
+                        courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getQuantity())
+                                .setDiscount(discount).setCourse(course);
+                        courseDiscountRepository.save(courseDiscount);
+                    }
                 }
             }
-            //Add Location into Course
-
             for(CourseRequest.CourseLocation courseLocation :courseLocationsList){
                 CourseLocation location = mapperLocationGeneric.DTOmapToModel(courseLocation,CourseLocation.class);
                 location.setCourses(course);
@@ -98,29 +96,96 @@ public class CourseServiceImpl implements CourseService{
     }
     @Override
 
-    public boolean updateCourse(Long id, CourseRequest courseRequest)
+    public boolean updateCourse(Long id, CourseUpdateRequest courseRequest)
     {
         User user = userService.getCurrentUserDetails();
+        Course courseExit = courseRepository.findCourseById(id);
         try{
-            MapperGeneric<Course,CourseRequest> mapperGeneric = new MapperGeneric<>();
-            MapperGeneric<CourseMediaInfo,CourseRequest.CourseMediaInfoDTOS> mapperMediaGeneric = new MapperGeneric<>();
-            MapperGeneric<CourseLocation,CourseRequest.CourseLocation> mapperLocationGeneric = new MapperGeneric<>();
-            List<CourseRequest.CourseMediaInfoDTOS> courseMediaInfoDTOSList = courseRequest.getMediaInfoList();
-            List<CourseRequest.DiscountDTO> discountDTOSList = courseRequest.getDiscountDTOS();
-            List<CourseRequest.CourseLocation> courseLocationsList = courseRequest.getCourseLocation();
+            MapperGeneric<Course,CourseUpdateRequest> mapperGeneric = new MapperGeneric<>();
+
+            MapperGeneric<CourseMediaInfo,CourseUpdateRequest.CourseMediaInfoDTOS> mapperMediaGeneric = new MapperGeneric<>();
+            MapperGeneric<CourseLocation,CourseUpdateRequest.CourseLocation> mapperLocationGeneric = new MapperGeneric<>();
+            MapperGeneric<Discount,CourseUpdateRequest.DiscountDTO> mapperDiscountGeneric = new MapperGeneric<>();
+
+            List<CourseUpdateRequest.CourseMediaInfoDTOS> courseMediaInfoDTOSList = courseRequest.getMediaInfoList();
+            List<CourseUpdateRequest.DiscountDTO> discountDTOSList = courseRequest.getDiscountDTOS();
+            List<CourseUpdateRequest.CourseLocation> courseLocationsList = courseRequest.getCourseLocation();
+
             Course course =  mapperGeneric.DTOmapToModel(courseRequest,Course.class);
             course.setTeacher(user);
-
             courseRepository.updateCourse(id,course);
 
-//            if(courseMediaInfoDTOSList != null){
-//                for (CourseRequest.CourseMediaInfoDTOS mediaInfoDTOS : courseMediaInfoDTOSList) {
-//                    CourseMediaInfo mediaInfo = mapperMediaGeneric.DTOmapToModel(mediaInfoDTOS, CourseMediaInfo.class);
-//                    mediaInfo.setCourse(course);
-//                    courseMediaInfoRepository.save(mediaInfo);
-//                }
-//            }
+            if(courseMediaInfoDTOSList != null){
+                for (CourseUpdateRequest.CourseMediaInfoDTOS mediaInfoDTOS : courseMediaInfoDTOSList)
+                {
+                    CourseMediaInfo mediaInfo = mapperMediaGeneric.DTOmapToModel(mediaInfoDTOS, CourseMediaInfo.class);
+                    Long cMda_id = mediaInfoDTOS.getCourseMedia_id();
+                    if(cMda_id>0){
+                        courseMediaInfoRepository.updateCourse(cMda_id,mediaInfo);
+                    }else{
+                        mediaInfo.setCourse(courseExit);
+                        courseMediaInfoRepository.save(mediaInfo);
+                    }
+                }
+            }
+            if(courseLocationsList!=null){
+                for(CourseUpdateRequest.CourseLocation courseLocation : courseLocationsList){
+                    CourseLocation location = mapperLocationGeneric.DTOmapToModel(courseLocation,CourseLocation.class);
+                    Long cLct_id = courseLocation.getCourseLocation_id();
+                    location.setCourses(courseExit);
+                    if(cLct_id>0){
+                        courseLocationRepository.updateCourseLocation(cLct_id,location);;
+                    }else{
+                        location.setCourses(courseExit);
+                        courseLocationRepository.save(location);
+                    }
+                }
+            }
+            if(discountDTOSList !=null){
+                for(CourseUpdateRequest.DiscountDTO discountDTO :discountDTOSList)
+                {
+                    Discount existingDiscount = discountRepository.findById(discountDTO.getCourseDiscount_id()).orElse(null);
+                    if (existingDiscount != null){
+                        Discount discount = mapperDiscountGeneric.DTOmapToModel(discountDTO,Discount.class);
+                        Long dCount_id = discountDTO.getCourseDiscount_id();
+                        discountRepository.updateDiscount(dCount_id,discount);
+                        if(existingDiscount.getRemainingUses() > 0){
+                            int remainingUsesInDatabase = existingDiscount.getRemainingUses();
+                            int newQuantity = discountDTO.getQuantity();
 
+                            int courseDiscountAdjustment = newQuantity - remainingUsesInDatabase;
+                            if (courseDiscountAdjustment > 0) {
+                                for (int i = 0; i < courseDiscountAdjustment; i++) {
+                                    CourseDiscount courseDiscount = new CourseDiscount();
+                                    UUID randomUUID = UUID.randomUUID();
+                                    String randomDiscountCode = randomUUID.toString();
+                                    courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(newQuantity)
+                                            .setDiscount(existingDiscount).setCourse(course);
+                                    courseDiscountRepository.save(courseDiscount);
+                                }
+                            } else {
+                                for (int i = 0; i < -courseDiscountAdjustment; i++) {
+                                    courseDiscountRepository.deleteCourseDiscounts(existingDiscount.getId(), newQuantity);
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        Discount discount = mapperDiscountGeneric.DTOmapToModel(discountDTO,Discount.class);
+
+                        discountRepository.save(discount);
+
+                        for(int i=0;i<discountDTO.getQuantity();i++){
+                            CourseDiscount courseDiscount = new CourseDiscount();
+                            UUID randomUUID = UUID.randomUUID();
+                            String randomDiscountCode = randomUUID.toString();
+                            courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getQuantity())
+                                    .setDiscount(discount).setCourse(courseExit);
+                            courseDiscountRepository.save(courseDiscount);
+                        }
+                    }
+                }
+            }
 
             return true;
         } catch (NotFoundException notFoundException) {

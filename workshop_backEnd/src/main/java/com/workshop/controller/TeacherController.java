@@ -3,6 +3,7 @@ package com.workshop.controller;
 import com.workshop.config.ApiResponse;
 import com.workshop.dto.CourseDTO.CourseRequest;
 import com.workshop.dto.CourseDTO.CourseRespones;
+import com.workshop.dto.CourseDTO.CourseUpdateRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.service.CourseService;
 import com.workshop.service.UserService;
@@ -24,10 +25,8 @@ import java.util.List;
 @Tag(name = "Teacher Controller", description = "Quản Lý Tác Vụ Giáo Viên")
 public class TeacherController {
 
-    @Autowired
-    private CourseService courseService;
-    @Autowired
-    private UserService userService;
+    private final CourseService courseService;
+    private final UserService userService;
     @Operation(summary = "Đổi mật khẩu")
     @PutMapping("chancePassword")
     public ResponseEntity<ApiResponse<?>> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
@@ -106,9 +105,9 @@ public class TeacherController {
     }
     @Operation(summary = "Sửa khóa Học")
     @PutMapping("course/update/{id}")
-    public ResponseEntity<ApiResponse<?>> UpdateCourse(@PathVariable Long id, @RequestBody CourseRequest courseRequest) {
-        if (id != null && courseRequest != null) {
-            boolean result = courseService.updateCourse(id, courseRequest);
+    public ResponseEntity<ApiResponse<?>> UpdateCourse(@PathVariable Long id, @RequestBody CourseUpdateRequest courseUpdateRequest) {
+        if (id != null && courseUpdateRequest != null) {
+            boolean result = courseService.updateCourse(id, courseUpdateRequest);
             if (result) {
                 return ResponseEntity.status(HttpStatus.CREATED)
                         .body(new ApiResponse<>(HttpStatus.CREATED.name(), "The Course has been Update ", null));

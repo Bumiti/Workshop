@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -29,9 +31,11 @@ public class Discount extends BaseModel{
     private User user;
 
     @OneToMany(mappedBy = "discount")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<WorkshopDiscount> workshopDiscounts;
 
     @OneToMany(mappedBy = "discount")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<CourseDiscount> courseDiscounts;
 
 }

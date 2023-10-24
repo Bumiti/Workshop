@@ -1,15 +1,14 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
-import com.workshop.dao.AdminServiceImpl;
 import com.workshop.dto.CourseDTO.CourseRespones;
 import com.workshop.dto.useDTO.UserInfoResponse;
+import com.workshop.service.AdminService;
 import com.workshop.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +21,9 @@ import java.util.List;
 @Tag(name = "Admin Area Controller", description = "Quản Lý Tác Vụ Admin Service")
 @SecurityRequirement(name = "bearerAuth")
 public class AdminController {
-    @Autowired
-    private AdminServiceImpl adminService;
-    @Autowired
-    private CourseService courseService;
+
+    private final AdminService adminService;
+    private final CourseService courseService;
 
     private ResponseEntity<ApiResponse<?>> createResponse(HttpStatus httpStatus, String status, String message, Object data) {
         return ResponseEntity.status(httpStatus).body(new ApiResponse<>(status, message, data));
@@ -110,9 +108,8 @@ public class AdminController {
 //            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", e.getMessage(), null);
 //        }
 //    }
-
     @Operation(summary = "Tìm Account bằng Role")
-    @GetMapping("account/listbyrole")
+    @GetMapping("user/listUserByRole")
     public ResponseEntity<ApiResponse<?>> listAccountByRole(@RequestParam(name = "role") String role) {
         try {
             List<UserInfoResponse> accounts = adminService.listAccountByRole(role);
@@ -126,7 +123,7 @@ public class AdminController {
         }
     }
     @Operation(summary = "Thay đổi trạng thái Account")
-    @PostMapping("account/changeStatus")
+    @PostMapping("user/changeStatus")
     public ResponseEntity<ApiResponse<?>> activeUserByRole(@RequestParam Long id) {
         try {
             boolean result = adminService.chanceIsEnableWithRoleAndId(id);

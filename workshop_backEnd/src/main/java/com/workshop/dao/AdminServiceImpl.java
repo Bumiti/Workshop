@@ -12,6 +12,8 @@ import com.workshop.reposetory.*;
 import com.workshop.reposetory.Course.CourseRepository;
 import com.workshop.reposetory.User.UserRepository;
 import com.workshop.service.AdminService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private WorkShopRepository workShopRepository;
+    private final UserRepository userRepository;
+    private final CourseRepository courseRepository;
+    private final WorkShopRepository workShopRepository;
 
     @Override
     public boolean chanceIsEnableWithRoleAndId(Long Id) {
