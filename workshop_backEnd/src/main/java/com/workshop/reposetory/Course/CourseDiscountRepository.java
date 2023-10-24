@@ -1,5 +1,6 @@
 package com.workshop.reposetory.Course;
 
+import com.workshop.model.Discount;
 import com.workshop.model.courseModel.CourseDiscount;
 import com.workshop.model.courseModel.CourseMediaInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,7 @@ public interface CourseDiscountRepository extends JpaRepository<CourseDiscount,L
     @Modifying
     @Query("DELETE FROM CourseDiscount cd WHERE cd.discount.id = :discountId AND cd.quantity =   :newQuantity")
     void deleteCourseDiscounts(@Param("discountId") Long discountId, @Param("newQuantity") int newQuantity);
+
+
+    void deleteCourseDiscountByDiscount(Discount discount);
 }

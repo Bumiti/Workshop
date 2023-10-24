@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/test/**").permitAll()
+                .requestMatchers("/web/**").permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/v3/api-docs/**").permitAll()
                 .requestMatchers("/user/**").hasAnyAuthority("USER","SELLER","ADMIN")
