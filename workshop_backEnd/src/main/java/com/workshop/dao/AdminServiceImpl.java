@@ -1,13 +1,16 @@
 package com.workshop.dao;
 
 
+import com.workshop.config.MapperGeneric;
 import com.workshop.dto.*;
 import com.workshop.dto.CourseDTO.CourseRespones;
 import com.workshop.dto.useDTO.UserInfoResponse;
+import com.workshop.model.Location;
 import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.User;
 import com.workshop.reposetory.*;
 import com.workshop.reposetory.Course.CourseRepository;
+import com.workshop.reposetory.User.UserRepository;
 import com.workshop.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,50 +59,54 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<CourseRespones> listCourse() {
-        List<Course> courses = courseRepository.findAll();
-        List<CourseRespones> CourseList = new ArrayList<>();
-        for (Course course : courses) {
-            CourseRespones courseResponse = new CourseRespones();
-            courseResponse.setId(course.getId()).setName(course.getName())
-                    .setDescription(course.getDescription())
-                    .setPrice(course.getPrice())
-                    .setStartDate(course.getStartDate())
-                    .setEndDate(course.getEndDate())
-                    .setType(course.getType())
-                    .setPublic(course.isPublic())
-                    .setTeacher(course.getTeacher().getUser_name())
-            ;
+        List<Course> coursesEntityList = courseRepository.findAll();
+        List<CourseRespones> coursesResponesList = new ArrayList<>();
+
+        MapperGeneric<Location, CourseRespones.CourseLocation.locationResponse> locationMapper = new MapperGeneric<>();
+        MapperGeneric<Course, CourseRespones> CourseMapper = new MapperGeneric<>();
+        MapperGeneric<CourseMediaInfo, CourseRespones.CourseMediaInfo> CourseMediaMapper = new MapperGeneric<>();
+        MapperGeneric<CourseLocation,CourseRespones.CourseLocation>CourseLocationMapper = new MapperGeneric<>();
+
+        for (Course course : coursesEntityList)
+        {
             List<CourseRespones.StudentEnrollment> studentEnrollments = new ArrayList<>();
-            for (CourseEnrollment enrollment : course.getEnrolledStudents()) {
+            List<CourseRespones.CourseMediaInfo> courseInfoMediaList = new ArrayList<>();
+            List<CourseRespones.CourseLocation> courseLocationsList = new ArrayList<>();
+            CourseRespones courseResponse = CourseMapper.ModelmapToDTO(course, CourseRespones.class);
+            courseResponse.setId(course.getId());
+            courseResponse.setTeacher(course.getTeacher().getFull_name());
+            for (CourseEnrollment enrollment : course.getEnrolledStudents())
+            {
                 CourseRespones.StudentEnrollment studentEnrollment = new CourseRespones.StudentEnrollment();
                 studentEnrollment.setId(enrollment.getEnrolledStudent().getId());
                 studentEnrollment.setName(enrollment.getEnrolledStudent().getUser_name());
                 studentEnrollments.add(studentEnrollment);
             }
             courseResponse.setStudentEnrollments(studentEnrollments);
-
-            List<CourseRespones.CourseMediaInfo> courseInfoMediaList = new ArrayList<>();
-            for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos()) {
-                CourseRespones.CourseMediaInfo courseInfoMedia = new CourseRespones.CourseMediaInfo();
-                courseInfoMedia.setId(courseMediaInfo.getId());
-                courseInfoMedia.setUrlMedia(courseMediaInfo.getUrlMedia());
-                courseInfoMedia.setUrlImage(courseMediaInfo.getUrlImage());
+            for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos())
+            {
+                if(courseMediaInfo.getCourse().equals(course)){
+                    CourseRespones.CourseMediaInfo courseInfoMedia = CourseMediaMapper.ModelmapToDTO(courseMediaInfo,CourseRespones.CourseMediaInfo.class);
+                    courseInfoMedia.setId(courseMediaInfo.getId());
+                    courseInfoMediaList.add(courseInfoMedia);
+                }
             }
             courseResponse.setCourseMediaInfos(courseInfoMediaList);
-            List<CourseRespones.CourseLocation> courseLocations = new ArrayList<>();
-            for (CourseLocation courseLocation : course.getCourseLocation()) {
-                CourseRespones.CourseLocation location = new CourseRespones.CourseLocation();
-                location.setId(courseLocation.getId());
-                location.setScheduleDate(courseLocation.getSchedule_Date());
-                location.setName(courseLocation.getLocations().getName());
-                location.setAddress(courseLocation.getLocations().getAddress());
-                location.setDescription(courseLocation.getLocations().getName());
+            for (CourseLocation courseLocation : course.getCourseLocation())
+            {
+                CourseRespones.CourseLocation courseLocal = CourseLocationMapper.ModelmapToDTO(courseLocation,CourseRespones.CourseLocation.class);
+                courseLocal.setId(courseLocation.getId());
+                if(courseLocation.getLocations()!=null){
+                    CourseRespones.CourseLocation.locationResponse location =
+                            locationMapper.ModelmapToDTO(courseLocation.getLocations(), CourseRespones.CourseLocation.locationResponse.class);
+                    courseLocal.setLocationResponse(location);
+                }
+                courseLocationsList.add(courseLocal);
             }
-            courseResponse.setCourseLocations(courseLocations);
-
-            CourseList.add(courseResponse);
+            courseResponse.setCourseLocations(courseLocationsList);
+            coursesResponesList.add(courseResponse);
         }
-        return CourseList;
+        return coursesResponesList;
     }
 
     @Override

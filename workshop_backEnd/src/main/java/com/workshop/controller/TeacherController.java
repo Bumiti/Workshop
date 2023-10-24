@@ -78,7 +78,7 @@ public class TeacherController {
     @GetMapping("course/list")
     public ResponseEntity<ApiResponse<?>> ListCourseByTeacherId() {
         try {
-            List<CourseRespones> ListCourse = courseService.listCourse();
+            List<CourseRespones> ListCourse = courseService.listCoursebyTeacher();
             System.out.print(ListCourse);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse<>("success", "List of ListCourse", ListCourse));

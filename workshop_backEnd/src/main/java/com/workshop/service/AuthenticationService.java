@@ -5,6 +5,7 @@ import com.workshop.jwtservice.JwtService;
 import com.workshop.model.userModel.Roles;
 import com.workshop.model.userModel.User;
 import com.workshop.reposetory.*;
+import com.workshop.reposetory.User.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

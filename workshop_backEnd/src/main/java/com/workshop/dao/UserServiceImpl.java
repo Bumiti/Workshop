@@ -7,6 +7,8 @@ import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.dto.useDTO.UserRegisterRequest;
 import com.workshop.model.userModel.*;
 import com.workshop.reposetory.*;
+import com.workshop.reposetory.User.UserAddressRepository;
+import com.workshop.reposetory.User.UserRepository;
 import com.workshop.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -125,7 +127,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
 
         } else {
-            throw new RuntimeException("Không tìm thấy người dùng với user_name: " + user_name);
+            throw new RuntimeException("Cant Not found User with user_name: " + user_name);
         }
         return null;
     }
@@ -184,7 +186,6 @@ public class UserServiceImpl implements UserService {
     {
         try{
             User user = getCurrentUserDetails();
-
             if (user != null && isPasswordCorrect(oldPassword)) {
                 String Password = passwordEncoder.encode(newPassword);
                 long Id = user.getId();
@@ -197,7 +198,6 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Error : ",e);
         }
     }
-
     @Override
     public UserInfoResponse userDetail() {
         User user = getCurrentUserDetails();
@@ -226,7 +226,6 @@ public class UserServiceImpl implements UserService {
 
         return inforRespone;
     }
-
     private String generateRandomPassword() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}|;:,.<>?";
         int length = 12;

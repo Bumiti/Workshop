@@ -14,7 +14,7 @@ public interface CourseService {
     boolean deleteCourse(Long id);
     boolean settingStatusCourse(Long id);
     List<UserInfoResponse> listStudentByCourse(Long id);
-    List<CourseRespones> listCourse();
+    List<CourseRespones> listCoursebyTeacher();
     boolean AddEnrolledStudentsToCourseById(Long Course_id,List<Long> List_Student_id);
 
 }

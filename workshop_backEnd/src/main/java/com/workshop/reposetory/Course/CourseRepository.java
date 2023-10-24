@@ -44,7 +44,7 @@ public interface CourseRepository extends JpaRepository<Course,Long> {
     @Modifying
     @Query("UPDATE Course c SET c.name = :#{#course.name}, c.description = :#{#course.description}" +
             ", c.price = :#{#course.price}, c.startDate = :#{#course.startDate}, c.endDate = :#{#course.endDate}" +
-            ", c.type = :#{#course.type} WHERE c.id = :Id")
+            ", c.type = :#{#course.type},c.student_count = :#{#course.student_count} WHERE c.id = :Id")
     void updateCourse(@Param("Id") Long Id, @Param("course") Course course);
 
     @Transactional

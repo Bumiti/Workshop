@@ -16,7 +16,6 @@ public class LocationServiceImpl implements LocationService {
            locationRepository.save(location);
            return true;
        }catch (Exception ex){
-
            return false;
        }
     }

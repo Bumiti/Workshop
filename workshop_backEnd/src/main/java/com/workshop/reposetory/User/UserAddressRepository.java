@@ -1,4 +1,4 @@
-package com.workshop.reposetory;
+package com.workshop.reposetory.User;
 
 
 import com.workshop.model.userModel.UserAddresses;

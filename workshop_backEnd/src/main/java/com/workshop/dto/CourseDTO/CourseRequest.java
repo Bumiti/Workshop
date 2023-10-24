@@ -3,6 +3,7 @@ package com.workshop.dto.CourseDTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -15,12 +16,19 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseRequest {
+    @NotNull
     private String name;
+    @NotNull
     private String description;
+    @NotNull
     private double price;
+    @NotNull
     private Timestamp startDate;
+    @NotNull
     private Timestamp endDate;
+    @NotNull
     private int student_count;
+    @NotNull
     private String type;
     @JsonProperty("MediaInfoList")
     @Nullable
