@@ -4,7 +4,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class AdminServiceTest {
 
@@ -18,5 +17,8 @@ class AdminServiceTest {
 
     @Test
     void listWorkshop() {
+    }
+    @Test
+    void editUser() {
     }
 }

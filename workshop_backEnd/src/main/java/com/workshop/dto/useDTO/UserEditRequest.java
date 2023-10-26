@@ -21,12 +21,10 @@ public class UserEditRequest {
     private String phoneNumber;
     private String image_url;
 //    private List<String> roles;
-
     @JsonProperty("userAddresses")
     @Nullable
     @Builder.Default
     private List<UserAddress> userAddresses = Collections.emptyList();
-
     @Getter
     @Setter
     @AllArgsConstructor
@@ -37,7 +35,6 @@ public class UserEditRequest {
         private String City;
         private String State;
         private int PostalCode;
-
     }
 
 }

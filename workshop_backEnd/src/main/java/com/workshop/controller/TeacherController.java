@@ -70,6 +70,23 @@ public class TeacherController {
                     ("Error", "An error occurred: " + e.getMessage(), null));
         }
     }
+    @Operation(summary = "Xóa Address")
+    @DeleteMapping("user/deleteAddress/{useAddress_id}")
+    public ResponseEntity<ApiResponse<?>> deleteUserAddress(@PathVariable Long useAddress_id) {
+        try {
+            boolean result = userService.DeleteAddress(useAddress_id);
+            if (result) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
+                        ("Success", "Delete Success", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
+                        ("Error", "Please check again", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
+                    ("Error", "An error occurred: " + e.getMessage(), null));
+        }
+    }
     @Operation(summary = "Danh Sách Học Sinh Trong Khóa Học")
     @GetMapping("course/listStudent/{id}")
     public ResponseEntity<ApiResponse<?>> ListStudentByCourser(@PathVariable Long id) {

@@ -2,7 +2,6 @@ package com.workshop.controller;
 
 import com.workshop.authentication.*;
 import com.workshop.config.ApiResponse;
-import com.workshop.dao.UserServiceImpl;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserRegisterRequest;
 import com.workshop.event.RegisterCompleteEvent;
@@ -10,6 +9,7 @@ import com.workshop.event.RenewPasswordEvent;
 import com.workshop.model.userModel.*;
 import com.workshop.reposetory.VerificationTokenRepository;
 import com.workshop.service.AuthenticationService;
+import com.workshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,14 +25,13 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Authentication Controller", description = "Quản Lý xác thực tài khoản")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
-    private final UserServiceImpl userServiceimpl;
+    private final UserService userService;
     private final ApplicationEventPublisher publisher;
     private final VerificationTokenRepository verificationTokenRepository;
 
     private String applicationUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
-
     @Operation(summary = "Đăng nhập bằng tài khoản Web")
     @PostMapping("/loginWeb")
     public ResponseEntity<ApiResponse<?>> webAuthentication(@RequestBody AuthenticationRequest authenticationRequest) {
@@ -52,7 +51,7 @@ public class AuthenticationController {
     @PostMapping("/loginOAuthentication")
     public ResponseEntity<ApiResponse<?>> OAuthentication(@RequestBody OAuthenticationRequest OAuthen) {
         try {
-            User user = userServiceimpl.SaveUserOAuthed(OAuthen);
+            User user = userService.SaveUserOAuthed(OAuthen);
             if (user != null) {
                 AuthenticationRequest authenticationRequest = new AuthenticationRequest();
                 authenticationRequest.setPassword(user.getEmail()).setEmail(user.getEmail());
@@ -78,7 +77,7 @@ public class AuthenticationController {
     @PostMapping("user/register")
     public ResponseEntity<ApiResponse<?>> registerUser(@RequestBody UserRegisterRequest userRegisterRequest, final HttpServletRequest request) {
         if (userRegisterRequest != null) {
-            User user = userServiceimpl.SaveUser(userRegisterRequest);
+            User user = userService.SaveUser(userRegisterRequest);
             publisher.publishEvent(new RegisterCompleteEvent(user, applicationUrl(request)));
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
                     ("Success", "please check your Email to complete your registration", null));
@@ -92,7 +91,7 @@ public class AuthenticationController {
     @PutMapping("user/edit")
     public ResponseEntity<ApiResponse<?>> editUser(@RequestBody UserEditRequest userEditRequest) {
         try {
-            boolean result = userServiceimpl.EditUser(userEditRequest);
+            boolean result = userService.EditUser(userEditRequest);
             if (result) {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
                         ("Success", "Your Info Has Been Changed", null));
@@ -111,7 +110,7 @@ public class AuthenticationController {
     public ResponseEntity<ApiResponse<?>> webAuthentication(@RequestParam String Email, final HttpServletRequest request) {
         try {
             if (Email != null) {
-                String newPassword = userServiceimpl.ResetPasswordByMail(Email);
+                String newPassword = userService.ResetPasswordByMail(Email);
                 publisher.publishEvent((new RenewPasswordEvent(Email, newPassword, applicationUrl(request))));
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
                         ("Success", "please check your Email Get New Password", null));
@@ -130,7 +129,7 @@ public class AuthenticationController {
         if (byToken.getUser().isEnable()) {
             return "This Account has already been verified,please ! Login";
         }
-        String verification = userServiceimpl.validate(token);
+        String verification = userService.validate(token);
         if (verification.equalsIgnoreCase("valid")) {
             return "Email verified Successfully, You can login";
         }

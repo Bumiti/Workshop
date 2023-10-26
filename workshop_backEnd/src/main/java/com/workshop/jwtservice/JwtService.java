@@ -6,8 +6,6 @@ import com.workshop.model.userModel.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
-
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -23,7 +21,6 @@ public class JwtService {
                 .withClaim("roles", authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
     }
-
     public String generateRefreshToken(User user, Collection<SimpleGrantedAuthority> authorities) {
         Algorithm algorithm = Algorithm.HMAC256(Secret_key.getBytes());
         return JWT.create()

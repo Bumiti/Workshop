@@ -2,18 +2,14 @@ package com.workshop.dao;
 
 import com.workshop.authentication.OAuthenticationRequest;
 import com.workshop.config.MapperGeneric;
-import com.workshop.dto.CourseDTO.CourseUpdateRequest;
 import com.workshop.dto.useDTO.*;
-import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.*;
 import com.workshop.reposetory.*;
 import com.workshop.reposetory.User.*;
 import com.workshop.service.UserService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.security.SecureRandom;
-import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +18,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+//@Transactional
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -50,12 +46,12 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public Boolean EditUser(UserEditRequest user) {
+        //MapperGeneric<kiểu model,kiểu dto> tenmapper = new MapperGeneric<>();
         MapperGeneric<UserAddresses, UserEditRequest.UserAddress> UserAddressmapper = new MapperGeneric<>();
         List<UserEditRequest.UserAddress> userAddressList = user.getUserAddresses();
         try {
-            Optional<User> userExist = userRepository.findByEmail(user.getEmail());
-            if (userExist.isPresent()) {
-                User existingUser = userExist.get();
+            User existingUser = userRepository.getUserEditByMail(user.getEmail());
+            if (existingUser!=null) {
                 if (user.getUser_name() != null) {
                     existingUser.setUser_name(user.getUser_name());
                 }
@@ -68,34 +64,23 @@ public class UserServiceImpl implements UserService {
                 if (user.getPhoneNumber() != null) {
                     existingUser.setPhoneNumber(user.getPhoneNumber());
                 }
-                if(userAddressList!=null){
-                    for(UserEditRequest.UserAddress userAddress :userAddressList){
-                        UserAddresses userAddresses = UserAddressmapper.DTOmapToModel(userAddress,UserAddresses.class);
-                        Long useAddres_id = userAddress.getId();
-                        if(useAddres_id >0){
-                            userAddressRepository.updateUserAddressById(useAddres_id,userAddresses);
+                userRepository.updateUser(existingUser);
+                if(userAddressList!=null && (long) userAddressList.size() >0)
+                {
+                    for(UserEditRequest.UserAddress userAddressItem  :userAddressList)
+                    {
+                        //kieu du lieu nhan ve = tenmapper.phuongthuc(biendulieu,class du lieu nhan ve);
+                        UserAddresses userAddresses = UserAddressmapper.DTOmapToModel(userAddressItem,UserAddresses.class);
+                        Long useAddress_id = userAddressItem.getId();
+                        if(useAddress_id >0){
+                            userAddressRepository.updateUserAddressById(useAddress_id,userAddresses);
                         }else{
                             userAddresses.setUser(existingUser);
                             userAddressRepository.save(userAddresses);
                         }
+                    }
                 }
-//                List<UserAddresses> userAddressesList = new ArrayList<>();
-//                for (UserEditRequest.UserAddress userAddressDTO : user.getUserAddresses()) {
-//                    UserAddresses userAddresses = new UserAddresses();
-//                    userAddresses.setAddress(userAddressDTO.getAddress())
-//                    .setCity(userAddressDTO.getCity())
-//                    .setState(userAddressDTO.getState())
-//                    .setPostalCode(userAddressDTO.getPostalCode())
-//                    .setUser(existingUser);
-//                    userAddressesList.add(userAddresses);
-//                }
-//                userAddressRepository.saveAll(userAddressesList);
-                userRepository.save(existingUser);
                 return true;
-            } else {
-                String errorMessage = "User Not Found with Email: " + user.getEmail();
-                return false;
-            }
         }else{return false;}
         } catch (Exception exception) {
             String errorMessage = "exception: " + exception.getMessage();
@@ -104,9 +89,9 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public User SaveUserOAuthed(OAuthenticationRequest OAuthen) {
-        Optional<User> userexist = userRepository.findByEmail(OAuthen.getEmail());
-        if (userexist.isPresent()) {
-            return userexist.get();
+        Optional<User> userExist = userRepository.findByEmail(OAuthen.getEmail());
+        if (userExist.isPresent()) {
+            return userExist.get();
         } else {
             User use = new User();
             use.setEmail(OAuthen.getEmail()).setUser_name(OAuthen.getEmail()).setFull_name(OAuthen.getEmail())
@@ -124,19 +109,32 @@ public class UserServiceImpl implements UserService {
     public void SaveRoles(Roles role) {
         roleRepository.save(role);
     }
+
     @Override
-    public Void AddRoleToUser(String user_name, String role_name) {
-        Optional<User> userOptional = userRepository.findByEmail(user_name);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            Roles roles = roleRepository.findByName(role_name);
-            user.getRoles().add(roles);
-            userRepository.save(user);
-        } else {
-            throw new RuntimeException("Cant Not found User with user_name: " + user_name);
+    public boolean DeleteAddress(Long useAddress_id) {
+
+        User existingUser = getCurrentUserDetails();
+        if(existingUser!=null){
+            int result = userAddressRepository.deleteUserAddressesByUserAndId(existingUser,useAddress_id);
+            return result > 0;
+        }else{
+            return false;
         }
-        return null;
     }
+
+//    @Override
+//    public Void AddRoleToUser(String user_name, String role_name) {
+//        Optional<User> userOptional = userRepository.findByEmail(user_name);
+//        if (userOptional.isPresent()) {
+//            User user = userOptional.get();
+//            Roles roles = roleRepository.findByName(role_name);
+//            user.getRoles().add(roles);
+//            userRepository.save(user);
+//        } else {
+//            throw new RuntimeException("Cant Not found User with user_name: " + user_name);
+//        }
+//        return null;
+//    }
     @Override
     public User getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

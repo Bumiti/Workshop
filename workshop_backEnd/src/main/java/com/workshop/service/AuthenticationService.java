@@ -26,13 +26,13 @@ public class AuthenticationService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(),authenticationRequest.getPassword()));
         User user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
         List<Roles> role = null;
-        if(user!=null){ role = RoleCustomerReposetory.getRole(user);}
-
+//        if(user!=null){ role = RoleCustomerReposetory.getRole(user);}
+        if(user!=null){ role = RoleCustomerReposetory.getRolesForUserByEmail(user.getEmail());}
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         Set<Roles> set = new HashSet<>();
-        role.stream().forEach(c->set.add(new Roles(c.getName())));
+        role.forEach(c->set.add(new Roles(c.getName())));
         user.setRoles(set);
-        set.stream().forEach(i->authorities.add(new SimpleGrantedAuthority(i.getName())));
+        set.forEach(i->authorities.add(new SimpleGrantedAuthority(i.getName())));
         var jwtToken = jwtService.generateAccessToken(user,authorities);
         var jwtRefreshToken = jwtService.generateRefreshToken(user,authorities);
 
@@ -59,8 +59,8 @@ public class AuthenticationService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(OUse.getEmail(),OUse.getPassword()));
         User user = userRepository.findByEmail(OUse.getEmail()).orElseThrow();
         List<Roles> role = null;
-        if(user!=null){ role = RoleCustomerReposetory.getRole(user);}
-
+//        if(user!=null){ role = RoleCustomerReposetory.getRole(user);}
+        if(user!=null){ role = RoleCustomerReposetory.getRolesForUserByEmail(user.getEmail());}
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
         Set<Roles> set = new HashSet<>();

@@ -15,7 +15,7 @@ public interface CourseDiscountRepository extends JpaRepository<CourseDiscount,L
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM CourseDiscount cd WHERE cd.discount.id = :discountId AND cd.quantity =   :newQuantity")
+    @Query("DELETE FROM CourseDiscount cd WHERE cd.discount.id = :discountId AND cd.quantity = :newQuantity")
     void deleteCourseDiscounts(@Param("discountId") Long discountId, @Param("newQuantity") int newQuantity);
 
 

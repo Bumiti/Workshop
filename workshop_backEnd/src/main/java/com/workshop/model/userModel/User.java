@@ -28,18 +28,15 @@ public class User extends BaseModel implements UserDetails  {
     private String full_name;
     @Column(name="user_name")
     private String user_name;
-
     @Column(name="email")
     @NaturalId(mutable = true)
     private String email;
-
     @Column(name="gender")
     private String gender;
     @Column(name="password")
     private String password;
     @Column(name="phone_number")
     private String phoneNumber;
-
     @Column(name="isEnable")
     private boolean isEnable = false;
     @Column(name="image_url")
@@ -49,38 +46,27 @@ public class User extends BaseModel implements UserDetails  {
     // Quan hệ một nhiều với khóa học đã tạo bởi giáo viên
     @OneToMany(mappedBy = "teacher")
     private List<Course> teacherCourses;
-
     // Quan hệ một nhiều với khóa học và buổi workshop đã đăng ký
     @OneToMany(mappedBy = "enrolledStudent")
     private List<CourseEnrollment> enrolledCourses;
-
     @OneToMany(mappedBy = "user")
     private List<UserAddresses> userAddresses;
-
     @OneToMany(mappedBy = "enrolledStudent")
     private List<WorkshopEnrollment> enrolledWorkshops;
-
     // Quan hệ một nhiều với danh sách ưu đãi
     @OneToMany(mappedBy = "user")
     private List<Discount> discounts;
-
-
     @ManyToMany
     @JoinTable(name="users_role",
             joinColumns = @JoinColumn(name="User_id"),
             inverseJoinColumns = @JoinColumn(name="Roles_id"))
     private Set<Roles> roles = new HashSet<>();
-
-
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authority = new ArrayList<>();
         roles.stream().forEach(i->authority.add(new SimpleGrantedAuthority(i.getName())));
         return List.of(new SimpleGrantedAuthority((authority.toString())));
     }
-
     @Override
     public String getUsername() {
         return email;
