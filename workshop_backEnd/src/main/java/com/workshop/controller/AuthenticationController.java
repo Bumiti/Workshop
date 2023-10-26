@@ -52,7 +52,7 @@ public class AuthenticationController {
     @PostMapping("/loginOAuthentication")
     public ResponseEntity<ApiResponse<?>> OAuthentication(@RequestBody OAuthenticationRequest OAuthen) {
         try {
-            User user = userServiceimpl.SaveUserOAuthen(OAuthen);
+            User user = userServiceimpl.SaveUserOAuthed(OAuthen);
             if (user != null) {
                 AuthenticationRequest authenticationRequest = new AuthenticationRequest();
                 authenticationRequest.setPassword(user.getEmail()).setEmail(user.getEmail());

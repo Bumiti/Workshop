@@ -32,35 +32,14 @@ public class UserInfoResponse {
     private List<UserAddress> userAddresses= Collections.emptyList();
 
     @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class UserAddress {
+        private Long id;
         private String Address;
         private String City;
         private String State;
         private int PostalCode;
-
-        public UserAddress(String address, String city, String state, int postalCode) {
-            Address = address;
-            City = city;
-            State = state;
-            PostalCode = postalCode;
-        }
-        public UserAddress() {
-        }
-
-        public void setAddress(String address) {
-            Address = address;
-        }
-
-        public void setCity(String city) {
-            City = city;
-        }
-
-        public void setState(String state) {
-            State = state;
-        }
-
-        public void setPostalCode(int postalCode) {
-            PostalCode = postalCode;
-        }
     }
 }

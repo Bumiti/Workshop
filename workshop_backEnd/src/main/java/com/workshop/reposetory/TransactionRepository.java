@@ -10,6 +10,4 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction,Long> {
 
-//    @Query()
-//    List<Transaction> TransactionList();
 }

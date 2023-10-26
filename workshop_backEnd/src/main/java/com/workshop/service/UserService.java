@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 public interface UserService {
     User SaveUser(UserRegisterRequest user);
     Boolean EditUser(UserEditRequest user);
-    User SaveUserOAuthen(OAuthenticationRequest OAuthen);
-    Roles SaveRoles(Roles role);
+    User SaveUserOAuthed(OAuthenticationRequest OAuthen);
+    void SaveRoles(Roles role);
     Void AddRoleToUser(String user_name,String role_name);
     User getCurrentUserDetails();
     void saveUserVerificationToken(User user, String verificationToken);

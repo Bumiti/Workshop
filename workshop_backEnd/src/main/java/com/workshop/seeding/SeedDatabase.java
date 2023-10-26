@@ -1,49 +1,28 @@
 package com.workshop.seeding;
-
-
-import com.workshop.config.MapperGeneric;
-import com.workshop.dto.CourseDTO.CourseRequest;
 import com.workshop.dto.useDTO.UserRegisterRequest;
 import com.workshop.model.Location;
-import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.Roles;
-import com.workshop.model.userModel.User;
 import com.workshop.reposetory.User.UserRepository;
 import com.workshop.service.LocationService;
 import jakarta.annotation.PostConstruct;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.workshop.service.UserService;
-
-import java.io.File;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
 import java.util.Random;
-
 
 @Service
 @RequiredArgsConstructor
-
 public class SeedDatabase {
 
     private final UserService userService;
-    private final UserRepository userRepository;
     private final LocationService locationService;
 
-
     private static final String SEED_STATUS_FILE_PATH = "seed_status.txt";
-
     private boolean isSeedCompleted() {
         return new File(SEED_STATUS_FILE_PATH).exists();
     }
-
     private void createSeedStatusFile() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(SEED_STATUS_FILE_PATH))) {
             writer.write("Seed has run and completed");
@@ -52,7 +31,6 @@ public class SeedDatabase {
             e.printStackTrace();
         }
     }
-
     private void addRandomTeachers() {
         String[] names = {"John", "Alice", "Bob", "Emily", "Michael", "Sarah", "David", "Olivia", "Daniel", "Sophia", "William", "Emma", "James", "Ava", "Matthew", "Chloe", "Jacob", "Mia", "Ethan", "Lily"};
         String[] genders = {"male", "female"};
@@ -81,7 +59,6 @@ public class SeedDatabase {
             userService.SaveUser(teacher);
         }
     }
-
     private void addLocation() {
         locationService.AddLocation(new Location("Adora Plaza", "Quận 1", "Trung Tâm 1", null, null));
         locationService.AddLocation(new Location("Diamond Center", "Quận 1", "Trung Tâm 2", null, null));
@@ -120,7 +97,6 @@ public class SeedDatabase {
         locationService.AddLocation(new Location("CitiMart 2", "Quận 12", "Trung Tâm 2", null, null));
         locationService.AddLocation(new Location("Super Plaza", "Quận 12", "Trung Tâm 3", null, null));
     }
-
     private void addDefaultRoles() {
         userService.SaveRoles(new Roles(null, "USER"));
         userService.SaveRoles(new Roles(null, "SELLER"));
@@ -131,17 +107,16 @@ public class SeedDatabase {
         if (isSeedCompleted()) {
             System.out.println("Seed has run before. Do not do it again");
         } else {
+            //gọi hàm từ trên xuống
+            addDefaultRoles();
             userService.SaveUser(new UserRegisterRequest("NguyenAdmin", "admin64",
                     "admin64@gmail.com", "12345", "0383334196", "female", "ADMIN", true));
             userService.SaveUser(new UserRegisterRequest("lactuong64@gmail.com", "lactuong64@gmail.com",
                     "lactuong64@gmail.com", "12345", "0383334195", "male", "USER", true));
             userService.SaveUser(new UserRegisterRequest("teacher01", "teacher01",
                     "teacher01@gmail.com", "12345", "0383334195", "male", "SELLER", true));
-            //gọi hàm trên xuống
-            addDefaultRoles();
             addRandomTeachers();
             addLocation();
-
             createSeedStatusFile();
         }
 

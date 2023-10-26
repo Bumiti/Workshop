@@ -4,6 +4,7 @@ import com.workshop.config.ApiResponse;
 import com.workshop.dto.CourseDTO.CourseRequest;
 import com.workshop.dto.CourseDTO.CourseRespones;
 import com.workshop.dto.CourseDTO.CourseUpdateRequest;
+import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.service.CourseService;
 import com.workshop.service.UserService;
@@ -11,7 +12,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +53,23 @@ public class TeacherController {
                     ("Success", "Your Info is ", null));
         }
     }
-
+    @Operation(summary = "Sửa thông tin cá nhân Teacher")
+    @PutMapping("user/edit")
+    public ResponseEntity<ApiResponse<?>> editUser(@RequestBody UserEditRequest userEditRequest) {
+        try {
+            boolean result = userService.EditUser(userEditRequest);
+            if (result) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
+                        ("Success", "Your Info Has Been Changed", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
+                        ("Error", "Please check again", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
+                    ("Error", "An error occurred: " + e.getMessage(), null));
+        }
+    }
     @Operation(summary = "Danh Sách Học Sinh Trong Khóa Học")
     @GetMapping("course/listStudent/{id}")
     public ResponseEntity<ApiResponse<?>> ListStudentByCourser(@PathVariable Long id) {
@@ -77,7 +93,7 @@ public class TeacherController {
     @GetMapping("course/list")
     public ResponseEntity<ApiResponse<?>> ListCourseByTeacherId() {
         try {
-            List<CourseRespones> ListCourse = courseService.listCoursebyTeacher();
+            List<CourseRespones> ListCourse = courseService.listCourseTeacher();
             System.out.print(ListCourse);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse<>("success", "List of ListCourse", ListCourse));

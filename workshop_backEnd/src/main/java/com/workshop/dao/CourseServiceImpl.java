@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.*;
-
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -25,7 +23,6 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMediaInfoRepository courseMediaInfoRepository;
     private final UserServiceImpl userService;
     private final CourseLocationRepository courseLocationRepository;
-
     boolean isCourse(Long Id) {
         Course course_exit = courseRepository.findCourseById(Id);
         return course_exit != null;
@@ -84,9 +81,7 @@ public class CourseServiceImpl implements CourseService {
             return true;
         } else {return false;}
     }
-
     @Override
-
     public boolean updateCourse(Long id, CourseUpdateRequest courseRequest) {
         User user = userService.getCurrentUserDetails();
         Course courseExit = courseRepository.findCourseById(id);
@@ -149,7 +144,6 @@ public class CourseServiceImpl implements CourseService {
                                 }
                             } else {
                                 for (int i = 0; i < -courseDiscountAdjustment; i++) {
-//                                    courseDiscountRepository.deleteCourseDiscounts(existingDiscount.getId(), newQuantity);
                                     courseDiscountRepository.deleteCourseDiscountByDiscount(existingDiscount);
                                 }
                             }
@@ -158,14 +152,12 @@ public class CourseServiceImpl implements CourseService {
                         discount.setRemainingUses(discountDTO.getQuantity());
                         discountRepository.save(discount);
                         for (int i = 0; i < discountDTO.getQuantity(); i++) {
-
-                            CourseDiscount courseDiscount = new CourseDiscount();
-                            UUID randomUUID = UUID.randomUUID();
-                            String randomDiscountCode = randomUUID.toString();
-                            courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getQuantity())
-                                    .setDiscount(discount).setCourse(courseExit);
-
-                            courseDiscountRepository.save(courseDiscount);
+                        CourseDiscount courseDiscount = new CourseDiscount();
+                        UUID randomUUID = UUID.randomUUID();
+                        String randomDiscountCode = randomUUID.toString();
+                        courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getQuantity())
+                                .setDiscount(discount).setCourse(courseExit);
+                        courseDiscountRepository.save(courseDiscount);
                         }
                     }
                 }
@@ -176,16 +168,13 @@ public class CourseServiceImpl implements CourseService {
             return false;
         }
     }
-
     @Override
     public boolean deleteCourse(Long id) {
         Course course = courseRepository.findCourseById(id);
         if (course.getName() != null) {
             courseRepository.delete(course);
             return true;
-        } else {
-            return false;
-        }
+        } else {return false;}
     }
 
     @Override
@@ -197,7 +186,6 @@ public class CourseServiceImpl implements CourseService {
             throw new RuntimeException("Error: " + exception);
         }
     }
-
     @Override
     public List<UserInfoResponse> listStudentByCourse(Long id) {
         try {
@@ -219,9 +207,8 @@ public class CourseServiceImpl implements CourseService {
             return null;
         }
     }
-
     @Override
-    public List<CourseRespones> listCoursebyTeacher() {
+    public List<CourseRespones> listCourseTeacher() {
         try {
             User teacher = userService.getCurrentUserDetails();
             List<Course> coursesEntityList = courseRepository.listCoursebyTeacherId(teacher.getId());
@@ -231,7 +218,6 @@ public class CourseServiceImpl implements CourseService {
             MapperGeneric<Course, CourseRespones> CourseMapper = new MapperGeneric<>();
             MapperGeneric<CourseMediaInfo, CourseRespones.CourseMediaInfo> CourseMediaMapper = new MapperGeneric<>();
             MapperGeneric<CourseLocation, CourseRespones.CourseLocation> CourseLocationMapper = new MapperGeneric<>();
-
             for (Course course : coursesEntityList) {
                 List<CourseRespones.StudentEnrollment> studentEnrollments = new ArrayList<>();
                 List<CourseRespones.CourseMediaInfo> courseInfoMediaList = new ArrayList<>();
@@ -272,7 +258,6 @@ public class CourseServiceImpl implements CourseService {
             throw new RuntimeException(runtimeException);
         }
     }
-
     @Override
     public boolean AddEnrolledStudentsToCourseById(Long Course_id, List<Long> studentIds) {
         try {
@@ -293,12 +278,10 @@ public class CourseServiceImpl implements CourseService {
     public List<CourseRespones> listCourseEnable() {
         List<Course> coursesEntityList = courseRepository.listCoursePublic();
         List<CourseRespones> coursesResponesList = new ArrayList<>();
-
         MapperGeneric<Location, CourseRespones.CourseLocation.locationResponse> locationMapper = new MapperGeneric<>();
         MapperGeneric<Course, CourseRespones> CourseMapper = new MapperGeneric<>();
         MapperGeneric<CourseMediaInfo, CourseRespones.CourseMediaInfo> CourseMediaMapper = new MapperGeneric<>();
         MapperGeneric<CourseLocation,CourseRespones.CourseLocation>CourseLocationMapper = new MapperGeneric<>();
-
         for (Course course : coursesEntityList)
         {
             List<CourseRespones.StudentEnrollment> studentEnrollments = new ArrayList<>();

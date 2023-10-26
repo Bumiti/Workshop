@@ -2,27 +2,23 @@ package com.workshop.dao;
 
 import com.workshop.authentication.OAuthenticationRequest;
 import com.workshop.config.MapperGeneric;
-import com.workshop.dto.useDTO.UserEditRequest;
-import com.workshop.dto.useDTO.UserInfoResponse;
-import com.workshop.dto.useDTO.UserRegisterRequest;
+import com.workshop.dto.CourseDTO.CourseUpdateRequest;
+import com.workshop.dto.useDTO.*;
+import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.*;
 import com.workshop.reposetory.*;
-import com.workshop.reposetory.User.UserAddressRepository;
-import com.workshop.reposetory.User.UserRepository;
+import com.workshop.reposetory.User.*;
 import com.workshop.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.security.SecureRandom;
-
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.*;
-
-
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final VerificationTokenRepository verificationTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserAddressRepository userAddressRepository;
+
     @Override
     public User SaveUser(UserRegisterRequest user) {
         MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
@@ -53,6 +50,8 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public Boolean EditUser(UserEditRequest user) {
+        MapperGeneric<UserAddresses, UserEditRequest.UserAddress> UserAddressmapper = new MapperGeneric<>();
+        List<UserEditRequest.UserAddress> userAddressList = user.getUserAddresses();
         try {
             Optional<User> userExist = userRepository.findByEmail(user.getEmail());
             if (userExist.isPresent()) {
@@ -69,42 +68,50 @@ public class UserServiceImpl implements UserService {
                 if (user.getPhoneNumber() != null) {
                     existingUser.setPhoneNumber(user.getPhoneNumber());
                 }
-                List<UserAddresses> userAddressesList = new ArrayList<>();
-                for (UserEditRequest.UserAddress userAddressDTO : user.getUserAddresses()) {
-                    UserAddresses userAddresses = new UserAddresses();
-                    userAddresses.setAddress(userAddressDTO.getAddress())
-                            .setCity(userAddressDTO.getCity())
-                            .setState(userAddressDTO.getState())
-                            .setPostalCode(userAddressDTO.getPostalCode())
-                            .setUser(existingUser);
-                    userAddressesList.add(userAddresses);
+                if(userAddressList!=null){
+                    for(UserEditRequest.UserAddress userAddress :userAddressList){
+                        UserAddresses userAddresses = UserAddressmapper.DTOmapToModel(userAddress,UserAddresses.class);
+                        Long useAddres_id = userAddress.getId();
+                        if(useAddres_id >0){
+                            userAddressRepository.updateUserAddressById(useAddres_id,userAddresses);
+                        }else{
+                            userAddresses.setUser(existingUser);
+                            userAddressRepository.save(userAddresses);
+                        }
                 }
-//                userAddressRepository.saveUserAddresses(userAddressesList);
-                userAddressRepository.saveAll(userAddressesList);
+//                List<UserAddresses> userAddressesList = new ArrayList<>();
+//                for (UserEditRequest.UserAddress userAddressDTO : user.getUserAddresses()) {
+//                    UserAddresses userAddresses = new UserAddresses();
+//                    userAddresses.setAddress(userAddressDTO.getAddress())
+//                    .setCity(userAddressDTO.getCity())
+//                    .setState(userAddressDTO.getState())
+//                    .setPostalCode(userAddressDTO.getPostalCode())
+//                    .setUser(existingUser);
+//                    userAddressesList.add(userAddresses);
+//                }
+//                userAddressRepository.saveAll(userAddressesList);
                 userRepository.save(existingUser);
                 return true;
             } else {
                 String errorMessage = "User Not Found with Email: " + user.getEmail();
                 return false;
             }
-        } catch (DataAccessException ex) {
-            String errorMessage = "DataAccessException: " + ex.getMessage();
-            return false;
+        }else{return false;}
         } catch (Exception exception) {
             String errorMessage = "exception: " + exception.getMessage();
             return false;
         }
     }
     @Override
-    public User SaveUserOAuthen(OAuthenticationRequest OAuthen) {
+    public User SaveUserOAuthed(OAuthenticationRequest OAuthen) {
         Optional<User> userexist = userRepository.findByEmail(OAuthen.getEmail());
         if (userexist.isPresent()) {
             return userexist.get();
         } else {
             User use = new User();
             use.setEmail(OAuthen.getEmail()).setUser_name(OAuthen.getEmail()).setFull_name(OAuthen.getEmail())
-                    .setEnable(true)
-                    .setPassword(passwordEncoder.encode(OAuthen.getEmail()));
+            .setEnable(true)
+            .setPassword(passwordEncoder.encode(OAuthen.getEmail()));
             var result = userRepository.save(use);
             if (result != null) {
                 Roles roles = roleRepository.findByName("USER");
@@ -114,8 +121,8 @@ public class UserServiceImpl implements UserService {
         }
     }
     @Override
-    public Roles SaveRoles(Roles role) {
-        return roleRepository.save(role);
+    public void SaveRoles(Roles role) {
+        roleRepository.save(role);
     }
     @Override
     public Void AddRoleToUser(String user_name, String role_name) {
@@ -125,7 +132,6 @@ public class UserServiceImpl implements UserService {
             Roles roles = roleRepository.findByName(role_name);
             user.getRoles().add(roles);
             userRepository.save(user);
-
         } else {
             throw new RuntimeException("Cant Not found User with user_name: " + user_name);
         }
@@ -202,7 +208,6 @@ public class UserServiceImpl implements UserService {
     public UserInfoResponse userDetail() {
         User user = getCurrentUserDetails();
         User userFull = userRepository.findByEmailWithAddresses(user.getEmail()).get();
-
         List<UserInfoResponse.UserAddress> userAddressesList = new ArrayList<>();
         List<String>list = new ArrayList<>();
         for (Roles roles : userFull.getRoles()){
@@ -211,6 +216,7 @@ public class UserServiceImpl implements UserService {
         for(UserAddresses addresses : userFull.getUserAddresses())
         {
             UserInfoResponse.UserAddress userAddressres = new UserInfoResponse.UserAddress();
+            userAddressres.setId(addresses.getId());
             userAddressres.setAddress(addresses.getAddress());
             userAddressres.setCity(addresses.getCity());
             userAddressres.setPostalCode(addresses.getPostalCode());

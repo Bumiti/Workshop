@@ -1,6 +1,7 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
+import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,6 +45,23 @@ public class StudentController {
             }
         } catch (Exception authException) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(authException.getMessage(), "Authentication service error", null));
+        }
+    }
+    @Operation(summary = "Sửa thông tin Student")
+    @PutMapping("user/edit")
+    public ResponseEntity<ApiResponse<?>> editUser(@RequestBody UserEditRequest userEditRequest) {
+        try {
+            boolean result = userService.EditUser(userEditRequest);
+            if (result) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
+                        ("Success", "Your Info Has Been Changed", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
+                        ("Error", "Please check again", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
+                    ("Error", "An error occurred: " + e.getMessage(), null));
         }
     }
 }
