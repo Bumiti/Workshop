@@ -10,7 +10,7 @@ import { FaPlay } from "react-icons/fa";
 
 import styles from '../buttons/button.module.css';
 
-export default function Card_temp_1() {
+export default function Card_temp_2() {
     
     return (
         <div className="card-container">
@@ -26,7 +26,7 @@ export default function Card_temp_1() {
             </div>
           </div>
           <div className={styles.contentContainer}>
-            <p className={styles.freeTitle}></p>
+            <p className={styles.advancedTitle}>Advanced</p>
             <h1 className={styles.cardTitle}>
               React Native with TypeScript tutorial.
             </h1>

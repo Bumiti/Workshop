@@ -45,7 +45,7 @@ export default function Navbar() {
            className={styles.roundedCircle}
             src={session.user.image}
           />
-          <a> {session.user.name.split(' ')[0]}</a>
+          {/* <a> {session.user.name.split(' ')[0]}</a> */}
           {dropdownVisible && (
             <div className={`dropdownMenu ${dropdownVisible ? 'visible' : ''}`}>
               <div className={styles.dropDown}>

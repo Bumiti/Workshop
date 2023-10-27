@@ -20,14 +20,14 @@ const LoginForm = () => {
         const requestHeaders: HeadersInit = new Headers();
         requestHeaders.set('Content-Type', 'application/json');
         try {
-            console.log(values);
+            // console.log("123",values);
             const response = await signIn("credentials",{
                 email:values.email,
                 password:values.password,
                 redirect:true,
                 callbackUrl:"/"
             })
-            console.log("response",response)
+            // console.log("response",response)
             
         } catch (error) {
             console.error('Lỗi khi gọi API đăng nhập:', error);
