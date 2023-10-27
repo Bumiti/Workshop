@@ -7,6 +7,7 @@ import com.workshop.model.userModel.*;
 import com.workshop.reposetory.*;
 import com.workshop.reposetory.User.*;
 import com.workshop.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.security.SecureRandom;
@@ -18,7 +19,6 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-//@Transactional
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final UserAddressRepository userAddressRepository;
 
     @Override
+    @Transactional
     public User SaveUser(UserRegisterRequest user) {
         MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
         Optional<User> userExist = userRepository.findByEmail(user.getEmail());
@@ -45,8 +46,8 @@ public class UserServiceImpl implements UserService {
         return result;
     }
     @Override
+    @Transactional
     public Boolean EditUser(UserEditRequest user) {
-        //MapperGeneric<kiểu model,kiểu dto> tenmapper = new MapperGeneric<>();
         MapperGeneric<UserAddresses, UserEditRequest.UserAddress> UserAddressmapper = new MapperGeneric<>();
         List<UserEditRequest.UserAddress> userAddressList = user.getUserAddresses();
         try {
@@ -88,6 +89,7 @@ public class UserServiceImpl implements UserService {
         }
     }
     @Override
+    @Transactional
     public User SaveUserOAuthed(OAuthenticationRequest OAuthen) {
         Optional<User> userExist = userRepository.findByEmail(OAuthen.getEmail());
         if (userExist.isPresent()) {
@@ -111,6 +113,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean DeleteAddress(Long useAddress_id) {
 
         User existingUser = getCurrentUserDetails();
@@ -121,20 +124,6 @@ public class UserServiceImpl implements UserService {
             return false;
         }
     }
-
-//    @Override
-//    public Void AddRoleToUser(String user_name, String role_name) {
-//        Optional<User> userOptional = userRepository.findByEmail(user_name);
-//        if (userOptional.isPresent()) {
-//            User user = userOptional.get();
-//            Roles roles = roleRepository.findByName(role_name);
-//            user.getRoles().add(roles);
-//            userRepository.save(user);
-//        } else {
-//            throw new RuntimeException("Cant Not found User with user_name: " + user_name);
-//        }
-//        return null;
-//    }
     @Override
     public User getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -147,11 +136,13 @@ public class UserServiceImpl implements UserService {
     }
     //Lưu token xác thực user
     @Override
+    @Transactional
     public void saveUserVerificationToken(User user, String verificationToken) {
         var verification_token = new VerificationToken(verificationToken, user);
         verificationTokenRepository.save(verification_token);
     }
     @Override
+    @Transactional
     public String validate(String token) {
         VerificationToken theToken = verificationTokenRepository.findByToken((token));
         if (theToken == null) {
@@ -168,6 +159,7 @@ public class UserServiceImpl implements UserService {
         return "valid";
     }
     @Override
+    @Transactional
     public String ResetPasswordByMail(String mail) {
         Optional<User> user = userRepository.findByEmail(mail);
         if (user.isPresent()) {
@@ -186,6 +178,7 @@ public class UserServiceImpl implements UserService {
         return isPasswordMatch;
     }
     @Override
+    @Transactional
     public boolean ChangePassword(String oldPassword,String newPassword)
     {
         try{

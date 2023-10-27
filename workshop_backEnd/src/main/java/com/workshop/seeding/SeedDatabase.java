@@ -15,10 +15,8 @@ import java.util.Random;
 @Service
 @RequiredArgsConstructor
 public class SeedDatabase {
-
     private final UserService userService;
     private final LocationService locationService;
-
     private static final String SEED_STATUS_FILE_PATH = "seed_status.txt";
     private boolean isSeedCompleted() {
         return new File(SEED_STATUS_FILE_PATH).exists();
@@ -97,25 +95,23 @@ public class SeedDatabase {
         locationService.AddLocation(new Location("CitiMart 2", "Quận 12", "Trung Tâm 2", null, null));
         locationService.AddLocation(new Location("Super Plaza", "Quận 12", "Trung Tâm 3", null, null));
     }
-    private void addDefaultRoles() {
-        userService.SaveRoles(new Roles(null, "USER"));
-        userService.SaveRoles(new Roles(null, "SELLER"));
-        userService.SaveRoles(new Roles(null, "ADMIN"));
-    }
+
     @PostConstruct
     public void SeedData() {
         if (isSeedCompleted()) {
             System.out.println("Seed has run before. Do not do it again");
         } else {
-            //gọi hàm từ trên xuống
-            addDefaultRoles();
+
+            userService.SaveRoles(new Roles(null, "USER"));
+            userService.SaveRoles(new Roles(null, "SELLER"));
+            userService.SaveRoles(new Roles(null, "ADMIN"));
             userService.SaveUser(new UserRegisterRequest("NguyenAdmin", "admin64",
                     "admin64@gmail.com", "12345", "0383334196", "female", "ADMIN", true));
             userService.SaveUser(new UserRegisterRequest("lactuong64@gmail.com", "lactuong64@gmail.com",
                     "lactuong64@gmail.com", "12345", "0383334195", "male", "USER", true));
             userService.SaveUser(new UserRegisterRequest("teacher01", "teacher01",
                     "teacher01@gmail.com", "12345", "0383334195", "male", "SELLER", true));
-            addRandomTeachers();
+           addRandomTeachers();
             addLocation();
             createSeedStatusFile();
         }

@@ -15,10 +15,4 @@ class AdminServiceTest {
     void tearDown() {
     }
 
-    @Test
-    void listWorkshop() {
-    }
-    @Test
-    void editUser() {
-    }
 }

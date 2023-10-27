@@ -20,8 +20,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Query(value = "SELECT u.* FROM users u " +
-            "JOIN users_role ur ON u.id = ur.user_id " +
-            "JOIN roles r ON ur.roles_id = r.id " +
+            "JOIN fetch  users_role ur ON u.id = ur.user_id " +
+            "JOIN fetch  roles r ON ur.roles_id = r.id " +
             "WHERE r.name = ?1", nativeQuery = true)
     List<User> findUsersByRoleName(String roleName);
 
