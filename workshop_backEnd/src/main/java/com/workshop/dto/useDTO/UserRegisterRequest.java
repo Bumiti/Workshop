@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UserRegisterRequest {
 
-    private String full_name;
+    private String full_name ="";
     private String user_name;
     private String email;
     private String password;

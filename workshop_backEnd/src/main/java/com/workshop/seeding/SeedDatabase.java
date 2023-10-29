@@ -106,11 +106,11 @@ public class SeedDatabase {
             userService.SaveRoles(new Roles(null, "SELLER"));
             userService.SaveRoles(new Roles(null, "ADMIN"));
             userService.SaveUser(new UserRegisterRequest("NguyenAdmin", "admin64",
-                    "admin64@gmail.com", "12345", "0383334196", "female", "ADMIN", true));
+                    "admin64@gmail.com", "admin64@gmail.com", "0383334196", "female", "ADMIN", true));
             userService.SaveUser(new UserRegisterRequest("lactuong64@gmail.com", "lactuong64@gmail.com",
-                    "lactuong64@gmail.com", "12345", "0383334195", "male", "USER", true));
+                    "student@gmail.com", "student@gmail.com", "0383334195", "male", "USER", true));
             userService.SaveUser(new UserRegisterRequest("teacher01", "teacher01",
-                    "teacher01@gmail.com", "12345", "0383334195", "male", "SELLER", true));
+                    "teacher01@gmail.com", "teacher01@gmail.com", "0383334195", "male", "SELLER", true));
            addRandomTeachers();
             addLocation();
             createSeedStatusFile();

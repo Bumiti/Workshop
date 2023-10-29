@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface UserService {
     User SaveUser(UserRegisterRequest user);
     Boolean EditUser(UserEditRequest user);
-    User SaveUserOAuthed(OAuthenticationRequest OAuthen);
+    User SaveUserOAuthed(OAuthenticationRequest OAuth);
     void SaveRoles(Roles role);
     boolean DeleteAddress(Long useAddress_id);
     User getCurrentUserDetails();

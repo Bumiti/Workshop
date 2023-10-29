@@ -39,39 +39,28 @@ public class UserServiceImpl implements UserService {
         userMapper.setPassword(passwordEncoder.encode(user.getPassword()));
         userMapper.setEnable(false);
         var result = userRepository.save(userMapper);
-        if (result != null) {
-            Roles roles = roleRepository.findByName(user.getRole());
-            userMapper.getRoles().add(roles);
-        }
+        Roles roles = roleRepository.findByName(user.getRole());
+        userMapper.getRoles().add(roles);
         return result;
     }
     @Override
     @Transactional
     public Boolean EditUser(UserEditRequest user) {
-        MapperGeneric<UserAddresses, UserEditRequest.UserAddress> UserAddressmapper = new MapperGeneric<>();
+        MapperGeneric<UserAddresses, UserEditRequest.UserAddress> UserAddressable = new MapperGeneric<>();
         List<UserEditRequest.UserAddress> userAddressList = user.getUserAddresses();
         try {
             User existingUser = userRepository.getUserEditByMail(user.getEmail());
             if (existingUser!=null) {
-                if (user.getUser_name() != null) {
-                    existingUser.setUser_name(user.getUser_name());
-                }
-                if (user.getFull_name() != null) {
-                    existingUser.setFull_name(user.getFull_name());
-                }
-                if (user.getImage_url() != null) {
-                    existingUser.setImage_url(user.getImage_url());
-                }
-                if (user.getPhoneNumber() != null) {
-                    existingUser.setPhoneNumber(user.getPhoneNumber());
-                }
+                existingUser.setUser_name(user.getUser_name() != null ? user.getUser_name() : existingUser.getUser_name());
+                existingUser.setFull_name(user.getFull_name() != null ? user.getFull_name() : existingUser.getFull_name());
+                existingUser.setImage_url(user.getImage_url() != null ? user.getImage_url() : existingUser.getImage_url());
+                existingUser.setPhoneNumber(user.getPhoneNumber() != null ? user.getPhoneNumber() : existingUser.getPhoneNumber());
                 userRepository.updateUser(existingUser);
                 if(userAddressList!=null && (long) userAddressList.size() >0)
                 {
                     for(UserEditRequest.UserAddress userAddressItem  :userAddressList)
                     {
-                        //kieu du lieu nhan ve = tenmapper.phuongthuc(biendulieu,class du lieu nhan ve);
-                        UserAddresses userAddresses = UserAddressmapper.DTOmapToModel(userAddressItem,UserAddresses.class);
+                        UserAddresses userAddresses = UserAddressable.DTOmapToModel(userAddressItem,UserAddresses.class);
                         Long useAddress_id = userAddressItem.getId();
                         if(useAddress_id >0){
                             userAddressRepository.updateUserAddressById(useAddress_id,userAddresses);
@@ -84,26 +73,23 @@ public class UserServiceImpl implements UserService {
                 return true;
         }else{return false;}
         } catch (Exception exception) {
-            String errorMessage = "exception: " + exception.getMessage();
             return false;
         }
     }
     @Override
     @Transactional
-    public User SaveUserOAuthed(OAuthenticationRequest OAuthen) {
-        Optional<User> userExist = userRepository.findByEmail(OAuthen.getEmail());
+    public User SaveUserOAuthed(OAuthenticationRequest OAuth) {
+        Optional<User> userExist = userRepository.findByEmail(OAuth.getEmail());
         if (userExist.isPresent()) {
             return userExist.get();
         } else {
             User use = new User();
-            use.setEmail(OAuthen.getEmail()).setUser_name(OAuthen.getEmail()).setFull_name(OAuthen.getEmail())
+            use.setEmail(OAuth.getEmail()).setUser_name(OAuth.getEmail()).setFull_name(OAuth.getEmail())
             .setEnable(true)
-            .setPassword(passwordEncoder.encode(OAuthen.getEmail()));
+            .setPassword(passwordEncoder.encode(OAuth.getEmail()));
             var result = userRepository.save(use);
-            if (result != null) {
-                Roles roles = roleRepository.findByName("USER");
-                use.getRoles().add(roles);
-            }
+            Roles roles = roleRepository.findByName("USER");
+            use.getRoles().add(roles);
             return result;
         }
     }
@@ -111,11 +97,9 @@ public class UserServiceImpl implements UserService {
     public void SaveRoles(Roles role) {
         roleRepository.save(role);
     }
-
     @Override
     @Transactional
     public boolean DeleteAddress(Long useAddress_id) {
-
         User existingUser = getCurrentUserDetails();
         if(existingUser!=null){
             int result = userAddressRepository.deleteUserAddressesByUserAndId(existingUser,useAddress_id);
@@ -127,14 +111,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof String) {
-            String Email = (String) authentication.getPrincipal();
-            User user = userRepository.findByEmail(Email).get();
-            return user;
+        if (authentication != null && authentication.getPrincipal() instanceof String Email) {
+           Optional<User>  userOption = userRepository.findByEmail(Email);
+            return userOption.orElseGet(User::new);
         }
         return null;
     }
-    //Lưu token xác thực user
+
     @Override
     @Transactional
     public void saveUserVerificationToken(User user, String verificationToken) {
@@ -174,8 +157,7 @@ public class UserServiceImpl implements UserService {
     }
     private boolean isPasswordCorrect( String oldPassword) {
         User user = getCurrentUserDetails();
-        boolean isPasswordMatch = passwordEncoder.matches(oldPassword, user.getPassword());
-        return isPasswordMatch;
+        return passwordEncoder.matches(oldPassword, user.getPassword());
     }
     @Override
     @Transactional
@@ -197,31 +179,29 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserInfoResponse userDetail() {
+        MapperGeneric<UserAddresses, UserInfoResponse.UserAddress> UserAddressMapper = new MapperGeneric<>();
+        MapperGeneric<User, UserInfoResponse> UserMapper = new MapperGeneric<>();
         User user = getCurrentUserDetails();
-        User userFull = userRepository.findByEmailWithAddresses(user.getEmail()).get();
-        List<UserInfoResponse.UserAddress> userAddressesList = new ArrayList<>();
-        List<String>list = new ArrayList<>();
-        for (Roles roles : userFull.getRoles()){
-            list.add(roles.getName());
+        Optional<User> userOption = userRepository.findByEmailWithAddresses(user.getEmail());
+        if(userOption.isPresent()){
+            User userFull = userOption.get();
+            List<UserInfoResponse.UserAddress> userAddressesList = new ArrayList<>();
+            List<String>list = new ArrayList<>();
+            for (Roles roles : userFull.getRoles()){
+                list.add(roles.getName());
+            }
+            for(UserAddresses addresses : userFull.getUserAddresses())
+            {
+                UserInfoResponse.UserAddress userAddress = UserAddressMapper.ModelmapToDTO(addresses,UserInfoResponse.UserAddress.class);
+                userAddressesList.add(userAddress);
+            }
+            UserInfoResponse userInfoResponse = UserMapper.ModelmapToDTO(userFull,UserInfoResponse.class);
+            userInfoResponse.setRoles(list);
+            userInfoResponse.setUserAddresses(userAddressesList);
+            return userInfoResponse;
+        }else{
+            return new UserInfoResponse();
         }
-        for(UserAddresses addresses : userFull.getUserAddresses())
-        {
-            UserInfoResponse.UserAddress userAddressres = new UserInfoResponse.UserAddress();
-            userAddressres.setId(addresses.getId());
-            userAddressres.setAddress(addresses.getAddress());
-            userAddressres.setCity(addresses.getCity());
-            userAddressres.setPostalCode(addresses.getPostalCode());
-            userAddressres.setState(addresses.getState());
-            userAddressesList.add(userAddressres);
-        }
-        UserInfoResponse inforRespone = new UserInfoResponse();
-        inforRespone
-                .setId(userFull.getId()).setPhoneNumber(userFull.getPhoneNumber())
-                .setEmail(userFull.getEmail()).setFull_name(user.getFull_name())
-                .setRoles(list).setUser_name(userFull.getUser_name())
-                .setUserAddresses(userAddressesList).setEnable(userFull.isEnable());
-
-        return inforRespone;
     }
     private String generateRandomPassword() {
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}|;:,.<>?";
@@ -232,8 +212,6 @@ public class UserServiceImpl implements UserService {
             int randomIndex = random.nextInt(characters.length());
             password.append(characters.charAt(randomIndex));
         }
-
         return password.toString();
     }
-
 }

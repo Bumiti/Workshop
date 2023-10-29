@@ -23,7 +23,7 @@ export default function Navbar() {
     setDropdownVisible(!dropdownVisible);
   };
   // console.log("dropdownVisible:", dropdownVisible);
-  // console.log("session:", session);
+  console.log("session:", session);
   const handleSignout = () => {
     signOut();
   };
@@ -43,7 +43,7 @@ export default function Navbar() {
            width="30"
            height="30"
            className={styles.roundedCircle}
-            src={session.user.image}
+            src={session.user.image || session.user.picture}
           />
           {/* <a> {session.user.name.split(' ')[0]}</a> */}
           {dropdownVisible && (

@@ -1,7 +1,5 @@
 package com.workshop.dto.useDTO;
 
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nullable;
 import lombok.*;

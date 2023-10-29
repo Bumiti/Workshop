@@ -9,6 +9,7 @@ import com.workshop.model.userModel.User;
 import com.workshop.reposetory.Course.*;
 import com.workshop.reposetory.DiscountRepository;
 import com.workshop.service.CourseService;
+import com.workshop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseDiscountRepository courseDiscountRepository;
     private final DiscountRepository discountRepository;
     private final CourseMediaInfoRepository courseMediaInfoRepository;
-    private final UserServiceImpl userService;
+    private final UserService userService;
     private final CourseLocationRepository courseLocationRepository;
     boolean isCourse(Long Id) {
         Course course_exit = courseRepository.findCourseById(Id);

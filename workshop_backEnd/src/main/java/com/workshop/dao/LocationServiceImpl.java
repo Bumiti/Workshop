@@ -15,7 +15,7 @@ public class LocationServiceImpl implements LocationService {
     public void AddLocation(Location location) {
        try{
            locationRepository.save(location);
-       }catch (Exception ex){
+       }catch (Exception ignored){
        }
     }
 }

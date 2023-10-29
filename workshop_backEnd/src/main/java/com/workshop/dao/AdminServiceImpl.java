@@ -21,11 +21,9 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
-
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
     private final WorkShopRepository workShopRepository;
-
     @Override
     public boolean chanceIsEnableWithRoleAndId(Long Id) {
         try {
@@ -59,7 +57,6 @@ public class AdminServiceImpl implements AdminService {
     public List<CourseRespones> listCourse() {
         List<Course> coursesEntityList = courseRepository.findAll();
         List<CourseRespones> coursesResponesList = new ArrayList<>();
-
         MapperGeneric<Location, CourseRespones.CourseLocation.locationResponse> locationMapper = new MapperGeneric<>();
         MapperGeneric<Course, CourseRespones> CourseMapper = new MapperGeneric<>();
         MapperGeneric<CourseMediaInfo, CourseRespones.CourseMediaInfo> CourseMediaMapper = new MapperGeneric<>();

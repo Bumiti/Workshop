@@ -43,7 +43,7 @@ public class AuthenticationService {
         }
         userResponse.setEmail(user.getEmail())
                 .setUser_name(user.getUser_name()).setPhoneNumber(user.getPhoneNumber())
-                .setFull_name(user.getFull_name()).setGender(user.getGender())
+                .setFull_name(user.getFull_name()).setGender(user.getGender()).setImage(user.getImage_url())
                 .setAccessToken(jwtToken)
                 .setRefreshToken(jwtRefreshToken)
                 .setRoles(roles);
@@ -77,7 +77,7 @@ public class AuthenticationService {
         }
         userResponse.setEmail(user.getEmail())
                 .setUser_name(user.getUser_name())
-                .setFull_name(user.getFull_name()).setPhoneNumber(user.getPhoneNumber())
+                .setFull_name(user.getFull_name()).setPhoneNumber(user.getPhoneNumber()).setImage(user.getImage_url())
                 .setAccessToken(jwtToken).setGender(user.getGender())
                 .setRefreshToken(jwtRefreshToken)
                 .setRoles(roles);

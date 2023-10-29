@@ -1,3 +1,4 @@
+'use client'
 import { Box, Drawer } from "@mui/material";
 import Logo from "../shared/logo/Logo";
 import SidebarItems from "./SidebarItems";

@@ -85,6 +85,7 @@ const handler = NextAuth({
                         session.user.gender == data.data.user.gender
                         session.user.phoneNumber == data.data.user.phoneNumber
                         session.user.userAddresses == data.data.user.userAddresses
+                        session.user.image = data.data.user.image
                     }
                 };
                 await fetchData(); 
