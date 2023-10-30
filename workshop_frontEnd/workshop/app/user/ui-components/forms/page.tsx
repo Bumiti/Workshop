@@ -1,288 +1,3 @@
-// 'use client'
-// import React, { useState, useEffect } from 'react';
-// import {
-//   Paper,
-//   Grid,
-//   TextField,
-//   Button,
-//   createTheme,
-//   ThemeProvider,
-// } from '@mui/material';
-// import { useSession } from 'next-auth/react';
-
-// const lightTheme = createTheme({ palette: { mode: 'light' } });
-
-// const EditProfile = () => {
-//   const { data: session } = useSession();
-//   const [updatedUser, setUpdatedUser] = useState({
-//     full_name: '',
-//     user_name: '',
-//     email: '',
-//     phoneNumber: '',
-//   });
-
-//   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-//     setUpdatedUser((prevState) => ({
-//       ...prevState,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handleEditUser = async () => {
-//     try {
-//       if (session) {
-//         const response = await fetch('http://localhost:8089/auth/user/edit', {
-//           method: 'PUT',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify({ ...updatedUser, id: session.user.id }),
-//         });
-
-//         if (response.ok) {
-//           // Xử lý thành công (ví dụ: hiển thị thông báo thành công)
-//         } else {
-//           // Xử lý lỗi (ví dụ: hiển thị thông báo lỗi)
-//         }
-//       } else {
-//         // Xử lý trường hợp khi session là null (ví dụ: hiển thị thông báo lỗi)
-//       }
-//     } catch (error) {
-//       console.error('Lỗi:', error);
-//     }
-//   };
-
-
-//   return (
-//     <ThemeProvider theme={lightTheme}>
-//       <Grid container spacing={3}>
-//         <Grid item xs={12} lg={12}>
-//           <div>
-//             <h1>Edit Profile</h1>
-//             <form>
-//               <TextField
-//                 type="text"
-//                 name="full_name"
-//                 label="Full Name"
-//                 variant="outlined"
-//                 value={updatedUser.full_name}
-//                 onChange={handleInputChange}
-//               />
-//               <TextField
-//                 type="text"
-//                 name="user_name"
-//                 label="User Name"
-//                 variant="outlined"
-//                 value={updatedUser.user_name}
-//                 onChange={handleInputChange}
-//               />
-//               <TextField
-//                 name="email"
-//                 label="Email"
-//                 variant="outlined"
-//                 value={updatedUser.email}
-//                 onChange={handleInputChange}
-//               />
-//               <TextField
-//                 name="phoneNumber"
-//                 label="Phone Number"
-//                 variant="outlined"
-//                 value={updatedUser.phoneNumber}
-//                 onChange={handleInputChange}
-//               />
-//               <Button variant="contained" onClick={handleEditUser}>
-//                 Submit
-//               </Button>
-//             </form>
-//           </div>
-//         </Grid>
-//       </Grid>
-//     </ThemeProvider>
-//   );
-// };
-
-// export default EditProfile;
-// 'use client'
-// import React, { useState, useEffect } from 'react';
-// import {
-//   Grid,
-//   TextField,
-//   Button,
-//   createTheme,
-//   ThemeProvider,
-// } from '@mui/material';
-// import { useSession } from 'next-auth/react';
-
-// const lightTheme = createTheme({ palette: { mode: 'light' } });
-
-// const EditProfile = () => {
-//   const [userData, setUserData] = useState({
-//     full_name: '',
-//     user_name: '',
-//     email: '',
-//     phoneNumber: '',
-//     userAddresses: [
-//       {
-//         state: '',
-//         city: '',
-//         address: '',
-//         postalCode: 0,
-//       },
-//     ],
-//   });
-
-//   const { data: session } = useSession();
-
-//   useEffect(() => {
-//     if (session) {
-//       // Lấy thông tin người dùng từ API và cập nhật userData
-//       fetch('http://localhost:8089/user/detail', {
-//         headers: {
-//           Authorization: `Bearer ${session?.user.accessToken}`,
-//         },
-//       })
-//         .then((response) => response.json())
-//         .then((data) => {
-//           if (data && data.data) {
-//             setUserData(data.data);
-//           }
-//         })
-//         .catch((error) => {
-//           console.error('Error fetching user data:', error);
-//         });
-//     }
-//   }, [session]);
-//   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-//     const { name, value } = e.target;
-//     setUserData({
-//       ...userData,
-//       [name]: value,
-//     });
-//   };
-
-//   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, addressIndex: number | undefined) => {
-//     if (addressIndex !== undefined) {
-//       const { name, value } = e.target;
-//       setUserData((prevUserData) => {
-//         const updatedAddresses = [...prevUserData.userAddresses];
-//         updatedAddresses[addressIndex] = {
-//           ...updatedAddresses[addressIndex],
-//           [name]: value,
-//         };
-//         return {
-//           ...prevUserData,
-//           userAddresses: updatedAddresses,
-
-//         };
-
-//       });
-//     }
-//   };
-//   console.log(userData.userAddresses);
-
-
-//   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     try {
-//       const response = await fetch('http://localhost:8089/auth/user/edit', {
-//         method: 'PUT',
-//         headers: {
-//           // Không cần gắn Bearer Token
-//           // Authorization: `Bearer ${session?.user.accessToken}`,
-//           'Content-Type': 'multipart/form-data',
-//         },
-//         body: new FormData()
-//       });
-//       // console.log(userData);
-
-//       if (response.ok) {
-//         console.log('User data updated successfully.');
-//       } else {
-//         console.error('Error updating user data:', response.status);
-//       }
-//     } catch (error) {
-//       console.error('Error:', error);
-//     }
-//   };
-
-//   return (
-//     <ThemeProvider theme={lightTheme}>
-//       <Grid container spacing={3}>
-//         <Grid item xs={12} lg={12}>
-//           <div>
-//             <h1>Edit Profile</h1>
-//             <form onSubmit={handleSubmit}>
-//               <TextField
-//                 type="text"
-//                 label="Full Name"
-//                 name="full_name"
-//                 value={userData.full_name}
-//                 onChange={handleInputChange}
-//               />
-//               <TextField
-//                 type="text"
-//                 label="User Name"
-//                 name="user_name"
-//                 value={userData.user_name}
-//                 onChange={handleInputChange}
-//               />
-//               <TextField
-//                 type="text"
-//                 label="phone Number"
-//                 name="phoneNumber"
-//                 value={userData.phoneNumber}
-//                 onChange={handleInputChange}
-//               />
-//               <TextField
-//                 type="text"
-//                 label="Email"
-//                 name="email"
-//                 value={userData.email}
-//                 onChange={handleInputChange}
-//               />
-//               {userData.userAddresses.map((address, index) => (
-//                 <div key={index}>
-//                   <TextField
-//                     type="text"
-//                     label="State"
-//                     name="state"
-//                     value={address.state}
-//                     onChange={(e) => handleAddressChange(e, index)}
-//                   />
-//                   <TextField
-//                     type="text"
-//                     label="City"
-//                     name="city"
-//                     value={address.city}
-//                     onChange={(e) => handleAddressChange(e, index)}
-//                   />
-//                   <TextField
-//                     type="text"
-//                     label="Address"
-//                     name="address"
-//                     value={address.address}
-//                     onChange={(e) => handleAddressChange(e, index)}
-//                   />
-//                   <TextField
-//                     type="number"
-//                     label="Postal Code"
-//                     name="postalCode"
-//                     value={address.postalCode}
-//                     onChange={(e) => handleAddressChange(e, index)}
-//                   />
-//                 </div>
-//               ))}
-//               <button type="submit">Save</button>
-//             </form>
-//           </div>
-//         </Grid>
-//       </Grid>
-//     </ThemeProvider>
-//   );
-// };
-
-// export default EditProfile;
 
 'use client'
 import React, { useState, ChangeEvent, useEffect } from "react"
@@ -301,6 +16,7 @@ import {
 } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import styles from '../forms/form.module.css';
+import Image from "next/image";
 
 
 const lightTheme = createTheme({ palette: { mode: 'light' } });
@@ -339,10 +55,13 @@ const EditProfile = () => {
         .then((data) => {
           if (data && data.data) {
             setUserData(data.data);
+          // console.log(data.data);
+
           }
         })
         .catch((error) => {
           console.error('Error fetching user data:', error);
+          
         });
     }
   }, [session]);
@@ -364,67 +83,6 @@ const EditProfile = () => {
     }
   };
 
-  // console.log(userData);
-
-  // const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-
-  //   // Xác định các trường địa chỉ và cập nhật chúng
-  //   if (name === 'state') {
-  //     setUserData({
-  //       ...userData,
-  //       userAddresses: [{ ...userData.userAddresses[0], state: value }],
-  //     });
-  //   } else if (name === 'city') {
-  //     setUserData({
-  //       ...userData,
-  //       userAddresses: [{ ...userData.userAddresses[0], city: value }],
-  //     });
-  //   } else if (name === 'address') {
-  //     setUserData({
-  //       ...userData,
-  //       userAddresses: [{ ...userData.userAddresses[0], address: value }],
-  //     });
-  //   } else if (name === 'postalCode') {
-  //     setUserData({
-  //       ...userData,
-  //       userAddresses: [{ ...userData.userAddresses[0], postalCode: parseInt(value, 10) }],
-  //     });
-  //   }
-  // };
-  // const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-
-  //   // Xác định các trường địa chỉ và cập nhật chúng
-  //   if (name === 'state') {
-  //     const newAddress = { ...userData.userAddresses[0]};
-
-  //     // Kiểm tra xem userAddresses đã có thông tin hay chưa
-  //     if (userData.userAddresses[0].id === 0) {
-  //       // Chưa có thông tin userAddresses, gán id là 0
-  //       newAddress.id = 0;
-  //       newAddress.state = value;
-
-  //       newAddress.city = value; // Cập nhật giá trị cho trường "city"
-  //       newAddress.address = value; // Cập nhật giá trị cho trường "address"
-  //       newAddress.postalCode = parseInt(value, 10);        
-  //     } else {
-  //       // Đã có thông tin userAddresses, tìm "id" và gán lại
-  //       // Tìm "id" từ danh sách userAddresses, sử dụng logic thích hợp
-  //       // Ví dụ: Tìm "id" từ danh sách userAddresses đã tồn tại
-  //       const existingAddress = userData.userAddresses.find((address) => address.id === userData.userAddresses[0].id);
-  //       if (existingAddress) {
-  //         newAddress.id = existingAddress.id;
-  //       }
-  //     }
-
-
-  //     setUserData({
-  //       ...userData,
-  //       userAddresses: [newAddress],
-  //     });
-  //   }
-  //   }
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -509,7 +167,7 @@ const EditProfile = () => {
 
         if (response.ok) {
           console.log('User data updated successfully.');
-          console.log(userData);
+          // console.log(userData);
 
         } else {
           console.error('Error updating user data:', response.status);
@@ -528,21 +186,63 @@ const EditProfile = () => {
   });
   const [imgUrl, setImgUrl] = useState<(string | { url: string, fileName: string })[]>([]);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = event.target.files;
+  //   if (files) {
+  //     const selectedImage = files[0];
+  //     if (selectedImage) {
+  //       const fileExtension = selectedImage.name.split('.').pop();
+  //       console.log("File Extension:", fileExtension);
+  //       setImg({ file: selectedImage, extension: fileExtension });
+  //     } else {
+  //       console.error("Không có tệp hình ảnh được chọn.");
+  //     }
+  //   } else {
+  //     console.error("Không có tệp hình ảnh được chọn.");
+  //   }
+  // }
+  // const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = event.target.files;
+  //   if (files) {
+  //     const selectedImage = files[0];
+  //     if (selectedImage) {
+  //       const imgRef = ref(FirebaseDb, `/user/${v4()}`);
+  //       uploadBytes(imgRef, selectedImage).then((value) => {
+  //         getDownloadURL(value.ref).then(url => {
+  //           setUserData({ ...userData, image_url: url }); // Cập nhật URL hình ảnh vào userData
+  //         });
+  //       }).catch((error) => {
+  //         console.error("Lỗi tải lên:", error);
+  //       });
+  //     } else {
+  //       console.error("Không có tệp hình ảnh được chọn.");
+  //     }
+  //   } else {
+  //     console.error("Không có tệp hình ảnh được chọn.");
+  //   }
+  // }
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
       const selectedImage = files[0];
       if (selectedImage) {
-        const fileExtension = selectedImage.name.split('.').pop();
-        console.log("File Extension:", fileExtension);
-        setImg({ file: selectedImage, extension: fileExtension });
+        const imgRef = ref(FirebaseDb, `/user/${v4()}`);
+        try {
+          const uploadTask = await uploadBytes(imgRef, selectedImage);
+          const url = await getDownloadURL(uploadTask.ref);
+
+          // Lưu đường dẫn hình ảnh vào userData
+          setUserData({ ...userData, image_url: url });
+        } catch (error) {
+          console.error("Lỗi tải lên:", error);
+        }
       } else {
         console.error("Không có tệp hình ảnh được chọn.");
       }
     } else {
       console.error("Không có tệp hình ảnh được chọn.");
     }
-  }
+  };
 
   const handleClick = () => {
     if (img && img.file) {
@@ -568,15 +268,16 @@ const EditProfile = () => {
     <ThemeProvider theme={lightTheme}>
       <Grid container spacing={3}>
         <Grid item xs={12} lg={12}>
-          <div  className={`${styles.formCustom} text-center`}>
-            <h1>Edit Profile</h1>
+          <div className={`${styles.formCustom} text-center`}>
+            <h1  className={styles.h1Custom}>Edit Profile</h1>
+            <Image className={styles.imageMargin} src="/../../../heading-line-dec.png" alt="" width={45} height={2} />
             <form onSubmit={handleSubmit}>
               <div>
                 <TextField
                   type="text"
                   label="Full Name"
                   name="full_name"
-                  value={userData.full_name}
+                  value={userData.full_name || ''}
                   onChange={handleInputChange}
                   className={styles.inputCustom}
                 />
@@ -586,7 +287,7 @@ const EditProfile = () => {
                   type="text"
                   label="User Name"
                   name="user_name"
-                  value={userData.user_name}
+                  value={userData.user_name || ''}
                   onChange={handleInputChange}
                   className={styles.inputCustom}
                 />
@@ -596,7 +297,7 @@ const EditProfile = () => {
                   type="text"
                   label="Email"
                   name="email"
-                  value={userData.email}
+                  value={userData.email || ''}
                   onChange={handleInputChange}
                   className={styles.inputCustom}
                 />
@@ -605,18 +306,70 @@ const EditProfile = () => {
                   type="text"
                   label="Phone Number"
                   name="phoneNumber"
-                  value={userData.phoneNumber}
+                  value={userData.phoneNumber || ''}
                   onChange={handleInputChange}
+                  className={styles.inputCustom}
+                />
+              </div>
+           
+              <div>
+                <TextField
+                  type="text"
+                  label="State"
+                  name="state"
+                  value={userData?.userAddresses[0]?.state || ''}
+                  onChange={handleAddressChange}
+                  className={styles.inputCustom}
+                />
+
+                <TextField
+                  type="text"
+                  label="City"
+                  name="city"
+                  value={userData?.userAddresses[0]?.city || ''}
+                  onChange={handleAddressChange}
                   className={styles.inputCustom}
                 />
               </div>
               <div>
                 <TextField
                   type="text"
+                  label="Address"
+                  name="address"
+                  value={userData?.userAddresses[0]?.address || ''}
+                  onChange={handleAddressChange}
+                  className={styles.inputCustom}
+                />
+
+                <TextField
+                  type="number"
+                  label="Postal Code"
+                  name="postalCode"
+                  value={userData?.userAddresses[0]?.postalCode || ''}
+                  onChange={handleAddressChange}
+                  className={styles.inputCustom}
+                />
+
+              </div>
+              <div className={styles.leftAlignedDiv}>
+
+                {/* <TextField
+                  type="text"
                   label="Image URL"
                   name="image_url"
-                  value={userData.image_url}
+                  value={userData.image_url || ''}
                   onChange={handleInputChange}
+                  className={styles.inputCustom2}
+                /> */}
+                  {userData.image_url && (
+                <img src={userData.image_url} alt="User Avatar" className={styles.roundedImage} />
+              )}
+                  <input
+                  type="hidden"
+                  // label="Image URL"
+                  name="image_url"
+                  value={userData.image_url || ''}
+                  onChange={(e) => setUserData({ ...userData, image_url: e.target.value })}
                   className={styles.inputCustom2}
                 />
                 <label className={styles.customFileInput}>
@@ -628,57 +381,24 @@ const EditProfile = () => {
                     onChange={handleImageUpload}
                   />
                 </label>
+                {/* <Button onClick={handleClick}
+                className={styles.borderButton}>
+                Upload Image
+              </Button> */}
               </div>
-              <div>
-                <TextField
-                  type="text"
-                  label="State"
-                  name="state"
-                  value={userData?.userAddresses[0]?.state}
-                  onChange={handleAddressChange}
-                  className={styles.inputCustom}
-                />
-
-                <TextField
-                  type="text"
-                  label="City"
-                  name="city"
-                  value={userData?.userAddresses[0]?.city}
-                  onChange={handleAddressChange}
-                  className={styles.inputCustom}
-                />
-              </div>
-              <div>
-                <TextField
-                  type="text"
-                  label="Address"
-                  name="address"
-                  value={userData?.userAddresses[0]?.address}
-                  onChange={handleAddressChange}
-                  className={styles.inputCustom}
-                />
-
-                <TextField
-                  type="number"
-                  label="Postal Code"
-                  name="postalCode"
-                  value={userData?.userAddresses[0]?.postalCode}
-                  onChange={handleAddressChange}
-                  className={styles.inputCustom}
-                />
-              </div>
-
+            
               {/* <div>
                 <button onClick={handleClick}>Upload Image</button>
                 <button type="submit">Save</button>
               </div> */}
-              <Button onClick={handleClick}
-                className={styles.borderButton}>
-                Upload Image
-              </Button>
-              <Button type="submit"
+             
+             <Button type="submit"
                 className={styles.borderButton}>
                 Save Profile
+              </Button>
+               <Button href="/user/ui-components/changepass"
+                className={styles.borderButton}>
+                Change Password
               </Button>
             </form>
           </div>

@@ -23,6 +23,7 @@ import {
   IconMail,
   IconShield,
 } from "@tabler/icons-react";
+import { useSession } from "next-auth/react";
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
@@ -35,6 +36,11 @@ const Profile = () => {
   const handleSignout = () => {
     signOut();
   };
+  const { data: session } = useSession();
+  const userAvatar = session?.user?.image_url; // Đường dẫn hình ảnh người dùng
+  const userName = session?.user?.user_name; // Tên người dùng 
+  // console.log(session);
+  
   const theme = useTheme();
   const primary = theme.palette.primary.main;
   const primarylight = theme.palette.primary.light;
@@ -87,7 +93,7 @@ const Profile = () => {
         onClick={handleClick2}
       >
         <Avatar
-          src={"/images/users/user2.jpg"}
+          src={userAvatar}
           alt={"ProfileImg"}
           sx={{
             width: 30,
@@ -118,7 +124,7 @@ const Profile = () => {
               ml: 1,
             }}
           >
-            Julia
+          {userName}
           </Typography>
           <IconChevronDown width="20" height="20" />
         </Box>
@@ -148,7 +154,7 @@ const Profile = () => {
 
           <List>
             <ListItemButton component="a" href="/user/ui-components/forms">
-              <ListItemText primary="My Profile" />
+              <ListItemText primary="Change Password" />
             </ListItemButton>
             <ListItemButton component="a" href="#">
               <ListItemText primary="My Inbox" />
@@ -161,7 +167,7 @@ const Profile = () => {
         </Box>
         <Divider />
         <Box mt={2}>
-          <Button  fullWidth variant="contained"style={{ backgroundColor: "#4b8ef1" }} color="primary">
+          <Button  onClick={handleSignout}  fullWidth variant="contained"style={{ backgroundColor: "#4b8ef1" }} color="primary">
             Logout
           </Button>
         </Box>

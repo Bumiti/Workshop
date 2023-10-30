@@ -5,7 +5,7 @@ declare module "next-auth" {
         user: {
             id: number;
             full_name: string;
-            name: string;
+            user_name: string;
             email: string;
             roles: string;
             phoneNumber: string;
@@ -13,7 +13,6 @@ declare module "next-auth" {
             accessToken: string;
             refreshToken: string;
             image: string;
-            picture:string;
             userAddresses: userAddresses[];
         };
        

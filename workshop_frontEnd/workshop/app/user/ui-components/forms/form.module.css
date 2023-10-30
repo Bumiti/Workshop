@@ -63,3 +63,27 @@
     background-image: url(../../../../public/regular-table-bottom.png);
     background-size: cover;
   }
+  .roundedImage {
+    border-radius: 50%;
+    width: 170px; /* Điều chỉnh kích thước ảnh tại đây */
+    height: 170px; /* Điều chỉnh kích thước ảnh tại đây */
+    object-fit: cover; padding: 15px;
+  }
+  .leftAlignedDiv {
+    display: flex;
+    align-items: center;
+  }
+  
+  .customFileInput {
+    margin-left: 10px; /* Điều chỉnh khoảng cách theo nhu cầu */
+  }
+  .h1Custom{
+    color: #4b8ef1;
+  }
+  .lineCustom{
+    padding: 10px;
+  }
+  .imageMargin {
+    margin-bottom: 35px; /* Điều chỉnh giá trị theo nhu cầu */
+  }
+  
