@@ -34,7 +34,7 @@ public class StudentController {
         }
     }
     @Operation(summary = "Đổi mật khẩu")
-    @PutMapping("chancePassword")
+    @PutMapping("changePassword")
     public ResponseEntity<ApiResponse<?>> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
         try {
             boolean result = userService.ChangePassword(oldPassword, newPassword);
