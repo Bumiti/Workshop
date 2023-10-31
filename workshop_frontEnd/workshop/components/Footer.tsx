@@ -3,7 +3,6 @@ import Link from "next/link";
 import styles from '../CSS/home.module.css';
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 function Footer() {
   return (
     <footer id="newsletter" className={styles.footer}>

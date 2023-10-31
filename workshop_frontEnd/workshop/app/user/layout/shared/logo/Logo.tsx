@@ -1,8 +1,13 @@
-import Link from "next/link";
-import { styled } from "@mui/material";
-import Image from "next/image";
+import NextLink from "next/link";
+import { styled } from "@mui/material/styles"
+import NextImage from "next/image";
 
-const LinkStyled = styled(Link)(() => ({
+const LogoImage = styled(NextImage)(() => ({
+  height: "37px",
+  width: "80px",
+}));
+
+const LogoLink = styled(NextLink)(() => ({
   height: "40px",
   width: "180px",
   overflow: "hidden",
@@ -11,9 +16,9 @@ const LinkStyled = styled(Link)(() => ({
 
 const Logo = () => {
   return (
-    <LinkStyled href="/">
-      <Image src="/logo.png" alt="logo" height={37} width={80} priority />
-    </LinkStyled>
+    <LogoLink href="/">
+      <LogoImage src="/logo.png" alt="logo" layout="responsive" width={80} height={37} />
+    </LogoLink>
   );
 };
 

@@ -1,7 +1,6 @@
 
 import Link from "next/link";
 import styles from '../CSS/home.module.css';
-
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import CSS của Bootstrap
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +8,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Navbar() {
   const { data: session } = useSession();
+
 
   const NavLink = ({ text }: { text: string }) => (
     <li className="nav-item mr-20">
@@ -43,7 +43,7 @@ export default function Navbar() {
            width="30"
            height="30"
            className={styles.roundedCircle}
-            src={session.user.image || session.user.picture}
+            src={session.user.image || session.user.image}
           />
           {/* <a> {session.user.name.split(' ')[0]}</a> */}
           {dropdownVisible && (
@@ -68,25 +68,30 @@ export default function Navbar() {
       );
     }
   };
-
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      // Sử dụng document ở đây khi chạy trên trình duyệt
       const nav = document.querySelector('nav');
-      
-      if (nav) {
-      window.addEventListener('scroll', function () {
-        if (window.pageYOffset > 100) {
-          nav.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-          nav.classList.add('shadow');
-        } else {
-          nav.style.backgroundColor = 'transparent';
-          nav.classList.remove('shadow');
-        }
-      });
-    }}
+  
+      if (nav !== null) {
+        const handleScroll = () => {
+          if (window.pageYOffset > 100) {
+            nav.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+            nav.classList.add('shadow');
+          } else {
+            nav.style.backgroundColor = 'transparent';
+            nav.classList.remove('shadow');
+          }
+        };
+  
+        window.addEventListener('scroll', handleScroll);
+  
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }
+    }
   }, []);
-
+  
   return (
     <nav className={styles.navbar}>
       <nav  className="navbar fixed-top navbar-expand-lg navbar-dark p-md-3 transparent-navbar">

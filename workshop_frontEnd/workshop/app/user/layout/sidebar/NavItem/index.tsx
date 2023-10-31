@@ -4,13 +4,14 @@ import {
   ListItemIcon,
   ListItem,
   List,
-  styled,
   ListItemText,
-  useTheme,
   ListItemButton,
 } from "@mui/material";
 import Link from "next/link";
-
+import{
+  styled,
+  useTheme,
+}from "@mui/material/styles";
 type NavGroup = {
   [x: string]: any;
   id?: string;

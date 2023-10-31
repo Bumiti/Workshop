@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import Link from "next/link";
 import styles from '../CSS/home.module.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 const Card = () => {
+
   return (
+    
     <div id="carouselExampleCaptions" className="carousel carousel-dark slide"data-bs-ride="carousel">
     <div className={`${styles.indicartorsCustom} carousel-indicators`}>
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" className="active"

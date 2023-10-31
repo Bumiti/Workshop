@@ -2,7 +2,7 @@
 import { Box, Drawer } from "@mui/material";
 import Logo from "../shared/logo/Logo";
 import SidebarItems from "./SidebarItems";
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 interface ItemType {

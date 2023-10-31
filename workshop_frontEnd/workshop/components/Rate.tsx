@@ -226,7 +226,6 @@ import Image from 'next/image';
 import Link from "next/link";
 import styles from '../CSS/home.module.css';
 import React, { useState } from 'react'; import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 const Testimonials = () => {
     const testimonials = [  // Định nghĩa danh sách đánh giá sao

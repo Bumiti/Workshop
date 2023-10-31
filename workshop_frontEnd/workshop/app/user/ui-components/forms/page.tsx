@@ -10,10 +10,10 @@ import {
   Paper,
   Grid,
   TextField,
-  Button,
-  createTheme,
-  ThemeProvider,
+  Button
 } from '@mui/material';
+import{ createTheme,
+  ThemeProvider}  from "@mui/material/styles";
 import { useSession } from 'next-auth/react';
 import styles from '../forms/form.module.css';
 import Image from "next/image";

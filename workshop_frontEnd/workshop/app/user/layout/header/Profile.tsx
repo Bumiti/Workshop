@@ -37,7 +37,7 @@ const Profile = () => {
     signOut();
   };
   const { data: session } = useSession();
-  const userAvatar = session?.user?.image_url; // Đường dẫn hình ảnh người dùng
+  const userAvatar = session?.user?.image; // Đường dẫn hình ảnh người dùng
   const userName = session?.user?.user_name; // Tên người dùng 
   // console.log(session);
   

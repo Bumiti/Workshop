@@ -32,7 +32,7 @@
 
 // export default Dashboard;
 
-import { styled, Container, Box } from "@mui/material";
+import {Container, Box } from "@mui/material";
 import React, { useState } from "react";
 import Sidebar from "./layout/sidebar/Sidebar";
 import Header from "./layout/header/Header";
@@ -40,7 +40,7 @@ import Footer from "./layout/footer/page";
 // import Header from "@/app/(DashboardLayout)/layout/header/Header";
 // import Sidebar from "@/app/(DashboardLayout)/layout/sidebar/Sidebar";
 // import Footer from "./layout/footer/page";
-import { ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider,styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { baselightTheme } from "../user/utils/theme/DefaultColors";
 
