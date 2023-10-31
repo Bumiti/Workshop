@@ -8,8 +8,8 @@ const LogoImage = styled(NextImage)(() => ({
 }));
 
 const LogoLink = styled(NextLink)(() => ({
-  height: "40px",
-  width: "180px",
+  height: "45px",
+  width: "96px",
   overflow: "hidden",
   display: "block",
 }));
@@ -17,7 +17,7 @@ const LogoLink = styled(NextLink)(() => ({
 const Logo = () => {
   return (
     <LogoLink href="/">
-      <LogoImage src="/logo.png" alt="logo" layout="responsive" width={80} height={37} />
+      <LogoImage src="/logo.png" alt="logo" layout="responsive" width={50} height={37} />
     </LogoLink>
   );
 };

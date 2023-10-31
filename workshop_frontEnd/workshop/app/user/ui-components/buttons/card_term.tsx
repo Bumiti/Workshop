@@ -1,7 +1,5 @@
 import Image from "next/image";
 import thumb from "../../public/next.svg";
-import thumb2 from "../../public/vercel.svg";
-
 import { FaReact } from "react-icons/fa";
 import { SiTypescript } from "react-icons/si";
 import { AiOutlineClockCircle } from "react-icons/ai";

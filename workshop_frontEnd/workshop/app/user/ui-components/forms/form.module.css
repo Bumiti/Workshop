@@ -4,13 +4,14 @@
     width: 50%;
     padding-right: 20px;
     padding-bottom: 15px;
+    padding-top: 10px;
   }
   .inputCustom2 {
     text-align: center;
     border: 1px none #ccc;
     width:80%;
     padding-right: 20px;
-    padding-bottom: 15px;
+    padding-bottom: 20px !important;
   }
   .borderButton {
     display: inline-block !important;
@@ -85,5 +86,17 @@
   }
   .imageMargin {
     margin-bottom: 35px; /* Điều chỉnh giá trị theo nhu cầu */
+  }
+  
+  .customAlert::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: -1;
+    width: 100%; /* Điều chỉnh kích thước ảnh phải tùy ý */
+    height: 100%; /* Điều chỉnh kích thước ảnh phải tùy ý */
+    background-image: url('/images/pro-table-bottom.png');
+        background-size: cover;
   }
   

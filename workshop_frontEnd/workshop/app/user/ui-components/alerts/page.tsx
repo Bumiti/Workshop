@@ -2,23 +2,6 @@
 import styles from '../alerts/chat.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome,faUser, faPencil, faCommenting, faFile, faCog } from '@fortawesome/free-solid-svg-icons';
-import {
-    Paper,
-    Grid,
-    Stack,
-    Alert, AlertTitle
-} from '@mui/material'
-// import BaseCard from '@/app/(DashboardLayout)/components/shared/BaseCard';
-// import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-// const Item = styled(Paper)(({ theme }) => ({
-//     ...theme.typography.body1,
-//     textAlign: 'center',
-//     color: theme.palette.text.secondary,
-//     height: 60,
-//     lineHeight: '60px',
-//   }));
-
-
 
 const Alerts = () => {
     return (

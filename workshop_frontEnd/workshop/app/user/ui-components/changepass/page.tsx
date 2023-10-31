@@ -1,10 +1,10 @@
 'use client'
 import React, { useState, ChangeEvent, useEffect } from "react"
-import { Grid, TextField, Button, createTheme, ThemeProvider } from '@mui/material';
+import { Grid, TextField, Button} from '@mui/material';
 import { useSession } from 'next-auth/react';
 import styles from '../forms/form.module.css';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-
+import{ createTheme, ThemeProvider }from "@mui/material/styles";
 const lightTheme = createTheme({ palette: { mode: 'light' } });
 
 const ChangePassword = () => {
@@ -104,15 +104,15 @@ const ChangePassword = () => {
     <ThemeProvider theme={lightTheme}>
       <Grid container spacing={3}>
         <Grid item xs={12} lg={12}>
-        <Dialog open={isAlertOpen} onClose={handleCloseAlert}>
-            <DialogTitle>{alertTitle}</DialogTitle>
-            <DialogContent>
+        {/* <Dialog className={styles.customAlert} open={isAlertOpen} onClose={handleCloseAlert}>
+            <DialogTitle>SUCCESS</DialogTitle>
+            <DialogContent >
               <p>{alertMessage}</p>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleCloseAlert}>OK</Button>
             </DialogActions>
-          </Dialog>
+          </Dialog> */}
           <div className={`${styles.formCustom} text-center`}>
             <h1 className={styles.h1Custom}>Change Password</h1>
             <form onSubmit={handleSubmit}>
@@ -140,6 +140,19 @@ const ChangePassword = () => {
               <Button type="submit" className={styles.borderButton}>
                 Change Password
               </Button>
+              <Dialog
+                classes={{ paper: styles.customAlert }} // Áp dụng lớp CSS vào Dialog
+                open={isAlertOpen}
+                onClose={handleCloseAlert}
+              >
+                <DialogTitle>SUCCESS</DialogTitle>
+                <DialogContent>
+                  <p>{alertMessage}</p>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseAlert}>OK</Button>
+                </DialogActions>
+              </Dialog>
             </form>
           </div>
         </Grid>

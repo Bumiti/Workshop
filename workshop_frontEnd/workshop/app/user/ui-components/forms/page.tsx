@@ -2,10 +2,8 @@
 'use client'
 import React, { useState, ChangeEvent, useEffect } from "react"
 import { FirebaseDb } from ".././../../FireBase/Config"
-import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { v4 } from 'uuid';
-import { Container } from "react-bootstrap";
-import { UploadTaskSnapshot } from 'firebase/storage';
 import {
   Paper,
   Grid,
@@ -152,9 +150,6 @@ const EditProfile = () => {
     e.preventDefault();
     try {
       if (session) {
-        // const authToken = session.user.accessToken;
-        // console.log(authToken);
-        // console.log(userData);
 
         const response = await fetch('http://localhost:8089/auth/user/edit', {
           method: 'PUT',
@@ -180,47 +175,8 @@ const EditProfile = () => {
     }
   };
 
-  const [img, setImg] = useState<{ file: File | null, extension: string | undefined }>({
-    file: null,
-    extension: undefined,
-  });
-  const [imgUrl, setImgUrl] = useState<(string | { url: string, fileName: string })[]>([]);
+ 
 
-  // const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = event.target.files;
-  //   if (files) {
-  //     const selectedImage = files[0];
-  //     if (selectedImage) {
-  //       const fileExtension = selectedImage.name.split('.').pop();
-  //       console.log("File Extension:", fileExtension);
-  //       setImg({ file: selectedImage, extension: fileExtension });
-  //     } else {
-  //       console.error("Không có tệp hình ảnh được chọn.");
-  //     }
-  //   } else {
-  //     console.error("Không có tệp hình ảnh được chọn.");
-  //   }
-  // }
-  // const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = event.target.files;
-  //   if (files) {
-  //     const selectedImage = files[0];
-  //     if (selectedImage) {
-  //       const imgRef = ref(FirebaseDb, `/user/${v4()}`);
-  //       uploadBytes(imgRef, selectedImage).then((value) => {
-  //         getDownloadURL(value.ref).then(url => {
-  //           setUserData({ ...userData, image_url: url }); // Cập nhật URL hình ảnh vào userData
-  //         });
-  //       }).catch((error) => {
-  //         console.error("Lỗi tải lên:", error);
-  //       });
-  //     } else {
-  //       console.error("Không có tệp hình ảnh được chọn.");
-  //     }
-  //   } else {
-  //     console.error("Không có tệp hình ảnh được chọn.");
-  //   }
-  // }
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -244,25 +200,6 @@ const EditProfile = () => {
     }
   };
 
-  const handleClick = () => {
-    if (img && img.file) {
-      const { file, extension } = img;
-      const fileName = `${v4()}.${extension}`;
-      const imgRef = ref(FirebaseDb, `/user/${v4()}`);
-      uploadBytes(imgRef, file).then((value) => {
-        console.log("Tải lên thành công:", value);
-        getDownloadURL(value.ref).then(url => {
-          setImgUrl((data) => [...data, { url, fileName }]);
-          console.log(url);
-
-          // Lưu đường dẫn hình ảnh vào userData
-          setUserData({ ...userData, image_url: url });
-        });
-      }).catch((error) => {
-        console.error("Lỗi tải lên:", error);
-      });
-    }
-  };
 
   return (
     <ThemeProvider theme={lightTheme}>
@@ -352,15 +289,6 @@ const EditProfile = () => {
 
               </div>
               <div className={styles.leftAlignedDiv}>
-
-                {/* <TextField
-                  type="text"
-                  label="Image URL"
-                  name="image_url"
-                  value={userData.image_url || ''}
-                  onChange={handleInputChange}
-                  className={styles.inputCustom2}
-                /> */}
                   {userData.image_url && (
                 <img src={userData.image_url} alt="User Avatar" className={styles.roundedImage} />
               )}
@@ -381,17 +309,7 @@ const EditProfile = () => {
                     onChange={handleImageUpload}
                   />
                 </label>
-                {/* <Button onClick={handleClick}
-                className={styles.borderButton}>
-                Upload Image
-              </Button> */}
               </div>
-            
-              {/* <div>
-                <button onClick={handleClick}>Upload Image</button>
-                <button type="submit">Save</button>
-              </div> */}
-             
              <Button type="submit"
                 className={styles.borderButton}>
                 Save Profile
