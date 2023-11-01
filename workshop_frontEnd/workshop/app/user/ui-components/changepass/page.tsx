@@ -150,7 +150,7 @@ const ChangePassword = () => {
                   <p>{alertMessage}</p>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleCloseAlert}>OK</Button>
+                  <Button classes={{ root: styles.okButton }} onClick={handleCloseAlert}>OK</Button>
                 </DialogActions>
               </Dialog>
             </form>

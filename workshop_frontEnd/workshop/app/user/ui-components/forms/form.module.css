@@ -88,15 +88,13 @@
     margin-bottom: 35px; /* Điều chỉnh giá trị theo nhu cầu */
   }
   
-  .customAlert::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    right: 0;
+  .customAlert {
     z-index: -1;
-    width: 100%; /* Điều chỉnh kích thước ảnh phải tùy ý */
-    height: 100%; /* Điều chỉnh kích thước ảnh phải tùy ý */
-    background-image: url('/images/pro-table-bottom.png');
+    /* width: 100%; Điều chỉnh kích thước ảnh phải tùy ý */
+    /* height: 100%; Điều chỉnh kích thước ảnh phải tùy ý */
+    background-image: url('../../../../public/regular-table-top.png');
         background-size: cover;
   }
-  
+  .okButton:hover{
+    color: blue;
+  }
