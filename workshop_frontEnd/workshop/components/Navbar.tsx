@@ -43,7 +43,7 @@ export default function Navbar() {
            width="30"
            height="30"
            className={styles.roundedCircle}
-            src={session.user.image || session.user.image}
+            src={session.user.image || session.user.picture}
           />
           {/* <a> {session.user.name.split(' ')[0]}</a> */}
           {dropdownVisible && (
