@@ -1,7 +1,6 @@
-package com.workshop.reposetory.Course;
+package com.workshop.repositories.Course;
 
 import com.workshop.model.courseModel.CourseLocation;
-import com.workshop.model.courseModel.CourseMediaInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

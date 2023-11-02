@@ -1,7 +1,7 @@
 package com.workshop.dao;
 
 import com.workshop.model.Location;
-import com.workshop.reposetory.LocationRepository;
+import com.workshop.repositories.LocationRepository;
 import com.workshop.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

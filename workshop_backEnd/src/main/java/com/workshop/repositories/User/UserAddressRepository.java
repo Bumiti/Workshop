@@ -1,7 +1,6 @@
-package com.workshop.reposetory.User;
+package com.workshop.repositories.User;
 
 
-import com.workshop.model.courseModel.CourseLocation;
 import com.workshop.model.userModel.User;
 import com.workshop.model.userModel.UserAddresses;
 import org.springframework.data.jpa.repository.JpaRepository;

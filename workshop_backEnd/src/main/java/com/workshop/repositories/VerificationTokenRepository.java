@@ -1,4 +1,4 @@
-package com.workshop.reposetory;
+package com.workshop.repositories;
 
 import com.workshop.model.userModel.VerificationToken;
 import org.springframework.data.jpa.repository.JpaRepository;

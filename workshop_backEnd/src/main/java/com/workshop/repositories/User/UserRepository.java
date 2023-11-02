@@ -1,4 +1,4 @@
-package com.workshop.reposetory.User;
+package com.workshop.repositories.User;
 import com.workshop.model.userModel.User;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
@@ -8,6 +8,7 @@ import java.util.*;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
 
     @Query("select u from User u where u.email =:email and u.isEnable =true")
     Optional<User> findByEmail(String email);
@@ -25,6 +26,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "WHERE r.name = ?1", nativeQuery = true)
     List<User> findUsersByRoleName(String roleName);
 
+    @Modifying
+    @Query(value = "select u.* from users u join public.users_role ur on u.id = ur.user_id\n" +
+            "join public.roles r on ur.roles_id = r.id\n" +
+            "where r.name != 'ADMIN'", nativeQuery = true)
+    List<User> findUsersNonAdmin();
     @Transactional
     @Modifying
     @Query("UPDATE User u SET u.isEnable = CASE WHEN u.isEnable = true THEN false ELSE true END WHERE u.id = :id")

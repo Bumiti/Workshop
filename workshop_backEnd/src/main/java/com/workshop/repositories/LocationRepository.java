@@ -1,4 +1,4 @@
-package com.workshop.reposetory;
+package com.workshop.repositories;
 
 import com.workshop.model.Location;
 import org.springframework.data.jpa.repository.JpaRepository;

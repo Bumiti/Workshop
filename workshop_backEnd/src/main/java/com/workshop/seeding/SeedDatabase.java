@@ -2,7 +2,6 @@ package com.workshop.seeding;
 import com.workshop.dto.useDTO.UserRegisterRequest;
 import com.workshop.model.Location;
 import com.workshop.model.userModel.Roles;
-import com.workshop.reposetory.User.UserRepository;
 import com.workshop.service.LocationService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

@@ -7,7 +7,7 @@ import com.workshop.dto.useDTO.UserRegisterRequest;
 import com.workshop.event.RegisterCompleteEvent;
 import com.workshop.event.RenewPasswordEvent;
 import com.workshop.model.userModel.*;
-import com.workshop.reposetory.VerificationTokenRepository;
+import com.workshop.repositories.VerificationTokenRepository;
 import com.workshop.service.AuthenticationService;
 import com.workshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -122,6 +122,21 @@ public class AdminController {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
+
+    @Operation(summary = "Danh sách Account")
+    @GetMapping("user/listUser")
+    public ResponseEntity<ApiResponse<?>> listAccount() {
+        try {
+            List<UserInfoResponse> accounts = adminService.listAccount();
+            if (accounts.isEmpty()) {
+                return createResponse(HttpStatus.NOT_FOUND, "error", "No account found with role " , null);
+            } else {
+                return createResponse(HttpStatus.ACCEPTED, "success", "List of " , accounts);
+            }
+        }catch(Exception e){
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
+    }
     @Operation(summary = "Thay đổi trạng thái Account")
     @PostMapping("user/changeStatus")
     public ResponseEntity<ApiResponse<?>> activeUserByRole(@RequestParam Long id) {

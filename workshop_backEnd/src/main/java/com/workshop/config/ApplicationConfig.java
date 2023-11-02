@@ -1,6 +1,6 @@
 package com.workshop.config;
 
-import com.workshop.reposetory.User.UserRepository;
+import com.workshop.repositories.User.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.*;
