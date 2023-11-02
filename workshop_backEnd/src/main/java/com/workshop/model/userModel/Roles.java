@@ -28,8 +28,7 @@ public class Roles {
     private Long id;
     private String name;
 
-    @ManyToMany(mappedBy ="roles")
-    @Fetch(value = FetchMode.SELECT)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<User> user = new HashSet<>();
 

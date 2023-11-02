@@ -26,6 +26,8 @@ public class Location extends BaseModel{
     // Quan hệ một nhiều với buổi workshop có thể tổ chức tại đây
     @OneToMany(mappedBy = "location")
     private List<Workshop> workshops;
+    @OneToMany(mappedBy = "location")
+    private List<Request> requests;
 
     @OneToMany(mappedBy = "locations")
     @OnDelete(action = OnDeleteAction.CASCADE)
