@@ -11,6 +11,7 @@ import java.util.List;
 public interface AdminService {
     boolean chanceIsEnableWithRoleAndId(Long Id);
     List<UserInfoResponse> listAccountByRole(String role);
+    List<UserInfoResponse> listAccount();
     List<CourseRespones> listCourse();
     List<WorkShopRespone> listWorkshop();
 }

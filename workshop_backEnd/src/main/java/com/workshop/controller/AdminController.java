@@ -2,9 +2,11 @@ package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
 import com.workshop.dto.CourseDTO.CourseRespones;
+import com.workshop.dto.RequestResponse;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.service.AdminService;
 import com.workshop.service.CourseService;
+import com.workshop.service.RequestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +26,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final CourseService courseService;
-
+    private final RequestService requestService;
     private ResponseEntity<ApiResponse<?>> createResponse(HttpStatus httpStatus, String status, String message, Object data) {
         return ResponseEntity.status(httpStatus).body(new ApiResponse<>(status, message, data));
     }
@@ -43,7 +45,20 @@ public class AdminController {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
-
+    @Operation(summary = "Danh Sách Request")
+    @GetMapping("request/list")
+    public ResponseEntity<ApiResponse<?>> listRequest() {
+        try {
+            List<RequestResponse> requestResponseList = requestService.ListRequest();
+            if (requestResponseList.isEmpty()) {
+                return createResponse(HttpStatus.NOT_FOUND, "error", "List Request is empty", null);
+            } else {
+                return createResponse(HttpStatus.ACCEPTED, "success", "List of Request", requestResponseList);
+            }
+        } catch (Exception e) {
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
+    }
     @Operation(summary = "Thay đổi trạng thái Course")
     @PostMapping("course/status")
     public ResponseEntity<ApiResponse<?>> activeCourse(@RequestParam Long id) {
@@ -117,6 +132,21 @@ public class AdminController {
                 return createResponse(HttpStatus.NOT_FOUND, "error", "No account found with role " + role, null);
             } else {
                 return createResponse(HttpStatus.ACCEPTED, "success", "List of " + role, accounts);
+            }
+        }catch(Exception e){
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
+    }
+
+    @Operation(summary = "Danh sách Account")
+    @GetMapping("user/listUser")
+    public ResponseEntity<ApiResponse<?>> listAccount() {
+        try {
+            List<UserInfoResponse> accounts = adminService.listAccount();
+            if (accounts.isEmpty()) {
+                return createResponse(HttpStatus.NOT_FOUND, "error", "No account found with role " , null);
+            } else {
+                return createResponse(HttpStatus.ACCEPTED, "success", "List of " , accounts);
             }
         }catch(Exception e){
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);

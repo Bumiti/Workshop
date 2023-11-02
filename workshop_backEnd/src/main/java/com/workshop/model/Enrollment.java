@@ -22,6 +22,7 @@ import java.util.List;
 @Accessors(chain = true)
 @Table(name="enrollment")
 public class Enrollment extends BaseModel {
+
     private Date enrollmentDate;
     // Quan hệ nhiều một với người dùng đã đăng ký
     @ManyToOne

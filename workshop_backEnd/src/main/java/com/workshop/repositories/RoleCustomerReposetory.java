@@ -1,4 +1,4 @@
-package com.workshop.reposetory;
+package com.workshop.repositories;
 import com.workshop.model.userModel.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

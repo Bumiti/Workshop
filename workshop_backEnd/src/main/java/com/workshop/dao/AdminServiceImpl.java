@@ -6,14 +6,18 @@ import com.workshop.dto.CourseDTO.CourseRespones;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.model.Location;
 import com.workshop.model.courseModel.*;
+import com.workshop.model.userModel.Roles;
 import com.workshop.model.userModel.User;
-import com.workshop.reposetory.*;
-import com.workshop.reposetory.Course.CourseRepository;
-import com.workshop.reposetory.User.UserRepository;
+import com.workshop.model.userModel.UserAddresses;
+import com.workshop.repositories.*;
+import com.workshop.repositories.Course.CourseRepository;
+import com.workshop.repositories.User.UserRepository;
 import com.workshop.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,16 +43,46 @@ public class AdminServiceImpl implements AdminService {
     public List<UserInfoResponse> listAccountByRole(String role) {
         List<UserInfoResponse> listUserInfoResponse = new ArrayList<>();
         List<User> ListUser = userRepository.findUsersByRoleName(role);
-        for (User user : ListUser) {
-            UserInfoResponse userInfoResponse = new UserInfoResponse();
-            userInfoResponse.setId(user.getId())
-                    .setUser_name(user.getUser_name())
-                    .setFull_name(user.getFull_name())
-                    .setImage_url(user.getImage_url())
-                    .setPhoneNumber(user.getPhoneNumber())
-                    .setEnable(user.isEnable());
+        for(User user : ListUser){
+            MapperGeneric<User,UserInfoResponse> userMapper = new MapperGeneric<>();
+            UserInfoResponse userInfoResponse =  userMapper.ModelmapToDTO(user,UserInfoResponse.class);
+            List<UserInfoResponse.UserAddress> listUserAddressResponse = new ArrayList<>();
+            for(UserAddresses userAddresses : user.getUserAddresses()){
+                MapperGeneric<UserAddresses,UserInfoResponse.UserAddress> userAddressMapper = new MapperGeneric<>();
+                UserInfoResponse.UserAddress userAddress = userAddressMapper.ModelmapToDTO(userAddresses,UserInfoResponse.UserAddress.class);
+                listUserAddressResponse.add(userAddress);
+            }
+            List<String>roleList =new ArrayList<>();
+            for(Roles roles : user.getRoles()){
+                roleList.add(roles.getName());
+            }
+            userInfoResponse.setRoles(roleList);
+            userInfoResponse.setUserAddresses(listUserAddressResponse);
             listUserInfoResponse.add(userInfoResponse);
+        }
+        return listUserInfoResponse;
+    }
 
+    @Override
+    public List<UserInfoResponse> listAccount() {
+        List<UserInfoResponse> listUserInfoResponse = new ArrayList<>();
+        List<User> ListUser = userRepository.findUsersNonAdmin();
+        for(User user : ListUser){
+            MapperGeneric<User,UserInfoResponse> userMapper = new MapperGeneric<>();
+            UserInfoResponse userInfoResponse =  userMapper.ModelmapToDTO(user,UserInfoResponse.class);
+            List<UserInfoResponse.UserAddress> listUserAddressResponse = new ArrayList<>();
+            for(UserAddresses userAddresses : user.getUserAddresses()){
+                MapperGeneric<UserAddresses,UserInfoResponse.UserAddress> userAddressMapper = new MapperGeneric<>();
+                UserInfoResponse.UserAddress userAddress = userAddressMapper.ModelmapToDTO(userAddresses,UserInfoResponse.UserAddress.class);
+                listUserAddressResponse.add(userAddress);
+            }
+            List<String>roleList =new ArrayList<>();
+            for(Roles role : user.getRoles()){
+                roleList.add(role.getName());
+            }
+            userInfoResponse.setRoles(roleList);
+            userInfoResponse.setUserAddresses(listUserAddressResponse);
+            listUserInfoResponse.add(userInfoResponse);
         }
         return listUserInfoResponse;
     }

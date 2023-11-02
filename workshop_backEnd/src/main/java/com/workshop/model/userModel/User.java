@@ -56,7 +56,8 @@ public class User extends BaseModel implements UserDetails  {
     // Quan hệ một nhiều với danh sách ưu đãi
     @OneToMany(mappedBy = "user")
     private List<Discount> discounts;
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="users_role",
             joinColumns = @JoinColumn(name="User_id"),
             inverseJoinColumns = @JoinColumn(name="Roles_id"))

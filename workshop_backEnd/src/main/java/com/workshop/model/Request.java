@@ -9,6 +9,7 @@ import lombok.experimental.Accessors;
 
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -18,8 +19,11 @@ import java.util.List;
 @Accessors(chain = true)
 @Table(name="requesttb")
 public class Request extends BaseModel{
-    private String type; // Loại yêu cầu (đăng ký khóa học, đăng ký workshop, đăng ký buổi offline, v.v.)
-    private String status; // Trạng thái yêu cầu (đã duyệt, chưa duyệt, v.v.)
+
+    @Enumerated(EnumType.STRING)
+    private RequestType type;
+    @Enumerated(EnumType.STRING)
+    private RequestStatus status;
     // Quan hệ nhiều một với người dùng tạo yêu cầu
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -33,11 +37,23 @@ public class Request extends BaseModel{
     @JoinColumn(name = "workshop_id")
     private Workshop workshop;
     // Quan hệ một một với địa điểm (nếu là yêu cầu đăng ký buổi offline)
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "location_id")
     private Location location;
 
     // Quan hệ nhiều một với thanh toán (khi yêu cầu đã được duyệt và thanh toán)
     @OneToMany(mappedBy = "request")
     private List<Transaction> transactions;
+
+    public enum RequestStatus {
+        PENDING,
+        APPROVED,
+        REJECTED
+    }
+    public enum RequestType {
+        Register_Course_Online,
+        Register_Course_Offline,
+//        Register_WorkShop_Online,
+//        Register_WorkShop_Offline,
+    }
 }

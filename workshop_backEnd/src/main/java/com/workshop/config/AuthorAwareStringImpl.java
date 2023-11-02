@@ -1,8 +1,7 @@
 package com.workshop.config;
 
 import com.workshop.model.userModel.User;
-import com.workshop.reposetory.User.UserRepository;
-import lombok.RequiredArgsConstructor;
+import com.workshop.repositories.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;

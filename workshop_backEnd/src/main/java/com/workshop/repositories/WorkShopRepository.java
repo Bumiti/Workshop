@@ -1,6 +1,5 @@
-package com.workshop.reposetory;
+package com.workshop.repositories;
 
-import com.workshop.dto.WorkShopRespone;
 import com.workshop.model.workshopModel.Workshop;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
