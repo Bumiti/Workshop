@@ -80,6 +80,7 @@ public class AdminServiceImpl implements AdminService {
             for(Roles role : user.getRoles()){
                 roleList.add(role.getName());
             }
+            userInfoResponse.setId(user.getId());
             userInfoResponse.setRoles(roleList);
             userInfoResponse.setUserAddresses(listUserAddressResponse);
             listUserInfoResponse.add(userInfoResponse);
