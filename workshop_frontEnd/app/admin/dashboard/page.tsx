@@ -1,10 +1,9 @@
 import React from 'react';
-import Home from './Home';
 
 const page = () => {
     return (
         <div>
-            <Home/>
+            <h1>hello dashboard</h1>
         </div>
     );
 };
