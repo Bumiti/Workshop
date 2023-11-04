@@ -3,9 +3,6 @@ import FacebookProvider from "next-auth/providers/facebook"
 import GitHubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
 import DiscordProvider from "next-auth/providers/discord"
-import Instagram from "next-auth/providers/instagram"
-import Reddit from "next-auth/providers/reddit"
-import LinkedIn from "next-auth/providers/linkedin"
 import NextAuth from "next-auth/next"
 
 
@@ -32,7 +29,7 @@ const handler = NextAuth({
               
               if (user)
               {
-                console.log("user nè :",user.data.user);
+                // console.log("user nè :",user.data.user);
                 user.data.user.sub = 'credentials',
                 user.data.user.id= 'credentials'
                 return user.data.user;
@@ -78,7 +75,7 @@ const handler = NextAuth({
                     });
                     if (response.ok) {
                         const data = await response.json();
-                        console.log("User Data :", data.data.user);
+                        // console.log("User Data :", data.data.user);
                         session.user.roles = data.data.user.roles
                         session.user.accessToken = data.data.user.accessToken
                         session.user.refreshToken = data.data.user.refreshToken
