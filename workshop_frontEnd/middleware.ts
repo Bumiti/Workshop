@@ -6,19 +6,26 @@ export default withAuth(
         console.log("Đường dẫn đang truy cập :",request.nextUrl.pathname)
         if (request.nextUrl.pathname.startsWith("/teacher")) 
         {
-            if (Array.isArray(request.nextauth.token?.roles) && request.nextauth!.token!.roles.includes("SELLER")) {return;} 
+            if (Array.isArray(request.nextauth.token?.roles) && request.nextauth!.token!.roles.includes("SELLER")) 
+            {
+            } 
             else {
                 return NextResponse.rewrite(new URL("/login", request.url));
             }
         }
         if (request.nextUrl.pathname.startsWith("/user")){
-            if (Array.isArray(request.nextauth.token?.roles) && (request.nextauth!.token!.roles.includes("USER") || request.nextauth!.token!.roles.includes("SELLER"))) {} 
+            if (Array.isArray(request.nextauth.token?.roles) && (request.nextauth!.token!.roles.includes("USER") || request.nextauth!.token!.roles.includes("SELLER"))) {
+   
+            } 
             else {
                 return NextResponse.rewrite(new URL("/login", request.url));
             }
         }
         if(request.nextUrl.pathname.startsWith("/admin")){
-            if(Array.isArray(request.nextauth.token?.roles) && request.nextauth.token?.roles.includes("ADMIN")){}
+            if(Array.isArray(request.nextauth.token?.roles) && request.nextauth.token?.roles.includes("ADMIN"))
+            {
+
+            }
             else{
                 return NextResponse.rewrite(new URL("/login", request.url));
             }

@@ -29,7 +29,6 @@ const handler = NextAuth({
               
               if (user)
               {
-                // console.log("user nè :",user.data.user);
                 user.data.user.sub = 'credentials',
                 user.data.user.id= 'credentials'
                 return user.data.user;
@@ -75,7 +74,6 @@ const handler = NextAuth({
                     });
                     if (response.ok) {
                         const data = await response.json();
-                        // console.log("User Data :", data.data.user);
                         session.user.roles = data.data.user.roles
                         session.user.accessToken = data.data.user.accessToken
                         session.user.refreshToken = data.data.user.refreshToken
@@ -83,7 +81,6 @@ const handler = NextAuth({
                         session.user.phoneNumber == data.data.user.phoneNumber
                         session.user.userAddresses == data.data.user.userAddresses
                         session.user.image = data.data.user.image
-                     
                     }
                 };
                 await fetchData(); 

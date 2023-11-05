@@ -1,9 +1,10 @@
-import Image from 'next/image';
-import Link from "next/link";
+
 import styles from '../CSS/home.module.css';
 import React, { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 const Card = () => {
+ 
 
   return (
     

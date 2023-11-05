@@ -7,11 +7,10 @@ import Testimonials from '@/components/Rate';
 import PricingCarousel from '@/components/PricingCarousel';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
-import ApiService from './services/ApiService';
 
 export default function Home() {
-  const apiService = new ApiService();
-   apiService.listCoursePublic();
+  
+  console.log(456);
   return (
     <div>
       <Navbar/>

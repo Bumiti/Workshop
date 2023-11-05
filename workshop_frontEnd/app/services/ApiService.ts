@@ -1,28 +1,27 @@
 import dotenv from 'dotenv';
 import axios, { AxiosInstance } from 'axios';
-import { useSession } from 'next-auth/react';
+
+import UserInfoResponse from '@/types/UserInfoResponse';
 
 dotenv.config();
 
 class ApiService {
-    private baseUrls: string;
+    private baseUrl: string;
     private customAxios: AxiosInstance;
-    private tokenStr: string;
-    constructor() {
-        const { data: session } = useSession();
-        this.tokenStr = session?.user.accessToken || '',
-            this.baseUrls = 'http://localhost:8089/',
-            this.customAxios = axios.create({
-                baseURL: this.baseUrls,
-                timeout: 5000,
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-type": "Application/json",
-                    "Authorization": `Bearer ${this.tokenStr}`,
-                },
-            });
-        }
-    //HomePage API
+
+    constructor(private session: any) {
+        this.baseUrl = 'http://localhost:8089/';
+        this.customAxios = axios.create({
+            baseURL: this.baseUrl,
+            timeout: 500000,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session?.user.accessToken || ''}`,
+            },
+        });
+    }
+
     async listCoursePublic() {
         try {
             const response = await this.customAxios.get('/web/course/list');
@@ -31,46 +30,50 @@ class ApiService {
             throw error;
         }
     }
-    //Admin API
+
     async listRequestAdmin() {
         try {
-            if (this.tokenStr != null && this.tokenStr.length > 0) {
+            if (this.session?.user.accessToken) {
                 const response = await this.customAxios.get('/admin/request/list');
                 return response.data;
             }
+            return [];
         } catch (error) {
             throw error;
         }
     }
-    async listCourseAdmin(){
+
+    async listCourseAdmin() {
         try {
-            if (this.tokenStr != null && this.tokenStr.length > 0) {
+            if (this.session?.user.accessToken) {
                 const response = await this.customAxios.get('/admin/course/list');
                 return response.data;
             }
+            return [];
         } catch (error) {
             throw error;
         }
     }
-    async listAccountAdmin(){
+
+    async listAccountAdmin() {
         try {
-            if (this.tokenStr != null && this.tokenStr.length > 0) {
+            if (this.session?.user.accessToken) {
                 const response = await this.customAxios.get('/admin/user/listUser');
-                console.log(response.data.data);
-                return response.data;
+                return response.data ;
             }
+            return [];
         } catch (error) {
             throw error;
         }
     }
-    async changeStatusAccount(id: number){
+
+    async changeStatusAccount(id: number) {
         try {
-            if (this.tokenStr != null && this.tokenStr.length > 0) {
-                console.log(" this.tokenStr :", this.tokenStr)
+            if (this.session?.user.accessToken) {
                 const response = await this.customAxios.post(`/admin/user/changeStatus?id=${id}`);
-                console.log(response.data);
                 return response.data;
             }
+            return null;
         } catch (error) {
             throw error;
         }
