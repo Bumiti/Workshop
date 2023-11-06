@@ -6,8 +6,6 @@ import { AiFillHome } from 'react-icons/ai';
 import { BiSolidUserAccount } from 'react-icons/bi';
 import { SiGoogleclassroom } from 'react-icons/si';
 import { BsPersonWorkspace } from 'react-icons/bs';
-import './style.css';
-
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
