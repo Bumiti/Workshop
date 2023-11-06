@@ -1,8 +1,6 @@
 package com.workshop.controller;
-
-import com.workshop.authentication.AuthenticationRequest;
 import com.workshop.config.ApiResponse;
-import com.workshop.dto.CourseRequest;
+import com.workshop.dto.CourseDTO.CourseRequest;
 import com.workshop.service.CourseService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +26,7 @@ public class SellerController {
     public ResponseEntity<ApiResponse> addCourse(@RequestBody CourseRequest courseRequest)
     {
         if(courseRequest!=null){
-           boolean result =  courseService.AddCourse(courseRequest);
+           boolean result =  courseService.addCourse(courseRequest);
            if(result){
                return ResponseEntity.status(HttpStatus.CREATED)
                        .body( new ApiResponse<>(HttpStatus.CREATED.name(),"The Course has been Create ",null));

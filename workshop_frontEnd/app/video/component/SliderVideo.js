@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 const SliderVideo = ({ videos, onVideoSelect }) => {
     const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
 
-    const handleVideoSelect = (videoUrl) => {
+    const handleVionVideoSelectdeoSelect = (videoUrl) => {
         setSelectedVideoUrl(videoUrl);
     };
 

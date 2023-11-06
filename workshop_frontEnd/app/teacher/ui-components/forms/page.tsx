@@ -1,7 +1,7 @@
 
 'use client'
 import React, { useState, ChangeEvent, useEffect } from "react"
-import { FirebaseDb } from ".././../../FireBase/Config"
+import { FirebaseDb } from "../../../../utils/FireBase/Config"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { v4 } from 'uuid';
 import {
