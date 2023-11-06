@@ -51,6 +51,8 @@ public class CourseRequest {
     public static class CourseMediaInfoDTOS{
         private String urlMedia;
         private String urlImage;
+        private String thumbnailSrc;
+        private String title;
     }
     @Getter
     @Setter

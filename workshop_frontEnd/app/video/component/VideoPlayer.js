@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
 const VideoPublic = ({ selectedVideoUrl }) => {
-    // Sử dụng useState để lưu trữ URL của video được chọn
+
     const [currentVideoUrl, setCurrentVideoUrl] = useState(selectedVideoUrl);
     useEffect(() => {
         setCurrentVideoUrl(selectedVideoUrl);
@@ -14,7 +14,7 @@ const VideoPublic = ({ selectedVideoUrl }) => {
     return (
         <Row>
             <Col sm={12} md={12} lg={12}>
-                <div className="mx-auto w-full space-y-6">
+                <div className="mx-auto w-full space-y-6 p-2">
                     <Row>
                         <div className="player-container">
                             <ReactPlayer

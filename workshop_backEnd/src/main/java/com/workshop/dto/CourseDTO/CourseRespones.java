@@ -62,6 +62,8 @@ public class CourseRespones {
         private Long id;
         private String urlMedia;
         private String urlImage;
+        private String thumbnailSrc;
+        private String title;
     }
     @Getter
     @Setter
