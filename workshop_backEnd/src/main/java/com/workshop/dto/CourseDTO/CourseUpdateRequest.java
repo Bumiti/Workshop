@@ -53,6 +53,8 @@ public class CourseUpdateRequest {
         private Long courseMedia_id;
         private String urlMedia;
         private String urlImage;
+        private String thumbnailSrc;
+        private String title;
     }
     @Getter
     @Setter

@@ -1,42 +1,57 @@
+'use client'
 import React from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { MdDashboard } from 'react-icons/md';
 import { AiFillHome } from 'react-icons/ai';
 import { BiSolidUserAccount } from 'react-icons/bi';
-import { BsPeopleFill } from 'react-icons/bs';
-import { RiLogoutBoxRFill } from 'react-icons/ri';
+import { SiGoogleclassroom } from 'react-icons/si';
+import { BsPersonWorkspace } from 'react-icons/bs';
+import './style.css';
 
-function Sidebar() {
+
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+function Sidebar () {
+    const navLink = [
+        {
+            name: "Home",
+            link: "/admin",
+            icon: <AiFillHome />,
+        },
+        {
+            name: "Accounts",
+            link: "/admin/account",
+            icon: <BiSolidUserAccount />,
+        },
+        {
+            name: "Courses",
+            link: "/admin/courses",
+            icon: <SiGoogleclassroom />,
+        },
+        {
+            name: "WorkShop",
+            link: "/admin",
+            icon: <BsPersonWorkspace />,
+        },
+    ]
     return (
         <div className='bg-dark sidebar p-2'>
             <Link href={'/admin'}>
                 <div className='m-2 text-center'>
-                    <Image src={'/logo.png'} height={50} width={96}></Image>
+                    <Image alt='' src={'/logo.png'} height={50} width={96}></Image>
                 </div>
             </Link>
             <hr className='text-white' />
             <div className='list-group'>
-                <Link className='list-group-item py-2 my-1 bg-dark text-white rounded-pill' href={'/admin/dashboard'}>
-                    <i className='fs-5 me-3'><MdDashboard/></i>
-                    <span >Dashboard</span>
-                </Link>
-                <Link className='list-group-item py-2 my-1 bg-dark text-white rounded-pill' href={'/admin/'}>
-                    <i className='bi bi-house fs-5 me-3'><AiFillHome/></i>
-                    <span >Home</span>
-                </Link>
-                <Link className='list-group-item py-2 my-1 bg-dark text-white rounded-pill' href={'/admin/account'}>
-                    <i className='bi bi-table fs-5 me-3'><BiSolidUserAccount/></i>
-                    <span >Accounts</span>
-                </Link>
-                <Link className='list-group-item py-2 my-1 bg-dark text-white rounded-pill' href={'/admin/dashboard'}>
-                    <i className='bi bi-people fs-5 me-3'><BsPeopleFill/></i>
-                    <span >Customers</span>
-                </Link>
-                <Link className='list-group-item py-2 my-1 bg-dark text-white rounded-pill' href={'/admin/dashboard'}>
-                    <i className='bi bi-power fs-5 me-3'><RiLogoutBoxRFill/></i>
-                    <span >Logout</span>
-                </Link>
+                {navLink.map(({ name, link, icon }) => (
+                    <Link key={name} href={link} className='list-group-item py-2 my-1 bg-dark text-white rounded-pill'>
+                        <div >
+                            <i className='bi bi-house fs-5 me-3'>{icon}</i>
+                            <span>{name}</span>
+                        </div>
+                    </Link>
+                ))}
             </div>
         </div>
     )
