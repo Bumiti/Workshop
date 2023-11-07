@@ -8,17 +8,11 @@ import { BiCheckCircle, BiXCircle } from 'react-icons/bi';
 interface CoursesData {
     id: number;
     name: string;
-    user_name: string;
-    email: string;
-    phoneNumber: string;
-    image_url: string | null;
-    gender: string;
-    roles: string[];
     public: boolean;
     student_count: number;
     description: string;
-    startDate: string;
-    endDate: string;
+    startDate: number;
+    endDate: number;
 }
 
 const CoursesPage = () => {
@@ -41,6 +35,18 @@ const CoursesPage = () => {
             fetchData();
         }
     }, [session]);
+    const handleTogglePublicStatus = (id: number) => {
+        apiService.changeStatusCourse(id).then(() => {
+            setCourses((prevUsers) => {
+                return prevUsers.map((course) => {
+                    if (course.id === id) {
+                        course.public = !course.public;
+                    }
+                    return course;
+                });
+            });
+        });
+    };
 
 
     return (
@@ -49,26 +55,26 @@ const CoursesPage = () => {
             {courses.length > 0 && (
                 <Table striped bordered hover className="border border-warning rounded-circle">
                     <thead>
-                        <tr>
+                        <tr className='text-center align-middle'>
                             <th>Course Name</th>
                             <th>Description</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            <th>Status</th>
+                            <th className='pd-2'>Status</th>
                             <th>Total students</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className='text-center align-middle'>
                         {courses.map((course) => (
                             <tr key={course.id}>
                                 <td>{course.name}</td>
                                 <td>{course.description}</td>
                                 <td>{course.startDate}</td>
                                 <td>{course.endDate}</td>
-                                <td>{course.public ?
+                                <td onClick={() => handleTogglePublicStatus(course.id)}>{course.public ?
                                     (
                                         <i>Completed<BiCheckCircle color="green" size={20} /></i>
-                                    ):(
+                                    ) : (
                                         <i>Prepared<BiXCircle color="red" size={20} /></i>
                                     )}
                                 </td>

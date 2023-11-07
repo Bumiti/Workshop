@@ -2,6 +2,11 @@
     padding-left: 0;
     padding-right: 0;
 }
+@media screen and (min-width: 685px) {
+    .logo_header{
+        display: none;
+    }
+}
 .Header{
     margin-left: 15px;
     margin-right: 15px;

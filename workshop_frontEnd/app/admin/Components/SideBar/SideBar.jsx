@@ -5,6 +5,7 @@ import { MdDashboard } from 'react-icons/md';
 import { AiFillHome } from 'react-icons/ai';
 import { BiSolidUserAccount } from 'react-icons/bi';
 import { SiGoogleclassroom } from 'react-icons/si';
+import { MdOutlineRequestQuote } from 'react-icons/md';
 import { BsPersonWorkspace } from 'react-icons/bs';
 
 import Link from 'next/link';
@@ -26,6 +27,10 @@ function Sidebar () {
             name: "Courses",
             link: "/admin/courses",
             icon: <SiGoogleclassroom />,
+        },{
+            name: "Request",
+            link: "/admin/request",
+            icon: <MdOutlineRequestQuote />,
         },
         {
             name: "WorkShop",

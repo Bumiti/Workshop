@@ -82,7 +82,7 @@ class ApiService {
     async changeStatusCourse(id: number) {
         try {
             if (this.session?.user.accessToken) {
-                const response = await this.customAxios.post(`/admin/course/changeStatus?id=${id}`);
+                const response = await this.customAxios.post(`/admin/course/status?id=${id}`);
                 return response.data;
             }
             return null;
