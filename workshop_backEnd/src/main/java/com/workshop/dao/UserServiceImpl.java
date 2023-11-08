@@ -193,6 +193,7 @@ public class UserServiceImpl implements UserService {
             for(UserAddresses addresses : userFull.getUserAddresses())
             {
                 UserInfoResponse.UserAddress userAddress = UserAddressMapper.ModelmapToDTO(addresses,UserInfoResponse.UserAddress.class);
+                userAddress.setId(addresses.getId());
                 userAddressesList.add(userAddress);
             }
             UserInfoResponse userInfoResponse = UserMapper.ModelmapToDTO(userFull,UserInfoResponse.class);

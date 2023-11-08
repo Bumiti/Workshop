@@ -49,7 +49,7 @@ const Admin = () => {
         }
     }, [session]);
 
-    const handleButtonClick = (id: number) => {
+    const handleButtonClick = (id: any) => {
         apiService.changeStatusAccount(id).then(() => {
             setUsers((prevUsers) => {
                 return prevUsers.map((user) => {

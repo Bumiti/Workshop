@@ -61,10 +61,11 @@ public class AdminController {
     }
     @Operation(summary = "Thay đổi trạng thái Course")
     @PostMapping("course/status")
-    public ResponseEntity<ApiResponse<?>> activeCourse(@RequestParam Long id) {
+    public ResponseEntity<ApiResponse<?>> activeCourse(@RequestParam int id) {
         try {
-            if (id != null) {
-                boolean result = courseService.settingStatusCourse(id);
+            Long longId = (long) id;
+            if (longId >0) {
+                boolean result = courseService.settingStatusCourse(longId);
                 if (result) {
                     return createResponse(HttpStatus.ACCEPTED, "success", "The Course Status has been changed", null);
                 } else {
@@ -79,10 +80,11 @@ public class AdminController {
     }
     @Operation(summary = "Xóa (Disable) Course")
     @DeleteMapping("course/delete")
-    public ResponseEntity<ApiResponse<?>> removeCourse(@RequestParam Long id) {
+    public ResponseEntity<ApiResponse<?>> removeCourse(@RequestParam int id) {
         try {
-            if (id != null) {
-                boolean result = courseService.settingStatusCourse(id);
+            Long longId = (long) id;
+            if (longId >0) {
+                boolean result = courseService.settingStatusCourse(longId);
                 if (result) {
                     return createResponse(HttpStatus.ACCEPTED, "success", "The Course Status has been changed", null);
                 } else {
@@ -153,10 +155,11 @@ public class AdminController {
         }
     }
     @Operation(summary = "Thay đổi trạng thái Account")
-    @PostMapping("user/changeStatus")
-    public ResponseEntity<ApiResponse<?>> activeUserByRole(@RequestParam Long id) {
+    @PutMapping("user/changeStatus")
+    public ResponseEntity<ApiResponse<?>> activeUserByRole(@RequestParam int id) {
         try {
-            boolean result = adminService.chanceIsEnableWithRoleAndId(id);
+            Long longId = (long) id;
+            boolean result = adminService.chanceIsEnableWithRoleAndId(longId);
             if (result) {
                 return createResponse(HttpStatus.ACCEPTED, "success", "Account Status has been Chance", null);
             } else {
@@ -164,6 +167,26 @@ public class AdminController {
             }
         } catch (Exception e) {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", e.getMessage(), null);
+        }
+    }
+    @Operation(summary = "Xóa Address User")
+    @DeleteMapping("user/deleteAddress")
+    public ResponseEntity<ApiResponse<?>> deleteAddress(@RequestParam int id,@RequestParam  int idAddress) {
+        try {
+            Long longId1 = (long) id;
+            Long longId2 = (long) idAddress;
+            if (longId1 >0 && longId2 >0) {
+                boolean result = adminService.deleteAddressOfUser(longId1,longId2);
+                if (result) {
+                    return createResponse(HttpStatus.ACCEPTED, "success", "The Course Status has been changed", null);
+                } else {
+                    return createResponse(HttpStatus.BAD_REQUEST, "error", "Failed to change course status", null);
+                }
+            } else {
+                return createResponse(HttpStatus.NO_CONTENT, "error", "Invalid request: Course ID is missing", null);
+            }
+        } catch (Exception e) {
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
 }
