@@ -8,27 +8,51 @@ import { AiFillGithub } from "react-icons/ai"
 import { BsFacebook } from "react-icons/bs"
 import { BiLogoGmail } from "react-icons/bi"
 import { BsDiscord } from 'react-icons/bs';
-import { BsInstagram } from 'react-icons/bs';
-import { BsReddit } from 'react-icons/bs';
-import { BsLinkedin } from 'react-icons/bs';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 type Values = {
     email: string;
     password: string;
 };
+const currentUrl = typeof window !== null ? window.location.search : "";
+function getQueryParamValue(queryString: string, paramName: string) {
+    const urlParams = new URLSearchParams(queryString);
+    return urlParams.get(paramName);
+}
+const callbackUrl = getQueryParamValue(currentUrl, 'callbackUrl');
+console.log(callbackUrl);
+
+// Khai báo biến cờ
+let reloadCount = 0;
+
 const LoginForm = () => {
+    const router = useRouter();
+    const [shouldReload, setShouldReload] = useState(false);
+    useEffect(() => {
+        if (shouldReload) {
+          // Tăng biến đếm load lại
+          reloadCount++;
+    
+          // Kiểm tra nếu trang đã load lại đủ lần, thì tắt cờ
+          if (reloadCount >= 2) {
+            setShouldReload(false);
+            reloadCount = 0; // Đặt lại biến đếm
+          }
+        }
+      }, [shouldReload]);
     const handleSubmit = async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         const requestHeaders: HeadersInit = new Headers();
         requestHeaders.set('Content-Type', 'application/json');
         try {
-            // console.log("123",values);
-            const response = await signIn("credentials",{
-                email:values.email,
-                password:values.password,
-                redirect:true,
-                callbackUrl:"/"
+            const response = await signIn("credentials", {
+                email: values.email,
+                password: values.password,
+                redirect: true,
+                callbackUrl: callbackUrl || '/'
             })
-            // console.log("response",response)
-            
+            setShouldReload(true);
+            router.push(callbackUrl || '/');
         } catch (error) {
             console.error('Lỗi khi gọi API đăng nhập:', error);
         } finally {
@@ -39,7 +63,7 @@ const LoginForm = () => {
         <Container className={styles.container_css}>
             <Row className={' p-5 my-5'}>
                 <Col col='10' md='6'>
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" className="img-fluid" alt="Phone image" />
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" className="img-fluid" alt="Phone image" />
                 </Col>
                 <Col col='4' md='6' >
                     <div className={' p-3'}>
@@ -65,16 +89,16 @@ const LoginForm = () => {
                                 <button className="mb-4 w-100 btn btn-primary" type="submit">Login</button>
                                 <h2 className="lead fw-normal mb-0 me-3 text-center">Sign in with</h2>
                                 <div className={styles.div_media}>
-                                    <button onClick={() => signIn("facebook",{callbackUrl:"/"})} className='btn btn-lg me-2'>
+                                    <button onClick={() => signIn("facebook", { redirect: true, callbackUrl: callbackUrl || '/' })} className='btn btn-lg me-2'>
                                         <BsFacebook fab="true" icon='facebook-f' />
                                     </button>
-                                    <button onClick={() => signIn("github",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
+                                    <button onClick={() => signIn("github", { redirect: true, callbackUrl: callbackUrl || '/' })} className='btn  btn-lg me-2'>
                                         <AiFillGithub fab="true" icon='github' />
-                                    </button>                              
-                                    <button onClick={() => signIn("google",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
+                                    </button>
+                                    <button onClick={() => signIn("google", { redirect: true, callbackUrl: callbackUrl || '/' })} className='btn  btn-lg me-2'>
                                         <BiLogoGmail fab="true" icon='mail' />
                                     </button>
-                                    <button onClick={() => signIn("discord",{callbackUrl:"/"})} className='btn  btn-lg me-2'>
+                                    <button onClick={() => signIn("discord", { redirect: true, callbackUrl: callbackUrl || '/' })} className='btn  btn-lg me-2'>
                                         <BsDiscord fab="true" icon='discord' />
                                     </button>
                                     {/* <button onClick={() => signIn("instagram",{callbackUrl:"/"})} className='btn  btn-lg me-2'>

@@ -1,24 +1,48 @@
 import Image from 'next/image';
 import Link from "next/link";
 import styles from '../CSS/home.module.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ApiService from '@/app/services/ApiService';
 
 const PricingCarousel = () => {
+    const apiService = new ApiService();
+    const [listCourse, setlistCourse] = useState([]);
+    
+    useEffect(() => {
+        const fetchData = () => {
+            try {
+                apiService.listCoursePublic()
+                .then((listCourse)=>{
+                    setlistCourse(listCourse.data);
+                    console.log("listCourse",listCourse.data);
+                }) .catch((error) => {
+                    console.error(error);
+                });
+            }
+            catch (error) 
+            {
+                console.log(error);
+            }
+
+        }
+        fetchData();
+    },[])
     return (
         <div>
             <div className={styles.sectionHeadingPricing}>
                 <h4>We Have The Best Pre-Order <em className={styles.emm}>Prices</em> You Can Get</h4>
                 <div className="d-flex justify-content-center">
                     <Image src="/heading-line-dec.png" alt="Ảnh" width={45} height={2} />
-                
-                </div>      
-                <div className="d-flex justify-content-center">  
-                <p className={styles.pText}>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-                </div>      
+
+                </div>
+                <div className="d-flex justify-content-center">
+                    <p className={styles.pText}>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
+                </div>
 
             </div>
+
             <div id="carouselExampleCaptions-2" className="carousel carousel-dark slide" data-bs-ride="false">
                 <div className={`${styles.indicartorsCustom} carousel-indicators`}>
                     <button type="button" data-bs-target="#carouselExampleCaptions-2" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>

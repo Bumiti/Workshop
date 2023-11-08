@@ -5,10 +5,11 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Import CSS của Bootstrap
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+
 
 export default function Navbar() {
   const { data: session } = useSession();
-
 
   const NavLink = ({ text }: { text: string }) => (
     <li className="nav-item mr-20">
@@ -34,9 +35,14 @@ export default function Navbar() {
           Sign In</Link>
       );
     } else {
+      let profileLink = "/user"; // Mặc định là role "user"
+      
+      // Kiểm tra và cập nhật đường dẫn dựa trên vai trò của người dùng
+      if (session.user.roles.includes('SELLER')) {
+        profileLink = "/teacher";
+      }
       return (
         <div onClick={() => {
-          console.log("Image clicked");
           toggleDropdown();
         }}className={`${styles.gradientbutton} user-menu`}>
           <img
@@ -45,8 +51,7 @@ export default function Navbar() {
            className={styles.roundedCircle}
             src={session.user.image || session.user.picture}
           />
-          {/* <a> {session.user.name.split(' ')[0]}</a> */}
-          {dropdownVisible && (
+             {dropdownVisible && (
             <div className={`dropdownMenu ${dropdownVisible ? 'visible' : ''}`}>
               <div className={styles.dropDown}>
                 <label tabIndex={0} className="btn btn-active text-white btn-circle">
@@ -54,7 +59,7 @@ export default function Navbar() {
                 </label>
                 <ul tabIndex={0} className={`${styles.dropdownCustom} menu menu-compact dropdown-content p-2 shadow text-black bg-gray-50 rounded-box w-52`}>
                   <li  >
-                    <Link className={styles.LinkDropDown} href="/user">Profile</Link>
+                    <Link className={styles.LinkDropDown} href={profileLink}>Profile</Link>
                   </li>
                   <li><Link href="" className={styles.LinkDropDown} onClick={handleSignout}>Log Out</Link></li>
                   <li><Link className={styles.LinkDropDown} href={"/order/view-orders"}>My Orders</Link></li>

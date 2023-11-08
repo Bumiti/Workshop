@@ -1,30 +1,23 @@
-'use client'
-import React from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import Navbar from "./ui/dashboard/navbar/navbar"
+import Sidebar from "./ui/dashboard/sidebar/sidebar"
+import styles from "./ui/dashboard/dashboard.module.css"
+import Footer from "./ui/dashboard/footer/footer"
+import './ui/globals.css'
+import Dashboard from "./dashboard/page"
 
-import Sidebar from './Components/SideBar/SideBar'
-import Header from './Components/Header/Header'
-import Home from './Home'
-import './styles.css';
-
-import { useState } from 'react'
-
-export default function RootLayout({ children }) {
-    const [toggle, setToggle] = useState(true)
-    const Toggle = () => { setToggle(!toggle) }
-    return (
-        <div className='container-fluid bg-secondary min-vh-100 '>
-            <div className='row '>
-                {toggle && <div className='col-4 col-md-2 bg-dark vh-100 position-fixed'>
-                    <Sidebar />
-                </div>}
-                {toggle && <div className='col-4 col-md-2'></div>}
-                <div className='col'>
-                    <Header className='Header' Toggle={Toggle}/>
-                    {/* <Home className='main'/> */}
-                    {children}
-                </div>
-            </div>
-        </div>
-    )
+const Layout = ({children}) => {
+  return (
+    <div className={styles.container}>
+      <div className={styles.menu}>
+        <Sidebar/>
+      </div>
+      <div className={styles.content}>
+        <Navbar/>
+        {children}
+        <Footer/>
+      </div>
+    </div>
+  )
 }
+
+export default Layout
