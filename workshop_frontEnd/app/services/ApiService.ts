@@ -29,6 +29,14 @@ class ApiService {
             throw error;
         }
     }
+    async listCoursesFromApi() {
+        try {
+            const response = await this.customAxios.get('/seller/course/list');
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
     async listRequestAdmin() {
         try {
