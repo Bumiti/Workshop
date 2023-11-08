@@ -11,6 +11,7 @@ import com.workshop.model.userModel.User;
 import com.workshop.model.userModel.UserAddresses;
 import com.workshop.repositories.*;
 import com.workshop.repositories.Course.CourseRepository;
+import com.workshop.repositories.User.UserAddressRepository;
 import com.workshop.repositories.User.UserRepository;
 import com.workshop.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,14 @@ import org.springframework.stereotype.Service;
 import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
+    private  final UserAddressRepository userAddressRepository;
     private final CourseRepository courseRepository;
     private final WorkShopRepository workShopRepository;
     @Override
@@ -35,6 +38,25 @@ public class AdminServiceImpl implements AdminService {
             return result > 0;
         }
         catch (Exception exception) {
+            throw new RuntimeException("Error: " + exception);
+        }
+    }
+
+    @Override
+    public boolean deleteAddressOfUser(Long userId, Long userAddressId)
+    {
+        try
+        {
+           Optional<User> user = userRepository.findById(userId);
+           if(user.isPresent()){
+               User user1 = user.get();
+               userAddressRepository.deleteUserAddressesByUserAndId(user1,userAddressId);
+               return true;
+           }
+           else{
+               return false;
+           }
+        } catch (Exception exception) {
             throw new RuntimeException("Error: " + exception);
         }
     }
@@ -74,6 +96,7 @@ public class AdminServiceImpl implements AdminService {
             for(UserAddresses userAddresses : user.getUserAddresses()){
                 MapperGeneric<UserAddresses,UserInfoResponse.UserAddress> userAddressMapper = new MapperGeneric<>();
                 UserInfoResponse.UserAddress userAddress = userAddressMapper.ModelmapToDTO(userAddresses,UserInfoResponse.UserAddress.class);
+                userAddress.setId(userAddresses.getId());
                 listUserAddressResponse.add(userAddress);
             }
             List<String>roleList =new ArrayList<>();
@@ -141,9 +164,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<WorkShopRespone> listWorkshop() {
-
         List<WorkShopRespone>workshopResponesList = new ArrayList<>();
-
         return workshopResponesList;
     }
 }

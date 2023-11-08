@@ -8,7 +8,6 @@ dotenv.config();
 class ApiService {
     private baseUrl: string;
     private customAxios: AxiosInstance;
-
     constructor(private session: any) {
         this.baseUrl = 'http://localhost:8089/';
         this.customAxios = axios.create({
@@ -75,7 +74,7 @@ class ApiService {
         }
     }
 
-    async changeStatusAccount(id: number) {
+    async changeStatusAccount(id: any) {
         try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.post(`/admin/user/changeStatus?id=${id}`);

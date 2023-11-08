@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface AdminService {
     boolean chanceIsEnableWithRoleAndId(Long Id);
+    boolean deleteAddressOfUser(Long userId,Long userAddressId);
     List<UserInfoResponse> listAccountByRole(String role);
     List<UserInfoResponse> listAccount();
     List<CourseRespones> listCourse();

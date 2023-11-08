@@ -25,4 +25,5 @@ public interface UserAddressRepository extends JpaRepository<UserAddresses,Long>
 //    @Query("DELETE FROM UserAddresses cd WHERE cd.id = :id ")
     @Transactional
     int deleteUserAddressesByUserAndId(User user,Long id);
+
 }
