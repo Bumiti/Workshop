@@ -11,6 +11,7 @@ import java.util.List;
 public interface AdminService {
     boolean chanceIsEnableWithRoleAndId(Long Id);
     boolean deleteAddressOfUser(Long userId,Long userAddressId);
+    boolean deleteUser(Long userId);
     List<UserInfoResponse> listAccountByRole(String role);
     List<UserInfoResponse> listAccount();
     List<CourseRespones> listCourse();
