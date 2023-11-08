@@ -5,6 +5,7 @@ import Footer from "./ui/dashboard/footer/footer"
 import './ui/globals.css'
 import Dashboard from "./dashboard/page"
 
+
 const Layout = ({children}) => {
   return (
     <div className={styles.container}>
