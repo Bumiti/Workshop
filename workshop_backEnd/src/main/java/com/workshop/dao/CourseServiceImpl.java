@@ -341,7 +341,7 @@ public class CourseServiceImpl implements CourseService {
                 }
                 if (!isAlreadyExists) {
                     DiscountDTOList.add(discountDTO);
-                    tempDiscountList.add(discountDTO); // Thêm vào danh sách tạm thời
+                    tempDiscountList.add(discountDTO);
                 }
             }
             for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos()){

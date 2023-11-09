@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     private final VerificationTokenRepository verificationTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserAddressRepository userAddressRepository;
-
+    private final UserBankRepository userBankRepository;
     @Override
     @Transactional
     public User SaveUser(UserRegisterRequest user) {
@@ -47,7 +47,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Boolean EditUser(UserEditRequest user) {
         MapperGeneric<UserAddresses, UserEditRequest.UserAddress> UserAddressable = new MapperGeneric<>();
+        MapperGeneric<UserBanking, UserEditRequest.UserBank> userBankMapperGeneric = new MapperGeneric<>();
         List<UserEditRequest.UserAddress> userAddressList = user.getUserAddresses();
+        List<UserEditRequest.UserBank> userBankList = user.getUserBanks();
         try {
             User existingUser = userRepository.getUserEditByMail(user.getEmail());
             if (existingUser!=null) {
@@ -67,6 +69,21 @@ public class UserServiceImpl implements UserService {
                         }else{
                             userAddresses.setUser(existingUser);
                             userAddressRepository.save(userAddresses);
+                        }
+                    }
+                }
+                if(userBankList!=null && (long) userBankList.size() >0)
+                {
+                    for(UserEditRequest.UserBank userBankItem  :userBankList)
+                    {
+                        UserBanking userBanking = userBankMapperGeneric.DTOmapToModel(userBankItem,UserBanking.class);
+                        Long useBank_id = userBankItem.getId();
+                        if(useBank_id >0){
+
+                            userBankRepository.updateUserBankById(useBank_id,userBanking);
+                        }else{
+                            userBanking.setUser(existingUser);
+                            userBankRepository.save(userBanking);
                         }
                     }
                 }
@@ -109,6 +126,18 @@ public class UserServiceImpl implements UserService {
         }
     }
     @Override
+    @Transactional
+    public boolean DeleteBank(Long useBank_id) {
+        User existingUser = getCurrentUserDetails();
+        if(existingUser!=null){
+            int result = userBankRepository.deleteUserBankingByUserAndId(existingUser,useBank_id);
+            return result > 0;
+        }else{
+            return false;
+        }
+    }
+
+    @Override
     public User getCurrentUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof String Email) {
@@ -117,7 +146,6 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-
     @Override
     @Transactional
     public void saveUserVerificationToken(User user, String verificationToken) {
@@ -181,6 +209,7 @@ public class UserServiceImpl implements UserService {
     public UserInfoResponse userDetail() {
         MapperGeneric<UserAddresses, UserInfoResponse.UserAddress> UserAddressMapper = new MapperGeneric<>();
         MapperGeneric<User, UserInfoResponse> UserMapper = new MapperGeneric<>();
+        MapperGeneric<UserBanking, UserInfoResponse.UserBank> UserBankMapper = new MapperGeneric<>();
         User user = getCurrentUserDetails();
         Optional<User> userOption = userRepository.findByEmailWithAddresses(user.getEmail());
         if(userOption.isPresent()){
@@ -196,8 +225,15 @@ public class UserServiceImpl implements UserService {
                 userAddress.setId(addresses.getId());
                 userAddressesList.add(userAddress);
             }
+            List<UserInfoResponse.UserBank> userBankList = new ArrayList<>();
+            for(UserBanking userBanking : userFull.getUserBanks()){
+                UserInfoResponse.UserBank userBank = UserBankMapper.ModelmapToDTO(userBanking,UserInfoResponse.UserBank.class);
+                userBank.setId(userBanking.getId());
+                userBankList.add(userBank);
+            }
             UserInfoResponse userInfoResponse = UserMapper.ModelmapToDTO(userFull,UserInfoResponse.class);
             userInfoResponse.setRoles(list);
+            userInfoResponse.setUserBanks(userBankList);
             userInfoResponse.setUserAddresses(userAddressesList);
             return userInfoResponse;
         }else{

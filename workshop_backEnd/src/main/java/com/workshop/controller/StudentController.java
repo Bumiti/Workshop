@@ -1,8 +1,10 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
+import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
+import com.workshop.service.RequestService;
 import com.workshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
 
     private final UserService userService;
+    private final RequestService requestService;
     @Operation(summary = "Lấy thông tin cá nhân Học Sinh")
     @GetMapping("/detail")
     public ResponseEntity<ApiResponse<?>> UserDetail() {
@@ -55,6 +58,24 @@ public class StudentController {
             if (result) {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
                         ("Success", "Your Info Has Been Changed", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
+                        ("Error", "Please check again", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
+                    ("Error", "An error occurred: " + e.getMessage(), null));
+        }
+    }
+
+    @Operation(summary = "Nạp Tiền Vào Tài Khoản")
+    @PostMapping("user/deposit")
+    public ResponseEntity<ApiResponse<?>> Deposit(@RequestBody RequestDTO requestDTO) {
+        try {
+            var result =  requestService.createRequestOptions(requestDTO);
+            if (result!=null) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
+                        ("Success", "Your Request ACCEPTED", null));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
                         ("Error", "Please check again", null));

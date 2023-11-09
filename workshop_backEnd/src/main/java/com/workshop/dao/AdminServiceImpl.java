@@ -10,6 +10,7 @@ import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.Roles;
 import com.workshop.model.userModel.User;
 import com.workshop.model.userModel.UserAddresses;
+import com.workshop.model.userModel.UserBanking;
 import com.workshop.repositories.*;
 import com.workshop.repositories.Course.CourseRepository;
 import com.workshop.repositories.User.UserAddressRepository;
@@ -42,29 +43,55 @@ public class AdminServiceImpl implements AdminService {
             throw new RuntimeException("Error: " + exception);
         }
     }
-
     @Override
-    public boolean deleteAddressOfUser(Long userId, Long userAddressId)
-    {
-        try
-        {
+    public boolean deleteAddressOfUser(Long userId, Long userAddressId){
+        try {
            Optional<User> user = userRepository.findById(userId);
            if(user.isPresent()){
                User user1 = user.get();
                userAddressRepository.deleteUserAddressesByUserAndId(user1,userAddressId);
                return true;
-           }
-           else{
+           }else{
                return false;
            }
         } catch (Exception exception) {
             throw new RuntimeException("Error: " + exception);
         }
     }
-
     @Override
-    public boolean deleteUser(Long userId) {
-        return false;
+    public UserInfoResponse findUserById(Long userId) {
+        MapperGeneric<UserAddresses, UserInfoResponse.UserAddress> UserAddressMapper = new MapperGeneric<>();
+        MapperGeneric<User, UserInfoResponse> UserMapper = new MapperGeneric<>();
+        MapperGeneric<UserBanking, UserInfoResponse.UserBank> UserBankMapper = new MapperGeneric<>();
+        Optional<User> userOption = userRepository.findById(userId);
+        if(userOption.isPresent()){
+            User userFull = userOption.get();
+            List<UserInfoResponse.UserAddress> userAddressesList = new ArrayList<>();
+
+            List<String>list = new ArrayList<>();
+            for (Roles roles : userFull.getRoles()){
+                list.add(roles.getName());
+            }
+            for(UserAddresses addresses : userFull.getUserAddresses())
+            {
+                UserInfoResponse.UserAddress userAddress = UserAddressMapper.ModelmapToDTO(addresses,UserInfoResponse.UserAddress.class);
+                userAddress.setId(addresses.getId());
+                userAddressesList.add(userAddress);
+            }
+            List<UserInfoResponse.UserBank> userBankList = new ArrayList<>();
+            for(UserBanking userBanking : userFull.getUserBanks()){
+                UserInfoResponse.UserBank userBank = UserBankMapper.ModelmapToDTO(userBanking,UserInfoResponse.UserBank.class);
+                userBank.setId(userBanking.getId());
+                userBankList.add(userBank);
+            }
+            UserInfoResponse userInfoResponse = UserMapper.ModelmapToDTO(userFull,UserInfoResponse.class);
+            userInfoResponse.setRoles(list);
+            userInfoResponse.setUserBanks(userBankList);
+            userInfoResponse.setUserAddresses(userAddressesList);
+            return userInfoResponse;
+        }else{
+            return new UserInfoResponse();
+        }
     }
 
     @Override
@@ -73,6 +100,7 @@ public class AdminServiceImpl implements AdminService {
         List<User> ListUser = userRepository.findUsersByRoleName(role);
         for(User user : ListUser){
             MapperGeneric<User,UserInfoResponse> userMapper = new MapperGeneric<>();
+            MapperGeneric<UserBanking, UserInfoResponse.UserBank> UserBankMapper = new MapperGeneric<>();
             UserInfoResponse userInfoResponse =  userMapper.ModelmapToDTO(user,UserInfoResponse.class);
             List<UserInfoResponse.UserAddress> listUserAddressResponse = new ArrayList<>();
             for(UserAddresses userAddresses : user.getUserAddresses()){
@@ -80,10 +108,17 @@ public class AdminServiceImpl implements AdminService {
                 UserInfoResponse.UserAddress userAddress = userAddressMapper.ModelmapToDTO(userAddresses,UserInfoResponse.UserAddress.class);
                 listUserAddressResponse.add(userAddress);
             }
+            List<UserInfoResponse.UserBank> userBankList = new ArrayList<>();
+            for(UserBanking userBanking : user.getUserBanks()){
+                UserInfoResponse.UserBank userBank = UserBankMapper.ModelmapToDTO(userBanking,UserInfoResponse.UserBank.class);
+                userBank.setId(userBanking.getId());
+                userBankList.add(userBank);
+            }
             List<String>roleList =new ArrayList<>();
             for(Roles roles : user.getRoles()){
                 roleList.add(roles.getName());
             }
+            userInfoResponse.setUserBanks(userBankList);
             userInfoResponse.setRoles(roleList);
             userInfoResponse.setUserAddresses(listUserAddressResponse);
             listUserInfoResponse.add(userInfoResponse);
@@ -97,8 +132,15 @@ public class AdminServiceImpl implements AdminService {
         List<User> ListUser = userRepository.findUsersNonAdmin();
         for(User user : ListUser){
             MapperGeneric<User,UserInfoResponse> userMapper = new MapperGeneric<>();
+            MapperGeneric<UserBanking, UserInfoResponse.UserBank> UserBankMapper = new MapperGeneric<>();
             UserInfoResponse userInfoResponse =  userMapper.ModelmapToDTO(user,UserInfoResponse.class);
             List<UserInfoResponse.UserAddress> listUserAddressResponse = new ArrayList<>();
+            List<UserInfoResponse.UserBank> userBankList = new ArrayList<>();
+            for(UserBanking userBanking : user.getUserBanks()){
+                UserInfoResponse.UserBank userBank = UserBankMapper.ModelmapToDTO(userBanking,UserInfoResponse.UserBank.class);
+                userBank.setId(userBanking.getId());
+                userBankList.add(userBank);
+            }
             for(UserAddresses userAddresses : user.getUserAddresses()){
                 MapperGeneric<UserAddresses,UserInfoResponse.UserAddress> userAddressMapper = new MapperGeneric<>();
                 UserInfoResponse.UserAddress userAddress = userAddressMapper.ModelmapToDTO(userAddresses,UserInfoResponse.UserAddress.class);
@@ -109,6 +151,7 @@ public class AdminServiceImpl implements AdminService {
             for(Roles role : user.getRoles()){
                 roleList.add(role.getName());
             }
+            userInfoResponse.setUserBanks(userBankList);
             userInfoResponse.setId(user.getId());
             userInfoResponse.setRoles(roleList);
             userInfoResponse.setUserAddresses(listUserAddressResponse);

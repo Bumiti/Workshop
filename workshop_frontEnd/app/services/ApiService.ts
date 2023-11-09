@@ -29,6 +29,7 @@ class ApiService {
             throw error;
         }
     }
+
     async listCoursesFromApi() {
         try {
             const response = await this.customAxios.get('/seller/course/list');
@@ -37,7 +38,17 @@ class ApiService {
             throw error;
         }
     }
-
+    async getUserbyIdAdmin(id: any){
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get(`/admin/user/findById?id=${id}`);
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
     async listRequestAdmin() {
         try {
             if (this.session?.user.accessToken) {
@@ -49,7 +60,6 @@ class ApiService {
             throw error;
         }
     }
-
     async listCourseAdmin() {
         try {
             if (this.session?.user.accessToken) {
@@ -61,7 +71,6 @@ class ApiService {
             throw error;
         }
     }
-
     async listAccountAdmin() {
         try {
             if (this.session?.user.accessToken) {
@@ -73,7 +82,6 @@ class ApiService {
             throw error;
         }
     }
-
     async changeStatusAccount(id: any) {
         try {
             if (this.session?.user.accessToken) {

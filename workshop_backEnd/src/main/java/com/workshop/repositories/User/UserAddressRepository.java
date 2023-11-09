@@ -21,8 +21,7 @@ public interface UserAddressRepository extends JpaRepository<UserAddresses,Long>
     @Query("UPDATE UserAddresses u SET u.Address = :#{#userAddresses.address}, " +
             "u.City = :#{#userAddresses.city}, u.State = :#{#userAddresses.state}, u.PostalCode = :#{#userAddresses.postalCode} WHERE u.id = :Id")
     void updateUserAddressById(@Param("Id") Long Id, @Param("userAddresses") UserAddresses userAddresses);
-//    @Transactional
-//    @Query("DELETE FROM UserAddresses cd WHERE cd.id = :id ")
+
     @Transactional
     int deleteUserAddressesByUserAndId(User user,Long id);
 

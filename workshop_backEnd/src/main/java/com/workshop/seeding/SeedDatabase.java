@@ -16,6 +16,7 @@ import com.workshop.service.UserService;
 
 import java.io.*;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.*;
 
 @Service
@@ -23,6 +24,7 @@ import java.util.*;
 public class SeedDatabase {
     private final UserService userService;
     private final UserRepository userRepository;
+    private final UserBankRepository userBankRepository;
     private final UserAddressRepository userAddressRepository;
     private final RoleRepository roleRepository;
     private final CourseRepository courseRepository;
@@ -51,13 +53,21 @@ public class SeedDatabase {
     private void addRandomTeachers() {
         String[] names = {"John", "Alice", "Bob", "Emily", "Michael", "Sarah", "David", "Olivia", "Daniel", "Sophia", "William", "Emma", "James", "Ava", "Matthew", "Chloe", "Jacob", "Mia", "Ethan", "Lily"};
         String[] genders = {"male", "female"};
+        String[] bankName = {"ACB", "TechComBank", "DongA", "SCB", "AriBank", "VietComBank", "BIDV", "VieTinBank", "Sacombank", "MBBank", "Eximbank", "VPBank", "TPBank", "HDBank", "Agribank", "SeABank", "OceanBank", "MSB", "SHB", "NamABank", "VIB", "PVcomBank", "GPBank", "BacABank", "KienLongBank", "NCB", "ABBANK", "PGBank", "VietABank", "SCOM", "TPB", "LienvietPostBank", "VRB", "CBBank", "OCB", "LienVietBank", "ABBank", "BaoVietBank", "BVB", "VietBank", "UOB Vietnam", "Keb Hana Bank", "Shinhan Bank Vietnam", "HSBC Vietnam", "ANZ Bank Vietnam"};
+
+
+
         List<Roles> roles = roleRepository.findAll();
         Random random = new Random();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         for (int i = 0; i < 20; i++) {
             String randomName = names[random.nextInt(names.length)];
+
             String randomGender = genders[random.nextInt(genders.length)];
             Roles randomRoles = roles.get(random.nextInt(roles.size()));
+            Double randomNumber = Math.random() * 500.00;
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            Double formattedNumber = Double.valueOf(decimalFormat.format(randomNumber));
             String username = "teacher" + (i + 1);
             String email = username + "@gmail.com";
             String password = "12345";
@@ -73,7 +83,7 @@ public class SeedDatabase {
                     .setEmail(email)
                     .setPassword(encodedPassword)
                     .setPhoneNumber(phone)
-                    .setGender(randomGender)
+                    .setGender(randomGender).setBalance(formattedNumber)
                     .setEnable(true);
             userRepository.save(user);
             for (int j = 0; j < 3; j++) {
@@ -84,6 +94,16 @@ public class SeedDatabase {
                 address.setPostalCode(12345 * (j + 4));
                 address.setUser(user);
                 userAddressRepository.save(address);
+            }
+            for (int j = 0; j < 3; j++) {
+                UserBanking userBanking = new UserBanking();
+                UUID randomUUID = UUID.randomUUID();
+                String randomBankAccountCode = randomUUID.toString().replaceAll("[^0-9]", "");
+                String randomBank = bankName[random.nextInt(bankName.length)];
+                userBanking.setBankAccount(randomBankAccountCode)
+                        .setBankName(randomBank);
+                userBanking.setUser(user);
+                userBankRepository.save(userBanking);
             }
         }
     }
@@ -214,13 +234,13 @@ public class SeedDatabase {
                 }
 
             }
-            Request.RequestType randomRequestType = types[random.nextInt(types.length)];
-            Request request = new Request();
-            request.setCourse(course)
-                    .setUser(randomTeacher)
-                    .setStatus(Request.RequestStatus.PENDING)
-                    .setType(randomRequestType);
-            requestRepository.save(request);
+//            Request.RequestType randomRequestType = types[random.nextInt(types.length)];
+//            Request request = new Request();
+//            request.setCourse(course)
+//                    .setUser(randomTeacher)
+//                    .setStatus(Request.RequestStatus.PENDING)
+//                    .setType(randomRequestType);
+//            requestRepository.save(request);
 
         }
     }
@@ -233,11 +253,11 @@ public class SeedDatabase {
             userService.SaveRoles(new Roles(null, "USER"));
             userService.SaveRoles(new Roles(null, "SELLER"));
             userService.SaveRoles(new Roles(null, "ADMIN"));
-            userService.SaveUser(new UserRegisterRequest("NguyenAdmin", "admin64",
+            userService.SaveUser(new UserRegisterRequest("NguyenAdmin",5000.0, "admin64",
                     "admin64@gmail.com", "admin64@gmail.com", "0383334196", "female", "ADMIN", true));
-            userService.SaveUser(new UserRegisterRequest("LacTuong64", "lactuong64@gmail.com",
+            userService.SaveUser(new UserRegisterRequest("LacTuong64",5000.0, "lactuong",
                     "student@gmail.com", "student@gmail.com", "0383334195", "male", "USER", true));
-            userService.SaveUser(new UserRegisterRequest("teacher01", "teacher01",
+            userService.SaveUser(new UserRegisterRequest("teacher01",5000.0, "teacher01",
                     "teacher01@gmail.com", "teacher01@gmail.com", "0383334195", "male", "SELLER", true));
             addRandomTeachers();
             addLocation();
