@@ -16,6 +16,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { CompanyCard } from './company-card';
 import ApiService from '@/app/services/ApiService';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+
 interface Course {
     id: number;
     // Các trường dữ liệu khác của khóa học
@@ -64,7 +66,7 @@ const Buttons = () => {
                         >
                             <Stack spacing={1}>
                                 <Typography variant="h4">
-                                    Companies
+                                    Courses
                                 </Typography>
                                 <Stack
                                     alignItems="center"
@@ -93,18 +95,15 @@ const Buttons = () => {
                                     </Button>
                                 </Stack>
                             </Stack>
-                            <div>
+
+                            <Link href="./add">
                                 <Button
-                                    startIcon={(
-                                        <SvgIcon fontSize="small">
-                                            {/* <PlusIcon /> */}
-                                        </SvgIcon>
-                                    )}
+                                    startIcon={<SvgIcon fontSize="small">...</SvgIcon>}
                                     variant="contained"
                                 >
                                     Add
                                 </Button>
-                            </div>
+                            </Link>
                         </Stack>
                         {/* <CompaniesSearch /> */}
                         {loading ? (
