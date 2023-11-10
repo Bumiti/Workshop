@@ -19,12 +19,16 @@ public class UserEditRequest {
     private String user_name;
     private String email;
     private String phoneNumber;
+    private Double balance;
     private String image_url;
-//    private List<String> roles;
     @JsonProperty("userAddresses")
     @Nullable
     @Builder.Default
     private List<UserAddress> userAddresses = Collections.emptyList();
+    @JsonProperty("userBank")
+    @Nullable
+    @Builder.Default
+    private List<UserBank> userBanks = Collections.emptyList();
     @Getter
     @Setter
     @AllArgsConstructor
@@ -35,6 +39,15 @@ public class UserEditRequest {
         private String City;
         private String State;
         private int PostalCode;
+    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UserBank {
+        private Long id;
+        private String bankName;
+        private String bankAccount;
     }
 
 }

@@ -4,9 +4,12 @@ import com.workshop.config.ApiResponse;
 import com.workshop.dto.CourseDTO.CourseRequest;
 import com.workshop.dto.CourseDTO.CourseRespones;
 import com.workshop.dto.CourseDTO.CourseUpdateRequest;
+import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
+import com.workshop.model.Request;
 import com.workshop.service.CourseService;
+import com.workshop.service.RequestService;
 import com.workshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -27,6 +30,7 @@ public class TeacherController {
 
     private final CourseService courseService;
     private final UserService userService;
+    private final RequestService requestService;
     @Operation(summary = "Đổi mật khẩu")
     @PutMapping("chancePassword")
     public ResponseEntity<ApiResponse<?>> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
@@ -105,7 +109,27 @@ public class TeacherController {
         }
 
     }
-
+    @Operation(summary = "Rút Tiền Về Tài Khoản")
+    @PostMapping("teacher/deposit")
+    public ResponseEntity<ApiResponse<?>> WithDraw(@RequestBody RequestDTO requestDTO) {
+        try {
+            requestDTO.setType("WITHDRAW");
+            String result =  requestService.createRequestOptions(requestDTO);
+            if (result.equals("APPROVED")) {
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>
+                        ("Success", "Your Request APPROVED", null));
+            } else if(result.equals("PENDING") ){
+                return ResponseEntity.status(HttpStatus.CONTINUE).body(new ApiResponse<>
+                        ("pending", "Your Balance Not Enable", null));
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>
+                        ("cancel", "Your Request REJECTED", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
+                    ("Error", "An error occurred: " + e.getMessage(), null));
+        }
+    }
     @Operation(summary = "Danh Sách Khóa Học Của Giáo Viên")
     @GetMapping("course/list")
     public ResponseEntity<ApiResponse<?>> ListCourseByTeacherId() {

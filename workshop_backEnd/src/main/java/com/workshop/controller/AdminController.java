@@ -30,7 +30,6 @@ public class AdminController {
     private ResponseEntity<ApiResponse<?>> createResponse(HttpStatus httpStatus, String status, String message, Object data) {
         return ResponseEntity.status(httpStatus).body(new ApiResponse<>(status, message, data));
     }
-
     @Operation(summary = "Danh Sách Course")
     @GetMapping("course/list")
     public ResponseEntity<ApiResponse<?>> listCourse() {
@@ -61,10 +60,11 @@ public class AdminController {
     }
     @Operation(summary = "Thay đổi trạng thái Course")
     @PostMapping("course/status")
-    public ResponseEntity<ApiResponse<?>> activeCourse(@RequestParam Long id) {
+    public ResponseEntity<ApiResponse<?>> activeCourse(@RequestParam int id) {
         try {
-            if (id != null) {
-                boolean result = courseService.settingStatusCourse(id);
+            Long longId = (long) id;
+            if (longId >0) {
+                boolean result = courseService.settingStatusCourse(longId);
                 if (result) {
                     return createResponse(HttpStatus.ACCEPTED, "success", "The Course Status has been changed", null);
                 } else {
@@ -77,52 +77,6 @@ public class AdminController {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
-    @Operation(summary = "Xóa (Disable) Course")
-    @DeleteMapping("course/delete")
-    public ResponseEntity<ApiResponse<?>> removeCourse(@RequestParam Long id) {
-        try {
-            if (id != null) {
-                boolean result = courseService.settingStatusCourse(id);
-                if (result) {
-                    return createResponse(HttpStatus.ACCEPTED, "success", "The Course Status has been changed", null);
-                } else {
-                    return createResponse(HttpStatus.BAD_REQUEST, "error", "Failed to change course status", null);
-                }
-            } else {
-                return createResponse(HttpStatus.NO_CONTENT, "error", "Invalid request: Course ID is missing", null);
-            }
-        } catch (Exception e) {
-            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
-        }
-    }
-//    @Operation(summary = "Danh Sách Workshop")
-//    @GetMapping("workShop/list")
-//    public ResponseEntity<ApiResponse<?>> listWorkshop() {
-//        try {
-//            List<WorkShopRespone> workshops = adminService.listWorkshop();
-//            if (workshops.isEmpty()) {
-//                return createResponse(HttpStatus.NOT_FOUND, "error", "No workshops found", null);
-//            } else {
-//                return createResponse(HttpStatus.ACCEPTED, "success", "List of workshops", workshops);
-//            }
-//        } catch (Exception e) {
-//            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", e.getMessage(), null);
-//        }
-//    }
-
-//    @Operation(summary = "Admin update Infor Workshop")
-//    @GetMapping("workshop/updateinfor")
-//    public ResponseEntity<ApiResponse<?>> checkWorkshop(@RequestBody WorkShopRequest request) {
-//        try {
-//            if (request != null) {
-//                return createResponse(HttpStatus.ACCEPTED, "success", "List of workshops", null);
-//            } else {
-//                return createResponse(HttpStatus.NOT_FOUND, "error", "No workshops found", null);
-//            }
-//        } catch (Exception e) {
-//            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", e.getMessage(), null);
-//        }
-//    }
     @Operation(summary = "Tìm Account bằng Role")
     @GetMapping("user/listUserByRole")
     public ResponseEntity<ApiResponse<?>> listAccountByRole(@RequestParam(name = "role") String role) {
@@ -137,7 +91,21 @@ public class AdminController {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
-
+    @Operation(summary = "Tìm Account bằng Id")
+    @GetMapping("user/findById")
+    public ResponseEntity<ApiResponse<?>> AccountById(@RequestParam(name = "id") int id) {
+        try {
+            Long longId = (long) id;
+           UserInfoResponse accounts = adminService.findUserById(longId);
+            if (accounts!=null) {
+                return createResponse(HttpStatus.ACCEPTED, "success", "User by :" + id, accounts);
+            } else {
+                return createResponse(HttpStatus.NOT_FOUND, "error", "No account found with Id " + id, null);
+            }
+        }catch(Exception e){
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
+    }
     @Operation(summary = "Danh sách Account")
     @GetMapping("user/listUser")
     public ResponseEntity<ApiResponse<?>> listAccount() {
@@ -153,10 +121,11 @@ public class AdminController {
         }
     }
     @Operation(summary = "Thay đổi trạng thái Account")
-    @PostMapping("user/changeStatus")
-    public ResponseEntity<ApiResponse<?>> activeUserByRole(@RequestParam Long id) {
+    @PutMapping("user/changeStatus")
+    public ResponseEntity<ApiResponse<?>> activeUserByRole(@RequestParam int id) {
         try {
-            boolean result = adminService.chanceIsEnableWithRoleAndId(id);
+            Long longId = (long) id;
+            boolean result = adminService.chanceIsEnableWithRoleAndId(longId);
             if (result) {
                 return createResponse(HttpStatus.ACCEPTED, "success", "Account Status has been Chance", null);
             } else {
@@ -166,5 +135,6 @@ public class AdminController {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", e.getMessage(), null);
         }
     }
+
 }
 
