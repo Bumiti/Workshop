@@ -1,0 +1,34 @@
+.row>*{
+    padding-left: 0;
+    padding-right: 0;
+}
+@media screen and (min-width: 685px) {
+    .logo_header{
+        display: none;
+    }
+}
+.Header{
+    margin-left: 15px;
+    margin-right: 15px;
+}
+.list-group-item+.list-group-item {
+    border-top-width: 1px;
+}
+
+.chart{
+    background-color: white;
+    height: 400px;
+    width: 400px;
+}
+.form-chart{
+    margin-left: 8px;
+    margin-right: 8px;
+}
+.header-icon{
+    border: 1px solid white;
+    width: 50px;
+    height: 50px;
+}
+.icon_header{
+    margin-left: 15px;
+}
