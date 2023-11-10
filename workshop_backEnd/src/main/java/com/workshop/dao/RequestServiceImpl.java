@@ -71,7 +71,7 @@ public class RequestServiceImpl implements RequestService {
                     result =(handleWithDrawRequest(user, requestDTO, request, transaction, paymentMethod));
                 break;
                 case "BUY_COURSE":
-                    result = (handleByCourseRequest(user, requestDTO, request, transaction, paymentMethod,course));
+                    result = (handleBuyCourseRequest(user, requestDTO, request, transaction, paymentMethod,course));
                     break;
                 case "BUY_WORKSHOP":
                     break;
@@ -174,13 +174,12 @@ public class RequestServiceImpl implements RequestService {
             return "CANCEL";
         }
     }
-    private String handleByCourseRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod,Course course)
+    private String handleBuyCourseRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod,Course course)
     {
         course = courseRepository.findById(requestDTO.getItem_register_id()).get();
         if(requestDTO.getPaymentStatus().equals("success") && requestDTO.getStatus().equals("payment_gateway"))
         {
            try{
-               // discount chưa xong
                if(requestDTO.getDiscountAmount()>0 && requestDTO.getAmount()>requestDTO.getDiscountAmount() && requestDTO.getDiscountCode()!=null)
                {
                    request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));
