@@ -1,14 +1,11 @@
 'use client'
-import ApiService from '@/app/services/ApiService';
+import ApiService from "@/app/services/ApiService";
 import styles from "@/app/admin/ui/dashboard/users/singleUser/singleUser.module.css";
 import Image from "next/image";
-import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import getUserById from '@/utils/helper/helper'
-import { useRouter } from 'next/router';
-
-// import {listAccountAdmin} from "@/app/services/ApiService"
-
+import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { LiaTransgenderSolid } from 'react-icons/lia';
+import Link from "next/link";
 
 interface UserData {
   id: number;
@@ -36,70 +33,73 @@ const SingleUserPage = ({ params }) => {
   const { data: session } = useSession();
   const apiService = new ApiService(session);
   const [user, setUser] = useState<UserData | null>(null);
-  const [listdUser, setListdUser] = useState<UserData[] >([] );
 
   useEffect(() => {
-    if (session) {
-      const fetchData = async () => {
-          try {
-            const usersResponse = await apiService.listAccountAdmin(); 
-            if(usersResponse.data){
-              setListdUser(usersResponse.data);
-            }
-          } catch (error) {
-            console.error("Error:", error);
-          }
-      };
-      const bindingUser = async ()=>{
-        const user = getUserById(id,listdUser);
+    const fetchUser = async () => {
+      try {
+
+        if (id && session) {
+          const user = await apiService.getUserbyIdAdmin(id);
+          console.log('user', user)
+          setUser(user.data);
+        }
+
+      } catch (error) {
+        console.error("Error fetching user details:", error);
       }
-      fetchData();
-      bindingUser();
-    }
-  }, [session, id]);
+    };
+
+    fetchUser();
+  }, [session]);
 
   if (!user) {
-    return <div>Loading...</div>; // Xử lý trạng thái loading hoặc hiển thị thông báo lỗi nếu user không được tìm thấy
+    return <div>Loading...</div>;
   }
 
-  return (
 
+  return (
     <div className={styles.container}>
       <div className={styles.infoContainer}>
         <div className={styles.imgContainer}>
-          <Image alt='' src={user.image_url || "/noavatar.png"} fill />
+          <Image
+            src={user.image_url || "/noavatar.png"}
+            alt=""
+            className={styles.userImage}
+            fill
+          />
         </div>
-
+        {user.full_name}
       </div>
       <div className={styles.formContainer}>
         <form className={styles.form}>
           <input type="hidden" name="id" value={user.id} />
-          <label>Username</label>
-          <input type="text" name="username" value={user.full_name} />
-          <label>Email</label>
-          <input type="email" name="email" value={user.email} />
-          <label>Password</label>
-          <input type="password" name="password" />
-          <label>Phone</label>
-          <input type="text" name="phone" value={user.phoneNumber} />
-          <label>Address</label>
-          <textarea name="address" placeholder='address' />
-          <label>{user.roles}</label>
-          <select name="isAdmin" id="isAdmin">
-            <option selected>Yes</option>
-            <option selected>No</option>
-          </select>
-          <label>{user.enable}</label>
-          <select name="isActive" id="isActive">
-            <option selected>Yes</option>
-            <option selected>No</option>
-          </select>
-          <button>Update</button>
+          <label>Username:</label>
+          <h4>{user.full_name}</h4>
+          <label>Role:</label>
+          <h4>{user.roles}</h4>
+          <label>Gender:</label>
+          {user.gender !== null ? <h4>{user.gender}</h4> : <h4><LiaTransgenderSolid/></h4>}
+          <label>Email:</label>
+          <h4>{user.email}</h4>
+          <label>Phone:</label>
+          <h4>{user.phoneNumber}</h4>
+          <label>Status:</label>
+          <h4>{user.enable ? 'Actived' : 'Passived'}</h4>
+          {/* Render user addresses */}
+          {user.userAddresses.map((address, index) => (
+            <div>
+              <label>Address {index + 1}:</label>
+              <h4>{address.address}, {address.city}, {address.state} - {address.postalCode}</h4>
+            </div>
+          ))}
+          
         </form>
+        <div className="button"> <Link href={'/admin/dashboard/users'}><button className={styles.btn1}>Back</button></Link><button className={styles.btn2}>Change Status</button></div>
       </div>
-
     </div>
   );
 };
+
+
 
 export default SingleUserPage;

@@ -121,7 +121,7 @@ public class AdminController {
         }
     }
     @Operation(summary = "Thay đổi trạng thái Account")
-    @PutMapping("user/changeStatus")
+    @PostMapping("user/changeStatus")
     public ResponseEntity<ApiResponse<?>> activeUserByRole(@RequestParam int id) {
         try {
             Long longId = (long) id;

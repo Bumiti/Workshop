@@ -5,8 +5,10 @@ import Search from "@/app/admin/ui/dashboard/search/search";
 import styles from "@/app/admin/ui/dashboard/users/users.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import { Button, Container, Table, Modal, Card } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+
 
 interface UserData {
   id: number;
@@ -35,8 +37,6 @@ const UsersPage = () => {
   const { data: session } = useSession();
   const apiService = new ApiService(session);
   const [users, setUsers] = useState<UserData[]>([]);
-  const [selectedUser, setSelectedUser] = useState<UserData | null>(null); // State to track the selected user
-  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
     if (session) {
@@ -66,6 +66,7 @@ const UsersPage = () => {
       });
     });
   };
+
 
 
   return (
@@ -119,8 +120,11 @@ const UsersPage = () => {
                     <form>
                       {/*value={(user.id)}*/}
                       <input type="hidden" name="id" />
-                      <button className={`${styles.button} ${styles.delete}`}>
-                        Delete
+                      <button className={`${styles.button} ${styles.delete}`} onClick={(e) => {
+                        e.stopPropagation(); // Stop propagation to prevent the row click event
+                        handleButtonClick(user.id);
+                      }}>
+                        Change Status
                       </button>
                     </form>
                   </div>
