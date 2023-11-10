@@ -59,7 +59,8 @@ public class Transaction extends BaseModel{
     }
     public enum Type{
         DEPOSIT,
-        BUY,
+        BUY_COURSE,
+        BUY_WORKSHOP,
         WITHDRAW;
     }
 }

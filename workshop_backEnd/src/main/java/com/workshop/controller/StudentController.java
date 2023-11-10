@@ -90,4 +90,25 @@ public class StudentController {
                     ("Error", "An error occurred: " + e.getMessage(), null));
         }
     }
+    @Operation(summary = "Mua khóa Học")
+    @PostMapping("/byCourse")
+    public ResponseEntity<ApiResponse<?>> ByCourse(@RequestBody RequestDTO requestDTO) {
+        try {
+            requestDTO.setType("BUY_COURSE");
+            String result =  requestService.createRequestOptions(requestDTO);
+            if (result.equals("APPROVED")) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
+                        ("Success", "Your Request ACCEPTED", null));
+            } else if(result.equals("PENDING") ){
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>
+                        ("pending", "Your Request PENDING", null));
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>
+                        ("cancel", "Your Request REJECTED", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
+                    ("Error", "An error occurred: " + e.getMessage(), null));
+        }
+    }
 }

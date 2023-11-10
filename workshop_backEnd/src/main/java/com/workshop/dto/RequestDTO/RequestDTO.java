@@ -13,15 +13,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class RequestDTO {
-
     private String type;
+
     private String status = "PENDING";
-//    private Long userId;
+
     private Long item_register_id;
+
     private Long locationId;
-    //gửi
+
     private Double amount;
-    //thanh toán
+
+    private Double discountAmount;
+
     private String paymentName;
     private String paymentStatus;
     @Builder.Default
