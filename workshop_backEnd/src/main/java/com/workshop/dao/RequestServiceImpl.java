@@ -181,7 +181,7 @@ public class RequestServiceImpl implements RequestService {
         {
            try{
                // discount chưa xong
-               if(requestDTO.getDiscountAmount()>0 && requestDTO.getAmount()>requestDTO.getDiscountAmount())
+               if(requestDTO.getDiscountAmount()>0 && requestDTO.getAmount()>requestDTO.getDiscountAmount() && requestDTO.getDiscountCode()!=null)
                {
                    request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));
                    paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
@@ -208,6 +208,7 @@ public class RequestServiceImpl implements RequestService {
                    requestRepository.save(request);
                    paymentRepository.save(paymentMethod);
                    transactionRepository.save(transaction);
+                   courseDiscountRepository.deleteByCode(requestDTO.getDiscountCode());
                    return "APPROVED";
                }
                //no discount

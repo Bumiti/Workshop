@@ -24,6 +24,7 @@ public class RequestDTO {
     private Double amount;
 
     private Double discountAmount;
+    private String discountCode;
 
     private String paymentName;
     private String paymentStatus;
