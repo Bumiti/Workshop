@@ -23,6 +23,6 @@
     }
   },
 
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/auth/[...nextauth]/route.js", "middleware.js", "app/user/layout.tsx", "app/user/page.tsx", "utils/FireBase/page.js", "app/video/public/page.js", "app/teacher/ui-components/buttons/company-card.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/auth/[...nextauth]/route.js", "middleware.js", "app/user/layout.tsx", "app/user/page.tsx", "app/FireBase/page.js", "app/video/public/page.js", "app/admin/Components/SideBar/SideBar.jsx", "utils/helper/helper.tsx"],
   "exclude": ["node_modules"]
 }
