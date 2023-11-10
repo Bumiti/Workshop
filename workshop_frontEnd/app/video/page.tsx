@@ -2,7 +2,6 @@
 
 import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import VideoPublic from './component/VideoPlayer';
 import SliderVideo from "./component/SliderVideo";
 import { useState } from "react";

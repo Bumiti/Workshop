@@ -15,6 +15,7 @@ declare module "next-auth" {
             image: string;
             picture:string;
             userAddresses: userAddresses[];
+            type: string;
         };
        
     }

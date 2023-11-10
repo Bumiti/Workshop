@@ -1,0 +1,15 @@
+.colcolor1{
+    background-color: aquamarine;
+}
+.colcolor2{
+    background-color: rgb(196, 224, 235);
+}
+.videothum{
+   object-fit: cover;
+   padding: 0;
+   margin: 0;
+   text-align: center; /* Căn giữa theo chiều ngang */
+   display: flex;
+   justify-content: center; /* Căn giữa the nội dung theo chiều ngang */
+   align-items: center;
+}

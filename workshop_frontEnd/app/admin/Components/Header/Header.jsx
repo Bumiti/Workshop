@@ -21,6 +21,7 @@ const settings = ['Profile', 'Account', 'Dashboard'];
 function Header({ Toggle }) {
     const { data: session } = useSession();
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
