@@ -1,5 +1,6 @@
 package com.workshop.model.userModel;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workshop.model.*;
 
 import com.workshop.model.courseModel.Course;
@@ -24,22 +25,18 @@ import java.util.*;
 @Table(name = "users")
 public class User extends BaseModel implements UserDetails  {
 
-    @Column(name="full_name")
     private String full_name;
-    @Column(name="user_name")
     private String user_name;
-    @Column(name="email")
     @NaturalId(mutable = true)
     private String email;
-    @Column(name="gender")
     private String gender;
-    @Column(name="password")
     private String password;
-    @Column(name="phone_number")
     private String phoneNumber;
-    @Column(name="isEnable")
+
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER_FLOAT, pattern = "#.##")
+    private Double balance;
     private boolean isEnable = false;
-    @Column(name="image_url")
+
     private String image_url;
     @OneToOne(mappedBy = "user")
     private VerificationToken verificationToken;
@@ -49,6 +46,8 @@ public class User extends BaseModel implements UserDetails  {
     // Quan hệ một nhiều với khóa học và buổi workshop đã đăng ký
     @OneToMany(mappedBy = "enrolledStudent")
     private List<CourseEnrollment> enrolledCourses;
+    @OneToMany(mappedBy = "user")
+    private List<UserBanking> userBanks;
     @OneToMany(mappedBy = "user")
     private List<UserAddresses> userAddresses;
     @OneToMany(mappedBy = "enrolledStudent")

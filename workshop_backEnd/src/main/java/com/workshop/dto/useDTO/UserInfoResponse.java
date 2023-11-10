@@ -21,6 +21,7 @@ public class UserInfoResponse {
     private String email;
     private String phoneNumber;
     private String image_url;
+    private Double balance;
     private String gender;
     private List<String> roles;
     private boolean isEnable ;
@@ -28,6 +29,10 @@ public class UserInfoResponse {
     @Nullable
     @Builder.Default
     private List<UserAddress> userAddresses= Collections.emptyList();
+    @JsonProperty("userBank")
+    @Nullable
+    @Builder.Default
+    private List<UserBank> userBanks = Collections.emptyList();
 
     @Getter
     @Setter
@@ -39,5 +44,14 @@ public class UserInfoResponse {
         private String City;
         private String State;
         private int PostalCode;
+    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UserBank {
+        private Long id;
+        private String bankName;
+        private String bankAccount;
     }
 }

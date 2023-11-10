@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 public class UserRegisterRequest {
 
     private String full_name ="";
+    private Double balance=0.0;
     private String user_name;
     private String email;
     private String password;

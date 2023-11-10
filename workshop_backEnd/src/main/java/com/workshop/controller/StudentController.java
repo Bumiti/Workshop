@@ -1,8 +1,11 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
+import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
+import com.workshop.model.Request;
+import com.workshop.service.RequestService;
 import com.workshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
 
     private final UserService userService;
+    private final RequestService requestService;
     @Operation(summary = "Lấy thông tin cá nhân Học Sinh")
     @GetMapping("/detail")
     public ResponseEntity<ApiResponse<?>> UserDetail() {
@@ -58,6 +62,28 @@ public class StudentController {
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
                         ("Error", "Please check again", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
+                    ("Error", "An error occurred: " + e.getMessage(), null));
+        }
+    }
+
+    @Operation(summary = "Nạp Tiền Vào Tài Khoản")
+    @PostMapping("/deposit")
+    public ResponseEntity<ApiResponse<?>> Deposit(@RequestBody RequestDTO requestDTO) {
+        try {
+            requestDTO.setType("DEPOSIT");
+            String result =  requestService.createRequestOptions(requestDTO);
+            if (result.equals("APPROVED")) {
+                return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(new ApiResponse<>
+                        ("Success", "Your Request APPROVED", null));
+            } else if(result.equals("PENDING") ){
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>
+                        ("pending", "Your Request PENDING", null));
+            }else{
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>
+                        ("cancel", "Your Request REJECTED", null));
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>

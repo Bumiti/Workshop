@@ -15,6 +15,7 @@ public interface UserService {
     User SaveUserOAuthed(OAuthenticationRequest OAuth);
     void SaveRoles(Roles role);
     boolean DeleteAddress(Long useAddress_id);
+    boolean DeleteBank(Long useBank_id);
     User getCurrentUserDetails();
     void saveUserVerificationToken(User user, String verificationToken);
     String validate(String token);

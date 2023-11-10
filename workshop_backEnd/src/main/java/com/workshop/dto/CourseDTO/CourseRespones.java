@@ -46,6 +46,10 @@ public class CourseRespones {
     @Nullable
     @Builder.Default
     private List<CourseLocation> courseLocations = Collections.emptyList();
+    @JsonProperty("discountDTOS")
+    @Nullable
+    @Builder.Default
+    private List<DiscountDTO> discountDTOS = Collections.emptyList();
     @Getter
     @Setter
     @AllArgsConstructor
@@ -53,6 +57,23 @@ public class CourseRespones {
     public static class StudentEnrollment {
         private Long id;
         private String name;
+    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DiscountDTO {
+        private Long id;
+        //số lượng
+        private int quantity;
+        //ngày hết hạn
+        private Date redemptionDate;
+
+        //value của discount này
+        private int valueDiscount ;
+        private String name;
+        private String description;
+        private int remainingUses;
     }
     @Getter
     @Setter

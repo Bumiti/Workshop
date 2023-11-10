@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -19,19 +20,20 @@ import java.util.Date;
 @Table(name="transactions")
 public class Transaction extends BaseModel{
     private double amount;
-    private String status;
-    private Date transactionDate;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    @Enumerated(EnumType.STRING)
+    private Type type;
+    private LocalDateTime transactionDate;
 
-    // Quan hệ một nhiều với khóa học đã thanh toán hoặc buổi workshop đã thanh toán
     @ManyToOne
     @JoinColumn(name = "enrollment_id")
     private Enrollment enrollment;
 
-    // Quan hệ một một với yêu cầu liên quan (đăng ký khóa học, workshop, v.v.)
     @ManyToOne
     @JoinColumn(name = "request_id")
     private Request request;
-    // Quan hệ một nhiều với người dùng đã thực hiện thanh toán
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -40,7 +42,6 @@ public class Transaction extends BaseModel{
     @JoinColumn(name = "course_enrollment_id")
     private CourseEnrollment courseEnrollment;
 
-    // Quan hệ nhiều một với phương thức thanh toán
     @ManyToOne
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
@@ -49,5 +50,16 @@ public class Transaction extends BaseModel{
     @ManyToOne
     @JoinColumn(name = "workshop_enrollmen_id")
     private WorkshopEnrollment workshopEnrollment;
-
+    public enum Status{
+        PENDING,
+        COMPLETED,
+        FAILED,
+        CANCELED,
+        REFUND;
+    }
+    public enum Type{
+        DEPOSIT,
+        BUY,
+        WITHDRAW;
+    }
 }
