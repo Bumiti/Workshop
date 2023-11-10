@@ -1,8 +1,6 @@
 import dotenv from 'dotenv';
 import axios, { AxiosInstance } from 'axios';
 
-import UserInfoResponse from '@/types/UserInfoResponse';
-
 dotenv.config();
 
 class ApiService {

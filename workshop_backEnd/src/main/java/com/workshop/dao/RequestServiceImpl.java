@@ -2,16 +2,13 @@ package com.workshop.dao;
 
 import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.RequestResponse;
-import com.workshop.model.PaymentMethod;
-import com.workshop.model.Request;
-import com.workshop.model.Transaction;
+import com.workshop.model.*;
+import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.User;
-import com.workshop.repositories.PaymentRepository;
-import com.workshop.repositories.RequestRepository;
-import com.workshop.repositories.TransactionRepository;
+import com.workshop.repositories.*;
+import com.workshop.repositories.Course.CourseRepository;
 import com.workshop.repositories.User.UserRepository;
-import com.workshop.service.RequestService;
-import com.workshop.service.UserService;
+import com.workshop.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +22,7 @@ public class RequestServiceImpl implements RequestService {
     private final UserRepository userRepository;
     private final TransactionRepository transactionRepository;
     private final PaymentRepository paymentRepository;
+    private final CourseRepository courseRepository;
     @Override
     public List<RequestResponse> ListRequest() {
         List<Request> requestList =  requestRepository.findAll();
@@ -53,88 +51,128 @@ public class RequestServiceImpl implements RequestService {
        return requestResponseList;
     }
     @Override
-    public Request createRequestOptions(RequestDTO requestDTO) {
+    public String createRequestOptions(RequestDTO requestDTO) {
         try {
+            String result = "";
             User user = userService.getCurrentUserDetails();
             Request request = new Request();
             Transaction transaction = new Transaction();
             PaymentMethod paymentMethod = new PaymentMethod();
+            Course course = new Course();
             switch (requestDTO.getType()) {
                 case "DEPOSIT":
-                 if(requestDTO.getPaymentStatus().equals("success") && requestDTO.getAmount()>0){
-                     request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));
-                     paymentMethod.setDescription(requestDTO.getType().toString()).setName(requestDTO.getPaymentName());
-                     Double newBalance = user.getBalance() + requestDTO.getAmount();
-                     Long id = user.getId();
-                     paymentRepository.save(paymentMethod);
-                     userRepository.updateBalanceAccountById(id,newBalance);
-                     requestRepository.save(request);
-                     transaction.setRequest(request).setUser(user)
-                             .setAmount(requestDTO.getAmount())
-                             .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
-                             .setStatus(Transaction.Status.COMPLETED)
-                             .setTransactionDate(requestDTO.getRegistrationDateTime());
-                     transactionRepository.save(transaction);
-                 }else if(requestDTO.getPaymentStatus().equals("pending") && requestDTO.getAmount()>0){
-                     request.setUser(user).setStatus(Request.RequestStatus.PENDING).setType(Request.RequestType.valueOf(requestDTO.getType()));
-                     paymentMethod.setDescription(requestDTO.getType().toString()).setName(requestDTO.getPaymentName());
-                     paymentRepository.save(paymentMethod);
-                     requestRepository.save(request);
-                     transaction.setRequest(request).setUser(user)
-                             .setAmount(requestDTO.getAmount())
-                             .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
-                             .setStatus(Transaction.Status.PENDING)
-                             .setTransactionDate(requestDTO.getRegistrationDateTime());
-                     transactionRepository.save(transaction);
-                 }else{
-                     request.setUser(user).setStatus(Request.RequestStatus.REJECTED).setType(Request.RequestType.valueOf(requestDTO.getType()));
-                     paymentMethod.setDescription(requestDTO.getType().toString()).setName(requestDTO.getPaymentName());
-                     paymentRepository.save(paymentMethod);
-                     requestRepository.save(request);
-                     transaction.setRequest(request).setUser(user)
-                             .setAmount(requestDTO.getAmount())
-                             .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
-                             .setStatus(Transaction.Status.FAILED)
-                             .setTransactionDate(requestDTO.getRegistrationDateTime());
-                     transactionRepository.save(transaction);
-                 }
-                    break;
-                case "BUY_COURSE":
-                    if(requestDTO.getPaymentStatus().equals("balance") && requestDTO.getAmount()>0){
-
-                    }else if(requestDTO.getPaymentStatus().equals("payment_gateway") && requestDTO.getAmount()>0)
-                    {
-
-                    }else{
-
-                    }
-
-                    break;
-                case "BUY_WORKSHOP":
-
-
+                    result = (handleDepositRequest(user, requestDTO, request, transaction, paymentMethod));
                     break;
                 case "WITHDRAW":
-                    // Handle withdraw-specific logic
-
+                    result =(handleWithDrawRequest(user, requestDTO, request, transaction, paymentMethod));
+                break;
+                case "BUY_COURSE":
+                    result = (handleByCourseRequest(user, requestDTO, request, transaction, paymentMethod,course));
                     break;
-                case "REGISTER_COURSE_ONLINE":
-                    // Handle course registration online-specific logic
+                case "BUY_WORKSHOP":
+                    break;
 
+                case "REGISTER_COURSE_ONLINE":
                     break;
                 case "REGISTER_COURSE_OFFLINE":
-                    // Handle course registration offline-specific logic
-
                     break;
-                // Add other cases as needed
                 default:
-                    // Handle default case if necessary
                     break;
             }
-            return request;
+            return result;
         } catch (Exception e) {
             // Handle exceptions
             return null;
         }
+    }
+    private String handleDepositRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod) {
+        if(requestDTO.getPaymentStatus().equals("success") && requestDTO.getAmount()>0){
+            request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));
+            paymentMethod.setDescription(requestDTO.getType().toString()).setName(requestDTO.getPaymentName());
+            Double newBalance = user.getBalance() + requestDTO.getAmount();
+            Long id = user.getId();
+            paymentRepository.save(paymentMethod);
+            userRepository.updateBalanceAccountById(id,newBalance);
+            requestRepository.save(request);
+            transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
+                    .setAmount(requestDTO.getAmount())
+                    .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
+                    .setStatus(Transaction.Status.COMPLETED)
+                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+            transactionRepository.save(transaction);
+            return "APPROVED";
+        }else if(requestDTO.getPaymentStatus().equals("pending") && requestDTO.getAmount()>0){
+            request.setUser(user).setStatus(Request.RequestStatus.PENDING).setType(Request.RequestType.valueOf(requestDTO.getType()));
+            paymentMethod.setDescription(requestDTO.getType().toString()).setName(requestDTO.getPaymentName());
+            paymentRepository.save(paymentMethod);
+            requestRepository.save(request);
+            transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
+                    .setAmount(requestDTO.getAmount())
+                    .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
+                    .setStatus(Transaction.Status.PENDING)
+                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+            transactionRepository.save(transaction);
+            return "PENDING";
+        }else{
+            request.setUser(user).setStatus(Request.RequestStatus.REJECTED).setType(Request.RequestType.valueOf(requestDTO.getType()));
+            paymentMethod.setDescription(requestDTO.getType().toString()).setName(requestDTO.getPaymentName());
+            paymentRepository.save(paymentMethod);
+            requestRepository.save(request);
+            transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
+                    .setAmount(requestDTO.getAmount())
+                    .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
+                    .setStatus(Transaction.Status.FAILED)
+                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+            transactionRepository.save(transaction);
+            return "REJECTED";
+        }
+    };
+    private String handleWithDrawRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod){
+        if(requestDTO.getAmount() < user.getBalance() && (user.getBalance() - requestDTO.getAmount()) >10)
+        {
+            request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));
+            paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
+            Double newBalance = user.getBalance() - requestDTO.getAmount();
+            Long id = user.getId();
+            paymentRepository.save(paymentMethod);
+            userRepository.updateBalanceAccountById(id,newBalance);
+            requestRepository.save(request);
+            transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
+                    .setAmount(requestDTO.getAmount())
+                    .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
+                    .setStatus(Transaction.Status.COMPLETED)
+                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+            transactionRepository.save(transaction);
+            return "APPROVED";
+        }else if(requestDTO.getAmount() < user.getBalance() && (user.getBalance() - requestDTO.getAmount()) <10){
+            request.setUser(user).setStatus(Request.RequestStatus.REJECTED).setType(Request.RequestType.valueOf(requestDTO.getType()));
+            paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
+            paymentRepository.save(paymentMethod);
+            requestRepository.save(request);
+            transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
+                    .setAmount(requestDTO.getAmount())
+                    .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
+                    .setStatus(Transaction.Status.CANCELED)
+                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+            transactionRepository.save(transaction);
+            return "REJECTED";
+        }else{
+            request.setUser(user).setStatus(Request.RequestStatus.CANCEL).setType(Request.RequestType.valueOf(requestDTO.getType()));
+            paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
+            paymentRepository.save(paymentMethod);
+            requestRepository.save(request);
+            transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
+                    .setAmount(requestDTO.getAmount())
+                    .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
+                    .setStatus(Transaction.Status.FAILED)
+                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+            transactionRepository.save(transaction);
+            return "CANCEL";
+        }
+    }
+    private String handleByCourseRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod,Course course)
+    {
+        course = courseRepository.findById(requestDTO.getItem_register_id()).get();
+        return null;
     }
 }

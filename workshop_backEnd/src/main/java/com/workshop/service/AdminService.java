@@ -15,11 +15,6 @@ public interface AdminService {
     UserInfoResponse findUserById(Long userId);
     List<UserInfoResponse> listAccountByRole(String role);
     List<UserInfoResponse> listAccount();
-
-
-
-
-
     //----------------------------------------------------Account----------------------------------------------------//
     List<CourseRespones> listCourse();
     List<WorkShopRespone> listWorkshop();

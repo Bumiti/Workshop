@@ -4,6 +4,7 @@ import com.workshop.config.ApiResponse;
 import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
+import com.workshop.model.Request;
 import com.workshop.service.RequestService;
 import com.workshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -69,16 +70,20 @@ public class StudentController {
     }
 
     @Operation(summary = "Nạp Tiền Vào Tài Khoản")
-    @PostMapping("user/deposit")
+    @PostMapping("/deposit")
     public ResponseEntity<ApiResponse<?>> Deposit(@RequestBody RequestDTO requestDTO) {
         try {
-            var result =  requestService.createRequestOptions(requestDTO);
-            if (result!=null) {
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
-                        ("Success", "Your Request ACCEPTED", null));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
-                        ("Error", "Please check again", null));
+            requestDTO.setType("DEPOSIT");
+            String result =  requestService.createRequestOptions(requestDTO);
+            if (result.equals("APPROVED")) {
+                return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(new ApiResponse<>
+                        ("Success", "Your Request APPROVED", null));
+            } else if(result.equals("PENDING") ){
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>
+                        ("pending", "Your Request PENDING", null));
+            }else{
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>
+                        ("cancel", "Your Request REJECTED", null));
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>

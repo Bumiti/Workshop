@@ -41,7 +41,8 @@ public class Request extends BaseModel{
     public enum RequestStatus {
         PENDING,
         APPROVED,
-        REJECTED
+        REJECTED,
+        CANCEL,
     }
     public enum RequestType {
         DEPOSIT,

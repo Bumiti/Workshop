@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface RequestService {
     List<RequestResponse> ListRequest();
-    public Request createRequestOptions(RequestDTO requestDTO);
+    public String createRequestOptions(RequestDTO requestDTO);
 }
