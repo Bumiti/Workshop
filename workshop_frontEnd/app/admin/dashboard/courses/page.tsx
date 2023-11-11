@@ -25,6 +25,8 @@ const CoursesPage = () => {
   const { data: session } = useSession();
   const apiService = new ApiService(session);
   const [courses, setCourses] = useState<CoursesData[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [coursesPerPage] = useState<number>(5);
 
   useEffect(() => {
     if (session) {
@@ -54,11 +56,20 @@ const CoursesPage = () => {
     });
   };
 
+    // Pagination logic
+    const indexOfLastCourse = currentPage * coursesPerPage;
+    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+    const currentCourse = courses.slice(indexOfFirstCourse, indexOfLastCourse);
+  
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
   return (
     <div className={styles.container}>
       <div className={styles.top}>
         <Search placeholder="Search for a course..." />
       </div>
+      {currentCourse.length > 0 && (
+        <>
       <table className={styles.table}>
         <thead className="text-center">
           <tr>
@@ -72,7 +83,7 @@ const CoursesPage = () => {
           </tr>
         </thead>
         <tbody className="text-center">
-          {courses.map((course) => (
+          {currentCourse.map((course) => (
             <tr key={course.id}>
               <td>{course.name}</td>
               <td>{course.price}$</td>
@@ -106,6 +117,15 @@ const CoursesPage = () => {
           ))}
         </tbody>
       </table>
+      <Pagination
+            itemsPerPage={coursesPerPage}
+            totalItems={courses.length}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
+        </>
+
+      )}
     </div>
   );
 };

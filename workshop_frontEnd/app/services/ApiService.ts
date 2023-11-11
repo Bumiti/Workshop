@@ -80,10 +80,10 @@ class ApiService {
             throw error;
         }
     }
-    async changeStatusAccount(id: any) {
+    async changeStatusAccount(id: number) {
         try {
             if (this.session?.user.accessToken) {
-                const response = await this.customAxios.put(`/admin/user/changeStatus?id=${id}`);
+                const response = await this.customAxios.post(`/admin/user/changeStatus?id=${id}`);
                 return response.data;
             }
             return null;
