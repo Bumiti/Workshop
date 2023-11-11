@@ -13,38 +13,41 @@ import PageContainer from '@/app/user/components/container/PageContainer';
 import React, { useEffect, useState } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { CompanyCard } from './company-card';
+import { CompanyCard } from './company-card.js';
 import ApiService from '@/app/services/ApiService';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+
 interface Course {
     id: number;
-    // Các trường dữ liệu khác của khóa học
 }
 
-const Buttons = () => {
+const Buttons: React.FC = () => {
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
     const { data: session } = useSession();
+  
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const apiService = new ApiService(session);
-                const response = await apiService.listCoursesFromApi();
-                if (response.status === "success") {
-                    setCourses(response.data);
-                }
-            } catch (error) {
-                console.error('Lỗi khi tải dữ liệu:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (session) {
-            fetchData();
+      const fetchData = async () => {
+        try {
+          const apiService = new ApiService(session);
+          const response = await apiService.listCoursesFromApi();
+          if (response.status === "success") {
+            setCourses(response.data);
+          }
+        } catch (error) {
+          console.error('Lỗi khi tải dữ liệu:', error);
+        } finally {
+          setLoading(false);
         }
+      };
+  
+      if (session) {
+        fetchData();
+      }
     }, [session]);
-    console.log("courses nè:", courses);
+  
+
 
     return (
         <PageContainer title="button" description="this is button">
@@ -64,7 +67,7 @@ const Buttons = () => {
                         >
                             <Stack spacing={1}>
                                 <Typography variant="h4">
-                                    Companies
+                                    Courses
                                 </Typography>
                                 <Stack
                                     alignItems="center"
@@ -93,18 +96,15 @@ const Buttons = () => {
                                     </Button>
                                 </Stack>
                             </Stack>
-                            <div>
+
+                            <Link href="./add">
                                 <Button
-                                    startIcon={(
-                                        <SvgIcon fontSize="small">
-                                            {/* <PlusIcon /> */}
-                                        </SvgIcon>
-                                    )}
+                                    startIcon={<SvgIcon fontSize="small">...</SvgIcon>}
                                     variant="contained"
                                 >
                                     Add
                                 </Button>
-                            </div>
+                            </Link>
                         </Stack>
                         {/* <CompaniesSearch /> */}
                         {loading ? (
@@ -113,7 +113,11 @@ const Buttons = () => {
                             <Grid container spacing={3}>
                                 {courses.map((course, index) => (
                                     <Grid xs={12} md={6} lg={4} key={index}>
-                                        <CompanyCard courses={courses} courseId={course.id} />
+                                         {/* <div onClick={() => router.push(`./edit/${course.id}`)} > */}
+                                          {/* <Link style={{ textDecoration: 'none', color: 'inherit' }} href={`./edit/${course.id}`} passHref> */}
+                                          <CompanyCard  courses={courses} courseId={course.id} />
+                                        {/* </Link> */}
+                                        {/* </div> */}
                                     </Grid>
 
                                 ))}

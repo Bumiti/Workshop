@@ -2,23 +2,35 @@ import styles from '../CSS/home.module.css';
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Carousel } from 'react-bootstrap';
+import Link from 'next/link';
+import SliderVideo from '@/app/video/component/SliderVideo';
+
 const Card = () => {
-  const [courses, setCourses] = useState<CourseType[]>([]); // Thay thế 'CourseType' bằng kiểu dữ liệu cụ thể bạn sử dụng
+  const [courses, setCourses] = useState<CourseType[]>([]);
+  const [selectedVideoUrl, setSelectedVideoUrl] = useState<string>('');
 
   interface CourseType {
     id: number;
     name: string;
     description: string;
     link: string;
-    // Các thuộc tính khác nếu có
+    // Other properties if any
   }
-  
+
+  const handleVideoSelect = (videoId: number) => {
+    const selectedCourse = courses.find(course => course.id === videoId);
+    if (selectedCourse) {
+      setSelectedVideoUrl(selectedCourse.link);
+    }
+  };
+
   useEffect(() => {
+    // Fetching course list
     fetch('http://localhost:8089/web/course/list')
       .then(response => response.json())
       .then(result => {
         if (Array.isArray(result.data)) {
-          setCourses(result.data); // Chỉ setCourses nếu result.data là một mảng
+          setCourses(result.data);
         } else {
           console.error('Data is not an array:', result.data);
         }
@@ -27,7 +39,7 @@ const Card = () => {
   }, []);
 
   const chunkArray = (arr: CourseType[], chunkSize: number) => {
-    const groups = [];
+    const groups: CourseType[][] = [];
     for (let i = 0; i < arr.length; i += chunkSize) {
       groups.push(arr.slice(i, i + chunkSize));
     }
@@ -35,28 +47,27 @@ const Card = () => {
   };
 
   return (
-<Carousel>
-  {chunkArray(courses, 3).map((chunk, chunkIndex) => (
-    <Carousel.Item key={chunkIndex}>
-      <div className="card-group">
-        {chunk.map((course, index) => (
-          <div key={index} className={`card ${styles.cardCustom}`}>
-            <div className="card-body">
-              <div className={`${styles.serviceItem}`}>
-                <h4>{course.name}</h4>
-                <p>{course.description}</p>
-                <div className={`textButton ${styles.textButton}`}>
-                  <a href={course.link}>Read More <i className="fa fa-arrow-right"></i></a>
+    <Carousel>
+      {chunkArray(courses, 3).map((chunk, chunkIndex) => (
+        <Carousel.Item key={chunkIndex}>
+          <div className="card-group">
+            {chunk.map((course, index) => (
+              <div key={index} className={`card ${styles.cardCustom}`}>
+                <div className="card-body">
+                  <div className={`${styles.serviceItem}`}>
+                    <h4>{course.name}</h4>
+                    <p>{course.description}</p>
+                    <Link href={`/video/${course.id}`}>
+                    <span>Read More</span>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </Carousel.Item>
-  ))}
-</Carousel>
-
+        </Carousel.Item>
+      ))}
+    </Carousel>
   );
 };
 
