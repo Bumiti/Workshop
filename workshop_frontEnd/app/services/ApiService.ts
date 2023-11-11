@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import axios, { AxiosInstance } from 'axios';
-import UserInfoResponse from '@/types/UserInfoResponse';
 import CourseData from '../teacher/ui-components/add/courseData';
 
 dotenv.config();
@@ -42,6 +41,35 @@ class ApiService {
         try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.post('/seller/course/add', JSON.stringify(courseData));
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    } 
+
+    async getCourseById(courseId: number) {
+        try {
+          if (this.session?.user.accessToken) {
+            const response = await this.customAxios.get(`/seller/course/list/${courseId}`, {
+              params: {
+                courseId: courseId,
+              },
+            });
+            return response.data;
+          }
+          return [];
+        } catch (error) {
+          throw error;
+        }
+      }
+      
+    
+    async editCourse(courseId: number, courseData: CourseData) { 
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.put(`/seller/course/update/${courseId}`, JSON.stringify(courseData));
                 return response.data;
             }
             return [];
