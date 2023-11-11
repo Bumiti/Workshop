@@ -58,7 +58,7 @@ public class TeacherController {
         }
     }
     @Operation(summary = "Sửa thông tin cá nhân Teacher")
-    @PutMapping("user/edit")
+    @PutMapping("/edit")
     public ResponseEntity<ApiResponse<?>> editUser(@RequestBody UserEditRequest userEditRequest) {
         try {
             boolean result = userService.EditUser(userEditRequest);
@@ -75,7 +75,7 @@ public class TeacherController {
         }
     }
     @Operation(summary = "Xóa Address")
-    @DeleteMapping("user/deleteAddress/{useAddress_id}")
+    @DeleteMapping("/deleteAddress/{useAddress_id}")
     public ResponseEntity<ApiResponse<?>> deleteUserAddress(@PathVariable Long useAddress_id) {
         try {
             boolean result = userService.DeleteAddress(useAddress_id);
@@ -92,7 +92,7 @@ public class TeacherController {
         }
     }
     @Operation(summary = "Danh Sách Học Sinh Trong Khóa Học")
-    @GetMapping("course/listStudent/{id}")
+    @GetMapping("/course/listStudent/{id}")
     public ResponseEntity<ApiResponse<?>> ListStudentByCourser(@PathVariable Long id) {
         try {
             List<UserInfoResponse> ListStudent = courseService.listStudentByCourse(id);
@@ -110,7 +110,7 @@ public class TeacherController {
 
     }
     @Operation(summary = "Rút Tiền Về Tài Khoản")
-    @PostMapping("teacher/deposit")
+    @PostMapping("/deposit")
     public ResponseEntity<ApiResponse<?>> WithDraw(@RequestBody RequestDTO requestDTO) {
         try {
             requestDTO.setType("WITHDRAW");
