@@ -19,4 +19,6 @@ public interface CourseDiscountRepository extends JpaRepository<CourseDiscount,L
 
 
     void deleteCourseDiscountByDiscount(Discount discount);
+    @Transactional
+    void deleteByCode(String Code);
 }

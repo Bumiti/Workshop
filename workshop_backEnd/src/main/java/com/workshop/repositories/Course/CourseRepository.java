@@ -32,6 +32,13 @@ public interface CourseRepository extends JpaRepository<Course,Long> {
             "WHERE c.id = :courseId" )
     void addStudentsToCourse(@Param("courseId") long courseId, @Param("studentIds") List<Long> studentIds);
 
+    @Transactional
+    @Modifying
+    @Query(" insert into CourseEnrollment (courses, enrolledStudent) " +
+            "SELECT c, u FROM Course c JOIN User u ON u.id IN :studentIds " +
+            "WHERE c.id = :courseId" )
+    void addStudentToCourseEnroll(@Param("courseId") long courseId, @Param("studentIds") Long studentIds);
+
     @Modifying
     @Query("SELECT c FROM Course c WHERE c.teacher.id = :teacherId")
     List<Course> listCoursebyTeacherId(Long teacherId);

@@ -6,14 +6,19 @@ import com.workshop.model.*;
 import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.User;
 import com.workshop.repositories.*;
+import com.workshop.repositories.Course.CourseDiscountRepository;
 import com.workshop.repositories.Course.CourseRepository;
 import com.workshop.repositories.User.UserRepository;
 import com.workshop.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
@@ -23,6 +28,7 @@ public class RequestServiceImpl implements RequestService {
     private final TransactionRepository transactionRepository;
     private final PaymentRepository paymentRepository;
     private final CourseRepository courseRepository;
+    private final CourseDiscountRepository courseDiscountRepository;
     @Override
     public List<RequestResponse> ListRequest() {
         List<Request> requestList =  requestRepository.findAll();
@@ -67,7 +73,7 @@ public class RequestServiceImpl implements RequestService {
                     result =(handleWithDrawRequest(user, requestDTO, request, transaction, paymentMethod));
                 break;
                 case "BUY_COURSE":
-                    result = (handleByCourseRequest(user, requestDTO, request, transaction, paymentMethod,course));
+                    result = (handleBuyCourseRequest(user, requestDTO, request, transaction, paymentMethod,course));
                     break;
                 case "BUY_WORKSHOP":
                     break;
@@ -88,7 +94,7 @@ public class RequestServiceImpl implements RequestService {
     private String handleDepositRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod) {
         if(requestDTO.getPaymentStatus().equals("success") && requestDTO.getAmount()>0){
             request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));
-            paymentMethod.setDescription(requestDTO.getType().toString()).setName(requestDTO.getPaymentName());
+            paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
             Double newBalance = user.getBalance() + requestDTO.getAmount();
             Long id = user.getId();
             paymentRepository.save(paymentMethod);
@@ -103,7 +109,7 @@ public class RequestServiceImpl implements RequestService {
             return "APPROVED";
         }else if(requestDTO.getPaymentStatus().equals("pending") && requestDTO.getAmount()>0){
             request.setUser(user).setStatus(Request.RequestStatus.PENDING).setType(Request.RequestType.valueOf(requestDTO.getType()));
-            paymentMethod.setDescription(requestDTO.getType().toString()).setName(requestDTO.getPaymentName());
+            paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
             paymentRepository.save(paymentMethod);
             requestRepository.save(request);
             transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
@@ -115,7 +121,7 @@ public class RequestServiceImpl implements RequestService {
             return "PENDING";
         }else{
             request.setUser(user).setStatus(Request.RequestStatus.REJECTED).setType(Request.RequestType.valueOf(requestDTO.getType()));
-            paymentMethod.setDescription(requestDTO.getType().toString()).setName(requestDTO.getPaymentName());
+            paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
             paymentRepository.save(paymentMethod);
             requestRepository.save(request);
             transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
@@ -170,9 +176,153 @@ public class RequestServiceImpl implements RequestService {
             return "CANCEL";
         }
     }
-    private String handleByCourseRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod,Course course)
+//    private String handleBuyCourseRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod,Course course)
+//    {
+//        course = courseRepository.findById(requestDTO.getItem_register_id()).get();
+//        if(requestDTO.getPaymentStatus().equals("success") && requestDTO.getStatus().equals("payment_gateway"))
+//        {
+//           try{
+//               if(requestDTO.getDiscountAmount()>0 && requestDTO.getAmount()>requestDTO.getDiscountAmount() && requestDTO.getDiscountCode()!=null)
+//               {
+//                   request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));
+//                   paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
+//                   transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
+//                           .setAmount(requestDTO.getAmount())
+//                           .setType(Transaction.Type.valueOf(requestDTO.getType()))
+//                           .setStatus(Transaction.Status.COMPLETED)
+//                           .setTransactionDate(requestDTO.getRegistrationDateTime());
+//                   courseRepository.addStudentToCourseEnroll(requestDTO.getItem_register_id(),user.getId());
+//                   Long TeacherId = course.getTeacher().getId();
+//                   User teacher = userRepository.findById(TeacherId).get();
+//                   User Admin = userRepository.findByEmail("admin64@gmail.com").get();
+//                   Long AdminId = Admin.getId();
+//
+//                   Double balanceAfterDiscount = Math.max(0, requestDTO.getAmount() - requestDTO.getDiscountAmount());
+//                   BigDecimal transactionFee = BigDecimal.valueOf(0.03).multiply(BigDecimal.valueOf(balanceAfterDiscount));
+//
+//                   transactionFee = transactionFee.setScale(2, RoundingMode.HALF_UP);
+//                   Double newBalanceForTeacher = teacher.getBalance() + balanceAfterDiscount - transactionFee.doubleValue();
+//                   Double newBalanceForAdmin = Admin.getBalance() + transactionFee.doubleValue();
+//                   userRepository.updateBalanceAccountById(TeacherId, newBalanceForTeacher);
+//                   userRepository.updateBalanceAccountById(AdminId, newBalanceForAdmin);
+//                   requestRepository.save(request);
+//                   paymentRepository.save(paymentMethod);
+//                   transactionRepository.save(transaction);
+//                   courseDiscountRepository.deleteByCode(requestDTO.getDiscountCode());
+//                   return "APPROVED";
+//               }
+//               //no discount
+//               else
+//               {
+//                   request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));
+//                   paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
+//                   transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
+//                           .setAmount(requestDTO.getAmount())
+//                           .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
+//                           .setStatus(Transaction.Status.COMPLETED)
+//                           .setTransactionDate(requestDTO.getRegistrationDateTime());
+//                   courseRepository.addStudentToCourseEnroll(requestDTO.getItem_register_id(),user.getId());
+//                   Long TeacherId = course.getTeacher().getId();
+//                   User teacher = userRepository.findById(TeacherId).get();
+//                   User Admin = userRepository.findByEmail("admin64@gmail.com").get();
+//                   Long AdminId = Admin.getId();
+//                   Double transactionFee = 0.03 * requestDTO.getAmount();
+//                   Double newBalanceForTeacher = teacher.getBalance() + requestDTO.getAmount() - transactionFee;
+//                   Double newBalanceForAdmin = Admin.getBalance() + transactionFee;
+//
+//                   userRepository.updateBalanceAccountById(TeacherId, newBalanceForTeacher);
+//                   userRepository.updateBalanceAccountById(AdminId, newBalanceForAdmin);
+//                   requestRepository.save(request);
+//                   paymentRepository.save(paymentMethod);
+//                   transactionRepository.save(transaction);
+//                   return "APPROVED";
+//               }
+//           }catch (Exception e){
+//               throw e;
+//           }
+//
+//        }else if(requestDTO.getPaymentStatus().equals("success") && requestDTO.getStatus().equals("balance")){
+//
+//        }else{
+//
+//        }
+//        return null;
+//    }
+    private String handleBuyCourseRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod,Course course)
     {
-        course = courseRepository.findById(requestDTO.getItem_register_id()).get();
+        try{
+            Optional<Course> courseOp= courseRepository.findById(requestDTO.getItem_register_id());
+            if( courseOp.isPresent() && courseOp.get().isPublic())
+            {
+                course = courseOp.get();
+                final double transactionFees = 0.03;
+                request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType())).setCourse(course);
+                paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
+                transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
+                        .setAmount(requestDTO.getAmount())
+                        .setType(Transaction.Type.valueOf(requestDTO.getType()))
+                        .setStatus(Transaction.Status.COMPLETED)
+                        .setTransactionDate(requestDTO.getRegistrationDateTime());
+                Long TeacherId = course.getTeacher().getId();
+                User teacher = userRepository.findById(TeacherId).orElse(null);
+                User Admin = userRepository.findByEmail("admin64@gmail.com").orElse(null);
+                assert Admin != null;
+                Long AdminId = Admin.getId();
+                Long StudentId = user.getId();
+                Double discountAmount = requestDTO.getDiscountAmount();
+                Double dtoAmount=requestDTO.getAmount();
+                Double AmountAfterDiscount =0.0;
+                Double newBalanceForTeacher = 0.0;
+                Double newBalanceForAdmin = 0.0;
+                Double newBalanceForStudent = 0.0;
+                if(requestDTO.getStatus().equals("payment_gateway"))
+                {
+                    if(discountAmount>0 && dtoAmount>discountAmount && requestDTO.getDiscountCode()!=null){
+                        AmountAfterDiscount = Math.max(0, dtoAmount - discountAmount);
+                        BigDecimal transactionFee = BigDecimal.valueOf(transactionFees).multiply(BigDecimal.valueOf(AmountAfterDiscount));
+                        transactionFee = transactionFee.setScale(2, RoundingMode.HALF_UP);
+                        newBalanceForTeacher = teacher.getBalance() + AmountAfterDiscount - transactionFee.doubleValue();
+                        newBalanceForAdmin = Admin.getBalance() + transactionFee.doubleValue();
+                    }
+                    else{
+                        Double transactionFee = transactionFees * requestDTO.getAmount();
+                        newBalanceForTeacher = teacher.getBalance() + requestDTO.getAmount() - transactionFee;
+                        newBalanceForAdmin = Admin.getBalance() + transactionFee;
+                    }
+                }else{
+                    if(discountAmount>0 && dtoAmount>discountAmount && requestDTO.getDiscountCode()!=null){
+                        AmountAfterDiscount = Math.max(0, dtoAmount - discountAmount);
+                        BigDecimal transactionFee = BigDecimal.valueOf(transactionFees).multiply(BigDecimal.valueOf(AmountAfterDiscount));
+                        transactionFee = transactionFee.setScale(2, RoundingMode.HALF_UP);
+                        newBalanceForTeacher = teacher.getBalance() + AmountAfterDiscount - transactionFee.doubleValue();
+                        newBalanceForAdmin = Admin.getBalance() + transactionFee.doubleValue();
+                        newBalanceForStudent =user.getBalance() -dtoAmount;
+                        userRepository.updateBalanceAccountById(StudentId, newBalanceForStudent);
+                    }
+                    else{
+                        Double transactionFee = transactionFees * requestDTO.getAmount();
+                        newBalanceForTeacher = teacher.getBalance() + requestDTO.getAmount() - transactionFee;
+                        newBalanceForAdmin = Admin.getBalance() + transactionFee;
+                        newBalanceForStudent =user.getBalance() -dtoAmount;
+                        userRepository.updateBalanceAccountById(StudentId, newBalanceForStudent);
+                    }
+                }
+
+                courseRepository.addStudentToCourseEnroll(requestDTO.getItem_register_id(),user.getId());
+                userRepository.updateBalanceAccountById(TeacherId, newBalanceForTeacher);
+                userRepository.updateBalanceAccountById(AdminId, newBalanceForAdmin);
+                requestRepository.save(request);
+                paymentRepository.save(paymentMethod);
+                transactionRepository.save(transaction);
+                courseDiscountRepository.deleteByCode(requestDTO.getDiscountCode());
+                return "APPROVED";
+            }
+        }catch (Exception e)
+        {
+            return "PENDING";
+        }
         return null;
     }
+
+
 }

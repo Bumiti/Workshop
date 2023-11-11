@@ -37,6 +37,8 @@ const UsersPage = () => {
   const { data: session } = useSession();
   const apiService = new ApiService(session);
   const [users, setUsers] = useState<UserData[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [usersPerPage] = useState<number>(5);
 
   useEffect(() => {
     if (session) {
@@ -67,6 +69,12 @@ const UsersPage = () => {
     });
   };
 
+  // Pagination logic
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
 
   return (
@@ -77,62 +85,71 @@ const UsersPage = () => {
           <button className={styles.addButton}>Add New</button>
         </Link>
       </div>
-      {users.length > 0 && (
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <td>Name</td>
-              <td>Email</td>
-              <td>Phone Number</td>
-              <td>Role</td>
-              <td>Status</td>
-              <td>Action</td>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, index) => (
-              <tr key={user.id}>
-                <td>
-                  <div className={styles.user}>
-                    <Image
-                      src={"/noavatar.png"}
-                      alt=""
-                      width={40}
-                      height={40}
-                      className={styles.userImage}
-                    />
-                    {user.full_name}
-                  </div>
-                </td>
-                <td>{user.email}</td>
-                <td>{user.phoneNumber}</td>
-                <td>{user.roles}</td>
-                <td>{user.enable ? 'Actived' : 'Passived'}</td>
-                <td>
-                  <div className={styles.buttons}>
-                    {/*${user.id} bỏ vô link dưới*/}
-                    <Link href={`/admin/dashboard/users/${user.id}`}>
-                      <button className={`${styles.button} ${styles.view}`}>
-                        View
-                      </button>
-                    </Link>
-                    {/*action={deleteUser} bỏ vào form*/}
-                    <form>
-                      {/*value={(user.id)}*/}
-                      <input type="hidden" name="id" />
-                      <button className={`${styles.button} ${styles.delete}`} onClick={(e) => {
-                        e.stopPropagation(); // Stop propagation to prevent the row click event
-                        handleButtonClick(user.id);
-                      }}>
-                        Change Status
-                      </button>
-                    </form>
-                  </div>
-                </td>
+      {currentUsers.length > 0 && (
+        <>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <td>Name</td>
+                <td>Email</td>
+                <td>Phone Number</td>
+                <td>Role</td>
+                <td>Status</td>
+                <td>Action</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentUsers.map((user, index) => (
+                <tr key={user.id}>
+                  <td>
+                    <div className={styles.user}>
+                      <Image
+                        src={"/noavatar.png"}
+                        alt=""
+                        width={40}
+                        height={40}
+                        className={styles.userImage}
+                      />
+                      {user.full_name}
+                    </div>
+                  </td>
+                  <td>{user.email}</td>
+                  <td>{user.phoneNumber}</td>
+                  <td>{user.roles}</td>
+                  <td>{user.enable ? 'Actived' : 'Passived'}</td>
+                  <td>
+                    <div className={styles.buttons}>
+                      {/*${user.id} bỏ vô link dưới*/}
+                      <Link href={`/admin/dashboard/users/${user.id}`}>
+                        <button className={`${styles.button} ${styles.view}`}>
+                          View
+                        </button>
+                      </Link>
+                      {/*action={deleteUser} bỏ vào form*/}
+                      <form>
+                        {/*value={(user.id)}*/}
+                        <input type="hidden" name="id" />
+                        <button className={`${styles.button} ${styles.delete}`} onClick={(e) => {
+                          e.stopPropagation(); // Stop propagation to prevent the row click event
+                          handleButtonClick(user.id);
+                        }}>
+                          Change Status
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Pagination
+            itemsPerPage={usersPerPage}
+            totalItems={users.length}
+            paginate={paginate}
+            currentPage={currentPage}
+          />
+        </>
+
       )}
     </div>
   );

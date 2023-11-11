@@ -32,8 +32,8 @@ const menuItems = [
         icon: <MdSupervisedUserCircle />,
       },
       {
-        title: "Products",
-        path: "/admin/dashboard/products",
+        title: "Courses",
+        path: "/admin/dashboard/courses",
         icon: <MdShoppingBag />,
       },
       {
@@ -82,9 +82,6 @@ const menuItems = [
 
 const Sidebar = () => {
   const { data: session } = useSession();
-  const handleSignout = async () => {
-    await signOut();
-  };
   
   return (
     <div className={styles.container}>
@@ -111,12 +108,10 @@ const Sidebar = () => {
           </li>
         ))}
       </ul>
-      <form >
-        <button className={styles.logout} onSubmit={handleSignout}>
+        <button className={styles.logout} onClick={() => session ? signOut() : signIn()}>
           <MdLogout />
           Logout
         </button>
-      </form>
     </div>
   );
 };
