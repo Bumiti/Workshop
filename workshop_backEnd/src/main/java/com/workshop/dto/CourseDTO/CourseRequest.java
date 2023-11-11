@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -32,10 +33,11 @@ public class CourseRequest {
     private int student_count;
     @NotNull
     private String type;
-    @JsonProperty("MediaInfoList")
+    @JsonProperty("mediaInfoList")
     @Nullable
     @Builder.Default
-    private List<CourseMediaInfoDTOS> MediaInfoList = Collections.emptyList();
+    private List<CourseMediaInfoDTOS> mediaInfoList = Collections.emptyList();
+
     @JsonProperty("discountDTOS")
     @Nullable
     @Builder.Default

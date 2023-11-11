@@ -132,7 +132,7 @@ public class TeacherController {
     }
     @Operation(summary = "Danh Sách Khóa Học Của Giáo Viên")
     @GetMapping("course/list")
-    public ResponseEntity<ApiResponse<?>> ListCourseByTeacherId() {
+    public ResponseEntity<ApiResponse<?>> ListCourseByTeacher() {
         try {
             List<CourseRespones> ListCourse = courseService.listCourseTeacher();
             System.out.print(ListCourse);
@@ -143,6 +143,20 @@ public class TeacherController {
                     .body(new ApiResponse<>("error", exception.getMessage(), null));
         }
     }
+    @Operation(summary = "Danh Sách Khóa Học Của Giáo Viên Theo Id")
+    @GetMapping("course/list/{id}")
+    public ResponseEntity<ApiResponse<?>> listCourseByTeacherId(@RequestParam Long courseId) {
+        try {
+            List<CourseRespones> listCourse = courseService.listCourseTeacherById(courseId);
+            System.out.print(listCourse);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>("success", "List of Courses", listCourse));
+        } catch (RuntimeException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>("error", exception.getMessage(), null));
+        }
+    }
+
     @Operation(summary = "Thêm khóa Học")
     @PostMapping("course/add")
     public ResponseEntity<ApiResponse<?>> AddCourse(@RequestBody CourseRequest courseRequest) {
