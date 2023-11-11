@@ -232,6 +232,7 @@ public class UserServiceImpl implements UserService {
                 userBankList.add(userBank);
             }
             UserInfoResponse userInfoResponse = UserMapper.ModelmapToDTO(userFull,UserInfoResponse.class);
+            userInfoResponse.setId(userFull.getId());
             userInfoResponse.setRoles(list);
             userInfoResponse.setUserBanks(userBankList);
             userInfoResponse.setUserAddresses(userAddressesList);
