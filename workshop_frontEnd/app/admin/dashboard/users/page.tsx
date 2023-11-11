@@ -81,9 +81,6 @@ const UsersPage = () => {
     <div className={styles.container}>
       <div className={styles.top}>
         <Search placeholder="Search for a user..." />
-        <Link href="/admin/dashboard/users/add">
-          <button className={styles.addButton}>Add New</button>
-        </Link>
       </div>
       {currentUsers.length > 0 && (
         <>

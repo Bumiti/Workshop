@@ -57,7 +57,7 @@ const CoursesPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        <Search placeholder="Search for a product..." />
+        <Search placeholder="Search for a course..." />
       </div>
       <table className={styles.table}>
         <thead className="text-center">
