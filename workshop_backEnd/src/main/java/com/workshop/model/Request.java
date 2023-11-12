@@ -27,10 +27,10 @@ public class Request extends BaseModel{
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "course_id")
-    private Course course;
-    @OneToOne
+    private Course courses;
+    @ManyToOne
     @JoinColumn(name = "workshop_id")
     private Workshop workshop;
     @ManyToOne

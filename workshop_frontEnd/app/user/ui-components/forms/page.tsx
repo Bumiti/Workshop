@@ -187,7 +187,7 @@ const EditProfile = () => {
           const uploadTask = await uploadBytes(imgRef, selectedImage);
           const url = await getDownloadURL(uploadTask.ref);
 
-          // Lưu đường dẫn hình ảnh vào userData
+          console.log(url);
           setUserData({ ...userData, image_url: url });
         } catch (error) {
           console.error("Lỗi tải lên:", error);

@@ -36,9 +36,9 @@ public class RequestServiceImpl implements RequestService {
         for(Request request : requestList)
         {
             RequestResponse requestResponse = new RequestResponse();
-            if(request.getCourse()!=null){
-                requestResponse.setCourseName(request.getCourse().getName());
-                requestResponse.setCourseId(request.getCourse().getId());
+            if(request.getCourses()!=null){
+                requestResponse.setCourseName(request.getCourses().getName());
+                requestResponse.setCourseId(request.getCourses().getId());
             }
             if(request.getWorkshop() !=null){
                 requestResponse.setWorkshopId(request.getWorkshop().getId());
@@ -51,7 +51,8 @@ public class RequestServiceImpl implements RequestService {
             requestResponse.setId(request.getId())
                     .setStatus(String.valueOf(request.getStatus()))
                     .setType(String.valueOf(request.getType()))
-                    .setUserId(request.getUser().getId()).setUserName(request.getUser().getUser_name());
+                    .setUserId(request.getUser().getId()).setUserName(request.getUser().getUser_name())
+                    .setRegistrationDateTime(request.getCreatedDate().toLocalDateTime());
             requestResponseList.add(requestResponse);
         }
        return requestResponseList;
@@ -256,7 +257,7 @@ public class RequestServiceImpl implements RequestService {
             {
                 course = courseOp.get();
                 final double transactionFees = 0.03;
-                request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType())).setCourse(course);
+                request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType())).setCourses(course);
                 paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
                 transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
                         .setAmount(requestDTO.getAmount())

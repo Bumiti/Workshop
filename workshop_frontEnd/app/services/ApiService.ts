@@ -18,16 +18,6 @@ class ApiService {
             },
         });
     }
-
-    async listCoursePublic() {
-        try {
-            const response = await this.customAxios.get('/web/course/list');
-            return response.data;
-        } catch (error) {
-            throw error;
-        }
-    }
-
     async listCoursesFromApi() {
         try {
             const response = await this.customAxios.get('/seller/course/list');
@@ -103,6 +93,33 @@ class ApiService {
             throw error;
         }
     }
+    //-------------------------------------------------Web API-------------------------------------------------//
+
+    async listCoursePublic() {
+        try {
+            const response = await this.customAxios.get('/web/course/list');
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async CoursePublicDetail(id: number) {
+        try {
+            const response = await this.customAxios.get(`/web/course/detail?id=${id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async checkUserInCourse(user_email: number,courseId:number) {
+        try {
+            const response = await this.customAxios.get(`/web/course/checkedUser?user_email=${user_email}&course_id=${courseId}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    //-------------------------------------------------Web API-------------------------------------------------//
 }
 
 export default ApiService;

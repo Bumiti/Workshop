@@ -5,6 +5,7 @@ import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.model.Request;
+import com.workshop.service.CourseService;
 import com.workshop.service.RequestService;
 import com.workshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +26,7 @@ public class StudentController {
 
     private final UserService userService;
     private final RequestService requestService;
+    private final CourseService courseService;
     @Operation(summary = "Lấy thông tin cá nhân Học Sinh")
     @GetMapping("/detail")
     public ResponseEntity<ApiResponse<?>> UserDetail() {
@@ -52,7 +54,7 @@ public class StudentController {
         }
     }
     @Operation(summary = "Sửa thông tin Student")
-    @PutMapping("user/edit")
+    @PutMapping("/edit")
     public ResponseEntity<ApiResponse<?>> editUser(@RequestBody UserEditRequest userEditRequest) {
         try {
             boolean result = userService.EditUser(userEditRequest);
@@ -106,6 +108,25 @@ public class StudentController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>
                         ("cancel", "Your Request REJECTED", null));
             }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
+                    ("Error", "An error occurred: " + e.getMessage(), null));
+        }
+    }
+    @Operation(summary = "Check Code Course Discount")
+    @GetMapping("/checkDiscount")
+    public ResponseEntity<ApiResponse<?>> CheckCodeDiscountCourese(@RequestParam String code) {
+        try {
+
+            int result =  courseService.checkCodeDiscount(code);
+            if (result>0) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
+                        ("Success", "Your Code is Active", result));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>
+                        ("not_found", "Your Code : "+code+ " is OutDate", null));
+            }
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
                     ("Error", "An error occurred: " + e.getMessage(), null));

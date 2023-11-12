@@ -2,9 +2,11 @@ import styles from '../CSS/home.module.css';
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Carousel } from 'react-bootstrap';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 const Card = () => {
   const [courses, setCourses] = useState<CourseType[]>([]); // Thay thế 'CourseType' bằng kiểu dữ liệu cụ thể bạn sử dụng
-
+  const router = useRouter();
   interface CourseType {
     id: number;
     name: string;
@@ -12,7 +14,7 @@ const Card = () => {
     link: string;
     // Các thuộc tính khác nếu có
   }
-  
+
   useEffect(() => {
     fetch('http://localhost:8089/web/course/list')
       .then(response => response.json())
@@ -35,27 +37,35 @@ const Card = () => {
   };
 
   return (
-<Carousel>
-  {chunkArray(courses, 3).map((chunk, chunkIndex) => (
-    <Carousel.Item key={chunkIndex}>
-      <div className="card-group">
-        {chunk.map((course, index) => (
-          <div key={index} className={`card ${styles.cardCustom}`}>
-            <div className="card-body">
-              <div className={`${styles.serviceItem}`}>
-                <h4>{course.name}</h4>
-                <p>{course.description}</p>
-                <div className={`textButton ${styles.textButton}`}>
-                  <a href={course.link}>Read More <i className="fa fa-arrow-right"></i></a>
+    <Carousel>
+      {chunkArray(courses, 4).map((chunk, chunkIndex) => (
+        <Carousel.Item key={chunkIndex}>
+          <div className="card-group">
+            {chunk.map((course, index) => (
+
+              <div key={index} className={`card ${styles.cardCustom}`}>
+
+                <div className="card-body">
+
+                  <div className={`${styles.serviceItem}`}>
+                  <h2>{course.id}</h2>
+                    <h4>{course.name}</h4>
+                    <p>{course.description}</p>
+                    <div className={`textButton ${styles.textButton}`}>
+                      <Link href={`/courseDemo/[id]`} as={`/courseDemo/${course.id}`}>
+                        Đăng kí nhanh
+                      </Link>
+
+                    </div>
+
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </Carousel.Item>
-  ))}
-</Carousel>
+        </Carousel.Item>
+      ))}
+    </Carousel>
 
   );
 };

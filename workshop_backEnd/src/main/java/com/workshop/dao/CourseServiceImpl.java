@@ -8,6 +8,7 @@ import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.User;
 import com.workshop.repositories.Course.*;
 import com.workshop.repositories.DiscountRepository;
+import com.workshop.repositories.User.UserRepository;
 import com.workshop.service.CourseService;
 import com.workshop.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,10 @@ public class CourseServiceImpl implements CourseService {
     private final DiscountRepository discountRepository;
     private final CourseMediaInfoRepository courseMediaInfoRepository;
     private final UserService userService;
+    private final UserRepository userRepository;
     private final CourseLocationRepository courseLocationRepository;
+    private final CourseEnrollmentRepository courseEnrollmentRepository;
+
     boolean isCourse(Long Id) {
         Course course_exit = courseRepository.findCourseById(Id);
         return course_exit != null;
@@ -64,7 +68,7 @@ public class CourseServiceImpl implements CourseService {
                             CourseDiscount courseDiscount = new CourseDiscount();
                             UUID randomUUID = UUID.randomUUID();
                             String randomDiscountCode = randomUUID.toString();
-                            courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getQuantity())
+                            courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getValueDiscount())
                                     .setDiscount(discount).setCourse(course);
                             courseDiscountRepository.save(courseDiscount);
                         }
@@ -139,7 +143,7 @@ public class CourseServiceImpl implements CourseService {
                                     CourseDiscount courseDiscount = new CourseDiscount();
                                     UUID randomUUID = UUID.randomUUID();
                                     String randomDiscountCode = randomUUID.toString();
-                                    courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(newQuantity)
+                                    courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getValueDiscount())
                                             .setDiscount(existingDiscount).setCourse(course);
                                     courseDiscountRepository.save(courseDiscount);
                                 }
@@ -156,7 +160,7 @@ public class CourseServiceImpl implements CourseService {
                         CourseDiscount courseDiscount = new CourseDiscount();
                         UUID randomUUID = UUID.randomUUID();
                         String randomDiscountCode = randomUUID.toString();
-                        courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getQuantity())
+                        courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getValueDiscount())
                                 .setDiscount(discount).setCourse(courseExit);
                         courseDiscountRepository.save(courseDiscount);
                         }
@@ -177,7 +181,6 @@ public class CourseServiceImpl implements CourseService {
             return true;
         } else {return false;}
     }
-
     @Override
     public boolean settingStatusCourse(Long id) {
         try {
@@ -208,8 +211,6 @@ public class CourseServiceImpl implements CourseService {
             return null;
         }
     }
-
-
     @Override
     public List<CourseRespones> listCourseTeacher() {
         try {
@@ -299,7 +300,6 @@ public class CourseServiceImpl implements CourseService {
             return false;
         }
     }
-
     @Override
     public List<CourseRespones> listCourseEnable() {
         List<Course> coursesEntityList = courseRepository.listCoursePublic();
@@ -368,5 +368,111 @@ public class CourseServiceImpl implements CourseService {
         }
         return coursesResponesList;
     }
+    @Override
+    public int checkCodeDiscount(String discountCode) {
+        try{
+            if(discountCode!=null){
+                int value = 0;
+             CourseDiscount courseDiscount = courseDiscountRepository.findByCode(discountCode);
+                if (courseDiscount != null) {
+                    value = courseDiscount.getQuantity();
+                }
+                return value;
+            }else{
+                return 0;
+            }
+        }catch (Exception e){
+            return 0;
+        }
+    }
+    @Override
+    public CourseRespones courseById(Long id) {
+        try {
+            boolean result = isCourse(id);
+            Course course = courseRepository.CoursePublic(id);
+            if (result && course!=null)
+            {
 
+                MapperGeneric<Location, CourseRespones.CourseLocation.locationResponse> locationMapper = new MapperGeneric<>();
+                MapperGeneric<Course, CourseRespones> CourseMapper = new MapperGeneric<>();
+                MapperGeneric<CourseMediaInfo, CourseRespones.CourseMediaInfo> CourseMediaMapper = new MapperGeneric<>();
+                MapperGeneric<CourseLocation,CourseRespones.CourseLocation>CourseLocationMapper = new MapperGeneric<>();
+                MapperGeneric<Discount, CourseRespones.DiscountDTO> DiscountDToMapper = new MapperGeneric<>();
+                List<CourseRespones.StudentEnrollment> studentEnrollments = new ArrayList<>();
+                List<CourseRespones.CourseMediaInfo> courseInfoMediaList = new ArrayList<>();
+                List<CourseRespones.CourseLocation> courseLocationsList = new ArrayList<>();
+                List<CourseRespones.DiscountDTO> DiscountDTOList = new ArrayList<>();
+                CourseRespones courseResponse = CourseMapper.ModelmapToDTO(course, CourseRespones.class);
+                courseResponse.setId(course.getId());
+                courseResponse.setTeacher(course.getTeacher().getFull_name());
+                for (CourseEnrollment enrollment : course.getEnrolledStudents())
+                {
+                    CourseRespones.StudentEnrollment studentEnrollment = new CourseRespones.StudentEnrollment();
+                    studentEnrollment.setId(enrollment.getEnrolledStudent().getId());
+                    studentEnrollment.setName(enrollment.getEnrolledStudent().getUser_name());
+                    studentEnrollments.add(studentEnrollment);
+                }
+                List<CourseRespones.DiscountDTO> tempDiscountList = new ArrayList<>();
+                for(CourseDiscount courseDiscount : course.getCourseDiscounts()){
+                    Discount discount = courseDiscount.getDiscount();
+                    CourseRespones.DiscountDTO discountDTO = DiscountDToMapper.ModelmapToDTO(discount,CourseRespones.DiscountDTO.class);
+                    discountDTO.setQuantity(courseDiscount.getQuantity());
+                    discountDTO.setRedemptionDate(courseDiscount.getRedemptionDate());
+                    discountDTO.setId(discount.getId());
+                    boolean isAlreadyExists = false;
+                    for (CourseRespones.DiscountDTO existingDiscountDTO : tempDiscountList) {
+                        if (existingDiscountDTO.getId() == discountDTO.getId()) {
+                            isAlreadyExists = true;
+                            break;
+                        }
+                    }
+                    if (!isAlreadyExists) {
+                        DiscountDTOList.add(discountDTO);
+                        tempDiscountList.add(discountDTO);
+                    }
+                }
+                for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos()){
+                    if(courseMediaInfo.getCourse().equals(course)){
+                        CourseRespones.CourseMediaInfo courseInfoMedia = CourseMediaMapper.ModelmapToDTO(courseMediaInfo,CourseRespones.CourseMediaInfo.class);
+                        courseInfoMedia.setId(courseMediaInfo.getId());
+                        courseInfoMediaList.add(courseInfoMedia);
+                    }
+                }
+                for (CourseLocation courseLocation : course.getCourseLocation()){
+                    CourseRespones.CourseLocation courseLocal = CourseLocationMapper.ModelmapToDTO(courseLocation,CourseRespones.CourseLocation.class);
+                    courseLocal.setId(courseLocation.getId());
+                    if(courseLocation.getLocations()!=null){
+                        CourseRespones.CourseLocation.locationResponse location =
+                                locationMapper.ModelmapToDTO(courseLocation.getLocations(), CourseRespones.CourseLocation.locationResponse.class);
+                        courseLocal.setLocationResponse(location);
+                    }courseLocationsList.add(courseLocal);
+                }
+                courseResponse.setStudentEnrollments(studentEnrollments);
+                courseResponse.setCourseMediaInfos(courseInfoMediaList);
+                courseResponse.setDiscountDTOS(DiscountDTOList);
+                courseResponse.setCourseLocations(courseLocationsList);
+               return courseResponse ;
+            } else {
+                return null;
+            }
+        } catch (RuntimeException runtimeException) {
+            System.out.println("Error: " + runtimeException.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public boolean checkUserInCourse(String email, Long course_id) {
+       try{
+           boolean result = isCourse(course_id);
+           User user = userRepository.getUserEditByMail(email);
+           Long user_id = user.getId();
+           if(result){
+               return courseEnrollmentRepository.checkUserInCourse(user_id,course_id);
+           }
+           return false;
+       }catch (Exception e){
+           return false;
+       }
+    }
 }

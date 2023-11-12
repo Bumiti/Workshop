@@ -3,10 +3,12 @@ package com.workshop.controller;
 import com.workshop.config.ApiResponse;
 import com.workshop.dto.CourseDTO.CourseRespones;
 import com.workshop.dto.RequestResponse;
+import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.service.AdminService;
 import com.workshop.service.CourseService;
 import com.workshop.service.RequestService;
+import com.workshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,6 +29,7 @@ public class AdminController {
     private final AdminService adminService;
     private final CourseService courseService;
     private final RequestService requestService;
+    private final UserService userService;
     private ResponseEntity<ApiResponse<?>> createResponse(HttpStatus httpStatus, String status, String message, Object data) {
         return ResponseEntity.status(httpStatus).body(new ApiResponse<>(status, message, data));
     }
@@ -50,7 +53,7 @@ public class AdminController {
         try {
             List<RequestResponse> requestResponseList = requestService.ListRequest();
             if (requestResponseList.isEmpty()) {
-                return createResponse(HttpStatus.NOT_FOUND, "error", "List Request is empty", null);
+                return createResponse(HttpStatus.ACCEPTED, "success", "List Request is empty", null);
             } else {
                 return createResponse(HttpStatus.ACCEPTED, "success", "List of Request", requestResponseList);
             }
@@ -133,6 +136,23 @@ public class AdminController {
             }
         } catch (Exception e) {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", e.getMessage(), null);
+        }
+    }
+    @Operation(summary = "Sửa thông tin cá nhân Admin")
+    @PutMapping("/edit")
+    public ResponseEntity<ApiResponse<?>> editUser(@RequestBody UserEditRequest userEditRequest) {
+        try {
+            boolean result = userService.EditUser(userEditRequest);
+            if (result) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
+                        ("Success", "Your Info Has Been Changed", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
+                        ("Error", "Please check again", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
+                    ("Error", "An error occurred: " + e.getMessage(), null));
         }
     }
 

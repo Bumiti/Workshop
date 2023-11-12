@@ -2,6 +2,7 @@ package com.workshop.model.courseModel;
 
 import com.workshop.model.BaseModel;
 import com.workshop.model.Discount;
+import com.workshop.model.Request;
 import com.workshop.model.userModel.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,6 +39,10 @@ public class Course extends BaseModel {
     @OneToMany(mappedBy = "courses")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<CourseEnrollment> enrolledStudents;
+
+    @OneToMany(mappedBy = "courses")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Request> requests;
 
 
     @OneToMany(mappedBy = "course")
