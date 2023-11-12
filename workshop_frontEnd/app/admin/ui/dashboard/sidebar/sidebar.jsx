@@ -3,6 +3,7 @@ import Image from "next/image";
 import MenuLink from "./menuLink/menuLink";
 import styles from "./sidebar.module.css";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { SiGoogleclassroom } from "react-icons/si";
 import * as React from 'react';
 import {
   MdDashboard,
@@ -35,7 +36,7 @@ const menuItems = [
       {
         title: "Courses",
         path: "/admin/dashboard/courses",
-        icon: <MdShoppingBag />,
+        icon: <SiGoogleclassroom />,
       },
       {
         title: "Request",

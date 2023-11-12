@@ -14,18 +14,19 @@ interface RequestData {
   id: number;
   type: string;
   status: boolean;
-  createDate: number;
-  nameUser: UserData[];
+  createDate: string;
+  userName: string;
+  registrationDateTime: string;
   nameCourse: CoursesData[];
 }
 
 interface UserData {
-  id: number;
+  id: number | null;
   full_name: string;
 }
 
 interface CoursesData {
-  id: number;
+  id: number | null;
   name: string;
 }
 
@@ -81,20 +82,19 @@ const RequestPage = () => {
               {currentRequest.map((request) => (
                 <tr key={request.id}>
                   <td>{request.type}</td>
-                  <td>{request.createDate}$</td>
+                  <td>{request.registrationDateTime}</td>
                   <td>{request.status}</td>
-                  {request.nameUser.map((name, index) => (
-                    <div>
-                      <label>User Name {index + 1}:</label>
-                      <h4>{name.full_name}</h4>
+                  <td>{request.userName}</td>
+                  {/* Course Name */}
+                  {/* <td>
+                    <div className={styles.buttons}>
+                      {request.nameCourse.map((course, index) => (
+                        <div key={index}>
+                          {course.name}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                  {request.nameCourse.map((name, index) => (
-                    <div>
-                      <label>User Name {index + 1}:</label>
-                      <h4>{name.name}</h4>
-                    </div>
-                  ))}
+                  </td> */}
                   <td>
                     <div className={styles.buttons}>
                     </div>

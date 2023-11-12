@@ -7,7 +7,7 @@ class ApiService {
     private baseUrl: string;
     private customAxios: AxiosInstance;
     constructor(private session: any) {
-        this.baseUrl = 'http://localhost:8089/';
+        this.baseUrl = 'http://192.168.1.130:8089/';
         this.customAxios = axios.create({
             baseURL: this.baseUrl,
             timeout: 500000,
@@ -81,7 +81,7 @@ class ApiService {
         }
     }
     async changeStatusAccount(id: number) {
-        try {
+        try {   
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.post(`/admin/user/changeStatus?id=${id}`);
                 return response.data;
@@ -96,6 +96,18 @@ class ApiService {
         try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.post(`/admin/course/status?id=${id}`);
+                return response.data;
+            }
+            return null;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async EditAdmin(id: any) {
+        try {   
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.put(`/admin/edit?id=${id}`);
                 return response.data;
             }
             return null;

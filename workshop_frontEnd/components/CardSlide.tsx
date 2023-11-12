@@ -14,7 +14,7 @@ const Card = () => {
   }
   
   useEffect(() => {
-    fetch('http://localhost:8089/web/course/list')
+    fetch('http://192.168.1.130:8089/web/course/list')
       .then(response => response.json())
       .then(result => {
         if (Array.isArray(result.data)) {
