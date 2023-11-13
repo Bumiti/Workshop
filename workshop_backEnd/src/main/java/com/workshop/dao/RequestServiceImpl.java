@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -105,7 +106,7 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.COMPLETED)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "APPROVED";
         }else if(requestDTO.getPaymentStatus().equals("pending") && requestDTO.getAmount()>0){
@@ -117,7 +118,7 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.PENDING)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "PENDING";
         }else{
@@ -129,7 +130,7 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.FAILED)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "REJECTED";
         }
@@ -148,7 +149,7 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.COMPLETED)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "APPROVED";
         }else if(requestDTO.getAmount() < user.getBalance() && (user.getBalance() - requestDTO.getAmount()) <10){
@@ -160,7 +161,7 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.CANCELED)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "REJECTED";
         }else{
@@ -172,7 +173,7 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.FAILED)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "CANCEL";
         }
@@ -263,7 +264,7 @@ public class RequestServiceImpl implements RequestService {
                         .setAmount(requestDTO.getAmount())
                         .setType(Transaction.Type.valueOf(requestDTO.getType()))
                         .setStatus(Transaction.Status.COMPLETED)
-                        .setTransactionDate(requestDTO.getRegistrationDateTime());
+                        .setTransactionDate(LocalDateTime.now());
                 Long TeacherId = course.getTeacher().getId();
                 User teacher = userRepository.findById(TeacherId).orElse(null);
                 User Admin = userRepository.findByEmail("admin64@gmail.com").orElse(null);

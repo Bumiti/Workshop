@@ -34,7 +34,6 @@ public class SeedDatabase {
     private final CourseEnrollmentRepository courseEnrollmentRepository;
     private final DiscountRepository discountRepository;
     private final CourseDiscountRepository courseDiscountRepository;
-    private final RequestRepository requestRepository;
     private static final String SEED_STATUS_FILE_PATH = "seed_status.txt";
 
     private boolean isSeedCompleted() {
@@ -46,8 +45,7 @@ public class SeedDatabase {
             writer.write("Seed has run and completed");
             System.out.println("Seed status file created successfully");
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+            System.out.println(e.getMessage());        }
     }
 
     private void addRandomTeachers() {
@@ -175,7 +173,7 @@ public class SeedDatabase {
         Random random = new Random();
         List<User> teachers = userRepository.findUsersByRoleName("SELLER");
         List<User> students = userRepository.findUsersByRoleName("USER");
-        Request.RequestType[] types = Request.RequestType.values();
+
         for (int i = 0; i < 20; i++) {
             int randomNumber = (int) (Math.random() * (max - min + 5) + min);
             String randomCourseName = courseNames[random.nextInt(courseNames.length)];

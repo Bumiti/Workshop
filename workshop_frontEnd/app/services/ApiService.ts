@@ -18,6 +18,27 @@ class ApiService {
             },
         });
     }
+    async buyCourseWithStudent(data: {
+        type: string;
+        status: string;
+        item_register_id: number;
+        locationId: number;
+        amount: number;
+        discountAmount: number;
+        discountCode: string;
+        paymentName: string;
+        paymentStatus: string;
+       
+    }) {
+        try {
+            const response = await this.customAxios.post('/user/byCourse', data);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    //-------------------------------------------------User API-------------------------------------------------//
+    //-------------------------------------------------Admin API-------------------------------------------------//
     async listCoursesFromApi() {
         try {
             const response = await this.customAxios.get('/seller/course/list');
@@ -26,8 +47,6 @@ class ApiService {
             throw error;
         }
     }
-    
-    //-------------------------------------------------Admin API-------------------------------------------------//
     async getUserbyIdAdmin(id: any){
         try {
             if (this.session?.user.accessToken) {
@@ -83,7 +102,6 @@ class ApiService {
             throw error;
         }
     }
-
     async changeStatusCourse(id: number) {
         try {
             if (this.session?.user.accessToken) {
@@ -97,7 +115,6 @@ class ApiService {
     }
     //-------------------------------------------------Admin API-------------------------------------------------//
     //-------------------------------------------------Web API-------------------------------------------------//
-
     async listCoursePublic() {
         try {
             const response = await this.customAxios.get('/web/course/list');
