@@ -1,9 +1,13 @@
 'use client'
-import { Col, Container, Row } from "react-bootstrap"
-import React, { useEffect, useState } from 'react';
+
+import { Container, Row, Col } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import VideoPublic from './component/VideoPlayer';
+import SliderVideo from "./component/SliderVideo";
+import { useEffect, useState } from "react";
 import ApiService from "@/app/services/ApiService";
 import { useSession } from 'next-auth/react';
-import SideLeft from '../[id]/component/SideLeft'
+import { v4 as uuidv4 } from 'uuid';
 interface CourseType {
     id: number;
     name: string;
@@ -20,17 +24,19 @@ interface courseMediaInfos {
     urlImage:string;
     urlMedia:string;
 }
-const CourseDemo = ({ params }: { params: { id: any } }) => {
+const teacher = ({ params }: { params: { id: any } }) => {
+    const [selectedVideoUrl, setSelectedVideoUrl] = useState('');
     const { data: session } = useSession();
     const apiService = new ApiService(session);
     const [course, setCourse] = useState<CourseType>();
-
+    const [video, setVideo] = useState<CourseType>();
     useEffect(() => {
             const fetchData = async () => {
                 try {
                     const respone = await apiService.CoursePublicDetail(params.id);
                     if (respone.data) 
-                    {                
+                    {   
+                        console.log(respone.data);    
                         setCourse(respone.data);                    
                     }
                 } catch (error) {
@@ -39,28 +45,20 @@ const CourseDemo = ({ params }: { params: { id: any } }) => {
             };
             fetchData();
     },[]);
-    console.log("course",course);
     return (
-        <Container fluid>
-            <Row className="">
-                <hr></hr>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <Col sm={8}>
-                    <Container className="p-5 pt-2">
-                        <h1>Tiêu Đề Video</h1>
-                        <h5>Lời Nhắc</h5>
-                        <h1>Tiêu Đề Video</h1>
-                        {/* List Danh Sach Title */}
+        <Container fluid className="w-screen h-screen">
+            <Row className="bg-slate-400">
+                <Col sm={2}>
+                    <Container>
+                       <SliderVideo videos={course?.courseMediaInfos} onVideoSelect={setSelectedVideoUrl}/>
                     </Container>
                 </Col>
-                <Col sm={4}>
-                    <SideLeft course={course} />
+                <Col sm={10}>
+                    <VideoPublic selectedVideoUrl={selectedVideoUrl} />
                 </Col>
             </Row>
         </Container>
     )
 }
-export default CourseDemo;
+
+export default teacher;

@@ -5,6 +5,7 @@ import styles from '../../[id]/courseDemo.module.css';
 import { useEffect, useState } from "react";
 import ApiService from "@/app/services/ApiService";
 import { useSession } from 'next-auth/react';
+import { v4 as uuidv4 } from 'uuid';
 
 const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
 
@@ -48,11 +49,12 @@ export default function SideLeft({ course }) {
         return null; // or render a loading state
     }
 
+    const randomToken = uuidv4();
     return (
         <Container className="p-2 ">
             <div className={styles.videothum}>
                 <ReactPlayer
-                    url='https://youtu.be/4zlqCu24wr4'
+                    url={course.courseMediaInfos[0].urlMedia}
                     controls={true}
                     playing={true}
                     muted={true}
@@ -63,9 +65,12 @@ export default function SideLeft({ course }) {
             <div className="text-center">
                 <h1>{isFree ? 'free' : 'premium'}</h1>
                 {isFree ? (
-                    <Link href={'/courseDemo/register'}>
-                        Xem Miễn Phí
-                    </Link>
+                    // <Link href={'/courseDemo/register'}>
+                    //     Xem Miễn Phí
+                    // </Link>
+                    <Link href={`/video/[id]`} as={`/video/${course.id}`}>
+                     Xem Miễn Phí
+                  </Link>
                 ) : (
                     isUserInCourse ? (
                         <Link href={'/courseDemo/watch'}>

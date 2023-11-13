@@ -4,6 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Carousel } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { v4 as uuidv4 } from 'uuid';
+
 const Card = () => {
   const [courses, setCourses] = useState<CourseType[]>([]); // Thay thế 'CourseType' bằng kiểu dữ liệu cụ thể bạn sử dụng
   const router = useRouter();
@@ -35,18 +37,15 @@ const Card = () => {
     }
     return groups;
   };
-
+  const randomToken = uuidv4();
   return (
     <Carousel>
       {chunkArray(courses, 4).map((chunk, chunkIndex) => (
         <Carousel.Item key={chunkIndex}>
           <div className="card-group">
             {chunk.map((course, index) => (
-
               <div key={index} className={`card ${styles.cardCustom}`}>
-
                 <div className="card-body">
-
                   <div className={`${styles.serviceItem}`}>
                   <h2>{course.id}</h2>
                     <h4>{course.name}</h4>
@@ -55,9 +54,7 @@ const Card = () => {
                       <Link href={`/courseDemo/[id]`} as={`/courseDemo/${course.id}`}>
                         Đăng kí nhanh
                       </Link>
-
                     </div>
-
                   </div>
                 </div>
               </div>
