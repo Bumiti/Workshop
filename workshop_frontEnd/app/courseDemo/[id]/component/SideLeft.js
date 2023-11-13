@@ -15,14 +15,14 @@ export default function SideLeft({ course }) {
     const { data: session } = useSession();
     const apiService = new ApiService(session);
     const email = session?.user.email;
-
+   
     useEffect(() => {
         const fetchData = async () => {
-            if (course) {
+            console.log("asdsada");
+            if (course.price >0) {
                 try {
                     const response = await apiService.checkUserInCourse(email, course.id);
                     console.log("response.status", response.status);
-
                     if (response.status === 'true') {
                         setIsUserInCourse(true);
                         console.log("User is in the course");
@@ -65,9 +65,7 @@ export default function SideLeft({ course }) {
             <div className="text-center">
                 <h1>{isFree ? 'free' : 'premium'}</h1>
                 {isFree ? (
-                    // <Link href={'/courseDemo/register'}>
-                    //     Xem Miễn Phí
-                    // </Link>
+    
                     <Link href={`/video/[id]`} as={`/video/${course.id}`}>
                      Xem Miễn Phí
                   </Link>

@@ -197,7 +197,9 @@ public class SeedDatabase {
                     .setTeacher(randomTeacher).setCreatedBy(nameTeacher);
             courseRepository.save(course);
             for (int j = 0; j < 3; j++) {
-                String randomUrlMedia = listVideo[random.nextInt(listVideo.length +random.nextInt(listVideo.length))];
+
+                String randomUrlMedia = listVideo[random.nextInt(listVideo.length)];
+
                 String randomUrlImage = "https://example.com/image" + j;
                 String randomTitle = "Video Title " + j;
 

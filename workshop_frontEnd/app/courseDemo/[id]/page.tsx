@@ -39,7 +39,6 @@ const CourseDemo = ({ params }: { params: { id: any } }) => {
             };
             fetchData();
     },[]);
-    console.log("course",course);
     return (
         <Container fluid>
             <Row className="">
