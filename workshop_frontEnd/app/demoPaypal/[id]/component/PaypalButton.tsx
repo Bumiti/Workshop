@@ -37,7 +37,7 @@ const PayPalCheckOutButton = ({ Courses }: { Courses: CourseDetail }) => {
                           
                 };
                 const buyCourseResponse = await apiService.buyCourseWithStudent(data);
-                console.log(buyCourseResponse)
+                console.log("buyCourseResponse",buyCourseResponse)
              if(buyCourseResponse.status === "Success"){
                 router.back();
                 router.refresh();

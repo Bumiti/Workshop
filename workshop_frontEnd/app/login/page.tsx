@@ -33,7 +33,6 @@ const LoginForm = () => {
         if (shouldReload) {
           // Tăng biến đếm load lại
           reloadCount++;
-    
           // Kiểm tra nếu trang đã load lại đủ lần, thì tắt cờ
           if (reloadCount >= 2) {
             setShouldReload(false);
