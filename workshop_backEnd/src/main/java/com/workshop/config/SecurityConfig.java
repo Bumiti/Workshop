@@ -26,6 +26,7 @@ public class SecurityConfig {
         http.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeRequests()
                 .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/test/**").permitAll()
                 .requestMatchers("/web/**").permitAll()
@@ -34,6 +35,8 @@ public class SecurityConfig {
                 .requestMatchers("/user/**").hasAnyAuthority("USER","SELLER","ADMIN")
                 .requestMatchers("/seller/**").hasAnyAuthority("SELLER","ADMIN")
                 .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                .requestMatchers("/h2-console/**", "/ws", "/ws/**", "/app/**", "/topic/**",
+                        "/img/**", "/websocket-server", "/websocket-server/**").permitAll()
                 .and()
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests()
