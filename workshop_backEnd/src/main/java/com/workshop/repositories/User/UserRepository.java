@@ -17,12 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User getUserEditByMail(String email);
     @Query("select u from User u left join fetch u.userAddresses ua where u.email = :email and u.isEnable = true")
     Optional<User> findByEmailWithAddresses(String email);
-    //    @Modifying
-//    @Query(value = "SELECT u.* FROM users u " +
-//            "JOIN fetch  users_role ur ON u.id = ur.user_id " +
-//            "JOIN fetch  roles r ON ur.roles_id = r.id " +
-//            "WHERE r.name = ?1", nativeQuery = true)
-//    List<User> findUsersByRoleName(String roleName);
     @Query(value = "SELECT u FROM User u " +
             "JOIN FETCH u.roles r " +
             "WHERE r.name = ?1")

@@ -1,7 +1,6 @@
 package com.workshop.model;
 
 import com.workshop.model.courseModel.CourseLocation;
-import com.workshop.model.workshopModel.Workshop;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.*;
@@ -22,13 +21,9 @@ public class Location extends BaseModel{
     private String name;
     private String address;
     private String description;
-
-    // Quan hệ một nhiều với buổi workshop có thể tổ chức tại đây
-    @OneToMany(mappedBy = "location")
-    private List<Workshop> workshops;
+    private String statusAvailable;
     @OneToMany(mappedBy = "location")
     private List<Request> requests;
-
     @OneToMany(mappedBy = "locations")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<CourseLocation> CourseLocation;

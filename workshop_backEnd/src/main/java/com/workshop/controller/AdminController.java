@@ -1,14 +1,13 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
-import com.workshop.dto.CourseDTO.CourseRespones;
+import com.workshop.dto.CourseDTO.CourseResponses;
+import com.workshop.dto.DashBoardDTO.DashboardDTO;
+import com.workshop.dto.LocationDTO;
 import com.workshop.dto.RequestResponse;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
-import com.workshop.service.AdminService;
-import com.workshop.service.CourseService;
-import com.workshop.service.RequestService;
-import com.workshop.service.UserService;
+import com.workshop.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,18 +29,48 @@ public class AdminController {
     private final CourseService courseService;
     private final RequestService requestService;
     private final UserService userService;
+    private final LocationService locationService;
+    private final DashboardService dashboardService;
     private ResponseEntity<ApiResponse<?>> createResponse(HttpStatus httpStatus, String status, String message, Object data) {
         return ResponseEntity.status(httpStatus).body(new ApiResponse<>(status, message, data));
+    }
+    @Operation(summary = "DashBoard")
+    @GetMapping("DashBoard")
+    public ResponseEntity<ApiResponse<?>> DashBoard() {
+        try {
+            DashboardDTO dtos = dashboardService.Dashboard();
+            if (dtos==null) {
+                return createResponse(HttpStatus.ACCEPTED, "error", "DashBoard is empty", null);
+            } else {
+                return createResponse(HttpStatus.ACCEPTED, "success", "get DashBoard success", dtos);
+            }
+        } catch (Exception e) {
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
     }
     @Operation(summary = "Danh Sách Course")
     @GetMapping("course/list")
     public ResponseEntity<ApiResponse<?>> listCourse() {
         try {
-            List<CourseRespones> courses = adminService.listCourse();
+            List<CourseResponses> courses = adminService.listCourse();
             if (courses.isEmpty()) {
                 return createResponse(HttpStatus.NOT_FOUND, "error", "List Courses is empty", null);
             } else {
                 return createResponse(HttpStatus.ACCEPTED, "success", "List of courses", courses);
+            }
+        } catch (Exception e) {
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
+    }
+    @Operation(summary = "Danh Sách Location")
+    @GetMapping("location/list")
+    public ResponseEntity<ApiResponse<?>> listLocation() {
+        try {
+            List<LocationDTO> location = locationService.listLocation();
+            if (location.isEmpty()) {
+                return createResponse(HttpStatus.NOT_FOUND, "error", "List location is empty", null);
+            } else {
+                return createResponse(HttpStatus.ACCEPTED, "success", "List of location", location);
             }
         } catch (Exception e) {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
@@ -75,6 +104,26 @@ public class AdminController {
                 }
             } else {
                 return createResponse(HttpStatus.NO_CONTENT, "error", "Invalid request: Course ID is missing", null);
+            }
+        } catch (Exception e) {
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
+    }
+    @Operation(summary = "Cập Nhật Location vào Course_Location")
+    @PutMapping("course/locationUpdate")
+    public ResponseEntity<ApiResponse<?>> locationUpdate(@RequestParam int course_location_Id,@RequestParam int location_id) {
+        try {
+            Long CourseLocationId = (long) course_location_Id;
+            Long LocationId = (long) location_id;
+            if (CourseLocationId >0 && LocationId>0) {
+                boolean result = courseService.UpdateLocationToLocationCourse(CourseLocationId,LocationId);
+                if (result) {
+                    return createResponse(HttpStatus.ACCEPTED, "success", "The Location has been Add Success", null);
+                } else {
+                    return createResponse(HttpStatus.BAD_REQUEST, "error", "Failed to Add Location ", null);
+                }
+            } else {
+                return createResponse(HttpStatus.NO_CONTENT, "error", "Invalid request: CourseLocationId is missing", null);
             }
         } catch (Exception e) {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);

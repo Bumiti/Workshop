@@ -2,12 +2,11 @@ package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
 import com.workshop.dto.CourseDTO.CourseRequest;
-import com.workshop.dto.CourseDTO.CourseRespones;
+import com.workshop.dto.CourseDTO.CourseResponses;
 import com.workshop.dto.CourseDTO.CourseUpdateRequest;
 import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
-import com.workshop.model.Request;
 import com.workshop.service.CourseService;
 import com.workshop.service.RequestService;
 import com.workshop.service.UserService;
@@ -134,7 +133,7 @@ public class TeacherController {
     @GetMapping("course/list")
     public ResponseEntity<ApiResponse<?>> ListCourseByTeacher() {
         try {
-            List<CourseRespones> ListCourse = courseService.listCourseTeacher();
+            List<CourseResponses> ListCourse = courseService.listCourseTeacher();
             System.out.print(ListCourse);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse<>("success", "List of ListCourse", ListCourse));
@@ -147,7 +146,7 @@ public class TeacherController {
     @GetMapping("course/list/{id}")
     public ResponseEntity<ApiResponse<?>> listCourseByTeacherId(@RequestParam Long courseId) {
         try {
-            List<CourseRespones> listCourse = courseService.listCourseTeacherById(courseId);
+            List<CourseResponses> listCourse = courseService.listCourseTeacherById(courseId);
             System.out.print(listCourse);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse<>("success", "List of Courses", listCourse));

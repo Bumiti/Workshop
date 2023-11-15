@@ -1,6 +1,6 @@
 package com.workshop.seeding;
 
-import com.workshop.dto.useDTO.UserRegisterRequest;
+
 import com.workshop.model.*;
 import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.*;
@@ -145,42 +145,42 @@ public class SeedDatabase {
         }
     }
     private void addLocation() {
-        locationService.AddLocation(new Location("Adora Plaza", "Quận 1", "Trung Tâm 1", null, null,null));
-        locationService.AddLocation(new Location("Diamond Center", "Quận 1", "Trung Tâm 2", null, null,null));
-        locationService.AddLocation(new Location("Vin-com Center", "Quận 1", "Trung Tâm 3",  null, null,null));
-        locationService.AddLocation(new Location("BlackPear Plaza", "Quận 2", "Trung Tâm 1",  null, null,null));
-        locationService.AddLocation(new Location("Mega Mall", "Quận 2", "Trung Tâm 2",  null, null,null));
-        locationService.AddLocation(new Location("Riverside Shopping", "Quận 2", "Trung Tâm 3", null, null,null));
-        locationService.AddLocation(new Location("VinCom Plaza", "Quận 3", "Trung Tâm 1",  null, null,null));
-        locationService.AddLocation(new Location("Crescent Mall", "Quận 3", "Trung Tâm 2",  null, null,null));
-        locationService.AddLocation(new Location("Takayoshi", "Quận 3", "Trung Tâm 3",  null, null,null));
-        locationService.AddLocation(new Location("Now Zone", "Quận 4", "Trung Tâm 1",  null, null,null));
-        locationService.AddLocation(new Location("Pearl Plaza", "Quận 4", "Trung Tâm 2",  null, null,null));
-        locationService.AddLocation(new Location("Saigon Paragon Mall", "Quận 4", "Trung Tâm 3",  null, null,null));
-        locationService.AddLocation(new Location("Lotte Mart", "Quận 5", "Trung Tâm 1",  null, null,null));
-        locationService.AddLocation(new Location("Pandora City", "Quận 5", "Trung Tâm 2",  null, null,null));
-        locationService.AddLocation(new Location("An Dong Plaza", "Quận 5", "Trung Tâm 3", null, null,null));
-        locationService.AddLocation(new Location("Now Mega Mall", "Quận 6", "Trung Tâm 1",  null, null,null));
-        locationService.AddLocation(new Location("Parks CT Plaza", "Quận 6", "Trung Tâm 2",  null, null,null));
-        locationService.AddLocation(new Location("CitiMart Shopping", "Quận 6", "Trung Tâm 3",  null, null,null));
-        locationService.AddLocation(new Location("SC VivCity", "Quận 7", "Trung Tâm 1",  null, null,null));
-        locationService.AddLocation(new Location("Crescent Mall 2", "Quận 7", "Trung Tâm 2",  null, null,null));
-        locationService.AddLocation(new Location("Lotte Mart 2", "Quận 7", "Trung Tâm 3",  null, null,null));
-        locationService.AddLocation(new Location("AEON Mall Tan Phu Celadon", "Quận 8", "Trung Tâm 1",  null, null,null));
-        locationService.AddLocation(new Location("The Garden Mall", "Quận 8", "Trung Tâm 2",  null, null,null));
-        locationService.AddLocation(new Location("Dragon Mall", "Quận 8", "Trung Tâm 3",  null, null,null));
-        locationService.AddLocation(new Location("Vin-com Mega Mall", "Quận 9", "Trung Tâm 1",  null, null,null));
-        locationService.AddLocation(new Location("Crescent Mall 3", "Quận 9", "Trung Tâm 2",  null, null,null));
-        locationService.AddLocation(new Location("Takayoshi 2", "Quận 9", "Trung Tâm 3",  null, null,null));
-        locationService.AddLocation(new Location("Now Zone 2", "Quận 10", "Trung Tâm 1",  null, null,null));
-        locationService.AddLocation(new Location("Parks Shopping", "Quận 10", "Trung Tâm 2",  null, null,null));
-        locationService.AddLocation(new Location("Central Square", "Quận 10", "Trung Tâm 3",  null, null,null));
-        locationService.AddLocation(new Location("Lotte Mart 3", "Quận 11", "Trung Tâm 1",  null, null,null));
-        locationService.AddLocation(new Location("AEON Mall 2", "Quận 11", "Trung Tâm 2",  null, null,null));
-        locationService.AddLocation(new Location("Mega Plaza", "Quận 11", "Trung Tâm 3",  null, null,null));
-        locationService.AddLocation(new Location("Vin-com Mega Mall 2", "Quận 12", "Trung Tâm 1", null, null,null));
-        locationService.AddLocation(new Location("CitiMart 2", "Quận 12", "Trung Tâm 2",  null, null,null));
-        locationService.AddLocation(new Location("Super Plaza", "Quận 12", "Trung Tâm 3",  null, null,null));
+        locationService.AddLocation(new Location("Adora Plaza", "Quận 1", "Trung Tâm 1","pending",null,null));
+        locationService.AddLocation(new Location("Diamond Center", "Quận 1", "Trung Tâm 2","available", null,null));
+        locationService.AddLocation(new Location("Vin-com Center", "Quận 1", "Trung Tâm 3","pending",  null,null));
+        locationService.AddLocation(new Location("BlackPear Plaza", "Quận 2", "Trung Tâm 1","available",  null,null));
+        locationService.AddLocation(new Location("Mega Mall", "Quận 2", "Trung Tâm 2","pending",  null, null));
+        locationService.AddLocation(new Location("Riverside Shopping", "Quận 2", "Trung Tâm 3","available", null,null));
+        locationService.AddLocation(new Location("VinCom Plaza", "Quận 3", "Trung Tâm 1","available",  null,null));
+        locationService.AddLocation(new Location("Crescent Mall", "Quận 3", "Trung Tâm 2","available",  null,null));
+        locationService.AddLocation(new Location("Takayoshi", "Quận 3", "Trung Tâm 3","available",  null,null));
+        locationService.AddLocation(new Location("Now Zone", "Quận 4", "Trung Tâm 1","pending",  null,null));
+        locationService.AddLocation(new Location("Pearl Plaza", "Quận 4", "Trung Tâm 2","available",  null,null));
+        locationService.AddLocation(new Location("Saigon Paragon Mall", "Quận 4", "Trung Tâm 3","available", null,null));
+        locationService.AddLocation(new Location("Lotte Mart", "Quận 5", "Trung Tâm 1","pending",  null,null));
+        locationService.AddLocation(new Location("Pandora City", "Quận 5", "Trung Tâm 2","available", null,null));
+        locationService.AddLocation(new Location("An Dong Plaza", "Quận 5", "Trung Tâm 3","disable", null,null));
+        locationService.AddLocation(new Location("Now Mega Mall", "Quận 6", "Trung Tâm 1","disable",  null,null));
+        locationService.AddLocation(new Location("Parks CT Plaza", "Quận 6", "Trung Tâm 2","disable",  null,null));
+        locationService.AddLocation(new Location("CitiMart Shopping", "Quận 6", "Trung Tâm 3","disable",  null,null));
+        locationService.AddLocation(new Location("SC VivCity", "Quận 7", "Trung Tâm 1","available",  null, null));
+        locationService.AddLocation(new Location("Crescent Mall 2", "Quận 7", "Trung Tâm 2","available",  null, null));
+        locationService.AddLocation(new Location("Lotte Mart 2", "Quận 7", "Trung Tâm 3","available",  null, null));
+        locationService.AddLocation(new Location("AEON Mall Tan Phu Celadon", "Quận 8","pending", "Trung Tâm 1",  null,null));
+        locationService.AddLocation(new Location("The Garden Mall", "Quận 8", "Trung Tâm 2","disable",  null, null));
+        locationService.AddLocation(new Location("Dragon Mall", "Quận 8", "Trung Tâm 3","disable",  null, null));
+        locationService.AddLocation(new Location("Vin-com Mega Mall", "Quận 9", "Trung Tâm 1","available",  null, null));
+        locationService.AddLocation(new Location("Crescent Mall 3", "Quận 9", "Trung Tâm 2","available",  null, null));
+        locationService.AddLocation(new Location("Takayoshi 2", "Quận 9", "Trung Tâm 3","available",  null, null));
+        locationService.AddLocation(new Location("Now Zone 2", "Quận 10", "Trung Tâm 1","available",  null, null));
+        locationService.AddLocation(new Location("Parks Shopping", "Quận 10", "Trung Tâm 2","available",  null, null));
+        locationService.AddLocation(new Location("Central Square", "Quận 10", "Trung Tâm 3","available",  null, null));
+        locationService.AddLocation(new Location("Lotte Mart 3", "Quận 11", "Trung Tâm 1","available",  null, null));
+        locationService.AddLocation(new Location("AEON Mall 2", "Quận 11", "Trung Tâm 2","available",  null, null));
+        locationService.AddLocation(new Location("Mega Plaza", "Quận 11", "Trung Tâm 3","available",  null, null));
+        locationService.AddLocation(new Location("Vin-com Mega Mall 2", "Quận 12", "Trung Tâm 1","available", null, null));
+        locationService.AddLocation(new Location("CitiMart 2", "Quận 12", "Trung Tâm 2","available",  null, null));
+        locationService.AddLocation(new Location("Super Plaza", "Quận 12", "Trung Tâm 3","available",  null, null));
     }
     private void addCourse() {
         String[] courseNames = {

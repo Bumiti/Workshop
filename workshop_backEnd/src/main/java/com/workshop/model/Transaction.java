@@ -2,7 +2,6 @@ package com.workshop.model;
 
 import com.workshop.model.courseModel.CourseEnrollment;
 import com.workshop.model.userModel.User;
-import com.workshop.model.workshopModel.WorkshopEnrollment;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -46,10 +45,6 @@ public class Transaction extends BaseModel{
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
 
-
-    @ManyToOne
-    @JoinColumn(name = "workshop_enrollmen_id")
-    private WorkshopEnrollment workshopEnrollment;
     public enum Status{
         PENDING,
         COMPLETED,

@@ -5,7 +5,6 @@ import com.workshop.model.*;
 
 import com.workshop.model.courseModel.Course;
 import com.workshop.model.courseModel.CourseEnrollment;
-import com.workshop.model.workshopModel.WorkshopEnrollment;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -50,9 +49,7 @@ public class User extends BaseModel implements UserDetails  {
     private List<UserBanking> userBanks;
     @OneToMany(mappedBy = "user")
     private List<UserAddresses> userAddresses;
-    @OneToMany(mappedBy = "enrolledStudent")
-    private List<WorkshopEnrollment> enrolledWorkshops;
-    // Quan hệ một nhiều với danh sách ưu đãi
+
     @OneToMany(mappedBy = "user")
     private List<Discount> discounts;
 

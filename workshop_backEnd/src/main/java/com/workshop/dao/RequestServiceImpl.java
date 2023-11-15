@@ -41,10 +41,6 @@ public class RequestServiceImpl implements RequestService {
                 requestResponse.setCourseName(request.getCourses().getName());
                 requestResponse.setCourseId(request.getCourses().getId());
             }
-            if(request.getWorkshop() !=null){
-                requestResponse.setWorkshopId(request.getWorkshop().getId());
-                requestResponse.setWorkshopName(request.getWorkshop().getName());
-            }
             if(request.getLocation() !=null){
                 requestResponse.setLocationId(request.getLocation().getId());
                 requestResponse.setLocationName(request.getLocation().getName());
@@ -77,13 +73,6 @@ public class RequestServiceImpl implements RequestService {
                 case "BUY_COURSE":
                     result = (handleBuyCourseRequest(user, requestDTO, request, transaction, paymentMethod,course));
                     break;
-                case "BUY_WORKSHOP":
-                    break;
-
-                case "REGISTER_COURSE_ONLINE":
-                    break;
-                case "REGISTER_COURSE_OFFLINE":
-                    break;
                 default:
                     break;
             }
@@ -93,6 +82,12 @@ public class RequestServiceImpl implements RequestService {
             return null;
         }
     }
+
+    @Override
+    public boolean changeStatusRequest(Long request_id) {
+        return false;
+    }
+
     private String handleDepositRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod) {
         if(requestDTO.getPaymentStatus().equals("success") && requestDTO.getAmount()>0){
             request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));

@@ -24,13 +24,10 @@ import java.util.List;
 public class CourseLocation extends BaseModel {
     private String Area;
     private Date schedule_Date;
-    // Quan hệ một nhiều với khóa học
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     private Course courses;
-    // Quan hệ một nhiều với địa điểm
-
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = true)
     private Location locations;

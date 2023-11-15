@@ -1,10 +1,9 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
-import com.workshop.dto.CourseDTO.CourseRespones;
+import com.workshop.dto.CourseDTO.CourseResponses;
 import com.workshop.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +30,7 @@ public class HomePageController {
     @GetMapping("course/list")
     public ResponseEntity<ApiResponse<?>> listCourse() {
         try {
-            List<CourseRespones> courses = courseService.listCourseEnable();
+            List<CourseResponses> courses = courseService.listCourseEnable();
             if (courses.isEmpty()) {
                 return createResponse(HttpStatus.NOT_FOUND, "error", "List Courses is empty", null);
             } else {
@@ -46,9 +45,9 @@ public class HomePageController {
     public ResponseEntity<ApiResponse<?>> CourseById(@RequestParam int id) {
         Long longId = (long) id;
         try {
-            CourseRespones courses = courseService.courseById(longId);
+            CourseResponses courses = courseService.courseById(longId);
             if (courses ==null) {
-                return createResponse(HttpStatus.NOT_FOUND, "error", " Courses is Not Found Or Deactive", null);
+                return createResponse(HttpStatus.NOT_FOUND, "error", " Courses is Not Found Or Deactivate", null);
             } else {
                 return createResponse(HttpStatus.ACCEPTED, "success", "courses", courses);
             }

@@ -8,5 +8,6 @@ import java.util.List;
 @Repository
 public interface RequestService {
     List<RequestResponse> ListRequest();
-    public String createRequestOptions(RequestDTO requestDTO);
+    String createRequestOptions(RequestDTO requestDTO);
+    boolean changeStatusRequest(Long request_id);
 }

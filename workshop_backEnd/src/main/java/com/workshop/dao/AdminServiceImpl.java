@@ -1,8 +1,7 @@
 package com.workshop.dao;
 
 import com.workshop.config.MapperGeneric;
-import com.workshop.dto.*;
-import com.workshop.dto.CourseDTO.CourseRespones;
+import com.workshop.dto.CourseDTO.CourseResponses;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.model.Discount;
 import com.workshop.model.Location;
@@ -11,7 +10,6 @@ import com.workshop.model.userModel.Roles;
 import com.workshop.model.userModel.User;
 import com.workshop.model.userModel.UserAddresses;
 import com.workshop.model.userModel.UserBanking;
-import com.workshop.repositories.*;
 import com.workshop.repositories.Course.CourseRepository;
 import com.workshop.repositories.User.UserAddressRepository;
 import com.workshop.repositories.User.UserRepository;
@@ -20,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +29,7 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private  final UserAddressRepository userAddressRepository;
     private final CourseRepository courseRepository;
-    private final WorkShopRepository workShopRepository;
+
     @Override
     public boolean chanceIsEnableWithRoleAndId(Long Id) {
         try {
@@ -161,40 +158,40 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<CourseRespones> listCourse() {
+    public List<CourseResponses> listCourse() {
         List<Course> coursesEntityList = courseRepository.findAll();
-        List<CourseRespones> coursesResponesList = new ArrayList<>();
-        MapperGeneric<Location, CourseRespones.CourseLocation.locationResponse> locationMapper = new MapperGeneric<>();
-        MapperGeneric<Course, CourseRespones> CourseMapper = new MapperGeneric<>();
-        MapperGeneric<CourseMediaInfo, CourseRespones.CourseMediaInfo> CourseMediaMapper = new MapperGeneric<>();
-        MapperGeneric<CourseLocation,CourseRespones.CourseLocation>CourseLocationMapper = new MapperGeneric<>();
-        MapperGeneric<Discount, CourseRespones.DiscountDTO> DiscountDToMapper = new MapperGeneric<>();
+        List<CourseResponses> coursesResponesList = new ArrayList<>();
+        MapperGeneric<Location, CourseResponses.CourseLocation.locationResponse> locationMapper = new MapperGeneric<>();
+        MapperGeneric<Course, CourseResponses> CourseMapper = new MapperGeneric<>();
+        MapperGeneric<CourseMediaInfo, CourseResponses.CourseMediaInfo> CourseMediaMapper = new MapperGeneric<>();
+        MapperGeneric<CourseLocation, CourseResponses.CourseLocation>CourseLocationMapper = new MapperGeneric<>();
+        MapperGeneric<Discount, CourseResponses.DiscountDTO> DiscountDToMapper = new MapperGeneric<>();
 
         for (Course course : coursesEntityList)
         {
-            List<CourseRespones.StudentEnrollment> studentEnrollments = new ArrayList<>();
-            List<CourseRespones.CourseMediaInfo> courseInfoMediaList = new ArrayList<>();
-            List<CourseRespones.CourseLocation> courseLocationsList = new ArrayList<>();
-            List<CourseRespones.DiscountDTO> DiscountDTOList = new ArrayList<>();
-            CourseRespones courseResponse = CourseMapper.ModelmapToDTO(course, CourseRespones.class);
+            List<CourseResponses.StudentEnrollment> studentEnrollments = new ArrayList<>();
+            List<CourseResponses.CourseMediaInfo> courseInfoMediaList = new ArrayList<>();
+            List<CourseResponses.CourseLocation> courseLocationsList = new ArrayList<>();
+            List<CourseResponses.DiscountDTO> DiscountDTOList = new ArrayList<>();
+            CourseResponses courseResponse = CourseMapper.ModelmapToDTO(course, CourseResponses.class);
             courseResponse.setId(course.getId());
             courseResponse.setTeacher(course.getTeacher().getFull_name());
             for (CourseEnrollment enrollment : course.getEnrolledStudents())
             {
-                CourseRespones.StudentEnrollment studentEnrollment = new CourseRespones.StudentEnrollment();
+                CourseResponses.StudentEnrollment studentEnrollment = new CourseResponses.StudentEnrollment();
                 studentEnrollment.setId(enrollment.getEnrolledStudent().getId());
                 studentEnrollment.setName(enrollment.getEnrolledStudent().getUser_name());
                 studentEnrollments.add(studentEnrollment);
             }
-            List<CourseRespones.DiscountDTO> tempDiscountList = new ArrayList<>();
+            List<CourseResponses.DiscountDTO> tempDiscountList = new ArrayList<>();
             for(CourseDiscount courseDiscount : course.getCourseDiscounts()){
                 Discount discount = courseDiscount.getDiscount();
-                CourseRespones.DiscountDTO discountDTO = DiscountDToMapper.ModelmapToDTO(discount,CourseRespones.DiscountDTO.class);
+                CourseResponses.DiscountDTO discountDTO = DiscountDToMapper.ModelmapToDTO(discount, CourseResponses.DiscountDTO.class);
                 discountDTO.setQuantity(courseDiscount.getQuantity());
                 discountDTO.setRedemptionDate(courseDiscount.getRedemptionDate());
                 discountDTO.setId(discount.getId());
                 boolean isAlreadyExists = false;
-                for (CourseRespones.DiscountDTO existingDiscountDTO : tempDiscountList) {
+                for (CourseResponses.DiscountDTO existingDiscountDTO : tempDiscountList) {
                     if (existingDiscountDTO.getId() == discountDTO.getId()) {
                         isAlreadyExists = true;
                         break;
@@ -208,18 +205,18 @@ public class AdminServiceImpl implements AdminService {
             for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos())
             {
                 if(courseMediaInfo.getCourse().equals(course)){
-                    CourseRespones.CourseMediaInfo courseInfoMedia = CourseMediaMapper.ModelmapToDTO(courseMediaInfo,CourseRespones.CourseMediaInfo.class);
+                    CourseResponses.CourseMediaInfo courseInfoMedia = CourseMediaMapper.ModelmapToDTO(courseMediaInfo, CourseResponses.CourseMediaInfo.class);
                     courseInfoMedia.setId(courseMediaInfo.getId());
                     courseInfoMediaList.add(courseInfoMedia);
                 }
             }
             for (CourseLocation courseLocation : course.getCourseLocation())
             {
-                CourseRespones.CourseLocation courseLocal = CourseLocationMapper.ModelmapToDTO(courseLocation,CourseRespones.CourseLocation.class);
+                CourseResponses.CourseLocation courseLocal = CourseLocationMapper.ModelmapToDTO(courseLocation, CourseResponses.CourseLocation.class);
                 courseLocal.setId(courseLocation.getId());
                 if(courseLocation.getLocations()!=null){
-                    CourseRespones.CourseLocation.locationResponse location =
-                            locationMapper.ModelmapToDTO(courseLocation.getLocations(), CourseRespones.CourseLocation.locationResponse.class);
+                    CourseResponses.CourseLocation.locationResponse location =
+                            locationMapper.ModelmapToDTO(courseLocation.getLocations(), CourseResponses.CourseLocation.locationResponse.class);
                     courseLocal.setLocationResponse(location);
                 }
                 courseLocationsList.add(courseLocal);
@@ -231,11 +228,5 @@ public class AdminServiceImpl implements AdminService {
             coursesResponesList.add(courseResponse);
         }
         return coursesResponesList;
-    }
-
-    @Override
-    public List<WorkShopRespone> listWorkshop() {
-        List<WorkShopRespone>workshopResponesList = new ArrayList<>();
-        return workshopResponesList;
     }
 }

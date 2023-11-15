@@ -1,5 +1,6 @@
 package com.workshop.repositories.Course;
 
+import com.workshop.dto.CourseDTO.CourseResponses;
 import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,8 @@ public interface CourseRepository extends JpaRepository<Course,Long> {
 
     Course findCourseById(Long id);
 
+    @Query("SELECT c FROM Course c join c.CourseLocation cl where cl.id= :course_location_Id")
+    Course findCourseByCourseLocationId(@Param("course_location_Id") long course_location_Id);
     @Modifying
     @Query("UPDATE Course u SET u.isPublic = ?2 WHERE u.id = ?1")
     void updateById(long id,boolean isPublic);

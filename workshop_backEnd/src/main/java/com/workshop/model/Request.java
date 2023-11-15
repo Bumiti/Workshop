@@ -2,7 +2,6 @@ package com.workshop.model;
 
 import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.User;
-import com.workshop.model.workshopModel.Workshop;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -30,9 +29,6 @@ public class Request extends BaseModel{
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course courses;
-    @ManyToOne
-    @JoinColumn(name = "workshop_id")
-    private Workshop workshop;
     @ManyToOne
     @JoinColumn(name = "location_id")
     private Location location;

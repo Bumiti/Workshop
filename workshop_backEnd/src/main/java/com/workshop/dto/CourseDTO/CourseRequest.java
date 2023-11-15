@@ -6,12 +6,8 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.Accessors;
-
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Builder
@@ -63,12 +59,8 @@ public class CourseRequest {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class DiscountDTO {
-        //số lượng
         private int quantity;
-        //ngày hết hạn
         private Date redemptionDate;
-
-        //value của discount này
         private int valueDiscount ;
         private String name;
         private String description;
