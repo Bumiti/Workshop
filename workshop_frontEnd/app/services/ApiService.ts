@@ -40,6 +40,17 @@ class ApiService {
     }
     //-------------------------------------------------User API-------------------------------------------------//
     //-------------------------------------------------Admin API-------------------------------------------------//
+    async getUserbyIdAdmin(id: any){
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get(`/admin/user/findById?id=${id}`);
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
     async listCoursesFromApi() {
         try {
             const response = await this.customAxios.get('/seller/course/list');
@@ -122,10 +133,10 @@ class ApiService {
             throw error;
         }
     }
-    async changeStatusAccount(id: any) {
-        try {
+    async changeStatusAccount(id: number) {
+        try {   
             if (this.session?.user.accessToken) {
-                const response = await this.customAxios.put(`/admin/user/changeStatus?id=${id}`);
+                const response = await this.customAxios.post(`/admin/user/changeStatus?id=${id}`);
                 return response.data;
             }
             return null;
@@ -144,7 +155,17 @@ class ApiService {
             throw error;
         }
     }
-    //-------------------------------------------------Admin API-------------------------------------------------//
+    async EditAdmin(id: any) {
+        try {   
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.put(`/admin/edit?id=${id}`);
+                return response.data;
+            }
+            return null;
+        } catch (error) {
+            throw error;
+        }
+    }
     //-------------------------------------------------Web API-------------------------------------------------//
     async listCoursePublic() {
         try {
@@ -171,6 +192,7 @@ class ApiService {
         }
     }
     //-------------------------------------------------Web API-------------------------------------------------//
+    
 }
 
 export default ApiService;

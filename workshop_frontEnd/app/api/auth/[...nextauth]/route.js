@@ -26,7 +26,7 @@ const handler = NextAuth({
                 }),
               });
               const user = await res.json()
-              
+              console.log("user crede",user);
               if (user)
               {
                 user.data.user.sub = 'credentials',
@@ -74,13 +74,14 @@ const handler = NextAuth({
                     });
                     if (response.ok) {
                         const data = await response.json();
+                       
                         session.user.roles = data.data.user.roles
                         session.user.accessToken = data.data.user.accessToken
                         session.user.refreshToken = data.data.user.refreshToken
                         session.user.gender == data.data.user.gender
                         session.user.phoneNumber == data.data.user.phoneNumber
                         session.user.userAddresses == data.data.user.userAddresses
-                        session.user.image = data.data.user.image
+                        session.user.image = data.data.user.image_url
                     }
                 };
                 await fetchData(); 

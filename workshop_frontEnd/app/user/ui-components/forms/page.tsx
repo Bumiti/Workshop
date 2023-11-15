@@ -44,7 +44,7 @@ const EditProfile = () => {
   useEffect(() => {
     // console.log(session?.user.accessToken)
     if (session) {
-      fetch('http://localhost:8089/user/detail', {
+      fetch('http://192.168.1.130:8089/user/detail', {
         headers: {
           Authorization: `Bearer ${session?.user.accessToken}`,
         },
@@ -151,7 +151,7 @@ const EditProfile = () => {
     try {
       if (session) {
 
-        const response = await fetch('http://localhost:8089/auth/user/edit', {
+        const response = await fetch('http:///192.168.1.130:8089/auth/user/edit', {
           method: 'PUT',
           headers: {
             //  Authorization: `Bearer ${authToken}`,

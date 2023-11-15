@@ -15,7 +15,7 @@ type Values = {
     email: string;
     password: string;
 };
-const currentUrl = typeof window !== null ? window.location.search : "";
+const currentUrl = typeof window !== 'undefined' ? window.location.search : "";
 function getQueryParamValue(queryString: string, paramName: string) {
     const urlParams = new URLSearchParams(queryString);
     return urlParams.get(paramName);

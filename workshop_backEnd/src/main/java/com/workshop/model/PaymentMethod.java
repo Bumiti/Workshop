@@ -21,8 +21,6 @@ import java.util.List;
 public class PaymentMethod extends BaseModel{
     private String name;
     private String description;
-
-    // Quan hệ một nhiều với thanh toán
     @OneToMany(mappedBy = "paymentMethod")
     private List<Transaction> transactions;
 
