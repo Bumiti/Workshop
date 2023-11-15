@@ -21,7 +21,6 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Component
 @RequiredArgsConstructor
-
 public class JwtSecurityFilter extends OncePerRequestFilter
 {
     private static final String Secret_key = "Service_QuanKZ_0401_1995";

@@ -34,7 +34,6 @@ public class SeedDatabase {
     private final CourseEnrollmentRepository courseEnrollmentRepository;
     private final DiscountRepository discountRepository;
     private final CourseDiscountRepository courseDiscountRepository;
-    private final RequestRepository requestRepository;
     private static final String SEED_STATUS_FILE_PATH = "seed_status.txt";
 
     private boolean isSeedCompleted() {
@@ -46,17 +45,50 @@ public class SeedDatabase {
             writer.write("Seed has run and completed");
             System.out.println("Seed status file created successfully");
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+            System.out.println(e.getMessage());        }
     }
 
+    @PostConstruct
+    public void SeedData() {
+        if (isSeedCompleted()) {
+            System.out.println("Seed has run before. Do not do it again");
+        } else {
+            userService.SaveRoles(new Roles(null, "USER"));
+            userService.SaveRoles(new Roles(null, "SELLER"));
+            userService.SaveRoles(new Roles(null, "ADMIN"));
+            addServiceManager();
+            addRandomTeachers();
+            addLocation();
+            addCourse();
+            createSeedStatusFile();
+        }
+
+    }
+    private void addServiceManager(){
+        User Manager = new User();
+        User Seller = new User();
+        User User = new User();
+        List<Roles> rolesList = roleRepository.findAll();
+        Roles rolesUser = rolesList.get(0);
+        Roles rolesSeller= rolesList.get(1);
+        Roles rolesAdmin = rolesList.get(2);
+        Set<Roles> rolesSetUser = new HashSet<>();
+        Set<Roles> rolesSetSeller = new HashSet<>();
+        Set<Roles> rolesSetAdmin = new HashSet<>();
+        rolesSetUser.add(rolesUser);
+        rolesSetSeller.add(rolesSeller);
+        rolesSetAdmin.add(rolesAdmin);
+        Manager.setFull_name("Nguyễn Hồng Quân").setBalance(5000.0).setUser_name("HongQuan").setEmail("admin64@gmail.com").setPassword("admin64@gmail.com").setPhoneNumber("0383334196").setGender("male").setRoles(rolesSetAdmin).setEnable(true);
+        Seller.setFull_name("Phan Huỳnh Hồng Hân").setBalance(5000.0).setUser_name("Hồng Hân").setEmail("han2000@gmail.com").setPassword("han2000@gmail.com").setPhoneNumber("097865848").setGender("female").setRoles(rolesSetSeller).setEnable(true);
+        User.setFull_name("Lê Thanh Hiếu").setBalance(5000.0).setUser_name("Thanh Hiếu").setEmail("lethanhhieu@gmail.com").setPassword("lethanhhieu@gmail.com").setPhoneNumber("9833241764").setGender("male").setRoles(rolesSetUser).setEnable(true);
+        userRepository.save( Manager);
+        userRepository.save( Seller);
+        userRepository.save( User);
+    }
     private void addRandomTeachers() {
         String[] names = {"John", "Alice", "Bob", "Emily", "Michael", "Sarah", "David", "Olivia", "Daniel", "Sophia", "William", "Emma", "James", "Ava", "Matthew", "Chloe", "Jacob", "Mia", "Ethan", "Lily"};
         String[] genders = {"male", "female"};
         String[] bankName = {"ACB", "TechComBank", "DongA", "SCB", "AriBank", "VietComBank", "BIDV", "VieTinBank", "Sacombank", "MBBank", "Eximbank", "VPBank", "TPBank", "HDBank", "Agribank", "SeABank", "OceanBank", "MSB", "SHB", "NamABank", "VIB", "PVcomBank", "GPBank", "BacABank", "KienLongBank", "NCB", "ABBANK", "PGBank", "VietABank", "SCOM", "TPB", "LienvietPostBank", "VRB", "CBBank", "OCB", "LienVietBank", "ABBank", "BaoVietBank", "BVB", "VietBank", "UOB Vietnam", "Keb Hana Bank", "Shinhan Bank Vietnam", "HSBC Vietnam", "ANZ Bank Vietnam"};
-
-
-
         List<Roles> roles = roleRepository.findAll();
         Random random = new Random();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -107,7 +139,6 @@ public class SeedDatabase {
             }
         }
     }
-
     private void addLocation() {
         locationService.AddLocation(new Location("Adora Plaza", "Quận 1", "Trung Tâm 1", null, null,null));
         locationService.AddLocation(new Location("Diamond Center", "Quận 1", "Trung Tâm 2", null, null,null));
@@ -146,11 +177,24 @@ public class SeedDatabase {
         locationService.AddLocation(new Location("CitiMart 2", "Quận 12", "Trung Tâm 2",  null, null,null));
         locationService.AddLocation(new Location("Super Plaza", "Quận 12", "Trung Tâm 3",  null, null,null));
     }
-
     private void addCourse() {
         String[] courseNames = {
                 "C#", "C++", "Java", "JavaScript", "ASP.NET", "Sound Effect",
                 "Python", "Ruby", "PHP", "Swift", "Kotlin", "Go", "Rust", "Scala", "TypeScript", "SQL", "HTML/CSS", "R", "Perl", "Haskell"
+        };
+        String [] listVideo ={
+                "https://youtu.be/R6plN3FvzFY",
+                "https://youtu.be/zwsPND378OQ",
+                "https://youtu.be/ZotVkQDC6mU",
+                "https://youtu.be/LYnrFSGLCl8",
+                "https://youtu.be/JG0pdfdKjgQ",
+                "https://youtu.be/AzmdwZ6e_aM",
+                "https://youtu.be/UYpIh5pIkSA",
+                "https://youtu.be/NsSsJTg29oE",
+                "https://youtu.be/4J6d8cr0X48",
+                "https://youtu.be/AgZ0PX28bnA",
+                "https://youtu.be/x9fnxVTkpP4",
+                "https://youtu.be/pcUiTt6eBk0",
         };
         String[] courseDescriptions = {"DESCRIPTION FOR", "HOW CAN LEARN", "HOT COURSE", "BEGIN FOR DEVELOPER", "WHAT YOU CAN LEARN"};
         String[] type = {"One line", "Off Line"};
@@ -162,8 +206,6 @@ public class SeedDatabase {
         Random random = new Random();
         List<User> teachers = userRepository.findUsersByRoleName("SELLER");
         List<User> students = userRepository.findUsersByRoleName("USER");
-//        List<Location> locations = locationRepository.findAll();
-        Request.RequestType[] types = Request.RequestType.values();
         for (int i = 0; i < 20; i++) {
             int randomNumber = (int) (Math.random() * (max - min + 5) + min);
             String randomCourseName = courseNames[random.nextInt(courseNames.length)];
@@ -174,7 +216,6 @@ public class SeedDatabase {
             Timestamp courseStartDate = startDates[random.nextInt(startDates.length)];
             Timestamp courseEndDate = endDates[random.nextInt(endDates.length)];
             User randomTeacher = teachers.get(new Random().nextInt(teachers.size()));
-//            Location randomLocation = locations.get(new Random().nextInt(teachers.size()));
             String nameTeacher = randomTeacher.getUsername().toLowerCase();
             Course course = new Course();
             course.setName(randomCourseName).setStudent_count(randomNumber).setPublic(randomBoolean).setType(randomType)
@@ -184,17 +225,16 @@ public class SeedDatabase {
                     .setEndDate(courseEndDate)
                     .setTeacher(randomTeacher).setCreatedBy(nameTeacher);
             courseRepository.save(course);
-            String randomUrlMedia = "https://example.com/media" + i;
-            String randomUrlImage = "https://example.com/image" + i;
             for (int j = 0; j < 3; j++) {
+                String randomUrlMedia = listVideo[random.nextInt(listVideo.length)];
+                String randomUrlImage = "https://example.com/image" + j;
+                String randomTitle = "Video Title " + j;
                 CourseMediaInfo courseMediaInfo = new CourseMediaInfo();
-                courseMediaInfo.setUrlMedia(randomUrlMedia)
-                        .setUrlImage(randomUrlImage)
+                courseMediaInfo.setUrlMedia(randomUrlMedia).setTitle(randomTitle)
+                        .setUrlImage(randomUrlImage).setThumbnailSrc("https://drive.google.com/uc?id=1Ydevpx_dppORdtxEPW-ZGJVYyWMBy20S")
                         .setCourse(course);
                 courseMediaInfoRepository.save(courseMediaInfo);
-
                 CourseLocation courseLocation = new CourseLocation();
-//                courseLocation.setCourses(course).setLocations(randomLocation).setArea("Room " + i + " class " + (i + 1) * 5).setSchedule_Date(courseStartDate);
                 courseLocation.setCourses(course).setArea("District " + i).setSchedule_Date(courseStartDate);
                 courseLocationRepository.save(courseLocation);
                 User randomStudents;
@@ -234,36 +274,6 @@ public class SeedDatabase {
                 }
 
             }
-//            Request.RequestType randomRequestType = types[random.nextInt(types.length)];
-//            Request request = new Request();
-//            request.setCourse(course)
-//                    .setUser(randomTeacher)
-//                    .setStatus(Request.RequestStatus.PENDING)
-//                    .setType(randomRequestType);
-//            requestRepository.save(request);
-
         }
-    }
-
-    @PostConstruct
-    public void SeedData() {
-        if (isSeedCompleted()) {
-            System.out.println("Seed has run before. Do not do it again");
-        } else {
-            userService.SaveRoles(new Roles(null, "USER"));
-            userService.SaveRoles(new Roles(null, "SELLER"));
-            userService.SaveRoles(new Roles(null, "ADMIN"));
-            userService.SaveUser(new UserRegisterRequest("NguyenAdmin",5000.0, "admin64",
-                    "admin64@gmail.com", "admin64@gmail.com", "0383334196", "female", "ADMIN", true));
-            userService.SaveUser(new UserRegisterRequest("LacTuong64",5000.0, "lactuong",
-                    "student@gmail.com", "student@gmail.com", "0383334195", "male", "USER", true));
-            userService.SaveUser(new UserRegisterRequest("teacher01",5000.0, "teacher01",
-                    "teacher01@gmail.com", "teacher01@gmail.com", "0383334195", "male", "SELLER", true));
-            addRandomTeachers();
-            addLocation();
-            addCourse();
-            createSeedStatusFile();
-        }
-
     }
 }

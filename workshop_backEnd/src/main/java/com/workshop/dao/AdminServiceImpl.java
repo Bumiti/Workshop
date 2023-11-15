@@ -18,9 +18,10 @@ import com.workshop.repositories.User.UserRepository;
 import com.workshop.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -233,9 +234,58 @@ public class AdminServiceImpl implements AdminService {
         return coursesResponesList;
     }
 
+
     @Override
     public List<WorkShopRespone> listWorkshop() {
         List<WorkShopRespone>workshopResponesList = new ArrayList<>();
         return workshopResponesList;
     }
+
+    @Override
+    public User getCurrentUserDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof String Email) {
+            Optional<User>  userOption = userRepository.findByEmail(Email);
+            return userOption.orElseGet(User::new);
+        }
+        return null;
+    }
+
+    @Override
+    public UserInfoResponse userDetail() {
+        MapperGeneric<UserAddresses, UserInfoResponse.UserAddress> UserAddressMapper = new MapperGeneric<>();
+        MapperGeneric<User, UserInfoResponse> UserMapper = new MapperGeneric<>();
+        MapperGeneric<UserBanking, UserInfoResponse.UserBank> UserBankMapper = new MapperGeneric<>();
+        User user = getCurrentUserDetails();
+        Optional<User> userOption = userRepository.findByEmailWithAddresses(user.getEmail());
+        if(userOption.isPresent()){
+            User userFull = userOption.get();
+            List<UserInfoResponse.UserAddress> userAddressesList = new ArrayList<>();
+            List<String>list = new ArrayList<>();
+            for (Roles roles : userFull.getRoles()){
+                list.add(roles.getName());
+            }
+            for(UserAddresses addresses : userFull.getUserAddresses())
+            {
+                UserInfoResponse.UserAddress userAddress = UserAddressMapper.ModelmapToDTO(addresses,UserInfoResponse.UserAddress.class);
+                userAddress.setId(addresses.getId());
+                userAddressesList.add(userAddress);
+            }
+            List<UserInfoResponse.UserBank> userBankList = new ArrayList<>();
+            for(UserBanking userBanking : userFull.getUserBanks()){
+                UserInfoResponse.UserBank userBank = UserBankMapper.ModelmapToDTO(userBanking,UserInfoResponse.UserBank.class);
+                userBank.setId(userBanking.getId());
+                userBankList.add(userBank);
+            }
+            UserInfoResponse userInfoResponse = UserMapper.ModelmapToDTO(userFull,UserInfoResponse.class);
+            userInfoResponse.setId(userFull.getId());
+            userInfoResponse.setRoles(list);
+            userInfoResponse.setUserBanks(userBankList);
+            userInfoResponse.setUserAddresses(userAddressesList);
+            return userInfoResponse;
+        }else{
+            return new UserInfoResponse();
+        }
+    }
+
 }

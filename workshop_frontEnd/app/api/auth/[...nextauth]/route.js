@@ -17,7 +17,7 @@ const handler = NextAuth({
             },
             async authorize(credentials) 
             {
-                const res = await fetch("http://192.168.1.130:8089/auth/loginWeb", {
+                const res = await fetch("http://localhost:8089/auth/loginWeb", {
                 method: 'POST',
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -65,7 +65,7 @@ const handler = NextAuth({
             if(session.user.id !=='credentials')
             {
                 const fetchData = async (e) => {
-                    const response = await fetch('http://192.168.1.130:8089/auth/loginOAuthentication', {
+                    const response = await fetch('http://localhost:8089/auth/loginOAuthentication', {
                         method: 'POST',
                         headers: new Headers({
                             'Content-Type': 'application/json',

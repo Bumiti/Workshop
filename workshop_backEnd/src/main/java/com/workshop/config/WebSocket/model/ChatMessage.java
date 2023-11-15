@@ -4,15 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
+import java.awt.*;
 import java.sql.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @ToString
+@Accessors(chain = true)
 public class ChatMessage {
-    private String nickname;
+    private MessageType type;
     private String content;
-    private Date timestamp;
+    private String sender;
+
+    public enum MessageType {
+        CHAT,
+        JOIN,
+        LEAVE
+    }
 }

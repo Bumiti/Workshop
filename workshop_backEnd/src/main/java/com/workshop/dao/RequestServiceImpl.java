@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,9 +37,9 @@ public class RequestServiceImpl implements RequestService {
         for(Request request : requestList)
         {
             RequestResponse requestResponse = new RequestResponse();
-            if(request.getCourse()!=null){
-                requestResponse.setCourseName(request.getCourse().getName());
-                requestResponse.setCourseId(request.getCourse().getId());
+            if(request.getCourses()!=null){
+                requestResponse.setCourseName(request.getCourses().getName());
+                requestResponse.setCourseId(request.getCourses().getId());
             }
             if(request.getWorkshop() !=null){
                 requestResponse.setWorkshopId(request.getWorkshop().getId());
@@ -51,7 +52,8 @@ public class RequestServiceImpl implements RequestService {
             requestResponse.setId(request.getId())
                     .setStatus(String.valueOf(request.getStatus()))
                     .setType(String.valueOf(request.getType()))
-                    .setUserId(request.getUser().getId()).setUserName(request.getUser().getUser_name());
+                    .setUserId(request.getUser().getId()).setUserName(request.getUser().getUser_name())
+                    .setRegistrationDateTime(request.getCreatedDate().toLocalDateTime());
             requestResponseList.add(requestResponse);
         }
        return requestResponseList;
@@ -104,7 +106,7 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.COMPLETED)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "APPROVED";
         }else if(requestDTO.getPaymentStatus().equals("pending") && requestDTO.getAmount()>0){
@@ -116,7 +118,7 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.PENDING)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "PENDING";
         }else{
@@ -128,7 +130,7 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.FAILED)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "REJECTED";
         }
@@ -147,7 +149,7 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.COMPLETED)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "APPROVED";
         }else if(requestDTO.getAmount() < user.getBalance() && (user.getBalance() - requestDTO.getAmount()) <10){
@@ -159,7 +161,7 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.CANCELED)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "REJECTED";
         }else{
@@ -171,83 +173,11 @@ public class RequestServiceImpl implements RequestService {
                     .setAmount(requestDTO.getAmount())
                     .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
                     .setStatus(Transaction.Status.FAILED)
-                    .setTransactionDate(requestDTO.getRegistrationDateTime());
+                    .setTransactionDate(LocalDateTime.now());
             transactionRepository.save(transaction);
             return "CANCEL";
         }
     }
-//    private String handleBuyCourseRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod,Course course)
-//    {
-//        course = courseRepository.findById(requestDTO.getItem_register_id()).get();
-//        if(requestDTO.getPaymentStatus().equals("success") && requestDTO.getStatus().equals("payment_gateway"))
-//        {
-//           try{
-//               if(requestDTO.getDiscountAmount()>0 && requestDTO.getAmount()>requestDTO.getDiscountAmount() && requestDTO.getDiscountCode()!=null)
-//               {
-//                   request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));
-//                   paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
-//                   transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
-//                           .setAmount(requestDTO.getAmount())
-//                           .setType(Transaction.Type.valueOf(requestDTO.getType()))
-//                           .setStatus(Transaction.Status.COMPLETED)
-//                           .setTransactionDate(requestDTO.getRegistrationDateTime());
-//                   courseRepository.addStudentToCourseEnroll(requestDTO.getItem_register_id(),user.getId());
-//                   Long TeacherId = course.getTeacher().getId();
-//                   User teacher = userRepository.findById(TeacherId).get();
-//                   User Admin = userRepository.findByEmail("admin64@gmail.com").get();
-//                   Long AdminId = Admin.getId();
-//
-//                   Double balanceAfterDiscount = Math.max(0, requestDTO.getAmount() - requestDTO.getDiscountAmount());
-//                   BigDecimal transactionFee = BigDecimal.valueOf(0.03).multiply(BigDecimal.valueOf(balanceAfterDiscount));
-//
-//                   transactionFee = transactionFee.setScale(2, RoundingMode.HALF_UP);
-//                   Double newBalanceForTeacher = teacher.getBalance() + balanceAfterDiscount - transactionFee.doubleValue();
-//                   Double newBalanceForAdmin = Admin.getBalance() + transactionFee.doubleValue();
-//                   userRepository.updateBalanceAccountById(TeacherId, newBalanceForTeacher);
-//                   userRepository.updateBalanceAccountById(AdminId, newBalanceForAdmin);
-//                   requestRepository.save(request);
-//                   paymentRepository.save(paymentMethod);
-//                   transactionRepository.save(transaction);
-//                   courseDiscountRepository.deleteByCode(requestDTO.getDiscountCode());
-//                   return "APPROVED";
-//               }
-//               //no discount
-//               else
-//               {
-//                   request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));
-//                   paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
-//                   transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
-//                           .setAmount(requestDTO.getAmount())
-//                           .setType(Transaction.Type.valueOf(requestDTO.getType().toString()))
-//                           .setStatus(Transaction.Status.COMPLETED)
-//                           .setTransactionDate(requestDTO.getRegistrationDateTime());
-//                   courseRepository.addStudentToCourseEnroll(requestDTO.getItem_register_id(),user.getId());
-//                   Long TeacherId = course.getTeacher().getId();
-//                   User teacher = userRepository.findById(TeacherId).get();
-//                   User Admin = userRepository.findByEmail("admin64@gmail.com").get();
-//                   Long AdminId = Admin.getId();
-//                   Double transactionFee = 0.03 * requestDTO.getAmount();
-//                   Double newBalanceForTeacher = teacher.getBalance() + requestDTO.getAmount() - transactionFee;
-//                   Double newBalanceForAdmin = Admin.getBalance() + transactionFee;
-//
-//                   userRepository.updateBalanceAccountById(TeacherId, newBalanceForTeacher);
-//                   userRepository.updateBalanceAccountById(AdminId, newBalanceForAdmin);
-//                   requestRepository.save(request);
-//                   paymentRepository.save(paymentMethod);
-//                   transactionRepository.save(transaction);
-//                   return "APPROVED";
-//               }
-//           }catch (Exception e){
-//               throw e;
-//           }
-//
-//        }else if(requestDTO.getPaymentStatus().equals("success") && requestDTO.getStatus().equals("balance")){
-//
-//        }else{
-//
-//        }
-//        return null;
-//    }
     private String handleBuyCourseRequest(User user, RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod,Course course)
     {
         try{
@@ -256,13 +186,13 @@ public class RequestServiceImpl implements RequestService {
             {
                 course = courseOp.get();
                 final double transactionFees = 0.03;
-                request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType())).setCourse(course);
+                request.setUser(user).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType())).setCourses(course);
                 paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
                 transaction.setRequest(request).setUser(user).setPaymentMethod(paymentMethod)
                         .setAmount(requestDTO.getAmount())
                         .setType(Transaction.Type.valueOf(requestDTO.getType()))
                         .setStatus(Transaction.Status.COMPLETED)
-                        .setTransactionDate(requestDTO.getRegistrationDateTime());
+                        .setTransactionDate(LocalDateTime.now());
                 Long TeacherId = course.getTeacher().getId();
                 User teacher = userRepository.findById(TeacherId).orElse(null);
                 User Admin = userRepository.findByEmail("admin64@gmail.com").orElse(null);

@@ -7,7 +7,7 @@ class ApiService {
     private baseUrl: string;
     private customAxios: AxiosInstance;
     constructor(private session: any) {
-        this.baseUrl = 'http://192.168.1.130:8089/';
+        this.baseUrl = 'http://localhost:8089/';
         this.customAxios = axios.create({
             baseURL: this.baseUrl,
             timeout: 500000,
@@ -18,16 +18,27 @@ class ApiService {
             },
         });
     }
+    async buyCourseWithStudent(data: {
+        type: string;
+        status: string;
+        item_register_id: number;
+        locationId: number;
+        amount: number;
+        discountAmount: number;
+        discountCode: string;
+        paymentName: string;
+        paymentStatus: string;
 
-    async listCoursePublic() {
+    }) {
         try {
-            const response = await this.customAxios.get('/web/course/list');
+            const response = await this.customAxios.post('/user/byCourse', data);
             return response.data;
         } catch (error) {
             throw error;
         }
     }
-
+    //-------------------------------------------------User API-------------------------------------------------//
+    //-------------------------------------------------Admin API-------------------------------------------------//
     async listCoursesFromApi() {
         try {
             const response = await this.customAxios.get('/seller/course/list');
@@ -36,7 +47,7 @@ class ApiService {
             throw error;
         }
     }
-    async getUserbyIdAdmin(id: any){
+    async getUserbyIdAdmin(id: any) {
         try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.get(`/admin/user/findById?id=${id}`);
@@ -73,7 +84,7 @@ class ApiService {
         try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.get('/admin/user/listUser');
-                return response.data ;
+                return response.data;
             }
             return [];
         } catch (error) {
@@ -81,7 +92,7 @@ class ApiService {
         }
     }
     async changeStatusAccount(id: number) {
-        try {   
+        try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.post(`/admin/user/changeStatus?id=${id}`);
                 return response.data;
@@ -91,7 +102,6 @@ class ApiService {
             throw error;
         }
     }
-
     async changeStatusCourse(id: number) {
         try {
             if (this.session?.user.accessToken) {
@@ -104,10 +114,10 @@ class ApiService {
         }
     }
 
-    async EditAdmin(id: any) {
-        try {   
+    async updateAdminDetails(id: number, newData: any): Promise<any> {
+        try {
             if (this.session?.user.accessToken) {
-                const response = await this.customAxios.put(`/admin/edit?id=${id}`);
+                const response = await this.customAxios.put(`/admin/edit?id=${id}`, newData);
                 return response.data;
             }
             return null;
@@ -116,7 +126,34 @@ class ApiService {
         }
     }
 
-    
+    //-------------------------------------------------Admin API-------------------------------------------------//
+    //-------------------------------------------------Web API-------------------------------------------------//
+    async listCoursePublic() {
+        try {
+            const response = await this.customAxios.get('/web/course/list');
+            return response.data;
+
+        } catch (error) {
+            throw error;
+        }
+    }
+    async CoursePublicDetail(id: number) {
+        try {
+            const response = await this.customAxios.get(`/web/course/detail?id=${id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async checkUserInCourse(user_email: number, courseId: number) {
+        try {
+            const response = await this.customAxios.get(`/web/course/checkedUser?user_email=${user_email}&course_id=${courseId}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    //-------------------------------------------------Web API-------------------------------------------------//
 }
 
 export default ApiService;

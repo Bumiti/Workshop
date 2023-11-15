@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -23,4 +25,5 @@ public class RequestResponse {
     private String workshopName;
     private Long locationId;
     private String locationName;
+    private LocalDateTime registrationDateTime;
 }

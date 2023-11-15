@@ -20,5 +20,8 @@ public interface CourseService {
 
     //Layer Website
     List<CourseRespones>listCourseEnable();
+    int checkCodeDiscount(String discountCode);
+    CourseRespones courseById(Long id);
+    boolean checkUserInCourse(String email,Long course_id);
 
 }
