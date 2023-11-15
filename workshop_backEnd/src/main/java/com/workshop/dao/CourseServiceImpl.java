@@ -24,10 +24,12 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMediaInfoRepository courseMediaInfoRepository;
     private final UserService userService;
     private final CourseLocationRepository courseLocationRepository;
+
     boolean isCourse(Long Id) {
         Course course_exit = courseRepository.findCourseById(Id);
         return course_exit != null;
     }
+
     @Override
     public boolean addCourse(CourseRequest courseRequest) {
         User user = userService.getCurrentUserDetails();
@@ -72,7 +74,7 @@ public class CourseServiceImpl implements CourseService {
                 }
             }
             //Add Location into Course
-            if(courseLocationsList!=null){
+            if (courseLocationsList != null) {
                 for (CourseRequest.CourseLocation courseLocation : courseLocationsList) {
                     CourseLocation location = mapperLocationGeneric.DTOmapToModel(courseLocation, CourseLocation.class);
                     location.setCourses(course);
@@ -80,8 +82,11 @@ public class CourseServiceImpl implements CourseService {
                 }
             }
             return true;
-        } else {return false;}
+        } else {
+            return false;
+        }
     }
+
     @Override
     public boolean updateCourse(Long id, CourseUpdateRequest courseRequest) {
         User user = userService.getCurrentUserDetails();
@@ -153,12 +158,12 @@ public class CourseServiceImpl implements CourseService {
                         discount.setRemainingUses(discountDTO.getQuantity());
                         discountRepository.save(discount);
                         for (int i = 0; i < discountDTO.getQuantity(); i++) {
-                        CourseDiscount courseDiscount = new CourseDiscount();
-                        UUID randomUUID = UUID.randomUUID();
-                        String randomDiscountCode = randomUUID.toString();
-                        courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getQuantity())
-                                .setDiscount(discount).setCourse(courseExit);
-                        courseDiscountRepository.save(courseDiscount);
+                            CourseDiscount courseDiscount = new CourseDiscount();
+                            UUID randomUUID = UUID.randomUUID();
+                            String randomDiscountCode = randomUUID.toString();
+                            courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getQuantity())
+                                    .setDiscount(discount).setCourse(courseExit);
+                            courseDiscountRepository.save(courseDiscount);
                         }
                     }
                 }
@@ -169,13 +174,16 @@ public class CourseServiceImpl implements CourseService {
             return false;
         }
     }
+
     @Override
     public boolean deleteCourse(Long id) {
         Course course = courseRepository.findCourseById(id);
         if (course.getName() != null) {
             courseRepository.delete(course);
             return true;
-        } else {return false;}
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -187,6 +195,7 @@ public class CourseServiceImpl implements CourseService {
             throw new RuntimeException("Error: " + exception);
         }
     }
+
     @Override
     public List<UserInfoResponse> listStudentByCourse(Long id) {
         try {
@@ -238,9 +247,9 @@ public class CourseServiceImpl implements CourseService {
                     studentEnrollments.add(studentEnrollment);
                 }
                 List<CourseRespones.DiscountDTO> tempDiscountList = new ArrayList<>();
-                for(CourseDiscount courseDiscount : course.getCourseDiscounts()){
+                for (CourseDiscount courseDiscount : course.getCourseDiscounts()) {
                     Discount discount = courseDiscount.getDiscount();
-                    CourseRespones.DiscountDTO discountDTO = DiscountDToMapper.ModelmapToDTO(discount,CourseRespones.DiscountDTO.class);
+                    CourseRespones.DiscountDTO discountDTO = DiscountDToMapper.ModelmapToDTO(discount, CourseRespones.DiscountDTO.class);
                     discountDTO.setQuantity(courseDiscount.getQuantity());
                     discountDTO.setRedemptionDate(courseDiscount.getRedemptionDate());
                     discountDTO.setId(discount.getId());
@@ -284,6 +293,7 @@ public class CourseServiceImpl implements CourseService {
             throw new RuntimeException(runtimeException);
         }
     }
+
     @Override
     public boolean AddEnrolledStudentsToCourseById(Long Course_id, List<Long> studentIds) {
         try {
@@ -307,10 +317,9 @@ public class CourseServiceImpl implements CourseService {
         MapperGeneric<Location, CourseRespones.CourseLocation.locationResponse> locationMapper = new MapperGeneric<>();
         MapperGeneric<Course, CourseRespones> CourseMapper = new MapperGeneric<>();
         MapperGeneric<CourseMediaInfo, CourseRespones.CourseMediaInfo> CourseMediaMapper = new MapperGeneric<>();
-        MapperGeneric<CourseLocation,CourseRespones.CourseLocation>CourseLocationMapper = new MapperGeneric<>();
+        MapperGeneric<CourseLocation, CourseRespones.CourseLocation> CourseLocationMapper = new MapperGeneric<>();
         MapperGeneric<Discount, CourseRespones.DiscountDTO> DiscountDToMapper = new MapperGeneric<>();
-        for (Course course : coursesEntityList)
-        {
+        for (Course course : coursesEntityList) {
             List<CourseRespones.StudentEnrollment> studentEnrollments = new ArrayList<>();
             List<CourseRespones.CourseMediaInfo> courseInfoMediaList = new ArrayList<>();
             List<CourseRespones.CourseLocation> courseLocationsList = new ArrayList<>();
@@ -318,17 +327,16 @@ public class CourseServiceImpl implements CourseService {
             CourseRespones courseResponse = CourseMapper.ModelmapToDTO(course, CourseRespones.class);
             courseResponse.setId(course.getId());
             courseResponse.setTeacher(course.getTeacher().getFull_name());
-            for (CourseEnrollment enrollment : course.getEnrolledStudents())
-            {
+            for (CourseEnrollment enrollment : course.getEnrolledStudents()) {
                 CourseRespones.StudentEnrollment studentEnrollment = new CourseRespones.StudentEnrollment();
                 studentEnrollment.setId(enrollment.getEnrolledStudent().getId());
                 studentEnrollment.setName(enrollment.getEnrolledStudent().getUser_name());
                 studentEnrollments.add(studentEnrollment);
             }
             List<CourseRespones.DiscountDTO> tempDiscountList = new ArrayList<>();
-            for(CourseDiscount courseDiscount : course.getCourseDiscounts()){
+            for (CourseDiscount courseDiscount : course.getCourseDiscounts()) {
                 Discount discount = courseDiscount.getDiscount();
-                CourseRespones.DiscountDTO discountDTO = DiscountDToMapper.ModelmapToDTO(discount,CourseRespones.DiscountDTO.class);
+                CourseRespones.DiscountDTO discountDTO = DiscountDToMapper.ModelmapToDTO(discount, CourseRespones.DiscountDTO.class);
                 discountDTO.setQuantity(courseDiscount.getQuantity());
                 discountDTO.setRedemptionDate(courseDiscount.getRedemptionDate());
                 discountDTO.setId(discount.getId());
@@ -344,21 +352,22 @@ public class CourseServiceImpl implements CourseService {
                     tempDiscountList.add(discountDTO);
                 }
             }
-            for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos()){
-                if(courseMediaInfo.getCourse().equals(course)){
-                    CourseRespones.CourseMediaInfo courseInfoMedia = CourseMediaMapper.ModelmapToDTO(courseMediaInfo,CourseRespones.CourseMediaInfo.class);
+            for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos()) {
+                if (courseMediaInfo.getCourse().equals(course)) {
+                    CourseRespones.CourseMediaInfo courseInfoMedia = CourseMediaMapper.ModelmapToDTO(courseMediaInfo, CourseRespones.CourseMediaInfo.class);
                     courseInfoMedia.setId(courseMediaInfo.getId());
                     courseInfoMediaList.add(courseInfoMedia);
                 }
             }
-            for (CourseLocation courseLocation : course.getCourseLocation()){
-                CourseRespones.CourseLocation courseLocal = CourseLocationMapper.ModelmapToDTO(courseLocation,CourseRespones.CourseLocation.class);
+            for (CourseLocation courseLocation : course.getCourseLocation()) {
+                CourseRespones.CourseLocation courseLocal = CourseLocationMapper.ModelmapToDTO(courseLocation, CourseRespones.CourseLocation.class);
                 courseLocal.setId(courseLocation.getId());
-                if(courseLocation.getLocations()!=null){
+                if (courseLocation.getLocations() != null) {
                     CourseRespones.CourseLocation.locationResponse location =
                             locationMapper.ModelmapToDTO(courseLocation.getLocations(), CourseRespones.CourseLocation.locationResponse.class);
                     courseLocal.setLocationResponse(location);
-                }courseLocationsList.add(courseLocal);
+                }
+                courseLocationsList.add(courseLocal);
             }
             courseResponse.setStudentEnrollments(studentEnrollments);
             courseResponse.setCourseMediaInfos(courseInfoMediaList);
@@ -369,4 +378,87 @@ public class CourseServiceImpl implements CourseService {
         return coursesResponesList;
     }
 
+    public List<CourseRespones> listCourseTeacherById(Long courseId) {
+        try {
+            Course courseEntity = courseRepository.findCourseById(courseId);
+            if (courseEntity != null) {
+                User teacher = userService.getCurrentUserDetails();
+                User use = userService.getCurrentUserDetails();
+                List<Course> coursesEntityList = courseRepository.listCoursebyTeacherId(teacher.getId());
+                List<CourseRespones> coursesResponesList = new ArrayList<>();
+
+                MapperGeneric<Location, CourseRespones.CourseLocation.locationResponse> locationMapper = new MapperGeneric<>();
+                MapperGeneric<Course, CourseRespones> CourseMapper = new MapperGeneric<>();
+                MapperGeneric<CourseMediaInfo, CourseRespones.CourseMediaInfo> CourseMediaMapper = new MapperGeneric<>();
+                MapperGeneric<CourseLocation, CourseRespones.CourseLocation> CourseLocationMapper = new MapperGeneric<>();
+                MapperGeneric<Discount, CourseRespones.DiscountDTO> DiscountDToMapper = new MapperGeneric<>();
+
+                for (Course course : coursesEntityList) {
+                    if (course.getId().equals(courseId)) {
+                        List<CourseRespones.StudentEnrollment> studentEnrollments = new ArrayList<>();
+                        List<CourseRespones.CourseMediaInfo> courseInfoMediaList = new ArrayList<>();
+                        List<CourseRespones.CourseLocation> courseLocationsList = new ArrayList<>();
+                        List<CourseRespones.DiscountDTO> DiscountDTOList = new ArrayList<>();
+
+                        CourseRespones courseResponse = CourseMapper.ModelmapToDTO(course, CourseRespones.class);
+                        courseResponse.setId(course.getId());
+                        courseResponse.setTeacher(use.getFull_name());
+                        for (CourseEnrollment enrollment : course.getEnrolledStudents()) {
+                            CourseRespones.StudentEnrollment studentEnrollment = new CourseRespones.StudentEnrollment();
+                            studentEnrollment.setId(enrollment.getEnrolledStudent().getId());
+                            studentEnrollment.setName(enrollment.getEnrolledStudent().getUser_name());
+                            studentEnrollments.add(studentEnrollment);
+                        }
+                        List<CourseRespones.DiscountDTO> tempDiscountList = new ArrayList<>();
+                        for (CourseDiscount courseDiscount : course.getCourseDiscounts()) {
+                            Discount discount = courseDiscount.getDiscount();
+                            CourseRespones.DiscountDTO discountDTO = DiscountDToMapper.ModelmapToDTO(discount, CourseRespones.DiscountDTO.class);
+                            discountDTO.setQuantity(courseDiscount.getQuantity());
+                            discountDTO.setRedemptionDate(courseDiscount.getRedemptionDate());
+                            discountDTO.setId(discount.getId());
+                            boolean isAlreadyExists = false;
+                            for (CourseRespones.DiscountDTO existingDiscountDTO : tempDiscountList) {
+                                if (existingDiscountDTO.getId() == discountDTO.getId()) {
+                                    isAlreadyExists = true;
+                                    break;
+                                }
+                            }
+                            if (!isAlreadyExists) {
+                                DiscountDTOList.add(discountDTO);
+                                tempDiscountList.add(discountDTO);
+                            }
+                        }
+                        for (CourseMediaInfo courseMediaInfo : course.getCourseOnlineInfos()) {
+                            if (courseMediaInfo.getCourse().equals(course)) {
+                                CourseRespones.CourseMediaInfo courseInfoMedia = CourseMediaMapper.ModelmapToDTO(courseMediaInfo, CourseRespones.CourseMediaInfo.class);
+                                courseInfoMedia.setId(courseMediaInfo.getId());
+                                courseInfoMediaList.add(courseInfoMedia);
+                            }
+                        }
+                        for (CourseLocation courseLocation : course.getCourseLocation()) {
+                            CourseRespones.CourseLocation courseLocal = CourseLocationMapper.ModelmapToDTO(courseLocation, CourseRespones.CourseLocation.class);
+                            courseLocal.setId(courseLocation.getId());
+                            if (courseLocation.getLocations() != null) {
+                                CourseRespones.CourseLocation.locationResponse location =
+                                        locationMapper.ModelmapToDTO(courseLocation.getLocations(), CourseRespones.CourseLocation.locationResponse.class);
+                                courseLocal.setLocationResponse(location);
+                            }
+                            courseLocationsList.add(courseLocal);
+                        }
+                        courseResponse.setStudentEnrollments(studentEnrollments);
+                        courseResponse.setCourseMediaInfos(courseInfoMediaList);
+                        courseResponse.setDiscountDTOS(DiscountDTOList);
+                        courseResponse.setCourseLocations(courseLocationsList);
+                        coursesResponesList.add(courseResponse);
+                    }
+                }
+                return coursesResponesList;
+            } else {
+                // Trả về null hoặc thực hiện xử lý khác nếu không tìm thấy khóa học
+                return Collections.emptyList(); // hoặc return null;
+            }
+        } catch (RuntimeException runtimeException) {
+            throw new RuntimeException(runtimeException);
+        }
+    }
 }
