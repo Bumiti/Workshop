@@ -19,16 +19,27 @@ class ApiService {
             },
         });
     }
-
-    async listCoursePublic() {
+    async buyCourseWithStudent(data: {
+        type: string;
+        status: string;
+        item_register_id: number;
+        locationId: number;
+        amount: number;
+        discountAmount: number;
+        discountCode: string;
+        paymentName: string;
+        paymentStatus: string;
+       
+    }) {
         try {
-            const response = await this.customAxios.get('/web/course/list');
+            const response = await this.customAxios.post('/user/byCourse', data);
             return response.data;
         } catch (error) {
             throw error;
         }
     }
-
+    //-------------------------------------------------User API-------------------------------------------------//
+    //-------------------------------------------------Admin API-------------------------------------------------//
     async listCoursesFromApi() {
         try {
             const response = await this.customAxios.get('/seller/course/list');
@@ -122,7 +133,6 @@ class ApiService {
             throw error;
         }
     }
-
     async changeStatusCourse(id: number) {
         try {
             if (this.session?.user.accessToken) {
@@ -134,6 +144,33 @@ class ApiService {
             throw error;
         }
     }
+    //-------------------------------------------------Admin API-------------------------------------------------//
+    //-------------------------------------------------Web API-------------------------------------------------//
+    async listCoursePublic() {
+        try {
+            const response = await this.customAxios.get('/web/course/list');
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async CoursePublicDetail(id: number) {
+        try {
+            const response = await this.customAxios.get(`/web/course/detail?id=${id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async checkUserInCourse(user_email: number,courseId:number) {
+        try {
+            const response = await this.customAxios.get(`/web/course/checkedUser?user_email=${user_email}&course_id=${courseId}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    //-------------------------------------------------Web API-------------------------------------------------//
 }
 
 export default ApiService;
