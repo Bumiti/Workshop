@@ -78,9 +78,14 @@ public class SeedDatabase {
         rolesSetUser.add(rolesUser);
         rolesSetSeller.add(rolesSeller);
         rolesSetAdmin.add(rolesAdmin);
-        Manager.setFull_name("Nguyễn Hồng Quân").setBalance(5000.0).setUser_name("HongQuan").setEmail("admin64@gmail.com").setPassword("admin64@gmail.com").setPhoneNumber("0383334196").setGender("male").setRoles(rolesSetAdmin).setEnable(true);
-        Seller.setFull_name("Phan Huỳnh Hồng Hân").setBalance(5000.0).setUser_name("Hồng Hân").setEmail("han2000@gmail.com").setPassword("han2000@gmail.com").setPhoneNumber("097865848").setGender("female").setRoles(rolesSetSeller).setEnable(true);
-        User.setFull_name("Lê Thanh Hiếu").setBalance(5000.0).setUser_name("Thanh Hiếu").setEmail("lethanhhieu@gmail.com").setPassword("lethanhhieu@gmail.com").setPhoneNumber("9833241764").setGender("male").setRoles(rolesSetUser).setEnable(true);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedAdminPassword = passwordEncoder.encode("admin64@gmail.com");
+        String encodedManagerPassword = passwordEncoder.encode("han2000@gmail.com");
+        String encodedUserPassword = passwordEncoder.encode("lethanhhieu@gmail.com");
+
+        Manager.setFull_name("Nguyễn Hồng Quân").setBalance(5000.0).setUser_name("HongQuan").setEmail("admin64@gmail.com").setPassword(encodedAdminPassword).setPhoneNumber("0383334196").setGender("male").setRoles(rolesSetAdmin).setEnable(true);
+        Seller.setFull_name("Phan Huỳnh Hồng Hân").setBalance(5000.0).setUser_name("Hồng Hân").setEmail("han2000@gmail.com").setPassword(encodedManagerPassword).setPhoneNumber("097865848").setGender("female").setRoles(rolesSetSeller).setEnable(true);
+        User.setFull_name("Lê Thanh Hiếu").setBalance(5000.0).setUser_name("Thanh Hiếu").setEmail("lethanhhieu@gmail.com").setPassword(encodedUserPassword).setPhoneNumber("9833241764").setGender("male").setRoles(rolesSetUser).setEnable(true);
         userRepository.save( Manager);
         userRepository.save( Seller);
         userRepository.save( User);

@@ -51,34 +51,42 @@ export default function SideLeft({ course }) {
     return (
         <Container className="p-2 ">
             <div className={styles.videothum}>
-                <ReactPlayer
-                    url={course.courseMediaInfos[0].urlMedia}
-                    controls={true}
-                    playing={true}
-                    muted={true}
-                    width={'100%'}
-                    height={333}
-                />
+                <div className={styles.circularVideo}>
+                    <ReactPlayer
+                        url={course.courseMediaInfos[0].urlMedia}
+                        controls={true}
+                        playing={true}
+                        muted={true}
+                        width={'100%'}
+                        height={333}
+                    />
+                </div>
             </div>
             <div className="text-center">
-                <h1>{isFree ? 'free' : 'premium'}</h1>
+                <h1 className={styles.emm}>{isFree ? 'free' : 'premium'}</h1>
                 {isFree ? (
-                    <Link href={`/video/[id]`} as={`/video/${course.id}`}>
+                    <Link className={styles.borderButton} href={`/video/[id]`} as={`/video/${course.id}`}>
                         Xem Miễn Phí
                     </Link>
                 ) : (
                     isUserInCourse ? (
-                        <Link href={`/video/[id]`} as={`/video/${course.id}`}>
-                        Xem Ngay
-                    </Link>
+                        <Link className={styles.borderButton} href={`/video/[id]`} as={`/video/${course.id}`}>
+                            Xem Ngay
+                        </Link>
                     ) : (
-                        <Link href={`/demoPaypal/[id]`} as={`/demoPaypal/${course.id}`}>
+                        <Link className={styles.borderButton} href={`/demoPaypal/[id]`} as={`/demoPaypal/${course.id}`}>
                             Mua Ngay
                         </Link>
                     )
                 )}
-                <h4>Tổng Cộng có 11 bài</h4>
-                <h4>Tổng Thời Lượng</h4>
+                <ul className={styles.list}>
+                    <li>
+                        <h6>Tổng Cộng có 11 bài</h6>
+                    </li>
+                    <li>
+                        <h6>Tổng Thời Lượng</h6>
+                    </li>
+                </ul>
             </div>
         </Container>
     );

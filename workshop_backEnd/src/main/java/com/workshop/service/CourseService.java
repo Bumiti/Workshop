@@ -17,7 +17,7 @@ public interface CourseService {
     List<UserInfoResponse> listStudentByCourse(Long id);
     List<CourseRespones> listCourseTeacher();
     boolean AddEnrolledStudentsToCourseById(Long Course_id,List<Long> List_Student_id);
-
+    List<CourseRespones> listCourseTeacherById(Long id);
     //Layer Website
     List<CourseRespones>listCourseEnable();
     int checkCodeDiscount(String discountCode);

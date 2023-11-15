@@ -37,7 +37,7 @@ const PayPalCheckOutButton = ({ Courses }: { Courses: CourseDetail }) => {
                           
                 };
                 const buyCourseResponse = await apiService.buyCourseWithStudent(data);
-                console.log("buyCourseResponse",buyCourseResponse)
+                console.log(buyCourseResponse)
              if(buyCourseResponse.status === "Success"){
                 router.back();
                 router.refresh();
@@ -64,7 +64,6 @@ const PayPalCheckOutButton = ({ Courses }: { Courses: CourseDetail }) => {
                 shape: "pill",
             }}
             onClick={(data,actions)=>{
-                //validation on button Click,client or server info
                 const hasAlredyBoughCourse = false;
                 if(hasAlredyBoughCourse){
                     setError('you already bought this product. Go to you account to View');

@@ -8,13 +8,14 @@ import { useEffect, useState } from "react";
 import ApiService from "@/app/services/ApiService";
 import { useSession } from 'next-auth/react';
 import { v4 as uuidv4 } from 'uuid';
+import Navbar from "@/components/Navbar";
+import styles from '../[id]/video.module.css';
 interface CourseType {
     id: number;
     name: string;
     description: string;
     link: string;
     price: number;
-    // Các thuộc tính khác nếu có
     courseMediaInfos:courseMediaInfos[];
   }
 interface courseMediaInfos {
@@ -46,6 +47,7 @@ const teacher = ({ params }: { params: { id: any } }) => {
             fetchData();
     },[]);
     return (
+    <div className={styles.pricingItemRegular}>
         <Container fluid className="w-screen h-screen">
             <Row className="bg-slate-400">
                 <Col sm={2}>
@@ -58,6 +60,7 @@ const teacher = ({ params }: { params: { id: any } }) => {
                 </Col>
             </Row>
         </Container>
+        </div>
     )
 }
 
