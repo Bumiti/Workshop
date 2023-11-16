@@ -1,0 +1,16 @@
+/* Tùy chỉnh các trạng thái của div */
+.disabled {
+    pointer-events: none;
+    background-color: #e21818; /* Màu tối khi vô hiệu hóa */
+  }
+  
+  .enabled {
+    pointer-events: auto;
+    background-color: rgb(21, 72, 212); /* Màu sáng khi có thể tương tác */
+  }
+  
+  /* Hiệu ứng hover */
+  .enabled:hover {
+    background-color: #EFEFEF; /* Màu thay đổi khi di chuột qua */
+  }
+  

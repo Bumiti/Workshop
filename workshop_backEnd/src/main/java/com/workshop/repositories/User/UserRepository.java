@@ -43,7 +43,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     void updateBalanceAccountById(Long id, Double NewBalance);
     @Transactional
     @Modifying
-    @Query("UPDATE User u SET u.password = :#{#user.password},u.user_name =:#{#user.user_name},u.full_name =:#{#user.full_name},u.image_url =:#{#user.image_url} WHERE u.id = :#{#user.id}")
+    @Query("UPDATE User u SET u.phoneNumber = :#{#user.phoneNumber},u.user_name =:#{#user.user_name},u.full_name =:#{#user.full_name},u.image_url =:#{#user.image_url} WHERE u.id = :#{#user.id}")
     void updateUser(@Param("user") User user);
 
 
