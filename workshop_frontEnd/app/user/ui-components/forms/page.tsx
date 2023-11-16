@@ -15,6 +15,7 @@ import{ createTheme,
 import { useSession } from 'next-auth/react';
 import styles from '../forms/form.module.css';
 import Image from "next/image";
+import ApiService from "@/app/services/ApiService";
 
 
 const lightTheme = createTheme({ palette: { mode: 'light' } });
@@ -39,28 +40,17 @@ const EditProfile = () => {
   });
 
   const { data: session } = useSession();
-
+  const apiService = new ApiService(session);
 
   useEffect(() => {
-    // console.log(session?.user.accessToken)
     if (session) {
-      fetch('http://192.168.1.130:8089/user/detail', {
-        headers: {
-          Authorization: `Bearer ${session?.user.accessToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data && data.data) {
-            setUserData(data.data);
-          // console.log(data.data);
-
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching user data:', error);
-          
-        });
+      apiService.getUserDetails().then((data) => {
+        if (data && data.data) {
+          setUserData(data.data);
+        }
+      }).catch((error) => {
+        console.error('Error fetching user data:', error);
+      });
     }
   }, [session]);
 
@@ -149,29 +139,19 @@ const EditProfile = () => {
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      console.log("userData after form submission:", userData);
       if (session) {
-
-        const response = await fetch('http:///192.168.1.130:8089/auth/user/edit', {
-          method: 'PUT',
-          headers: {
-            //  Authorization: `Bearer ${authToken}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(userData),
-        });
-
-        if (response.ok) {
-          console.log('User data updated successfully.');
-          // console.log(userData);
-
+        const response = await apiService.editUserProfile(userData);
+        if (response) {
+          console.log("User data updated successfully.");
         } else {
-          console.error('Error updating user data:', response.status);
+          console.error("Error updating user data.");
         }
       } else {
-        console.error('Session is null. User is not authenticated.');
+        console.error("Session is null. User is not authenticated.");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
@@ -186,9 +166,8 @@ const EditProfile = () => {
         try {
           const uploadTask = await uploadBytes(imgRef, selectedImage);
           const url = await getDownloadURL(uploadTask.ref);
-
-          console.log(url);
           setUserData({ ...userData, image_url: url });
+          console.log(url);
         } catch (error) {
           console.error("Lỗi tải lên:", error);
         }
@@ -200,6 +179,8 @@ const EditProfile = () => {
     }
   };
 
+console.log("userData nè:",userData);
+console.log("userData.image_url",userData.image_url);
 
   return (
     <ThemeProvider theme={lightTheme}>

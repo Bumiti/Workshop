@@ -98,15 +98,16 @@ const Edit = ({ params, onSubmit }: EditProps) => {
   };
 
   const handleAccountProfileDetailsSubmit = (data: any) => {
-    console.log('Data from form submission:', data);
+    console.log('Dữ liệu từ việc gửi biểu mẫu:', data);
   
-    setFormData((prevData) => {
-      const newData = { ...prevData, ...data };
-      console.log('handleAccountProfileDetailsSubmit thay doi ne', newData);
+    setFormData((data) => {
+      const newData = { ...data };
+      console.log('handleAccountProfileDetailsSubmit đã thay đổi dữ liệu:', newData);
       return newData;
     });
+
   };
-  
+ 
   const handleDiscountDTOSubmit = (data: any) => {
     setFormData((prevData) => {
       const newData = { ...prevData, ...data };

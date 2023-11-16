@@ -5,7 +5,8 @@ import { Carousel } from 'react-bootstrap';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
-
+import ApiService from '@/app/services/ApiService';
+import { useSession } from 'next-auth/react';
 const Card = () => {
   const [courses, setCourses] = useState<CourseType[]>([]); // Thay thế 'CourseType' bằng kiểu dữ liệu cụ thể bạn sử dụng
   const router = useRouter();
@@ -16,19 +17,25 @@ const Card = () => {
     link: string;
     // Các thuộc tính khác nếu có
   }
-
+  const { data: session } = useSession();
+  const apiService = new ApiService(session);
   useEffect(() => {
-    fetch('http://localhost:8089/web/course/list')
-      .then(response => response.json())
-      .then(result => {
+    const fetchData = async () => {
+      try {
+        const result = await apiService.listCoursePublic();
         if (Array.isArray(result.data)) {
-          setCourses(result.data); // Chỉ setCourses nếu result.data là một mảng
+          setCourses(result.data);
         } else {
           console.error('Data is not an array:', result.data);
         }
-      })
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [apiService]);
+
 
   const chunkArray = (arr: CourseType[], chunkSize: number) => {
     const groups = [];

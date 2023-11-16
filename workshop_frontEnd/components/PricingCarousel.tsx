@@ -4,9 +4,11 @@ import styles from '../CSS/home.module.css';
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ApiService from '@/app/services/ApiService';
+import { useSession } from 'next-auth/react';
 
 const PricingCarousel = () => {
-    const apiService = new ApiService();
+    const { data: session } = useSession();
+    const apiService = new ApiService(session);
     const [listCourse, setlistCourse] = useState([]);
     
     useEffect(() => {

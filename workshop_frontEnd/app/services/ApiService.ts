@@ -38,6 +38,52 @@ class ApiService {
             throw error;
         }
     }
+
+    async getUserDetails() {
+        try {
+          if (this.session?.user.accessToken) {
+            const response = await this.customAxios.get('/user/detail', {
+              headers: {
+                Authorization: `Bearer ${this.session?.user.accessToken}`,
+              },
+            });
+            return response.data;
+          }
+          return null;
+        } catch (error) {
+          throw error;
+        }
+      }
+    
+      async editUserProfile(userData: { full_name: string; user_name: string; email: string; phoneNumber: string; image_url: string; userAddresses: { id: number; state: string; city: string; address: string; postalCode: number; }[]; }) {
+        try {
+            const response = await this.customAxios.put('/auth/user/edit', JSON.stringify(userData));
+            return response.data;
+        } catch (error) {
+          throw error;
+        }
+      }
+
+      async changePassword(oldPassword: string, newPassword: string) {
+        try {
+          if (this.session?.user.accessToken) {
+            const response = await this.customAxios.put(
+              '/user/changePassword',
+              JSON.stringify({ oldPassword, newPassword }),
+              {
+                headers: {
+                  Authorization: `Bearer ${this.session?.user.accessToken}`,
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
+            return response;
+          }
+          return null;
+        } catch (error) {
+          throw error;
+        }
+      }
     //-------------------------------------------------User API-------------------------------------------------//
     //-------------------------------------------------Admin API-------------------------------------------------//
     async getUserbyIdAdmin(id: any){
