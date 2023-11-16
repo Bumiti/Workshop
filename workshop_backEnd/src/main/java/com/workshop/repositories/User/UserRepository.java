@@ -46,5 +46,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u SET u.phoneNumber = :#{#user.phoneNumber},u.user_name =:#{#user.user_name},u.full_name =:#{#user.full_name},u.image_url =:#{#user.image_url} WHERE u.id = :#{#user.id}")
     void updateUser(@Param("user") User user);
 
+    @Query(value = "SELECT u FROM User u JOIN u.roles r WHERE r.name = 'USER'")
+    List<User> countUsersWithUserRole();
+    @Query(value = "SELECT u FROM User u JOIN u.roles r WHERE r.name = 'SELLER'")
+    List<User> countUsersWithSellerRole();
 
 }

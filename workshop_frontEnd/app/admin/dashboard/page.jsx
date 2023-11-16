@@ -14,12 +14,18 @@ export const cards = [
   },
   {
     id: 2,
-    title: "Stock",
+    title: "Revenue",
     number: 8.236,
     change: -2,
   },
   {
     id: 3,
+    title: "Deposit",
+    number: 6.642,
+    change: 18,
+  },
+  {
+    id: 4,
     title: "Revenue",
     number: 6.642,
     change: 18,
