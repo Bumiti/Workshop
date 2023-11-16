@@ -7,6 +7,7 @@ dotenv.config();
 class ApiService {
     private baseUrl: string;
     private customAxios: AxiosInstance;
+    customAxiosWithoutAuthorization: AxiosInstance;
     constructor(private session: any) {
         this.baseUrl = 'http://localhost:8089/';
         this.customAxios = axios.create({
@@ -18,7 +19,19 @@ class ApiService {
                 'Authorization': `Bearer ${session?.user.accessToken || ''}`,
             },
         });
+        // Tạo customAxios mà không chứa 'Authorization'
+        this.customAxiosWithoutAuthorization = axios.create({
+            baseURL: this.baseUrl,
+            timeout: 500000,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+                // Không bao gồm 'Authorization'
+            },
+        });
+
     }
+
     async buyCourseWithStudent(data: {
         type: string;
         status: string;
@@ -29,7 +42,7 @@ class ApiService {
         discountCode: string;
         paymentName: string;
         paymentStatus: string;
-       
+
     }) {
         try {
             const response = await this.customAxios.post('/user/byCourse', data);
@@ -41,52 +54,52 @@ class ApiService {
 
     async getUserDetails() {
         try {
-          if (this.session?.user.accessToken) {
-            const response = await this.customAxios.get('/user/detail', {
-              headers: {
-                Authorization: `Bearer ${this.session?.user.accessToken}`,
-              },
-            });
-            return response.data;
-          }
-          return null;
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get('/user/detail', {
+                    headers: {
+                        Authorization: `Bearer ${this.session?.user.accessToken}`,
+                    },
+                });
+                return response.data;
+            }
+            return null;
         } catch (error) {
-          throw error;
+            throw error;
         }
-      }
-    
-      async editUserProfile(userData: { full_name: string; user_name: string; email: string; phoneNumber: string; image_url: string; userAddresses: { id: number; state: string; city: string; address: string; postalCode: number; }[]; }) {
-        try {
-            const response = await this.customAxios.put('/auth/user/edit', JSON.stringify(userData));
-            return response.data;
-        } catch (error) {
-          throw error;
-        }
-      }
+    }
 
-      async changePassword(oldPassword: string, newPassword: string) {
+    async editUserProfile(userData: { full_name: string; user_name: string; email: string; phoneNumber: string; image_url: string; userAddresses: { id: number; state: string; city: string; address: string; postalCode: number; }[]; }) {
         try {
-          if (this.session?.user.accessToken) {
-            const response = await this.customAxios.put(
-              '/user/changePassword',
-              JSON.stringify({ oldPassword, newPassword }),
-              {
-                headers: {
-                  Authorization: `Bearer ${this.session?.user.accessToken}`,
-                  'Content-Type': 'application/json',
-                },
-              }
-            );
-            return response;
-          }
-          return null;
+            const response = await this.customAxiosWithoutAuthorization.put('/auth/user/edit', JSON.stringify(userData));
+            return response.data;
         } catch (error) {
-          throw error;
+            throw error;
         }
-      }
+    }
+
+    async changePassword(oldPassword: string, newPassword: string) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.put(
+                    '/user/changePassword',
+                    JSON.stringify({ oldPassword, newPassword }),
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.session?.user.accessToken}`,
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                );
+                return response;
+            }
+            return null;
+        } catch (error) {
+            throw error;
+        }
+    }
     //-------------------------------------------------User API-------------------------------------------------//
     //-------------------------------------------------Admin API-------------------------------------------------//
-    async getUserbyIdAdmin(id: any){
+    async getUserbyIdAdmin(id: any) {
         try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.get(`/admin/user/findById?id=${id}`);
@@ -105,7 +118,7 @@ class ApiService {
             throw error;
         }
     }
-    async createCourse(courseData: CourseData) { 
+    async createCourse(courseData: CourseData) {
         try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.post('/seller/course/add', JSON.stringify(courseData));
@@ -115,26 +128,26 @@ class ApiService {
         } catch (error) {
             throw error;
         }
-    } 
+    }
 
     async getCourseById(courseId: number) {
         try {
-          if (this.session?.user.accessToken) {
-            const response = await this.customAxios.get(`/seller/course/list/${courseId}`, {
-              params: {
-                courseId: courseId,
-              },
-            });
-            return response.data;
-          }
-          return [];
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get(`/seller/course/list/${courseId}`, {
+                    params: {
+                        courseId: courseId,
+                    },
+                });
+                return response.data;
+            }
+            return [];
         } catch (error) {
-          throw error;
+            throw error;
         }
-      }
-      
-    
-    async editCourse(courseId: number, courseData: CourseData) { 
+    }
+
+
+    async editCourse(courseId: number, courseData: CourseData) {
         try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.put(`/seller/course/update/${courseId}`, JSON.stringify(courseData));
@@ -145,7 +158,7 @@ class ApiService {
             throw error;
         }
     }
-    
+
     async listRequestAdmin() {
         try {
             if (this.session?.user.accessToken) {
@@ -172,7 +185,7 @@ class ApiService {
         try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.get('/admin/user/listUser');
-                return response.data ;
+                return response.data;
             }
             return [];
         } catch (error) {
@@ -180,7 +193,7 @@ class ApiService {
         }
     }
     async changeStatusAccount(id: number) {
-        try {   
+        try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.post(`/admin/user/changeStatus?id=${id}`);
                 return response.data;
@@ -202,7 +215,7 @@ class ApiService {
         }
     }
     async EditAdmin(id: any) {
-        try {   
+        try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.put(`/admin/edit?id=${id}`);
                 return response.data;
@@ -229,7 +242,7 @@ class ApiService {
             throw error;
         }
     }
-    async checkUserInCourse(user_email: number,courseId:number) {
+    async checkUserInCourse(user_email: number, courseId: number) {
         try {
             const response = await this.customAxios.get(`/web/course/checkedUser?user_email=${user_email}&course_id=${courseId}`);
             return response.data;
@@ -238,7 +251,7 @@ class ApiService {
         }
     }
     //-------------------------------------------------Web API-------------------------------------------------//
-    
+
 }
 
 export default ApiService;

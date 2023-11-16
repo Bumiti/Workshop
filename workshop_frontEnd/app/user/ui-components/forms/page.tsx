@@ -53,7 +53,28 @@ const EditProfile = () => {
       });
     }
   }, [session]);
+  // useEffect(() => {
+  //   // console.log(session?.user.accessToken)
+  //   if (session) {
+  //     fetch('http://localhost:8089/user/detail', {
+  //       headers: {
+  //         Authorization: `Bearer ${session?.user.accessToken}`,
+  //       },
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         if (data && data.data) {
+  //           setUserData(data.data);
+  //         // console.log(data.data);
 
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error fetching user data:', error);
+          
+  //       });
+  //   }
+  // }, [session]);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -135,7 +156,34 @@ const EditProfile = () => {
     }
   }
 
+  // const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   try {
+  //     if (session) {
 
+  //       const response = await fetch('http://localhost:8089/auth/user/edit', {
+  //         method: 'PUT',
+  //         headers: {
+  //           //  Authorization: `Bearer ${authToken}`,
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify(userData),
+  //       });
+
+  //       if (response.ok) {
+  //         console.log('User data updated successfully.');
+  //         // console.log(userData);
+
+  //       } else {
+  //         console.error('Error updating user data:', response.status);
+  //       }
+  //     } else {
+  //       console.error('Session is null. User is not authenticated.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
