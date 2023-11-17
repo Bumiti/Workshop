@@ -23,6 +23,7 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
     @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.status = 'COMPLETED' AND t.type = 'BUY_COURSE'")
     long getTotalAmountOfCompletedBuyCourseTransactions();
 
-    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.status = 'COMPLETED' AND t.type = 'BUY_COURSE' AND t.transactionDate >= :startDate")
-    long getTotalAmountOfCompletedBuyCourseTransactions(@Param("startDate") LocalDateTime startDate);
+    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.status = 'COMPLETED' AND t.type = 'BUY_COURSE' AND t.transactionDate >= :startDate AND t.transactionDate <= :endDate")
+    long getTotalAmountOfCompletedBuyCourseTransactionsInMount(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
 }

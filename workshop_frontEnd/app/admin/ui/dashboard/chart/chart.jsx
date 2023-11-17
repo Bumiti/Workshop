@@ -104,9 +104,8 @@ const Chart = () => {
           <Line type="monotone" dataKey="visit" stroke="#8884d8" strokeDasharray="5 5" />
           <Line type="monotone" dataKey="click" stroke="#82ca9d" strokeDasharray="3 4 5 2" />
         </LineChart>
-
       </ResponsiveContainer>
-      <ResponsiveContainer>
+      {/* <ResponsiveContainer>
         <RadarChart outerRadius={90} width={730} height={250} data={data1}>
           <PolarGrid />
           <PolarAngleAxis dataKey="subject" />
@@ -115,7 +114,7 @@ const Chart = () => {
           <Radar name="Lily" dataKey="B" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
           <Legend />
         </RadarChart>
-      </ResponsiveContainer>
+      </ResponsiveContainer> */}
 
     </div>
   )

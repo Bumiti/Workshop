@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Service
@@ -34,38 +35,30 @@ public class DashBoardServiceImpl implements DashboardService {
     public DashboardDTO Dashboard() {
         try {
             DashboardDTO Dashboard = new DashboardDTO();
+
+            LocalDateTime startOfMonth = LocalDateTime.now().with(TemporalAdjusters.firstDayOfMonth());
+            LocalDateTime endOfMonth = LocalDateTime.now().with(TemporalAdjusters.lastDayOfMonth());
+
             List<User> totalAccount = userRepository.findAll();
             List<User> totalUser = userRepository.countUsersWithUserRole();
             List<User> totalTeacher = userRepository.countUsersWithSellerRole();
-            List<User> newUserThisMonth = totalUser.stream()
-                    .filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
-                    .toList();
-            List<User> newUserThisYear = totalUser.stream()
-                    .filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusYears(1)))
-                    .toList();
-            List<User> newTeacherThisMonth = totalTeacher.stream()
-                    .filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
-                    .toList();
-            List<User> newTeacherThisYear = totalTeacher.stream()
-                    .filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusYears(1)))
-                    .toList();
-
+            List<User> newUserThisMonth = totalUser.stream().filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(startOfMonth)).toList();
+            List<User> newUserThisYear = totalUser.stream().filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusYears(1))).toList();
+            List<User> newTeacherThisMonth = totalTeacher.stream().filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(startOfMonth)).toList();
+            List<User> newTeacherThisYear = totalTeacher.stream().filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusYears(1))).toList();
 
             List<Course> courseResponsesList = courseRepository.findAll();
-            List<Course> newCoursesThisMonth = courseResponsesList.stream()
-                    .filter(course -> course.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
-                    .toList();
-            List<Course> newCoursesThisYear= courseResponsesList.stream()
-                    .filter(course -> course.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
-                    .toList();
+            List<Course> newCoursesThisMonth = courseResponsesList.stream().filter(course -> course.getCreatedDate().toLocalDateTime().isAfter(startOfMonth)).toList();
+            List<Course> newCoursesThisYear= courseResponsesList.stream().filter(course -> course.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1))).toList();
 
             long transactionList = transactionRepository.findAll().size();
             long successfulTransactions = transactionRepository.countSuccessfulTransactions();
             long FailedTransactions = transactionRepository.countFailedTransactions();
 
             long TotalRevenue = transactionRepository.getTotalAmountOfCompletedBuyCourseTransactions();
-            LocalDateTime startDate = LocalDateTime.now().minusDays(30);
-            long TotalRevenueInMonths = transactionRepository.getTotalAmountOfCompletedBuyCourseTransactions(startDate);
+            long CoursesRevenueThisMonth = transactionRepository.getTotalAmountOfCompletedBuyCourseTransactionsInMount(startOfMonth,endOfMonth);
+
+
             List<UserBanking> userBankings = userBankRepository.findAll();
             Dashboard
                     //account//
@@ -78,12 +71,18 @@ public class DashBoardServiceImpl implements DashboardService {
                     .setTotalCourses(courseResponsesList.size()).setNewCoursesThisMonth(newCoursesThisMonth.size()).setNewCoursesThisYear(newCoursesThisYear.size())
                     //course//
 
+                    //Revenue//
+                    .setTotalCoursesPricing((int) TotalRevenue).setCoursesPricingThisMonth((int) CoursesRevenueThisMonth)
+                    .setTotalRevenue((int) ((int) TotalRevenue*0.03)).setRevenueThisMonth((int) CoursesRevenueThisMonth*0.03)
+
+                    .setRatioRevenue(1)
+                    //Revenue//
+
                     .setTotalDiscounts(discountRepository.findAll().size())
                     .setTotalBankAccounts(userBankings.size())
 
                     .setTotalTransactions((int) transactionList)
-                    .setTotalRevenue((int) TotalRevenue)
-                    .setRevenueThisMonth((int) TotalRevenueInMonths)
+
 
                     .setSuccessfulTransactions((int) successfulTransactions).setFailedTransactions((int) FailedTransactions);
 
