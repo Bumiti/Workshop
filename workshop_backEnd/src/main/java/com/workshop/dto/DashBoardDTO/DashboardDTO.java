@@ -15,14 +15,21 @@ import java.util.List;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class DashboardDTO {
-
+    //Account//
     private int totalAccount = 0 ;
     private int totalStudent = 0 ;
     private int newStudentThisMonth = 0 ;
+    private int newStudentThisYear = 0 ;
     private int totalTeacher = 0 ;
     private int newTeacherThisMonth = 0 ;
+    private int newTeacherThisYear = 0 ;
+    //Account//
+
+    //Course//
     private int totalCourses = 0 ;
     private int newCoursesThisMonth = 0 ;
+    private int newCoursesThisYear = 0;
+    //Course//
 
     private int totalRevenue = 0 ;/* Tổng doanh thu từ cơ sở dữ liệu */;
     private int revenueThisMonth = 0 ; /* Doanh thu trong tháng này */;

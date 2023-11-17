@@ -1,9 +1,7 @@
 package com.workshop.dao;
 
-import com.workshop.dto.CourseDTO.CourseResponses;
+
 import com.workshop.dto.DashBoardDTO.DashboardDTO;
-import com.workshop.dto.DashBoardDTO.TransactionDTO;
-import com.workshop.model.Discount;
 import com.workshop.model.Transaction;
 import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.User;
@@ -13,17 +11,15 @@ import com.workshop.repositories.DiscountRepository;
 import com.workshop.repositories.TransactionRepository;
 import com.workshop.repositories.User.UserBankRepository;
 import com.workshop.repositories.User.UserRepository;
-import com.workshop.service.AdminService;
-import com.workshop.service.CourseService;
 import com.workshop.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -31,55 +27,70 @@ public class DashBoardServiceImpl implements DashboardService {
     private final CourseRepository courseRepository;
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
-    private  final DiscountRepository discountRepository;
+    private final DiscountRepository discountRepository;
     private final UserBankRepository userBankRepository;
+
     @Override
     public DashboardDTO Dashboard() {
-       try {
-           DashboardDTO Dashboard = new DashboardDTO();
-           List<User>totalAccount = userRepository.findAll();
-           List<User> totalUser = userRepository.countUsersWithUserRole();
-           List<User>  totalTeacher = userRepository.countUsersWithSellerRole();
+        try {
+            DashboardDTO Dashboard = new DashboardDTO();
+            List<User> totalAccount = userRepository.findAll();
+            List<User> totalUser = userRepository.countUsersWithUserRole();
+            List<User> totalTeacher = userRepository.countUsersWithSellerRole();
+            List<User> newUserThisMonth = totalUser.stream()
+                    .filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
+                    .toList();
+            List<User> newUserThisYear = totalUser.stream()
+                    .filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusYears(1)))
+                    .toList();
+            List<User> newTeacherThisMonth = totalTeacher.stream()
+                    .filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
+                    .toList();
+            List<User> newTeacherThisYear = totalTeacher.stream()
+                    .filter(user -> user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusYears(1)))
+                    .toList();
 
-           List<User> newUserThisMonth = totalUser.stream()
-                   .filter(user ->user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
-                   .toList();
-           List<User> newTeacherThisMonth = totalTeacher.stream()
-                   .filter(user ->user.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
-                   .toList();
-           List<Course> courseResponsesList =courseRepository.findAll();
-           List<Course> newCoursesThisMonth = courseResponsesList.stream()
-                   .filter(course ->course.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
-                   .toList();
 
-           long transactionList = transactionRepository.findAll().size();
+            List<Course> courseResponsesList = courseRepository.findAll();
+            List<Course> newCoursesThisMonth = courseResponsesList.stream()
+                    .filter(course -> course.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
+                    .toList();
+            List<Course> newCoursesThisYear= courseResponsesList.stream()
+                    .filter(course -> course.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
+                    .toList();
+
+            long transactionList = transactionRepository.findAll().size();
             long successfulTransactions = transactionRepository.countSuccessfulTransactions();
-           long FailedTransactions = transactionRepository.countFailedTransactions();
-           List<Transaction> findCompletedBuyCourseTransactions =transactionRepository.findCompletedBuyCourseTransactions();
-           List<Transaction> RevenueThisMonth = findCompletedBuyCourseTransactions.stream()
-                   .filter(trans ->trans.getCreatedDate().toLocalDateTime().isAfter(LocalDateTime.now().minusMonths(1)))
-                   .toList();
-           List<UserBanking> userBankings = userBankRepository.findAll();
-           Dashboard
-                   .setTotalAccount( totalAccount.size())
-                   .setTotalTeacher( totalTeacher.size()).setNewTeacherThisMonth(newTeacherThisMonth.size())
-                   .setTotalStudent( totalUser.size()).setNewStudentThisMonth(newUserThisMonth.size())
+            long FailedTransactions = transactionRepository.countFailedTransactions();
 
-                   .setTotalCourses(courseResponsesList.size())
-                   .setNewCoursesThisMonth(newCoursesThisMonth.size())
+            long TotalRevenue = transactionRepository.getTotalAmountOfCompletedBuyCourseTransactions();
+            LocalDateTime startDate = LocalDateTime.now().minusDays(30);
+            long TotalRevenueInMonths = transactionRepository.getTotalAmountOfCompletedBuyCourseTransactions(startDate);
+            List<UserBanking> userBankings = userBankRepository.findAll();
+            Dashboard
+                    //account//
+                    .setTotalAccount(totalAccount.size())
+                    .setTotalTeacher(totalTeacher.size()).setNewTeacherThisMonth(newTeacherThisMonth.size()).setNewTeacherThisYear(newTeacherThisYear.size())
+                    .setTotalStudent(totalUser.size()).setNewStudentThisMonth(newUserThisMonth.size()).setNewStudentThisYear(newUserThisYear.size())
+                    //account//
 
-                   .setTotalDiscounts(discountRepository.findAll()
-                    .size()).setTotalBankAccounts(userBankings.size())
+                    //course//
+                    .setTotalCourses(courseResponsesList.size()).setNewCoursesThisMonth(newCoursesThisMonth.size()).setNewCoursesThisYear(newCoursesThisYear.size())
+                    //course//
 
-                   .setTotalRevenue(findCompletedBuyCourseTransactions.size())
-                   .setRevenueThisMonth(RevenueThisMonth.size())
-                   .setTotalTransactions((int) transactionList)
-                   .setSuccessfulTransactions((int) successfulTransactions).setFailedTransactions((int) FailedTransactions);
+                    .setTotalDiscounts(discountRepository.findAll().size())
+                    .setTotalBankAccounts(userBankings.size())
 
-           return Dashboard;
-       }catch (Exception e){
-           throw e;
-       }
+                    .setTotalTransactions((int) transactionList)
+                    .setTotalRevenue((int) TotalRevenue)
+                    .setRevenueThisMonth((int) TotalRevenueInMonths)
+
+                    .setSuccessfulTransactions((int) successfulTransactions).setFailedTransactions((int) FailedTransactions);
+
+            return Dashboard;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
 }
