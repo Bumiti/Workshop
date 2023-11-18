@@ -1,11 +1,13 @@
 package com.workshop.repositories.User;
 
+import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.User;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
@@ -51,4 +53,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT u FROM User u JOIN u.roles r WHERE r.name = 'SELLER'")
     List<User> countUsersWithSellerRole();
 
+    @Query("SELECT u FROM User u WHERE u.createdDate >= :startOfMonth AND u.createdDate <= :endOfMonth")
+    List<User> getUsersCreatedBetween(@Param("startOfMonth") LocalDateTime startOfMonth, @Param("endOfMonth") LocalDateTime endOfMonth);
+    @Query("SELECT u FROM User u JOIN FETCH u.roles r WHERE u.createdDate >= :startOfMonth AND u.createdDate <= :endOfMonth AND r.name = :role")
+    List<User> getUsersWithRolesAndRoleCreatedBetween(
+            @Param("startOfMonth") LocalDateTime startOfMonth,
+            @Param("endOfMonth") LocalDateTime endOfMonth,
+            @Param("role") String role);
 }

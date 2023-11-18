@@ -4,7 +4,8 @@ import com.workshop.authentication.*;
 import com.workshop.jwtservice.JwtService;
 import com.workshop.model.userModel.Roles;
 import com.workshop.model.userModel.User;
-import com.workshop.repositories.*;
+//import com.workshop.repositories.User.RoleCustomerRepository;
+import com.workshop.repositories.User.RoleRepository;
 import com.workshop.repositories.User.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +20,8 @@ import java.util.*;
 public class AuthenticationService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
-    private  final RoleCustomerReposetory RoleCustomerReposetory;
+//    private  final RoleCustomerRepository RoleCustomerReposetory;
+    private  final RoleRepository roleRepository;
     private final JwtService jwtService;
     public AuthenticationResponse authenticationResponse(AuthenticationRequest authenticationRequest){
 
@@ -27,7 +29,7 @@ public class AuthenticationService {
         User user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
         List<Roles> role = null;
 //        if(user!=null){ role = RoleCustomerReposetory.getRole(user);}
-        if(user!=null){ role = RoleCustomerReposetory.getRolesForUserByEmail(user.getEmail());}
+        if(user!=null){ role = roleRepository.getRolesForUserByEmail(user.getEmail());}
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         Set<Roles> set = new HashSet<>();
         role.forEach(c->set.add(new Roles(c.getName())));
@@ -60,7 +62,7 @@ public class AuthenticationService {
         User user = userRepository.findByEmail(OUse.getEmail()).orElseThrow();
         List<Roles> role = null;
 //        if(user!=null){ role = RoleCustomerReposetory.getRole(user);}
-        if(user!=null){ role = RoleCustomerReposetory.getRolesForUserByEmail(user.getEmail());}
+        if(user!=null){ role = roleRepository.getRolesForUserByEmail(user.getEmail());}
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
         Set<Roles> set = new HashSet<>();

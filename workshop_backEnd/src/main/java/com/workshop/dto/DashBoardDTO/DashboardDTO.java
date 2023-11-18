@@ -29,6 +29,8 @@ public class DashboardDTO {
     private double newTeacherThisMonth = 0 ;
     @NumberFormat(pattern = "#,##0.00")
     private double newTeacherThisYear = 0 ;
+    @NumberFormat(pattern = "#,##0.00")
+    private double ratioUser = 0;
     //Account//
 
     //Course//
@@ -38,7 +40,8 @@ public class DashboardDTO {
     private double newCoursesThisMonth = 0 ;
     @NumberFormat(pattern = "#,##0.00")
     private double newCoursesThisYear = 0;
-
+    @NumberFormat(pattern = "#,##0.00")
+    private double ratioCourse = 0;
     //Course//
     //Revenue//
     @NumberFormat(pattern = "#,##0.00")

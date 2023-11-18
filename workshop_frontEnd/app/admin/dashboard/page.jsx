@@ -8,33 +8,6 @@ import ApiService from '@/app/services/ApiService';
 import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 
-// export const cards = [
-//   {
-//     id: 1,
-//     title: "New Student in Mount",
-//     number: 10.928,
-//     change: 12,
-//   },
-//   {
-//     id: 2,
-//     title: "New Teacher in Mount",
-//     number: 8.236,
-//     change: -2,
-//   },
-//   {
-//     id: 3,
-//     title: "Deposit",
-//     number: 6.642,
-//     change: 18,
-//   },
-//   {
-//     id: 4,
-//     title: "Revenue",
-//     number: 6.642,
-//     change: 18,
-//   },
-// ];
-
 const Dashboard = () => {
   const [cards, setCard] = useState( [
     {
@@ -89,7 +62,7 @@ const Dashboard = () => {
                 subtitle: 'User on Month' ??  prevCards[0].subtitle,
                 total_number: result.data.totalAccount ?? prevCard[0].total_number,
                 week_number: result.data.newStudentThisMonth + result.data.newTeacherThisMonth ?? prevCard[0].total_number,
-                change: '' ?? prevCards[0].change,
+                change: result.data.ratioUser ?? prevCards[0].change,
               },
               {
                 ...prevCard[1],
@@ -98,7 +71,7 @@ const Dashboard = () => {
                 subtitle: 'Workshop on Month' ??  prevCards[1].subtitle,
                 total_number: result.data.totalCourses ?? prevCard[1].total_number,
                 week_number: result.data.newCoursesThisMonth  ?? prevCard[1].total_number,
-                change: '' ?? prevCards[1].change,
+                change: result.data.ratioCourse ?? prevCards[1].change,
               },
               {
                 ...prevCard[2],
@@ -107,7 +80,7 @@ const Dashboard = () => {
                 subtitle: 'Pricing on Month' ??  prevCards[2].subtitle,
                 total_number: result.data.totalCoursesPricing + "$" ?? prevCard[2].total_number,
                 week_number: result.data.coursesPricingThisMonth + "$"  ?? prevCard[2].total_number,
-                change: '' ?? prevCards[2].change,
+                change: result.data.ratioRevenue ?? prevCards[2].change,
               }
               ,
               {
@@ -117,7 +90,7 @@ const Dashboard = () => {
                 subtitle: 'Revenue on Month' ??  prevCards[3].subtitle,
                 total_number: result.data.totalRevenue + "$" ?? prevCard[3].total_number,
                 week_number: result.data.revenueThisMonth + "$"  ?? prevCard[3].total_number,
-                change: '' ?? prevCards[3].change,
+                change: result.data.ratioRevenue ?? prevCards[3].change,
               }
             ]);
           } else {
