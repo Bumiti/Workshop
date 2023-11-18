@@ -1,5 +1,11 @@
 # WorkShop_Project04
 
+# Use the following credentials for workshop Email:
+
+- **Email**: workshopproject04@gmail.com
+- **Password**: iebqtqjsfqzskuyf
+
+
 # Test Payment Accounts
 
 Use the following test accounts for payment testing:
