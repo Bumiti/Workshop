@@ -61,7 +61,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           onPressed: () {
                             isLogin.value = true;
                           },
-                          child: Text('Login'),
+                          child: Text('Login with passion'),
                         ),
                       ],
                     ),
@@ -112,7 +112,8 @@ class _AuthScreenState extends State<AuthScreen> {
         SizedBox(
           height: 20,
         ),
-        InputPasswordFieldWidget(loginController.passwordController, 'password'),
+        InputPasswordFieldWidget(
+            loginController.passwordController, 'password'),
         SizedBox(
           height: 20,
         ),
