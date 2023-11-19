@@ -78,9 +78,9 @@ const PayMent = ({ params }: { params: { id: any } }) => {
                 const data = {
                     type: "string",
                     status: "Amount",
-                    item_register_id: course.id,
+                    item_register_id: course!.id,
                     locationId: 0,
-                    amount: course.price,
+                    amount: course!.price,
                     discountAmount: 0,
                     discountCode: "string",
                     paymentName: "Amount",

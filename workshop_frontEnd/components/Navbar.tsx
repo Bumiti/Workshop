@@ -23,8 +23,6 @@ export default function Navbar() {
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible);
   };
-  // console.log("dropdownVisible:", dropdownVisible);
-  console.log("session:", session);
   const handleSignout = () => {
     signOut();
   };
@@ -38,7 +36,7 @@ export default function Navbar() {
       let profileLink = "/user"; // Mặc định là role "user"
       
       // Kiểm tra và cập nhật đường dẫn dựa trên vai trò của người dùng
-      if (session.user.roles.includes('SELLER')) {
+      if (session.user.roles ==="SELLER") {
         profileLink = "/teacher";
       }
       return (

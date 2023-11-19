@@ -1,11 +1,11 @@
 // ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors
 
 import 'package:workshop_mobi/controller/login_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:workshop_mobi/screens/auth/widgets/input_fields.dart';
 import 'package:workshop_mobi/screens/auth/widgets/password_fields.dart';
 import 'package:workshop_mobi/screens/auth/widgets/submit_button.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -80,24 +80,6 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget registerWidget() {
     return Column(
       children: [
-        // InputTextFieldWidget(registerationController.nameController, 'name'),
-        // SizedBox(
-        //   height: 20,
-        // ),
-        // InputTextFieldWidget(
-        //     registerationController.emailController, 'email address'),
-        // SizedBox(
-        //   height: 20,
-        // ),
-        // InputTextFieldWidget(
-        //     registerationController.passwordController, 'password'),
-        // SizedBox(
-        //   height: 20,
-        // ),
-        // SubmitButton(
-        //   onPressed: () => registerationController.registerWithEmail(),
-        //   title: 'Register',
-        // )
       ],
     );
   }
@@ -122,5 +104,9 @@ class _AuthScreenState extends State<AuthScreen> {
         )
       ],
     );
+
+
   }
 }
+  
+

@@ -1,9 +1,12 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
+import com.workshop.config.cloud.ResponseRequestOptions;
 import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
+import com.workshop.event.RenewPasswordEvent;
+import com.workshop.event.SendQrCodeEvent;
 import com.workshop.model.Request;
 import com.workshop.service.CourseService;
 import com.workshop.service.RequestService;
@@ -13,6 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +29,7 @@ import java.time.LocalDateTime;
 @SecurityRequirement(name ="bearerAuth")
 @Tag(name = "Student Controller", description = "Quản Lý Tác Vụ Học Sinh")
 public class StudentController {
-
+    private final ApplicationEventPublisher publisher;
     private final UserService userService;
     private final RequestService requestService;
     private final CourseService courseService;
@@ -78,11 +82,11 @@ public class StudentController {
     public ResponseEntity<ApiResponse<?>> Deposit(@RequestBody RequestDTO requestDTO) {
         try {
             requestDTO.setType("DEPOSIT");
-            String result =  requestService.createRequestOptions(requestDTO);
-            if (result.equals("APPROVED")) {
+            ResponseRequestOptions responseRequestOptions =  requestService.createRequestOptions(requestDTO);
+            if (responseRequestOptions.getStatus().equals("APPROVED")) {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
                         ("Success", "Your Request APPROVED", null));
-            } else if(result.equals("PENDING") ){
+            } else if(responseRequestOptions.getStatus().equals("PENDING") ){
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>
                         ("pending", "Your Request PENDING", null));
             }else{
@@ -100,11 +104,12 @@ public class StudentController {
         try {
 
             requestDTO.setType("BUY_COURSE");
-            String result =  requestService.createRequestOptions(requestDTO);
-            if (result.equals("APPROVED")) {
+            ResponseRequestOptions responseRequestOptions =  requestService.createRequestOptions(requestDTO);
+            publisher.publishEvent((new SendQrCodeEvent(responseRequestOptions.getUrlQrCode(),responseRequestOptions.getUser_name(),responseRequestOptions.getEmail())));
+            if (responseRequestOptions.getStatus().equals("APPROVED")) {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
                         ("Success", "Your Request ACCEPTED", null));
-            } else if(result.equals("PENDING") ){
+            } else if(responseRequestOptions.getStatus().equals("PENDING") ){
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>
                         ("pending", "Your Request PENDING", null));
             }else{

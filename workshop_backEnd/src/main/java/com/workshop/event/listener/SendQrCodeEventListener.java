@@ -1,16 +1,14 @@
 package com.workshop.event.listener;
-
-import com.workshop.event.RenewPasswordEvent;
+import com.workshop.event.SendQrCodeEvent;
+import com.workshop.model.userModel.User;
 import com.workshop.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.Component;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -19,34 +17,37 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RenewPasswordEventListener  implements ApplicationListener<RenewPasswordEvent> {
-    private final UserService userService;
+public class SendQrCodeEventListener
+        implements ApplicationListener<SendQrCodeEvent>
+{
     private  final JavaMailSender javaMailSender;
     @Override
-    public void onApplicationEvent(RenewPasswordEvent event) {
-        String Email = event.getMail();
-        String Password = event.getPassword();
+    public void onApplicationEvent(SendQrCodeEvent event) {
+        String user = event.getUser_name();
+        String url = event.getUrl();
+        String email = event.getEmail();
         try {
-            sendVerificationMail(Email,Password);
+            sendQrCode(url,user,email);
         }catch (MessagingException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
     }
-    public void sendVerificationMail(String mail,  String Password) throws MessagingException, UnsupportedEncodingException {
-        String subject = "Email Verification";
-        String senderName = "User Renew Password Service WorkShop";
+public void sendQrCode(String url,String user,String email) throws MessagingException, UnsupportedEncodingException {
+        String subject = "Ticker Qr Code";
+        String senderName = "WorkShop";
+
         Map<String, String> variables = new HashMap<>();
-        variables.put("password", Password);
+        variables.put("user", url);
+        variables.put("url", user);
 
-
-        String htmlContent = readHtmlTemplate("sendPassword.html");
+        String htmlContent = readHtmlTemplate("sendQrCode.html");
         for (Map.Entry<String, String> entry : variables.entrySet()) {
             htmlContent = htmlContent.replace("${" + entry.getKey() + "}", entry.getValue());
         }
         MimeMessage message =javaMailSender.createMimeMessage();
         var messagehepler = new MimeMessageHelper(message);
-        messagehepler.setFrom("workshopproject04@gmail.com",senderName);
-        messagehepler.setTo(mail);
+        messagehepler.setFrom("hquan0401.hr@gmail.com",senderName);
+        messagehepler.setTo(email);
         messagehepler.setSubject(subject);
         messagehepler.setText(htmlContent,true);
         javaMailSender.send((message));

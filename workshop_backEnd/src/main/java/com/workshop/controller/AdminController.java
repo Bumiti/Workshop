@@ -1,9 +1,11 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
+import com.workshop.config.cloud.ResponseRequestOptions;
 import com.workshop.dto.CourseDTO.CourseResponses;
 import com.workshop.dto.DashBoardDTO.DashboardDTO;
 import com.workshop.dto.LocationDTO;
+import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.RequestResponse;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
@@ -43,6 +45,28 @@ public class AdminController {
                 return createResponse(HttpStatus.ACCEPTED, "error", "DashBoard is empty", null);
             } else {
                 return createResponse(HttpStatus.ACCEPTED, "success", "get DashBoard success", dtos);
+            }
+        } catch (Exception e) {
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
+    }
+    @Operation(summary = "Xét duyệ rút tiền về cho giáo viên")
+    @GetMapping("teacher/withdraw")
+    public ResponseEntity<ApiResponse<?>> handleWithDrawRequest(@RequestParam int teacher_id) {
+        try {
+            RequestDTO requestDTO = new RequestDTO();
+            requestDTO.setItem_register_id((long) teacher_id);
+            requestDTO.setStatus("WITHDRAW");
+            ResponseRequestOptions responseRequestOptions  =  requestService.createRequestOptions(requestDTO);
+            if (responseRequestOptions.getStatus().equals("APPROVED")) {
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>
+                        ("Success", "Request is APPROVED", null));
+            } else if(responseRequestOptions.getStatus().equals("REJECTED") ){
+                return ResponseEntity.status(HttpStatus.CONTINUE).body(new ApiResponse<>
+                        ("rejected", "Request is REJECTED", null));
+            }else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>
+                        ("cancel", "Request is CANCEL", null));
             }
         } catch (Exception e) {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);

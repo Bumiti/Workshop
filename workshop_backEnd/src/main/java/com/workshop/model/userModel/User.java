@@ -5,10 +5,13 @@ import com.workshop.model.*;
 
 import com.workshop.model.courseModel.Course;
 import com.workshop.model.courseModel.CourseEnrollment;
+import com.workshop.model.courseModel.QrToken;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,6 +48,11 @@ public class User extends BaseModel implements UserDetails  {
     // Quan hệ một nhiều với khóa học và buổi workshop đã đăng ký
     @OneToMany(mappedBy = "enrolledStudent")
     private List<CourseEnrollment> enrolledCourses;
+
+    @OneToMany(mappedBy = "user")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<QrToken> qrTokens;
+
     @OneToMany(mappedBy = "user")
     private List<UserBanking> userBanks;
     @OneToMany(mappedBy = "user")
