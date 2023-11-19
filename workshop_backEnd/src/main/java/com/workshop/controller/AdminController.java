@@ -229,5 +229,18 @@ public class AdminController {
         }
     }
 
+    @Operation(summary = "Lấy thông tin cá nhân Admin")
+    @GetMapping("/detail")
+    public ResponseEntity<ApiResponse<?>> UserDetail() {
+        UserInfoResponse userInfoResponse = userService.userDetail();
+        if(userInfoResponse !=null){
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
+                    ("Success", "Your Info is ", userInfoResponse));
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>
+                    ("Success", "Your Info is ", null));
+        }
+    }
+
 }
 

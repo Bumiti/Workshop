@@ -1,47 +1,90 @@
-import React, { useEffect, useState } from 'react';
+'use client'
+import React, { useState, useEffect, ChangeEvent } from 'react';
+import ApiService from '@/app/services/ApiService'; // Thay đổi đường dẫn tới ApiService của bạn
 import { useSession } from 'next-auth/react';
-import ApiService from '@/app/services/ApiService';
 
-const ProfilePage = () => {
+interface AdminData {
+  id: number;
+  full_name: string;
+  user_name: string;
+  email: string;
+  phoneNumber: string;
+  image_url: string | null;
+  balance: number | null;
+  gender: string;
+  roles: string[];
+  enable: boolean;
+  userAddresses: any[]; // Thay thế any bằng kiểu dữ liệu thích hợp
+  userBank: any[]; // Thay thế any bằng kiểu dữ liệu thích hợp
+}
+
+const UpdateAdminPage: React.FC = () => {
+  const [adminId, setAdminId] = useState<number>(0);
   const { data: session } = useSession();
   const apiService = new ApiService(session);
-  const [userData, setUserData] = useState(null);
+  const [adminData, setAdminData] = useState<AdminData | null>(null);
 
   useEffect(() => {
-    const fetchProfileData = async () => {
+    // Gọi API để lấy thông tin admin khi component được mount
+    const fetchAdminData = async () => {
       try {
-        if (session && session.user.accessToken) {
-          const response = await apiService.EditAdmin(session.user.id); // Assuming you want to edit the profile of the currently logged-in user
-          setUserData(response);
-        }
+        const result = await apiService.getUserbyIdAdmin(adminId);
+        setAdminData(result);
       } catch (error) {
-        console.error("Error fetching profile data:", error);
+        console.error('Error fetching admin data:', error);
       }
     };
 
-    fetchProfileData();
-  }, [session]);
+    fetchAdminData();
+  }, [adminId]); // Chạy lại effect khi adminId thay đổi
 
-  if (!session) {
-    // Redirect to login page if not logged in
-    // You can also display a message or handle it differently based on your application logic
-    return <div>Please log in to view your profile.</div>;
-  }
 
-  if (!userData) {
-    // Display a loading spinner or message while fetching data
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAdminData((prevData) => ({
+      ...(prevData as AdminData),
+      [name]: value,
+    }));
+  };
+
+  const handleUpdateAdmin = async () => {
+    try {
+      if (adminData) {
+        // Gọi phương thức cập nhật admin từ ApiService
+        const result = await apiService.updateAdminDetails(adminData.id, adminData);
+        console.log('Admin updated:', result);
+      }
+    } catch (error) {
+      console.error('Error updating admin:', error);
+    }
+  };
+
+  if (!adminData) {
     return <div>Loading...</div>;
   }
 
-  // Render the user profile data
   return (
     <div>
-      <h1>Profile Page</h1>
-      <p>User ID: {userData.id}</p>
-      <p>Username: {userData.username}</p>
-      {/* Add more fields based on your user data structure */}
+      <h2>Update Admin</h2>
+      <label>
+        Admin ID:
+        <input type="text" value={adminId} onChange={(e) => setAdminId(Number(e.target.value))} />
+      </label>
+      <br />
+      <label>
+        Name:
+        <input type="text" name="name" value={adminData.full_name} onChange={handleInputChange} />
+      </label>
+      <br />
+      <label>
+        Email:
+        <input type="text" name="email" value={adminData.email} onChange={handleInputChange} />
+      </label>
+      <br />
+      {/* Thêm các trường khác cần cập nhật */}
+      <button onClick={handleUpdateAdmin}>Update Admin</button>
     </div>
   );
 };
 
-export default ProfilePage;
+export default UpdateAdminPage;
