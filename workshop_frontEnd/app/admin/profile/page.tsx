@@ -335,6 +335,7 @@ const EditAdminPage = () => {
           </form>
         </div>
       </div>
+
     </div>
   );
 };

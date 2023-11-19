@@ -192,6 +192,7 @@ const EditProfile = () => {
         const response = await apiService.editUserProfile(userData);
         if (response) {
           console.log("User data updated successfully.");
+
         } else {
           console.error("Error updating user data.");
         }
