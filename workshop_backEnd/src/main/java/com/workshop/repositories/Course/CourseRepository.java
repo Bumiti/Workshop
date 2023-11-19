@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -54,9 +55,6 @@ public interface CourseRepository extends JpaRepository<Course,Long> {
     @Query("SELECT c FROM Course c WHERE c.isPublic = true  and c.id = :courseId")
     Course CoursePublic(@Param("courseId") long courseId);
 
-//    @Modifying
-//    @Query("SELECT c FROM Course c")
-//    List<Course> listCourse();
 
     @Transactional
     @Modifying
@@ -69,5 +67,8 @@ public interface CourseRepository extends JpaRepository<Course,Long> {
     @Modifying
     @Query("UPDATE Course c SET c.isPublic = CASE WHEN c.isPublic = true THEN false ELSE true END WHERE c.id = :id")
     int chanceStatusCourseById(Long id);
+
+    @Query("SELECT c FROM Course c WHERE c.createdDate >= :startOfMonth AND c.createdDate <= :endOfMonth")
+    List<Course> getCoursesCreatedBetween(@Param("startOfMonth") LocalDateTime startOfMonth, @Param("endOfMonth") LocalDateTime endOfMonth);
 
 }

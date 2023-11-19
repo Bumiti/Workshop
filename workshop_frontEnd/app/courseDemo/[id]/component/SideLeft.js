@@ -81,7 +81,7 @@ export default function SideLeft({ course }) {
                 )}
                 <ul className={styles.list}>
                     <li>
-                        <h6>Tổng Cộng có 11 bài</h6>
+                        <h6>Tổng Cộng có {course.courseMediaInfos.length} bài</h6>
                     </li>
                     <li>
                         <h6>Tổng Thời Lượng</h6>

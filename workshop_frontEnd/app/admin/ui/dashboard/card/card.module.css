@@ -22,7 +22,10 @@
   font-size: 24px;
   font-weight: 500;
 }
-
+.number2 {
+  font-size: 18px;
+  font-weight: 250;
+}
 .detail {
   font-size: 14px;
   font-weight: 300;

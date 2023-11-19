@@ -110,6 +110,17 @@ class ApiService {
             throw error;
         }
     }
+    async dashboard() {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get('admin/DashBoard');
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
     async listCoursesFromApi() {
         try {
             const response = await this.customAxios.get('/seller/course/list');
