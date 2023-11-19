@@ -225,6 +225,30 @@ class ApiService {
             throw error;
         }
     }
+
+    async listLocation() {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get('/admin/location/list');
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async UpdateLocation(course_location_id: number, location_id: number) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.put(`admin/course/locationUpdate?course_location_Id=${course_location_id}&location_id=${location_id}`);
+                return response.data;
+            }
+            return null;
+        } catch (error) {
+            throw error;
+        }
+    }
     //-------------------------------------------------Web API-------------------------------------------------//
     async listCoursePublic() {
         try {
