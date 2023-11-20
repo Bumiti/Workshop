@@ -76,7 +76,7 @@ const UsersPage = () => {
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-
+  console.log('user', users)
   return (
     <div className={styles.container}>
       <div className={styles.top}>

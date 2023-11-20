@@ -225,10 +225,11 @@ class ApiService {
             throw error;
         }
     }
-    async EditAdmin(id: any) {
+
+    async updateAdminDetails(id: number, newData: any): Promise<any> {
         try {
             if (this.session?.user.accessToken) {
-                const response = await this.customAxios.put(`/admin/edit?id=${id}`);
+                const response = await this.customAxios.put(`/admin/edit?id=${id}`, newData);
                 return response.data;
             }
             return null;
@@ -236,11 +237,14 @@ class ApiService {
             throw error;
         }
     }
+
+    //-------------------------------------------------Admin API-------------------------------------------------//
     //-------------------------------------------------Web API-------------------------------------------------//
     async listCoursePublic() {
         try {
             const response = await this.customAxios.get('/web/course/list');
             return response.data;
+
         } catch (error) {
             throw error;
         }
@@ -262,7 +266,6 @@ class ApiService {
         }
     }
     //-------------------------------------------------Web API-------------------------------------------------//
-
 }
 
 export default ApiService;

@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:workshop_mobi/components/my_button.dart';
-import 'package:workshop_mobi/components/my_pw_textfield.dart';
-import 'package:workshop_mobi/components/my_email_textfield.dart';
+import 'package:workshop_mobi/screens/auth/components/my_button.dart';
+import 'package:workshop_mobi/screens/auth/components/my_pw_textfield.dart';
+import 'package:workshop_mobi/screens/auth/components/my_email_textfield.dart';
+import 'package:workshop_mobi/controller/login_controller.dart';
+import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   final void Function()? onTap;
 
   LoginPage({super.key, required this.onTap});
-
-  //text controllers
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
-  //login page
-  void login() {}
+  LoginController loginController = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -26,25 +23,20 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               //logo
-
               // Image.asset(
               //   "lib/assets/Logo.jpg",
               //   width: 200,
               //   height: 200,
               // ),
-
               // Icon(
               //   Icons.person,
               //   size: 80,
               //   color: Theme.of(context).colorScheme.inversePrimary,
               // ),
-
               // const SizedBox(
               //   height: 25,
               // ),
-
               //app name
-
               const Text(
                 'Sign In',
                 style: TextStyle(fontSize: 50, fontWeight: FontWeight.w700),
@@ -54,13 +46,15 @@ class LoginPage extends StatelessWidget {
                 height: 50,
               ),
               //email textfield
-              MyEmailTextfield(obscureText: false, controller: emailController),
+              MyEmailTextfield(
+                  obscureText: false,
+                  controller: loginController.emailController),
 
               const SizedBox(
                 height: 30,
               ),
               //password textfield
-              MyPwTextfield(controller: passwordController),
+              MyPwTextfield(controller: loginController.passwordController),
               const SizedBox(
                 height: 10,
               ),
@@ -84,7 +78,9 @@ class LoginPage extends StatelessWidget {
               //sign in button
               MyButton(
                 text: 'Sign in',
-                onTap: login,
+                onTap: () async {
+                  await loginController.loginWithEmail();
+                },
               ),
 
               const SizedBox(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:workshop_mobi/components/my_button.dart';
-import 'package:workshop_mobi/components/my_email_textfield.dart';
-import 'package:workshop_mobi/components/my_emailconfirm_textfield.dart';
-import 'package:workshop_mobi/components/my_pw_textfield.dart';
-import 'package:workshop_mobi/components/my_pwconfirm_textfield.dart';
+import 'package:workshop_mobi/screens/auth/components/my_button.dart';
+import 'package:workshop_mobi/screens/auth/components/my_email_textfield.dart';
+import 'package:workshop_mobi/screens/auth/components/my_emailconfirm_textfield.dart';
+import 'package:workshop_mobi/screens/auth/components/my_pw_textfield.dart';
+import 'package:workshop_mobi/screens/auth/components/my_pwconfirm_textfield.dart';
 
 class RegisterPage extends StatelessWidget {
   final void Function()? onTap;

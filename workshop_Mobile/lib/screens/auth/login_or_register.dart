@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:workshop_mobi/screens/login_page.dart';
-import 'package:workshop_mobi/screens/register_page.dart';
+import 'package:workshop_mobi/screens/auth/widgets/login_page.dart';
+import 'package:workshop_mobi/screens/auth/widgets/register_page.dart';
 
 class LoginOrReg extends StatefulWidget {
   const LoginOrReg({super.key});
@@ -10,7 +10,6 @@ class LoginOrReg extends StatefulWidget {
 }
 
 class _LoginOrRegState extends State<LoginOrReg> {
-  //initailly show login page
   bool showLoginPage = true;
 
   //toggle

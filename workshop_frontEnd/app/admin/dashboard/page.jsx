@@ -54,43 +54,43 @@ const Dashboard = () => {
           const result = await apiService.dashboard();
           console.log(result.data);
           if (result.status === "success") {
-            setCard((prevCard) => [
+            setCard((prevCards) => [
               {
-                ...prevCard[0],
-                id: '0' ?? prevCards[0].id,
-                title: 'Total User' ??  prevCards[0].title,
-                subtitle: 'User on Month' ??  prevCards[0].subtitle,
-                total_number: result.data.totalAccount ?? prevCard[0].total_number,
-                week_number: result.data.newStudentThisMonth + result.data.newTeacherThisMonth ?? prevCard[0].total_number,
-                change: result.data.ratioUser ?? prevCards[0].change,
+                ...prevCards[0],
+                id: '0' ?? prevCardss[0].id,
+                title: 'Total User' ??  prevCardss[0].title,
+                subtitle: 'User on Month' ??  prevCardss[0].subtitle,
+                total_number: result.data.totalAccount ?? prevCards[0].total_number,
+                week_number: result.data.newStudentThisMonth + result.data.newTeacherThisMonth ?? prevCards[0].total_number,
+                change: result.data.ratioUser ?? prevCardss[0].change,
               },
               {
-                ...prevCard[1],
-                id: '1' ?? prevCards[1].id,
-                title: 'Total Workshop' ??  prevCards[1].title,
-                subtitle: 'Workshop on Month' ??  prevCards[1].subtitle,
-                total_number: result.data.totalCourses ?? prevCard[1].total_number,
-                week_number: result.data.newCoursesThisMonth  ?? prevCard[1].total_number,
-                change: result.data.ratioCourse ?? prevCards[1].change,
+                ...prevCards[1],
+                id: '1' ?? prevCardss[1].id,
+                title: 'Total Workshop' ??  prevCardss[1].title,
+                subtitle: 'Workshop on Month' ??  prevCardss[1].subtitle,
+                total_number: result.data.totalCourses ?? prevCards[1].total_number,
+                week_number: result.data.newCoursesThisMonth  ?? prevCards[1].total_number,
+                change: result.data.ratioCourse ?? prevCardss[1].change,
               },
               {
-                ...prevCard[2],
-                id: '2' ?? prevCards[2].id,
-                title: 'Total Workshop Pricing' ??  prevCards[2].title,
-                subtitle: 'Pricing on Month' ??  prevCards[2].subtitle,
-                total_number: result.data.totalCoursesPricing + "$" ?? prevCard[2].total_number,
-                week_number: result.data.coursesPricingThisMonth + "$"  ?? prevCard[2].total_number,
-                change: result.data.ratioRevenue ?? prevCards[2].change,
+                ...prevCards[2],
+                id: '2' ?? prevCardss[2].id,
+                title: 'Total Workshop Pricing' ??  prevCardss[2].title,
+                subtitle: 'Pricing on Month' ??  prevCardss[2].subtitle,
+                total_number: result.data.totalCoursesPricing + "$" ?? prevCards[2].total_number,
+                week_number: result.data.coursesPricingThisMonth + "$"  ?? prevCards[2].total_number,
+                change: result.data.ratioRevenue ?? prevCardss[2].change,
               }
               ,
               {
-                ...prevCard[3],
-                id: '2' ?? prevCards[3].id,
-                title: 'Total Revenue' ??  prevCards[3].title,
-                subtitle: 'Revenue on Month' ??  prevCards[3].subtitle,
-                total_number: result.data.totalRevenue + "$" ?? prevCard[3].total_number,
-                week_number: result.data.revenueThisMonth + "$"  ?? prevCard[3].total_number,
-                change: result.data.ratioRevenue ?? prevCards[3].change,
+                ...prevCards[3],
+                id: '2' ?? prevCardss[3].id,
+                title: 'Total Revenue' ??  prevCardss[3].title,
+                subtitle: 'Revenue on Month' ??  prevCardss[3].subtitle,
+                total_number: result.data.totalRevenue + "$" ?? prevCards[3].total_number,
+                week_number: result.data.revenueThisMonth + "$"  ?? prevCards[3].total_number,
+                change: result.data.ratioRevenue ?? prevCardss[3].change,
               }
             ]);
           } else {

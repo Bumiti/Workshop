@@ -40,7 +40,6 @@ const SingleUserPage = ({ params }) => {
 
         if (id && session) {
           const user = await apiService.getUserbyIdAdmin(id);
-          console.log('user', user)
           setUser(user.data);
         }
 
@@ -55,7 +54,7 @@ const SingleUserPage = ({ params }) => {
   if (!user) {
     return <div>Loading...</div>;
   }
-
+  console.log('user', user)
 
   return (
     <div className={styles.container}>

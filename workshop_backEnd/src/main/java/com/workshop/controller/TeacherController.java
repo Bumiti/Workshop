@@ -1,6 +1,7 @@
 package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
+import com.workshop.config.cloud.ResponseRequestOptions;
 import com.workshop.dto.CourseDTO.CourseRequest;
 import com.workshop.dto.CourseDTO.CourseResponses;
 import com.workshop.dto.CourseDTO.CourseUpdateRequest;
@@ -108,16 +109,16 @@ public class TeacherController {
         }
 
     }
-    @Operation(summary = "Rút Tiền Về Tài Khoản")
+    @Operation(summary = "Gửi Yêu Cầu Rút Tiền Về Tài Khoản")
     @PostMapping("/deposit")
     public ResponseEntity<ApiResponse<?>> WithDraw(@RequestBody RequestDTO requestDTO) {
         try {
-            requestDTO.setType("WITHDRAW");
-            String result =  requestService.createRequestOptions(requestDTO);
-            if (result.equals("APPROVED")) {
+            requestDTO.setType("HANDLE_WITHDRAW");
+            ResponseRequestOptions responseRequestOptions =  requestService.createRequestOptions(requestDTO);
+            if (responseRequestOptions.getStatus().equals("PENDING")) {
                 return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>
-                        ("Success", "Your Request APPROVED", null));
-            } else if(result.equals("PENDING") ){
+                        ("Success", "Your Request PENDING", null));
+            } else if(responseRequestOptions.getStatus().equals("REJECTED") ){
                 return ResponseEntity.status(HttpStatus.CONTINUE).body(new ApiResponse<>
                         ("pending", "Your Balance Not Enable", null));
             }else{
