@@ -10,8 +10,17 @@ class LoginController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-
+  RxString emailErrorText = ''.obs;
+  RxString passwordErrorText = ''.obs;
   Future<void> loginWithEmail() async {
+    if (emailController.text == '' || passwordController.text == '') {
+      emailErrorText.value = 'Please enter your email';
+      passwordErrorText.value = 'Please enter your password';
+      return;
+    } else {
+      emailErrorText.value = '';
+      passwordErrorText.value = '';
+    }
     try {
       var user = await apiService.loginWebAccount(
         emailController.text.trim(),
@@ -21,42 +30,47 @@ class LoginController extends GetxController {
       var roles = user['roles'];
       String roleString = '';
       if (roles != null && roles.isNotEmpty) {
-         roleString = roles[0];
+        roleString = roles[0];
       } else {
         // print("Roles list is empty or null");
       }
       var accessToken = user['accessToken'];
       // print(roleString);
       await prefs.setString('token', accessToken);
-
       emailController.clear();
       passwordController.clear();
       if (roleString == 'USER') {
         Get.off(const UserHomeScreen());
       } else if (roleString == 'SELLER') {
         Get.off(const TeacherHomeScreen());
-      }else{
+      } else {
         Get.back();
         showDialog(
-        context: Get.context!,
-        builder: (context) {
-          return const SimpleDialog(
-            title: Text('Warning'),
-            contentPadding: EdgeInsets.all(20),
-            children: [Text('Your Account Not Available for this App, Please Login First')],
-          );
-        },
-      );
+          context: Get.context!,
+          builder: (context) {
+            return const SimpleDialog(
+              title: Text('False'),
+              contentPadding: EdgeInsets.all(20),
+              children: [
+                Text(
+                    'Your Account Not Available for this App, Please Register First')
+              ],
+            );
+          },
+        );
       }
     } catch (error) {
       Get.back();
       showDialog(
         context: Get.context!,
         builder: (context) {
-          return SimpleDialog(
-            title: const Text('Error'),
+          return const SimpleDialog(
+            title: Text('Error'),
             contentPadding: const EdgeInsets.all(20),
-            children: [Text(error.toString())],
+            children: [
+              Text(
+                  'Your Account Not Available for this App, Please Register First')
+            ],
           );
         },
       );

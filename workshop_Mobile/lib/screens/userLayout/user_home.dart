@@ -2,7 +2,8 @@ import 'package:workshop_mobi/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workshop_mobi/screens/auth/widgets/login_page.dart';
+import 'package:workshop_mobi/screens/auth/login_or_register.dart';
+
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ bool showLoginPage = true;
           onPressed: () async {
             final SharedPreferences prefs = await _prefs;
             prefs.clear();
-            Get.offAll(LoginPage(onTap: togglePages));
+            Get.offAll(const LoginOrReg());
           },
           child: const Text(
             'logout',

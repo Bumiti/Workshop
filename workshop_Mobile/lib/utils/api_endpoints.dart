@@ -1,5 +1,5 @@
 class ApiEndPoints {
-  static const String baseUrl = 'http://172.16.1.16:8089/';
+  static const String baseUrl = 'http://192.168.1.20:8089/';
   // ignore: library_private_types_in_public_api
   static  _AuthEndPoints authEndpoints = _AuthEndPoints();
   // ignore: library_private_types_in_public_api
@@ -8,7 +8,7 @@ class ApiEndPoints {
 }
 
 class _AuthEndPoints {
-  final String registerEmail = 'authaccount/registration';
+  final String register = 'auth/user/register';
   final String loginWebAccount = 'auth/loginWeb';
 
  

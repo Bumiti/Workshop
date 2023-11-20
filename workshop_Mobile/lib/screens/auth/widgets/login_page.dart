@@ -4,6 +4,7 @@ import 'package:workshop_mobi/screens/auth/components/my_pw_textfield.dart';
 import 'package:workshop_mobi/screens/auth/components/my_email_textfield.dart';
 import 'package:workshop_mobi/controller/login_controller.dart';
 import 'package:get/get.dart';
+import 'package:workshop_mobi/screens/auth/widgets/forgot_password.dart';
 
 // ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
@@ -59,18 +60,29 @@ class LoginPage extends StatelessWidget {
                 height: 10,
               ),
               //forgot password
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    "Forgot password?",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF00AEEF),
+                  GestureDetector(
+                    onTap: () {
+                      // Điều hướng đến trang Forgot Password
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ForgotPassword(onTap: () {  },)),
+                      );
+                    },
+                    child: Text(
+                      "Forgot password?",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF00AEEF),
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
+
               const SizedBox(
                 height: 25,
               ),

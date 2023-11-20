@@ -13,7 +13,7 @@ class _MyPwTextfieldState extends State<MyPwTextfield> {
   bool obscureText = true;
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       obscureText: obscureText,
       controller: widget.controller,
       decoration: InputDecoration(

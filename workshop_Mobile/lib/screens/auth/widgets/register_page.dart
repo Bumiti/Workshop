@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:workshop_mobi/controller/register_controller.dart';
 import 'package:workshop_mobi/screens/auth/components/my_button.dart';
 import 'package:workshop_mobi/screens/auth/components/my_email_textfield.dart';
 import 'package:workshop_mobi/screens/auth/components/my_emailconfirm_textfield.dart';
 import 'package:workshop_mobi/screens/auth/components/my_pw_textfield.dart';
 import 'package:workshop_mobi/screens/auth/components/my_pwconfirm_textfield.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
-
-  RegisterPage({super.key, required this.onTap});
-
+  RegisterPage({Key? key, required this.onTap}) : super(key: key);
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+class _RegisterPageState extends State<RegisterPage> {
   //text controllers
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPwdController = TextEditingController();
-
+  RegisterController registerController = Get.put(RegisterController());
   //register method
   void register() {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,85 +25,65 @@ class RegisterPage extends StatelessWidget {
       // Theme.of(context).colorScheme.background,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(25),
+          padding: const EdgeInsets.all(22),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              //logo
-              // Icon(
-              //   Icons.person,
-              //   size: 80,
-              //   color: Theme.of(context).colorScheme.inversePrimary,
-              // ),
-
-              // const SizedBox(
-              //   height: 25,
-              // ),
-
-              //app name
               const Text(
                 'Sign up',
                 style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
               ),
-
-              const SizedBox(
-                height: 50,
-              ),
-
-              //username textfield
-              MyEmailTextfield(
-                  obscureText: false, controller: usernameController),
-
-              const SizedBox(
-                height: 10,
-              ),
-
-              //email textfield
-              MyConfirmEmailTextfield(
-                  obscureText: false, controller: emailController),
-
-              const SizedBox(
-                height: 10,
-              ),
-
-              //password textfield
-              MyPwTextfield(controller: passwordController),
-              const SizedBox(
-                height: 10,
-              ),
-
-              //Confirmpassword textfield
-              MyConfirmPwTextfield(controller: confirmPwdController),
-              const SizedBox(
-                height: 10,
-              ),
-
-              //forgot password
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     Text(
-              //       "Forgot password?",
-              //       style: TextStyle(
-              //           color: Theme.of(context).colorScheme.inversePrimary),
-              //     ),
-              //   ],
-              // ),
               const SizedBox(
                 height: 25,
               ),
-
-              //register button
+              MyEmailTextfield(
+                  obscureText: false,
+                  controller: registerController.emailController),
+              const SizedBox(
+                height: 10,
+              ),
+              MyConfirmEmailTextfield(
+                  obscureText: false,
+                  controller: registerController.configEmailController),
+              const SizedBox(
+                height: 10,
+              ),
+              MyPwTextfield(controller: registerController.passwordController),
+              const SizedBox(
+                height: 10,
+              ),
+              MyConfirmPwTextfield(
+                  controller: registerController.configPasswordController),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const Text(
+                    "I am a Workshop Leader",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  Switch(
+                    value: registerController.isSeller,
+                    onChanged: (bool newValue) {
+                      setState(() {
+                        registerController.isSeller = newValue;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               MyButton(
                 text: 'Register',
                 onTap: register,
               ),
-
               const SizedBox(
-                height: 25,
+                height: 20,
               ),
-
-              //don't have an account? Register here
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -113,7 +92,7 @@ class RegisterPage extends StatelessWidget {
                     style: TextStyle(color: Colors.black),
                   ),
                   GestureDetector(
-                    onTap: onTap,
+                    onTap: widget.onTap,
                     child: const Text(
                       "Login here",
                       style: TextStyle(
