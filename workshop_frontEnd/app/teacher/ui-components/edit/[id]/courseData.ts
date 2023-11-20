@@ -1,6 +1,6 @@
 // Trong file courseData.ts
 
-interface mediaInfoList {
+interface MediaInfoList {
     id: number;
     thumbnailSrc: string | null;
     title: string;
@@ -11,14 +11,14 @@ interface mediaInfoList {
   interface discountDTOS {
     courseDiscount_id: number;
     quantity: number;
-    // redemptionDate: Date;
+    redemptionDate: Date;
     valueDiscount: number;
     name: string;
     description: string;
     remainingUses: number;
   }
   
-  interface CourseLocation {
+  interface courseLocation {
     courseLocation_id: number;
     schedule_Date: string;
     area: string;
@@ -33,9 +33,9 @@ interface mediaInfoList {
     endDate: string;
     studentCount: number;
     type: string;
-    mediaInfoList: mediaInfoList[];
+    MediaInfoList: MediaInfoList[];
     discountDTOS: discountDTOS[];
-    courseLocation: CourseLocation[];
+    courseLocation: courseLocation[];
   }
 //   interface CourseData {
 //     courseName: string;

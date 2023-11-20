@@ -17,7 +17,7 @@ export const CompanyCard = ({  courses, courseId }) => {
   return (
     
     <div onClick={() => router.push(`./edit/${courseId}`)} >
-    <Card  sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <Card  sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: '300px' }}>
       <CardContent>
         {filteredCourses[0] && (
           <Box>

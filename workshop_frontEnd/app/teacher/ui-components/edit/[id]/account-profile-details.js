@@ -44,7 +44,6 @@ export const AccountProfileDetails = ({ onDataChanged, formData }) => {
     }).isRequired,
   };
 
-  const [editingIndex, setEditingIndex] = useState(-1);
 
   const handleInputChange = useCallback((event) => {
     const newValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
@@ -63,29 +62,34 @@ export const AccountProfileDetails = ({ onDataChanged, formData }) => {
       }
   
       onDataChanged(updatedValues);
+      console.log('updatedValues',updatedValues);
+
       return updatedValues;
+
     });
   }, [onDataChanged]);
   const handleLocationInputChange = useCallback((event, index) => {
     const { name, value } = event.target;
-
+  
     setValues((prevState) => {
       const newCourseLocation = [...prevState.courseLocation];
       newCourseLocation[index] = {
         ...newCourseLocation[index],
         [name]: value,
       };
-
+  
       const newState = {
         ...prevState,
         courseLocation: newCourseLocation,
       };
-
+  
       onDataChanged(newState);
       return newState;
     });
   }, [onDataChanged]);
-  console.log(formData);
+
+  
+
   useEffect(() => {
     if (formData && formData.length > 0) {
       const startFormattedDate = formData[0]?.startDate
@@ -96,21 +100,22 @@ export const AccountProfileDetails = ({ onDataChanged, formData }) => {
         ? new Date(formData[0]?.endDate).toISOString().split('T')[0]
         : '';
   
-      setValues({
-        name: formData[0]?.name || 'ada',
-        description: formData[0]?.description || '',
-        price: formData[0]?.price || 0,
-        startDate: startFormattedDate,
-        endDate: endFormattedDate,
-        student_count: formData[0]?.studentCount || 0,
-        type: formData[0]?.type || 'offline',
-        schedule_Date: formData[0]?.courseLocations[0]?.schedule_Date
-          ? new Date(formData[0]?.courseLocations[0]?.schedule_Date).toISOString().split('T')[0]
-          : '',
-        area: formData[0]?.courseLocations[0]?.area || '',
-      });
-    }
-  }, [formData]);
+        setValues((prevValues) => ({
+          ...prevValues,
+          name: formData[0]?.name || 'ada',
+          description: formData[0]?.description || '',
+          price: formData[0]?.price || 0,
+          startDate: startFormattedDate,
+          endDate: endFormattedDate,
+          student_count: formData[0]?.studentCount || 0,
+          type: formData[0]?.type || 'offline',
+          schedule_Date: formData[0]?.courseLocations[0]?.schedule_Date
+            ? new Date(formData[0]?.courseLocations[0]?.schedule_Date).toISOString().split('T')[0]
+            : '',
+          area: formData[0]?.courseLocations[0]?.area || '',
+        }));
+      }
+    }, [formData]);
   
   
   const handleEdit = (index) => {
@@ -203,22 +208,24 @@ export const AccountProfileDetails = ({ onDataChanged, formData }) => {
       </Box>
     </CardContent>
     <Divider />
-    {values.type === 'offline' && ( 
+    {/* {values.type === 'offline' && ( 
       <CardContent sx={{ pt: 0 }}>
         <CardHeader subheader="Please input your address for offline workshop" />
         <Box sx={{ m: -1.5 }}>
           {
             // values.courseLocation.map((location, index) => (
               // <Grid container spacing={3} key={index}>
-              <Grid container spacing={3} >
+              {values.courseLocation.map((location, index) => (
+                <Grid container spacing={3} key={index}>
                 <Grid item xs={12} md={6}>
                   <TextField
                     fullWidth
                     label="Schedule Date"
                     name="schedule_Date"
-                    onChange={(event) => handleLocationInputChange(event, index)}
+                    onChange={(event) => handleLocationInputChange(event, 0)}
                     type="date"
-                    value={values.schedule_Date}
+                    value={location.schedule_Date}
+
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -226,17 +233,48 @@ export const AccountProfileDetails = ({ onDataChanged, formData }) => {
                     fullWidth
                     label="Area"
                     name="area"
-                    onChange={(event) => handleLocationInputChange(event, index)}
-                    value={values.area}
+                    onChange={(event) => handleLocationInputChange(event, 0)}
+                    value={location.area}
                   />
                 </Grid>
               </Grid>
-            // ))
+            ))
           }
-
+        }
         </Box>
       </CardContent>
-    )}
+    )} */}
+    {values.type === 'offline' && ( 
+  <CardContent sx={{ pt: 0 }}>
+    <CardHeader subheader="Please input your address for offline workshop" />
+    <Box sx={{ m: -1.5 }}>
+      {values.courseLocation.map((location, index) => (
+        <Grid container spacing={3} key={index}>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Schedule Date"
+              name="schedule_Date"
+              onChange={(event) => handleLocationInputChange(event, index)}
+              type="date"
+              value={location.schedule_Date}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              label="Area"
+              name="area"
+              onChange={(event) => handleLocationInputChange(event, index)}
+              value={location.area}
+            />
+          </Grid>
+        </Grid>
+      ))}
+    </Box>
+  </CardContent>
+)}
+
   </Card>
   );
 };

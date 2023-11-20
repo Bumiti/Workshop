@@ -1,91 +1,110 @@
-// 'use client';
-// import { Grid, ImageList, ImageListItem,Paper} from "@mui/material";
-// import BaseCard from '@/app/(DashboardLayout)/components/shared/BaseCard';
-// import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-// import Image from "next/image";
+'use client';
+import ApiService from "@/app/services/ApiService";
+import { Grid, Typography, TextField, Button, Card, CardContent, Box } from "@mui/material";import { useSession } from 'next-auth/react';
+import React, { useEffect, useState } from "react";
+import styles from './withdraw.module.css';
 
-// import img1 from "public/images/backgrounds/u1.jpg";
-// import img2 from "public/images/backgrounds/u3.jpg";
-// import img3 from "public/images/backgrounds/u4.jpg";
-// import img4 from "public/images/big/img5.jpg";
-// import img5 from "public/images/big/img6.jpg";
-// import img6 from "public/images/big/img7.jpg";
-// import img7 from "public/images/big/img8.jpg";
-// const itemData = [
-//   {
-//     img: img1 ,
-//     rows: 2,
-//     cols: 2,
-//   },
-//   {
-//     // img: img2 ,
-//     title: "Burger",
-//   },
-//   {
-//     img: img3 ,
-//   },
-//   {
-//     img:img2,
-//     cols: 2,
-//   },
-//   {
-//     img: img4,
-//     cols: 2,
-//     rows: 2,
-//   },
-//   {
-//     img: img3,
-//     cols: 2,
-//     rows: 2,
-//   },
-  
-//   {
-//     img: img6,
-//   },
-//   {
-//     img: img5,
-//     title: "Fern",
-//   },
-//   {
-//     img: img7,
-//     rows: 2,
-//     cols: 2,
-//   },
-//   {
-//     img:img2,
-//     cols: 2,
-//   },
 
-// ];
-// const Images = () => {
-//   return (
-//     <Grid container spacing={0}>
-//       <Grid item xs={12} lg={12}>
-//         <BaseCard title="Grid Image">
-//           <ImageList
-            
-//             variant="quilted"
-//             cols={4}
-//             rowHeight={121}
-//           >
-//             {itemData.map((itemimg,index) => (
-//               <ImageListItem
-//                 key={index}
-//                 cols={itemimg.cols || 1}
-//                 rows={itemimg.rows || 1}
-//               >
-//                 <Image
-//                   src={itemimg.img}
-//                   alt="img"
-//                   style={{ width: "100%",height:"100%",objectFit:"cover",objectPosition:"top"}}
-//                 />
-//               </ImageListItem>
-//             ))}
-//           </ImageList>
-//         </BaseCard>
-//       </Grid>
-//     </Grid>
-//   );
-// };
+const WithdrawPage = () => {
+  const [amount, setAmount] = useState(0);
+  const [withdrawalInfo, setWithdrawalInfo] = useState({
+    amount: 0,
+    type: 'CASH',
+    paymentName: 'CASH',
+  });
+  const [userData, setUserData] = useState({
+    full_name: '',
+    user_name: '',
+    email: '',
+    phoneNumber: '',
+    image_url: '',
+    balance:0,
+    userAddresses: [
+        {
+            id: 0,
+            state: '',
+            city: '',
+            address: '',
+            postalCode: 0,
+        },
+    ],
+});
 
-// export default Images;
+  const { data: session } = useSession();
+  const apiService = new ApiService(session);
+  const handleWithdraw = async () => {
+    try {
+      // Kiểm tra nếu số tiền hợp lệ (ví dụ: lớn hơn 0)
+      if (withdrawalInfo.amount > 0) {
+        // const user = /* Lấy thông tin người dùng (nếu cần) */;
+        const result = await apiService.withdraw(withdrawalInfo.amount, withdrawalInfo.type, withdrawalInfo.paymentName);
+        console.log('result né',result);
+        
+        if (result.status === 'Success') {
+          console.log('Rút tiền thành công!');
+          const updatedUserData = await apiService.getUserDetails();
+        if (updatedUserData && updatedUserData.data) {
+          setUserData(updatedUserData.data);
+          console.log('User data updated successfully:', updatedUserData.data);
+        }
+        } else {
+          console.log('Rút tiền thất bại!');
+          // Thực hiện các hành động cần thiết khi rút tiền thất bại
+        }
+      } else {
+        console.log('Số tiền không hợp lệ!');
+        // Thực hiện xử lý khi số tiền không hợp lệ
+      }
+    } catch (error) {
+      // Xử lý lỗi nếu cần
+      console.error('Lỗi khi thực hiện yêu cầu rút tiền:', error);
+    }
+  };
+
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (session) {
+          const data = await apiService.getUserDetails();
+          if (data && data.data) {
+            setUserData(data.data);
+            console.log('User data fetched successfully:', data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [session]);
+console.log(userData);
+
+return (
+  <Grid container spacing={0} className={styles.container}>
+    <Card className={styles.pricingItemRegular}>
+      <CardContent>
+        <Typography variant="h2">Withdraw Money</Typography>
+        <div className={styles.marginTop2}>
+          <Typography  variant="h4">Current Balance: {userData.balance}</Typography>
+        </div>
+        <div className={styles.marginTop2}>
+          <TextField
+            type="number"
+            label="Enter the amount."
+            value={withdrawalInfo.amount}
+            onChange={(e) => setWithdrawalInfo({ ...withdrawalInfo, amount: parseInt(e.target.value, 10) || 0 })}
+          />
+        </div>
+        <div className={styles.marginTop4}>
+          <Button className={styles.gradientbutton}  onClick={handleWithdraw}>
+          Confirm withdrawal
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  </Grid>
+);
+};
+export default WithdrawPage;

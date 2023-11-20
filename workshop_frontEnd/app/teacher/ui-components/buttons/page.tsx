@@ -17,7 +17,7 @@ import { CompanyCard } from './company-card.js';
 import ApiService from '@/app/services/ApiService';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-
+import AddIcon from '@mui/icons-material/Add';
 interface Course {
     id: number;
 }
@@ -26,27 +26,40 @@ const Buttons: React.FC = () => {
     const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
     const { data: session } = useSession();
-  
+
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const apiService = new ApiService(session);
-          const response = await apiService.listCoursesFromApi();
-          if (response.status === "success") {
-            setCourses(response.data);
-          }
-        } catch (error) {
-          console.error('Lỗi khi tải dữ liệu:', error);
-        } finally {
-          setLoading(false);
+        const fetchData = async () => {
+            try {
+                const apiService = new ApiService(session);
+                const response = await apiService.listCoursesFromApi();
+                if (response.status === "success") {
+                    setCourses(response.data);
+                    console.log('Courses:', response.data);
+
+                }
+            } catch (error) {
+                console.error('Lỗi khi tải dữ liệu:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (session) {
+            fetchData();
         }
-      };
-  
-      if (session) {
-        fetchData();
-      }
     }, [session]);
-  
+
+    const itemsPerPage = 6;
+
+    // Phân trang dữ liệu
+    const pageCount = Math.ceil(courses.length / itemsPerPage);
+    const [currentPage, setCurrentPage] = useState(1);
+    const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+        setCurrentPage(page);
+    };
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const visibleCourses = courses.slice(startIndex, startIndex + itemsPerPage);
 
 
     return (
@@ -99,11 +112,13 @@ const Buttons: React.FC = () => {
 
                             <Link href="./add">
                                 <Button
-                                    startIcon={<SvgIcon fontSize="small">...</SvgIcon>}
+                                    style={{ backgroundColor: "#4b8ef1", color: "#ffffff" }}
+                                    startIcon={<AddIcon fontSize="small" />}
                                     variant="contained"
                                 >
                                     Add
                                 </Button>
+
                             </Link>
                         </Stack>
                         {/* <CompaniesSearch /> */}
@@ -111,11 +126,11 @@ const Buttons: React.FC = () => {
                             <p>Đang tải...</p>
                         ) : courses.length > 0 ? (
                             <Grid container spacing={3}>
-                                {courses.map((course, index) => (
+                                {visibleCourses.map((course, index) => (
                                     <Grid xs={12} md={6} lg={4} key={index}>
-                                         {/* <div onClick={() => router.push(`./edit/${course.id}`)} > */}
-                                          {/* <Link style={{ textDecoration: 'none', color: 'inherit' }} href={`./edit/${course.id}`} passHref> */}
-                                          <CompanyCard  courses={courses} courseId={course.id} />
+                                        {/* <div onClick={() => router.push(`./edit/${course.id}`)} > */}
+                                        {/* <Link style={{ textDecoration: 'none', color: 'inherit' }} href={`./edit/${course.id}`} passHref> */}
+                                        <CompanyCard courses={courses} courseId={course.id} />
                                         {/* </Link> */}
                                         {/* </div> */}
                                     </Grid>
@@ -133,8 +148,10 @@ const Buttons: React.FC = () => {
                             }}
                         >
                             <Pagination
-                                count={3}
+                                count={pageCount}
                                 size="small"
+                                page={currentPage}
+                                onChange={(event, page) => handlePageChange(event, page)}
                             />
                         </Box>
                     </Stack>

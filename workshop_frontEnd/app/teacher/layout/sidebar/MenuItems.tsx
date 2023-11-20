@@ -1,5 +1,5 @@
 import {
-  IconBoxMultiple, IconCircleDot, IconHome, IconInfoCircle, IconLayout, IconLayoutGrid, IconPhoto, IconPoint, IconStar, IconTable, IconUser
+  IconBoxMultiple,IconPigMoney, IconCircleDot , IconHome, IconInfoCircle, IconLayout, IconLayoutGrid, IconPhoto, IconPoint, IconStar, IconTable, IconUser
 } from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
@@ -13,7 +13,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: "Course",
+    title: "Workshop",
     icon: IconCircleDot,
     href: "/teacher/ui-components/buttons",
   },
@@ -31,14 +31,14 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: "Workshop",
+    title: "Rate",
     icon: IconStar,
     href: "/teacher/ui-components/ratings",
   },
   {
     id: uniqueId(),
-    title: "Library",
-    icon: IconPhoto,
+    title: "Withdrawal",
+    icon: IconPigMoney ,
     href: "/teacher/ui-components/images",
   },
   // {

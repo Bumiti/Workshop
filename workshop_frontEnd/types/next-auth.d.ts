@@ -15,6 +15,7 @@ declare module "next-auth" {
             picture:string;
             userAddresses: userAddresses[];
             type: string;
+            balance:number;
         };
        
     }

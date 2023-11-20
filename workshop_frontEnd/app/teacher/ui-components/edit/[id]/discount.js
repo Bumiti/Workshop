@@ -18,7 +18,7 @@ export const DiscountDTOS = ({ onDataChanged,formData}) => {
         quantity: 0,
         valueDiscount: 0,
         remainingUses: 0,
-        redemptionDate: '',
+        redemptionDate: new Date(),
       },
     ],
   });
