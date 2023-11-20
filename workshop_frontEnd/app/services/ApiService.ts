@@ -76,6 +76,7 @@ class ApiService {
             throw error;
         }
     }
+
     async checkUserDiscount(code: any) {
         try {
             if (this.session?.user.accessToken) {
@@ -87,6 +88,7 @@ class ApiService {
             throw error;
         }
     }
+
     async changePassword(oldPassword: string, newPassword: string) {
         try {
             if (this.session?.user.accessToken) {
@@ -179,7 +181,7 @@ class ApiService {
     async changeStatusCourse(id: number) {
         try {
             if (this.session?.user.accessToken) {
-                const response = await this.customAxios.post(`/admin/course/status?id=${id}`);
+                const response = await this.customAxios.put(`/admin/course/status?id=${id}`);
                 return response.data;
             }
             return null;
@@ -187,11 +189,10 @@ class ApiService {
             throw error;
         }
     }
-
-    async updateAdminDetails(id: number, newData: any): Promise<any> {
+    async EditAdmin(id: any) {
         try {
             if (this.session?.user.accessToken) {
-                const response = await this.customAxios.put(`/admin/edit?id=${id}`, newData);
+                const response = await this.customAxios.put(`/admin/edit?id=${id}`);
                 return response.data;
             }
             return null;
@@ -200,13 +201,33 @@ class ApiService {
         }
     }
 
-    //-------------------------------------------------Admin API-------------------------------------------------//
+    async listLocation() {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get('/admin/location/list');
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
+    async UpdateLocation(course_location_id: number, location_id: number) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.put(`admin/course/locationUpdate?course_location_Id=${course_location_id}&location_id=${location_id}`);
+                return response.data;
+            }
+            return null;
+        } catch (error) {
+            throw error;
+        }
+    }
     //-------------------------------------------------Web API-------------------------------------------------//
     async listCoursePublic() {
         try {
             const response = await this.customAxios.get('/web/course/list');
             return response.data;
-
         } catch (error) {
             throw error;
         }

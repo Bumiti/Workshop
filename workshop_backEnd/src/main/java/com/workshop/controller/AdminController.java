@@ -50,13 +50,14 @@ public class AdminController {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
-    @Operation(summary = "Xét duyệ rút tiền về cho giáo viên")
+    @Operation(summary = "Xét duyệt rút tiền về cho giáo viên")
     @GetMapping("teacher/withdraw")
-    public ResponseEntity<ApiResponse<?>> handleWithDrawRequest(@RequestParam int teacher_id) {
+    public ResponseEntity<ApiResponse<?>> handleWithDrawRequest(@RequestParam int teacher_id,@RequestParam int request_id) {
         try {
             RequestDTO requestDTO = new RequestDTO();
+            requestDTO.setRequestId((long) request_id);
             requestDTO.setItem_register_id((long) teacher_id);
-            requestDTO.setStatus("WITHDRAW");
+            requestDTO.setType("WITHDRAW");
             ResponseRequestOptions responseRequestOptions  =  requestService.createRequestOptions(requestDTO);
             if (responseRequestOptions.getStatus().equals("APPROVED")) {
                 return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>
@@ -115,7 +116,7 @@ public class AdminController {
         }
     }
     @Operation(summary = "Thay đổi trạng thái Course")
-    @PostMapping("course/status")
+    @PutMapping("course/status")
     public ResponseEntity<ApiResponse<?>> activeCourse(@RequestParam int id) {
         try {
             Long longId = (long) id;

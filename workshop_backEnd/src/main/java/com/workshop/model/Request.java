@@ -23,6 +23,7 @@ public class Request extends BaseModel{
     private RequestType type;
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
+    private double value;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

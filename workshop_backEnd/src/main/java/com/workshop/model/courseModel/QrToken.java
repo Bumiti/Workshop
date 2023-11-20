@@ -2,10 +2,7 @@ package com.workshop.model.courseModel;
 
 import com.workshop.model.BaseModel;
 import com.workshop.model.userModel.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +20,9 @@ public class QrToken extends BaseModel {
 
     private String name;
     private String email;
+    @Column(columnDefinition = "TEXT", length = 1000)
     private String urlQrCode;
+
     private boolean status;
 
     @ManyToOne

@@ -19,10 +19,9 @@ public class RequestResponse {
     private String status;
     private Long userId;
     private String userName;
-    private Long courseId;
-    private String courseName;
     private Long workshopId;
     private String workshopName;
+    private double value;
     private Long locationId;
     private String locationName;
     private LocalDateTime registrationDateTime;

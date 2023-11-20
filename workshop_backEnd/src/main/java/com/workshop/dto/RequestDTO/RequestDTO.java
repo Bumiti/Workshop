@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class RequestDTO {
     private String type;
-
+    private Long requestId;
     private String status = "PENDING";
     //worshopId or TeacherID
     private Long item_register_id;

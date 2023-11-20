@@ -34,8 +34,8 @@ const menuItems = [
         icon: <MdSupervisedUserCircle />,
       },
       {
-        title: "Courses",
-        path: "/admin/dashboard/courses",
+        title: "Workshop",
+        path: "/admin/dashboard/workshop",
         icon: <SiGoogleclassroom />,
       },
       {

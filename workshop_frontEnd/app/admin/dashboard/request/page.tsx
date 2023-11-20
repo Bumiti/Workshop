@@ -17,6 +17,8 @@ interface RequestData {
   createDate: string;
   userName: string;
   registrationDateTime: string;
+  workshopName:string;
+  value:number;
   nameCourse: CoursesData[];
 }
 
@@ -71,20 +73,26 @@ const RequestPage = () => {
           <table className={styles.table}>
             <thead className="text-center">
               <tr>
+              <th>Request ID</th>
                 <th>Request Name</th>
                 <th>Create Date</th>
                 <th>status</th>
                 <th>User Name</th>
                 <th>Course Name</th>
+                <th>Amount</th>
               </tr>
             </thead>
             <tbody className="text-center">
               {currentRequest.map((request) => (
                 <tr key={request.id}>
+                   <td>{request.id}</td>
                   <td>{request.type}</td>
                   <td>{request.registrationDateTime}</td>
                   <td>{request.status}</td>
                   <td>{request.userName}</td>
+                  <td>{request.workshopName}</td>
+                  <td>{request.value}</td>
+
                   {/* Course Name */}
                   {/* <td>
                     <div className={styles.buttons}>
