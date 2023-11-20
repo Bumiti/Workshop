@@ -39,9 +39,9 @@ class LoginPage extends StatelessWidget {
               //   color: Theme.of(context).colorScheme.inversePrimary,
               // ),
 
-              const SizedBox(
-                height: 25,
-              ),
+              // const SizedBox(
+              //   height: 25,
+              // ),
 
               //app name
 
