@@ -106,12 +106,11 @@ class RegisterPage extends StatelessWidget {
 
               //don't have an account? Register here
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
+                  const Text(
                     "Already have an account? ",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary),
+                    style: TextStyle(color: Colors.black),
                   ),
                   GestureDetector(
                     onTap: onTap,
