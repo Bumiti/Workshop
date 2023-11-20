@@ -71,7 +71,7 @@ const PricingCarousel = () => {
                                             <li className="non-function">More Options</li>
                                         </ul>
                                         <div className={styles.borderButton}>
-                                            <a href="#">Purchase This Plan Now</a>
+                                            <a href="#">Purchase This Workshop Now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -93,7 +93,7 @@ const PricingCarousel = () => {
                                             <li className="non-function">More Options</li>
                                         </ul>
                                         <div className={styles.borderButton}>
-                                            <a href="#">Purchase This Plan Now</a>
+                                            <a href="#">Purchase This Workshop Now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -115,7 +115,7 @@ const PricingCarousel = () => {
                                             <li>More Options</li>
                                         </ul>
                                         <div className={styles.borderButton}>
-                                            <a href="#">Purchase This Plan Now</a>
+                                            <a href="#">Purchase This Workshop Now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -143,7 +143,7 @@ const PricingCarousel = () => {
                                             <li className="non-function">More Options</li>
                                         </ul>
                                         <div className={styles.borderButton}>
-                                            <a href="#">Purchase This Plan Now</a>
+                                            <a href="#">Purchase This Workshop Now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -165,7 +165,7 @@ const PricingCarousel = () => {
                                             <li className="non-function">More Options</li>
                                         </ul>
                                         <div className={styles.borderButton}>
-                                            <a href="#">Purchase This Plan Now</a>
+                                            <a href="#">Purchase This Workshop Now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -187,7 +187,7 @@ const PricingCarousel = () => {
                                             <li>More Options</li>
                                         </ul>
                                         <div className={styles.borderButton}>
-                                            <a href="#">Purchase This Plan Now</a>
+                                            <a href="#">Purchase This Workshop Now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -215,7 +215,7 @@ const PricingCarousel = () => {
                                             <li className="non-function">More Options</li>
                                         </ul>
                                         <div className={styles.borderButton}>
-                                            <a href="#">Purchase This Plan Now</a>
+                                            <a href="#">Purchase This Workshop Now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -237,7 +237,7 @@ const PricingCarousel = () => {
                                             <li className="non-function">More Options</li>
                                         </ul>
                                         <div className={styles.borderButton}>
-                                            <a href="#">Purchase This Plan Now</a>
+                                            <a href="#">Purchase This Workshop Now</a>
                                         </div>
                                     </div>
                                 </div>
@@ -259,7 +259,7 @@ const PricingCarousel = () => {
                                             <li>More Options</li>
                                         </ul>
                                         <div className={styles.borderButton}>
-                                            <a href="#">Purchase This Plan Now</a>
+                                            <a href="#">Purchase This Workshop Now</a>
                                         </div>
                                     </div>
                                 </div>

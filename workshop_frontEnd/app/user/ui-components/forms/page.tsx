@@ -155,35 +155,6 @@ const EditProfile = () => {
       });
     }
   }
-
-  // const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   try {
-  //     if (session) {
-
-  //       const response = await fetch('http://localhost:8089/auth/user/edit', {
-  //         method: 'PUT',
-  //         headers: {
-  //           //  Authorization: `Bearer ${authToken}`,
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify(userData),
-  //       });
-
-  //       if (response.ok) {
-  //         console.log('User data updated successfully.');
-  //         // console.log(userData);
-
-  //       } else {
-  //         console.error('Error updating user data:', response.status);
-  //       }
-  //     } else {
-  //       console.error('Session is null. User is not authenticated.');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // };
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -216,7 +187,7 @@ const EditProfile = () => {
           const uploadTask = await uploadBytes(imgRef, selectedImage);
           const url = await getDownloadURL(uploadTask.ref);
           setUserData({ ...userData, image_url: url });
-          console.log(url);
+         
         } catch (error) {
           console.error("Lỗi tải lên:", error);
         }

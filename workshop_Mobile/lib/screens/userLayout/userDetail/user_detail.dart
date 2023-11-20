@@ -6,9 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserDetailScreen extends StatefulWidget {
   final User user;
 
-  UserDetailScreen({required this.user});
+  const UserDetailScreen({super.key, required this.user});
 
   @override
+  // ignore: library_private_types_in_public_api
   _UserDetailScreenState createState() => _UserDetailScreenState();
 }
 
@@ -36,7 +37,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
       });
     } catch (error) {
       // Xử lý lỗi hoặc hiển thị thông báo lỗi
-      print('Error: $error');
+      // print('Error: $error');
     }
   }
 
@@ -135,7 +136,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                           },
                         );
                       },
-                      child: Text('Add Address'),
+                      child: const Text('Add Address'),
                     ),
                   ],
                 ),

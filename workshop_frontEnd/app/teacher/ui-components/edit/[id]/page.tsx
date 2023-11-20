@@ -39,7 +39,7 @@ const Edit = ({ params, onSubmit }: EditProps) => {
     endDate: '',
     studentCount: 0,
     type: 'offline',
-    mediaInfoList: [
+    MediaInfoList: [
       {
         id: 0,
         thumbnailSrc: '',
@@ -53,6 +53,7 @@ const Edit = ({ params, onSubmit }: EditProps) => {
         courseDiscount_id: 0,
         quantity: 0,
         valueDiscount: 0,
+        redemptionDate: new Date(),
         name: '',
         description: '',
         remainingUses: 0,
@@ -68,7 +69,7 @@ const Edit = ({ params, onSubmit }: EditProps) => {
         const apiService = new ApiService(session);
         const response = await apiService.getCourseById(params.id);
         if (response.status === 'success') {
-       
+
           setFormData(response.data);
           console.log('Updated formData:', response.data);
 
@@ -84,63 +85,131 @@ const Edit = ({ params, onSubmit }: EditProps) => {
       fetchCourseData();
     }
   }, [session, params.id]);
-  
+
   const handleReceivedVideo = (data: any) => {
     setFormData((prevData) => ({
       ...prevData,
-      mediaInfoList: [
+      MediaInfoList: [
         {
-          ...prevData.mediaInfoList[0],
+          ...prevData.MediaInfoList[0],
           ...data,
         },
       ],
     }));
   };
 
-  const handleAccountProfileDetailsSubmit = (data: any) => {
-    console.log('Dữ liệu từ việc gửi biểu mẫu:', data);
-  
-    setFormData((data) => {
-      const newData = { ...data };
+  const handleAccountProfileDetailsSubmit = (changedData: any) => {
+    console.log('Dữ liệu từ việc gửi biểu mẫu:', changedData);
+
+    setFormData((prevData) => {
+      // Cập nhật dữ liệu mới vào prevData sử dụng spread operator
+      const newData = { ...changedData };
+
       console.log('handleAccountProfileDetailsSubmit đã thay đổi dữ liệu:', newData);
       return newData;
     });
-
   };
- 
+
+
+  // const handleDiscountDTOSubmit = (data: any) => {
+  //   console.log('Dữ liệu từ việc gửi biểu handleDiscountDTOSubmit:', data);
+
+  //   setFormData((prevData) => {
+  //     // Dữ liệu mới từ onDataChanged
+  //     const changedData = data.discountDTOS[0];
+  // console.log('changedData nè',changedData);
+
+  //     // Kiểm tra xem prevData.discountDTOS có tồn tại không
+  //     const prevDiscountDTOS = prevData.discountDTOS || [];
+
+  //     // Cập nhật dữ liệu mới vào formData sử dụng spread operator
+  //     const newData = {
+  //       ...prevData. discountDTOS: [
+  //         {
+  //           ...prevDiscountDTOS[0],
+  //           ...changedData,
+  //         },
+  //       ],
+
+  //       // discountDTOS: [
+  //       //   {
+  //       //     ...prevDiscountDTOS[0],
+  //       //     ...changedData,
+  //       //   },
+  //       // ],
+  //     };
+
+  //     // console.log('handleDiscountDTOSubmit thay doi ne', newData);
+
+  //     // Kiểm tra giá trị mới của discountDTOS
+  //     // console.log('newData.discountDTOS', newData.discountDTOS);
+
+  //     return newData;
+  //   });
+  // };
+
+
   const handleDiscountDTOSubmit = (data: any) => {
+    console.log('Dữ liệu từ việc gửi biểu handleDiscountDTOSubmit:', data);
+
     setFormData((prevData) => {
-      const newData = { ...prevData, ...data };
-      console.log('handleDiscountDTOSubmit thay doi ne', newData);
-      return newData;
+      // Dữ liệu mới từ onDataChanged
+      const changedData = data.discountDTOS[0];
+        console.log('changedData nè', changedData);
+        console.log('prevData trước khi cập nhật:', prevData);
+
+      // Kiểm tra xem prevData.discountDTOS có tồn tại không
+      const prevDiscountDTOS = prevData?.[0]?.discountDTOS?.[0];
+
+      // const prevDiscountDTOS = (prevData[0] && prevData[0].discountDTOS) || [];
+
+
+      // Tạo một bản sao của prevData
+      const newData = { ...prevData };
+        console.log('newData 1', newData);
+
+      // Nếu prevDiscountDTOS có ít nhất một phần tử, thì cập nhật phần tử đầu tiên của mảng
+      if (prevDiscountDTOS) {
+        newData[0].discountDTOS = [
+          {
+            ...prevDiscountDTOS,
+            ...changedData,
+          },
+        ];
+      }
+
+      return newData[0];
+      console.log(newData);
+      
     });
   };
-  
+
   // const handleDiscountDTOSubmit = (data: any) => {
   //   setFormData((prevData) => {
   //     console.log('Previous Data:', prevData); // Log prevData
   //     const newData = { ...prevData.discountDTOS[0], ...data.discountDTOS[0] };
   //      // Log prevData
   //   console.log(newData);
-      
+
   //  return newData;
-    
+
   //   });
   // };
-console.log('formData áaasaa',formData);
-  
-  
+
+  console.log('formData', formData);
+
   const handleEditDataToServer = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-     
-        const numericId = Number(params.id); 
+
+      const numericId = Number(params.id);
       const apiService = new ApiService(session);
       const response = await apiService.editCourse(numericId, formData);
+      console.log('handleEditDataToServer formData', formData);
 
       if (response.status === 'success') {
         onSubmit(response);
-   
+
         router.push('/courses');
       } else {
         console.error('Error editing course:', response.error);
@@ -150,7 +219,7 @@ console.log('formData áaasaa',formData);
       console.error('Error:', error);
     }
   };
-console.log(handleEditDataToServer);
+  console.log(handleEditDataToServer);
 
   return (
     <PageContainer>
@@ -164,8 +233,8 @@ console.log(handleEditDataToServer);
               <Typography variant="h4">Edit Course</Typography>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={6} lg={4}>
-                  <AccountProfile onVideoUpload={handleReceivedVideo} formData={formData || {}} existingVideoUrl={formData.mediaInfoList && formData.mediaInfoList.length > 0
-                    ? formData.mediaInfoList[0].urlMedia
+                  <AccountProfile onVideoUpload={handleReceivedVideo} formData={formData || {}} existingVideoUrl={   formData &&formData.MediaInfoList && formData.MediaInfoList.length > 0
+                    ? formData.MediaInfoList[0].urlMedia
                     : ''} />
                 </Grid>
                 <Grid item xs={12} md={6} lg={8}>
@@ -176,7 +245,7 @@ console.log(handleEditDataToServer);
                 </Grid>
               </Grid>
               <Stack spacing={3}>
-              <DiscountDTOS onDataChanged={handleDiscountDTOSubmit} formData={formData || {}} />
+                <DiscountDTOS onDataChanged={handleDiscountDTOSubmit} formData={formData || {}} />
               </Stack>
             </Stack>
 

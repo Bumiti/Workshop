@@ -13,7 +13,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: "Course",
+    title: "Workshop",
     icon: IconCircleDot,
     href: "/user/ui-components/buttons",
   },
@@ -31,7 +31,7 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: "Workshop",
+    title: "Rate",
     icon: IconStar,
     href: "/user/ui-components/ratings",
   },

@@ -45,7 +45,7 @@ public class Request extends BaseModel{
         BUY_COURSE,
         BUY_WORKSHOP,
         WITHDRAW,
-        REGISTER_COURSE_ONLINE,
+        HANDLE_WITHDRAW,
         REGISTER_COURSE_OFFLINE,
     }
 }

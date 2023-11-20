@@ -4,38 +4,37 @@ import GitHubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials"
 import DiscordProvider from "next-auth/providers/discord"
 import NextAuth from "next-auth/next"
-
+import { isAfter, parseISO,fromUnixTime  } from 'date-fns';
+import { signOut } from "next-auth/react"
 
 const handler = NextAuth({
- 
+
     providers: [
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-              email: { label: "email", type: "text", placeholder: "jsmith" },
-              password: { label: "Password", type: "password" }
+                email: { label: "email", type: "text", placeholder: "jsmith" },
+                password: { label: "Password", type: "password" }
             },
-            async authorize(credentials) 
-            {
+            async authorize(credentials) {
                 const res = await fetch("http://localhost:8089/auth/loginWeb", {
-                method: 'POST',
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    email:credentials?.email,
-                    password:credentials?.password,
-                }),
-              });
-              const user = await res.json()
-              console.log("user crede",user);
-              if (user)
-              {
-                user.data.user.sub = 'credentials',
-                user.data.user.id= 'credentials'
-                return user.data.user;
-              }
-              return null
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        email: credentials?.email,
+                        password: credentials?.password,
+                    }),
+                });
+                const user = await res.json()
+                console.log("user credential", user);
+                if (user) {
+                    user.data.user.sub = 'credentials',
+                        user.data.user.id = 'credentials'
+                    return user.data.user;
+                }
+                return null
             }
-          }),
+        }),
         FacebookProvider({
             clientId: process.env.FACEBOOK_ID,
             clientSecret: process.env.FACEBOOK_SECRET,
@@ -54,16 +53,27 @@ const handler = NextAuth({
         }),
     ],
     callbacks: {
-        async jwt({token,user,session,trigger}){
-            if(trigger === "update"&& session ?.user){
+        async jwt({ token, user, session, trigger }) {
+
+            if (trigger === "update" && session?.user) {
                 token.user = session.user;
             }
-            return{ ...token, ...user}
+
+            console.log(token.exp);
+            if (token && token.exp > 0) {
+
+                const expireTime = fromUnixTime(token.exp);
+
+                const isTokenExpired = isAfter(expireTime, new Date());
+
+                console.log("isTokenExpired", isTokenExpired);
+            }
+
+            return { ...token, ...user }
         },
-        async session({ session,token}) {
-            session.user =token;
-            if(session.user.id !=='credentials')
-            {
+        async session({ session, token }) {
+            session.user = token;
+            if (session.user.id !== 'credentials') {
                 const fetchData = async (e) => {
                     const response = await fetch('http://localhost:8089/auth/loginOAuthentication', {
                         method: 'POST',
@@ -74,7 +84,7 @@ const handler = NextAuth({
                     });
                     if (response.ok) {
                         const data = await response.json();
-                       
+
                         session.user.roles = data.data.user.roles
                         session.user.accessToken = data.data.user.accessToken
                         session.user.refreshToken = data.data.user.refreshToken
@@ -84,16 +94,16 @@ const handler = NextAuth({
                         session.user.image = data.data.user.image_url
                     }
                 };
-                await fetchData(); 
+                await fetchData();
                 return session;
-            }else{
+            } else {
                 return session;
             }
         },
     },
-    pages:{
-        signIn:"/login",
-        error:"/login",
+    pages: {
+        signIn: "/login",
+        error: "/login",
     },
     secret: process.env.NEXTAUTH_SECRET
 })

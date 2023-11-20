@@ -1,8 +1,6 @@
 package com.workshop.event.listener;
 
-import com.workshop.event.RegisterCompleteEvent;
 import com.workshop.event.RenewPasswordEvent;
-import com.workshop.model.userModel.User;
 import com.workshop.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

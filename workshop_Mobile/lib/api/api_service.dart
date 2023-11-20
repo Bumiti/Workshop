@@ -11,7 +11,7 @@ class ApiService {
     try {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.loginWebAccount);
-          print(url);
+          // print(url);
       Map body = {
         'email': email.trim(),
         'password': password,
@@ -19,7 +19,7 @@ class ApiService {
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
       // print(response.statusCode);
-        print(response.body);
+        // print(response.body);
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['status'] == 'success') {
@@ -34,7 +34,7 @@ class ApiService {
         throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
       }
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -50,7 +50,7 @@ class ApiService {
 
       if (response.statusCode == 202) {
         final dynamic jsonResponse = jsonDecode(response.body);
-      print(jsonResponse);
+      // print(jsonResponse);
         if (jsonResponse['status'] == 'success') {
           final List<dynamic> userDataList = jsonResponse['data'];
     
@@ -85,7 +85,7 @@ class ApiService {
     var data = {
       'id': userId,
     };
-    print(url);
+    // print(url);
     try {
       final http.Response response = await http.put(
         url,
@@ -121,7 +121,7 @@ class ApiService {
     var url = Uri.parse(
         '${ApiEndPoints.baseUrl}${ApiEndPoints.adminEndpoints.deleteAddressAccount}?id=$userId&idAddress=$userAddressId');
     var data = {'id': userId, 'idAddress': userAddressId};
-    print(url);
+    // print(url);
     try {
       final http.Response response = await http.delete(
         url,

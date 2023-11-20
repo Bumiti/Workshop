@@ -77,6 +77,18 @@ class ApiService {
         }
     }
 
+    async checkUserDiscount(code: any) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get(`/user/checkDiscount?code=${code}`);
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async changePassword(oldPassword: string, newPassword: string) {
         try {
             if (this.session?.user.accessToken) {
@@ -121,55 +133,7 @@ class ApiService {
             throw error;
         }
     }
-    async listCoursesFromApi() {
-        try {
-            const response = await this.customAxios.get('/seller/course/list');
-            return response.data;
-        } catch (error) {
-            throw error;
-        }
-    }
-    async createCourse(courseData: CourseData) {
-        try {
-            if (this.session?.user.accessToken) {
-                const response = await this.customAxios.post('/seller/course/add', JSON.stringify(courseData));
-                return response.data;
-            }
-            return [];
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async getCourseById(courseId: number) {
-        try {
-            if (this.session?.user.accessToken) {
-                const response = await this.customAxios.get(`/seller/course/list/${courseId}`, {
-                    params: {
-                        courseId: courseId,
-                    },
-                });
-                return response.data;
-            }
-            return [];
-        } catch (error) {
-            throw error;
-        }
-    }
-
-
-    async editCourse(courseId: number, courseData: CourseData) {
-        try {
-            if (this.session?.user.accessToken) {
-                const response = await this.customAxios.put(`/seller/course/update/${courseId}`, JSON.stringify(courseData));
-                return response.data;
-            }
-            return [];
-        } catch (error) {
-            throw error;
-        }
-    }
-
+   
     async listRequestAdmin() {
         try {
             if (this.session?.user.accessToken) {
@@ -232,6 +196,7 @@ class ApiService {
                 return response.data;
             }
             return null;
+
         } catch (error) {
             throw error;
         }
@@ -277,7 +242,7 @@ class ApiService {
             throw error;
         }
     }
-    async checkUserInCourse(user_email: number, courseId: number) {
+    async checkUserInCourse(user_email: string, courseId: number) {
         try {
             const response = await this.customAxios.get(`/web/course/checkedUser?user_email=${user_email}&course_id=${courseId}`);
             return response.data;
@@ -286,6 +251,97 @@ class ApiService {
         }
     }
     //-------------------------------------------------Web API-------------------------------------------------//
+
+
+    //-------------------------------------------------Teacher API-------------------------------------------------//
+
+    async changePasswordTeacher(oldPassword: string, newPassword: string) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.put(
+                    '/teacher/changePassword',
+                    JSON.stringify({ oldPassword, newPassword }),
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.session?.user.accessToken}`,
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                );
+                return response;
+            }
+            return null;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async withdraw(amount: number, type: string, paymentName: string) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.post('/seller/deposit', {
+                    amount: amount,
+                    type: type,
+                    paymentName: paymentName,
+                });
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    async listCoursesFromApi() {
+        try {
+            const response = await this.customAxios.get('/seller/course/list');
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async createCourse(courseData: CourseData) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.post('/seller/course/add', JSON.stringify(courseData));
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getCourseById(courseId: number) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get(`/seller/course/list/${courseId}`, {
+                    params: {
+                        courseId: courseId,
+                    },
+                });
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    async editCourse(courseId: number, courseData: CourseData) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.put(`/seller/course/update/${courseId}`, JSON.stringify(courseData));
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    //-------------------------------------------------Teacher API-------------------------------------------------//
+
 }
 
 export default ApiService;

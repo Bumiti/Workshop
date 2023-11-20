@@ -217,12 +217,13 @@ public class AdminServiceImpl implements AdminService {
                 CourseResponses.CourseLocation courseLocal = CourseLocationMapper.ModelmapToDTO(courseLocation, CourseResponses.CourseLocation.class);
                 courseLocal.setId(courseLocation.getId());
                 if(courseLocation.getLocations()!=null){
-                    Long locationid = courseLocation.getLocations().getId();
+
+                    Long locationId = courseLocation.getLocations().getId();
                     CourseResponses.CourseLocation.locationResponse location =
                             locationMapper.ModelmapToDTO(courseLocation.getLocations(), CourseResponses.CourseLocation.locationResponse.class);
-                    location.setId(locationid);
-                    
+                    location.setId(locationId);
                     courseLocal.setLocationResponse(location);
+
                 }
                 courseLocationsList.add(courseLocal);
             }
@@ -234,15 +235,7 @@ public class AdminServiceImpl implements AdminService {
         }
         return coursesResponesList;
     }
-<<<<<<< HEAD
-=======
 
-
-    @Override
-    public List<WorkShopRespone> listWorkshop() {
-        List<WorkShopRespone>workshopResponesList = new ArrayList<>();
-        return workshopResponesList;
-    }
 
     @Override
     public User getCurrentUserDetails() {
@@ -291,5 +284,5 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
->>>>>>> 0d863eee00bb51bf16662ef47be2d513d0350cd3
+
 }

@@ -40,6 +40,10 @@ public class Course extends BaseModel {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<CourseEnrollment> enrolledStudents;
 
+    @OneToMany(mappedBy = "course")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<QrToken> qrTokens;
+
     @OneToMany(mappedBy = "courses")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Request> requests;

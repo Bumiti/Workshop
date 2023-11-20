@@ -189,6 +189,7 @@ const EditProfile = () => {
 
           // Lưu đường dẫn hình ảnh vào userData
           setUserData({ ...userData, image_url: url });
+          console.log("url reponse",url);
         } catch (error) {
           console.error("Lỗi tải lên:", error);
         }
