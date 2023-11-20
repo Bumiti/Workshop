@@ -29,12 +29,12 @@ const Menuitems = [
     icon: IconInfoCircle,
     href: "/teacher/ui-components/alerts",
   },
-  {
-    id: uniqueId(),
-    title: "Rate",
-    icon: IconStar,
-    href: "/teacher/ui-components/ratings",
-  },
+  // {
+  //   id: uniqueId(),
+  //   title: "Rate",
+  //   icon: IconStar,
+  //   href: "/teacher/ui-components/ratings",
+  // },
   {
     id: uniqueId(),
     title: "Withdrawal",

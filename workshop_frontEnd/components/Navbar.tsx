@@ -29,14 +29,15 @@ export default function Navbar() {
   const renderUserMenu = () => {
     if (!session) {
       return (
-        <Link href="/login" className={`${styles.gradientbutton} nav-link text-dark font-roboto custom-bold`} onClick={() => signIn("your-auth-provider")}>
+        <Link href="/login" className={`${styles.gradientbutton} nav-link text-dark font-roboto custom-bold`} 
+        onClick={() => signIn("your-auth-provider")}>
           Sign In</Link>
       );
     } else {
       let profileLink = "/user"; // Mặc định là role "user"
       
       // Kiểm tra và cập nhật đường dẫn dựa trên vai trò của người dùng
-      if (session.user.roles ==="SELLER") {
+      if (session.user.roles =='SELLER') {
         profileLink = "/teacher";
       }
       return (
