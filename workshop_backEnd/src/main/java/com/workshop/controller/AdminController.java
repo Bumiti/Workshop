@@ -4,6 +4,7 @@ import com.workshop.config.ApiResponse;
 import com.workshop.config.cloud.ResponseRequestOptions;
 import com.workshop.dto.CourseDTO.CourseResponses;
 import com.workshop.dto.DashBoardDTO.DashboardDTO;
+import com.workshop.dto.DashBoardDTO.WeeklyRecapDTo;
 import com.workshop.dto.LocationDTO;
 import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.RequestResponse;
@@ -50,6 +51,20 @@ public class AdminController {
                 return createResponse(HttpStatus.ACCEPTED, "error", "DashBoard is empty", null);
             } else {
                 return createResponse(HttpStatus.ACCEPTED, "success", "get DashBoard success", dtos);
+            }
+        } catch (Exception e) {
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
+    }
+    @Operation(summary = "Week Recap")
+    @GetMapping("WeekRecap")
+    public ResponseEntity<ApiResponse<?>> WeekRecap() {
+        try {
+            List<WeeklyRecapDTo> dtos = dashboardService.WEEKLY_RECAP_D_TO_LIST();
+            if (dtos==null) {
+                return createResponse(HttpStatus.ACCEPTED, "error", "WeeklyRecap is empty", null);
+            } else {
+                return createResponse(HttpStatus.ACCEPTED, "success", "get WeeklyRecap success", dtos);
             }
         } catch (Exception e) {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);

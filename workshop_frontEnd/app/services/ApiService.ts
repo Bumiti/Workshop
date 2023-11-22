@@ -122,6 +122,17 @@ class ApiService {
             throw error;
         }
     }
+    async getWeeklyRecapbyIdAdmin() {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get('admin/WeekRecap');
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
     async dashboard() {
         try {
             if (this.session?.user.accessToken) {

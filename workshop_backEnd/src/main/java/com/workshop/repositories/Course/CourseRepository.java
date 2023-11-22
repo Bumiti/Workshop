@@ -1,6 +1,7 @@
 package com.workshop.repositories.Course;
 
 import com.workshop.dto.CourseDTO.CourseResponses;
+import com.workshop.model.Request;
 import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,12 +11,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course,Long> {
-
+    List<Course> findByCreatedDateBetween(Timestamp createdDate, Timestamp createdDate2);
     Course findCourseById(Long id);
 
     @Query("SELECT c FROM Course c join c.CourseLocation cl where cl.id= :course_location_Id")
