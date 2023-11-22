@@ -6,14 +6,19 @@ import 'package:workshop_mobi/screens/auth/components/my_email_textfield.dart';
 import 'package:workshop_mobi/screens/auth/components/my_emailconfirm_textfield.dart';
 import 'package:workshop_mobi/screens/auth/components/my_pw_textfield.dart';
 import 'package:workshop_mobi/screens/auth/components/my_pwconfirm_textfield.dart';
-
 class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
-  RegisterPage({Key? key, required this.onTap}) : super(key: key);
+  const RegisterPage({Key? key, required this.onTap}) : super(key: key);
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 class _RegisterPageState extends State<RegisterPage> {
+
+  final GlobalKey<FormState> emailformKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> configemailformKeyformKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> passwordformKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> configpasswordformKey = GlobalKey<FormState>();
+
   //text controllers
   RegisterController registerController = Get.put(RegisterController());
   //register method
@@ -37,23 +42,33 @@ class _RegisterPageState extends State<RegisterPage> {
                 height: 25,
               ),
               MyEmailTextfield(
-                  obscureText: false,
-                  controller: registerController.emailController),
+                obscureText: false,
+                controller: registerController.emailController,
+                formKey: emailformKey,
+              ),
               const SizedBox(
                 height: 10,
               ),
               MyConfirmEmailTextfield(
-                  obscureText: false,
-                  controller: registerController.configEmailController),
+                formKey: configemailformKeyformKey,
+                emailController: registerController.emailController,
+              ),
               const SizedBox(
                 height: 10,
               ),
-              MyPwTextfield(controller: registerController.passwordController),
+              MyPwTextfield(
+                obscureText: true,
+                controller: registerController.passwordController,
+                formKey: passwordformKey, 
+              ),
               const SizedBox(
                 height: 10,
               ),
               MyConfirmPwTextfield(
-                  controller: registerController.configPasswordController),
+                  formKey: configpasswordformKey,
+                  passwordController: registerController.passwordController, 
+                  configpasswordController: registerController.configPasswordController,
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -79,7 +94,9 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               MyButton(
                 text: 'Register',
-                onTap: register,
+                onTap: () async {
+                  await registerController.RegisterUserAsyn();
+                },
               ),
               const SizedBox(
                 height: 20,

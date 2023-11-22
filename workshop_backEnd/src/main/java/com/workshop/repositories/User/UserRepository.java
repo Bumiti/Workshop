@@ -17,6 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByCreatedDateBetween(Timestamp createdDate, Timestamp createdDate2);
     @Query("select u from User u where u.email =:email and u.isEnable =true")
     Optional<User> findByEmail(String email);
+    @Query("select u from User u where u.email =:email ")
+    Optional<User> findAllByEmail(String email);
     @Query("select u from User u where u.email =:email and u.isEnable =true")
     User getUserEditByMail(String email);
     @Query("select u from User u left join fetch u.userAddresses ua where u.email = :email and u.isEnable = true")

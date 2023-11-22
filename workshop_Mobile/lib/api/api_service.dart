@@ -18,6 +18,7 @@ class ApiService {
       };
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
+         
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['status'] == 'success') {
@@ -34,39 +35,38 @@ class ApiService {
       rethrow;
     }
   }
-  //  Future<dynamic> registerAccount(String email, String password) async {
-  //   var headers = {'Content-Type': 'application/json'};
-  //   try {
-  //     var url = Uri.parse(
-  //         ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.loginWebAccount);
-  //     Map body = {
-  //       'full_name':email.trim(),
-  //       'balance':0,
-  //       'user_name':email.trim(),
-  //       'email': email.trim(),
-  //       'password': password,
-  //       'phoneNumber':'string',
-  //       'gender':'string',
-
-  //     };
-  //     http.Response response =
-  //         await http.post(url, body: jsonEncode(body), headers: headers);
-  //     if (response.statusCode == 200) {
-  //       final json = jsonDecode(response.body);
-  //       if (json['status'] == 'success') {
-  //         var data = json['data'];
-  //         var user = data['user'];
-  //         return user;
-  //       } else if (json['code'] == 1) {
-  //         throw jsonDecode(response.body)['message'];
-  //       }
-  //     } else {
-  //       throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
-  //     }
-  //   } catch (error) {
-  //     rethrow;
-  //   }
-  // }
+   Future<dynamic> registerAccount(String email, String password,String roles) async {
+    var headers = {'Content-Type': 'application/json'};
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.register);
+      Map body = {
+        'full_name':email.trim(),
+        'balance':0,
+        'user_name':email.trim(),
+        'email': email.trim(),
+        'password': password,
+        'phoneNumber':'string',
+        'gender':'string',
+        'role':roles,
+         "enable": true
+      };
+      http.Response response =
+          await http.post(url, body: jsonEncode(body), headers: headers);
+           print(response.statusCode);
+      if (response.statusCode == 202) {
+        final json = jsonDecode(response.body);
+         return json;
+      }else if(response.statusCode == 302){
+        final json = jsonDecode(response.body);
+         return json;
+      }else {
+        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
 
   // Future<List<User>> getListUserbyAdmin(String token) async {
   //   var headers = {

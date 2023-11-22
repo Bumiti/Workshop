@@ -17,7 +17,7 @@ class ForgotPassword extends StatelessWidget {
 
   //register method
   void register() {}
-
+final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,16 +52,15 @@ class ForgotPassword extends StatelessWidget {
 
               //username textfield
               MyEmailTextfield(
-                  obscureText: false, controller: usernameController),
+                  obscureText: false,
+                  controller: usernameController, formKey: formKey,),
 
               const SizedBox(
                 height: 10,
               ),
 
               //email textfield
-              MyConfirmEmailTextfield(
-                  obscureText: false, controller: emailController),
-
+            
               const SizedBox(
                 height: 10,
               ),

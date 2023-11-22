@@ -275,7 +275,6 @@ public class DashBoardServiceImpl implements DashboardService {
         }
     }
     private int getDayOfWeekValue(String dayOfWeek) {
-        // Convert day names to corresponding values (e.g., Monday -> 1, Tuesday -> 2, ..., Saturday -> 6)
         switch (dayOfWeek) {
             case "Monday":
                 return 1;

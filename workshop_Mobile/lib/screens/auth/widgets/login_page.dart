@@ -12,7 +12,9 @@ class LoginPage extends StatelessWidget {
 
   LoginPage({super.key, required this.onTap});
   LoginController loginController = Get.put(LoginController());
-
+// 1. Tạo GlobalKey<FormState> ở mức cao nhất
+  final GlobalKey<FormState> emailformKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> passwordformKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,20 +25,7 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              //logo
-              // Image.asset(
-              //   "lib/assets/Logo.jpg",
-              //   width: 200,
-              //   height: 200,
-              // ),
-              // Icon(
-              //   Icons.person,
-              //   size: 80,
-              //   color: Theme.of(context).colorScheme.inversePrimary,
-              // ),
-              // const SizedBox(
-              //   height: 25,
-              // ),
+   
               //app name
               const Text(
                 'Sign In',
@@ -49,13 +38,13 @@ class LoginPage extends StatelessWidget {
               //email textfield
               MyEmailTextfield(
                   obscureText: false,
-                  controller: loginController.emailController),
+                  controller: loginController.emailController, formKey: emailformKey,),
 
               const SizedBox(
                 height: 30,
               ),
               //password textfield
-              MyPwTextfield(controller: loginController.passwordController),
+              MyPwTextfield(controller: loginController.passwordController,formKey:passwordformKey, obscureText: true,),
               const SizedBox(
                 height: 10,
               ),

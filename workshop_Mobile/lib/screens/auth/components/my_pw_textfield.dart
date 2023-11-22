@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 
 class MyPwTextfield extends StatefulWidget {
   final TextEditingController controller;
-
-  const MyPwTextfield({super.key, required this.controller});
-
+  final GlobalKey<FormState> formKey;
+   const MyPwTextfield({Key? key, required this.formKey, required this.controller, required bool obscureText})
+      : super(key: key);
+  String getPasswordValue() {
+    return controller.text;
+  }
   @override
-  State<MyPwTextfield> createState() => _MyPwTextfieldState();
+ // ignore: library_private_types_in_public_api
+ _MyPwTextfieldState createState() => _MyPwTextfieldState();
 }
 
 class _MyPwTextfieldState extends State<MyPwTextfield> {
   bool obscureText = true;
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return Form(
+      key:widget.formKey,
+      child: TextFormField(
       obscureText: obscureText,
       controller: widget.controller,
       decoration: InputDecoration(
@@ -32,6 +38,15 @@ class _MyPwTextfieldState extends State<MyPwTextfield> {
           borderRadius: BorderRadius.circular(6),
         ),
       ),
-    );
+       validator: (value) {
+        // Kiểm tra xem giá trị nhập vào có phải là địa chỉ email hợp lệ hay không
+        if (value == null || value.isEmpty ) {
+          return 'Please enter a valid Password.';
+        }
+        return null; // Trả về null nếu không có lỗi
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    ),)
+    ;
   }
 }
