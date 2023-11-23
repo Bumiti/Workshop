@@ -222,6 +222,7 @@ public class AdminServiceImpl implements AdminService {
                     CourseResponses.CourseLocation.locationResponse location =
                             locationMapper.ModelmapToDTO(courseLocation.getLocations(), CourseResponses.CourseLocation.locationResponse.class);
                     location.setId(locationId);
+
                     courseLocal.setLocationResponse(location);
 
                 }
@@ -283,6 +284,5 @@ public class AdminServiceImpl implements AdminService {
             return new UserInfoResponse();
         }
     }
-
 
 }

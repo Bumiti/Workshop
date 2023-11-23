@@ -50,13 +50,14 @@ public class AdminController {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
-    @Operation(summary = "Xét duyệ rút tiền về cho giáo viên")
+    @Operation(summary = "Xét duyệt rút tiền về cho giáo viên")
     @GetMapping("teacher/withdraw")
-    public ResponseEntity<ApiResponse<?>> handleWithDrawRequest(@RequestParam int teacher_id) {
+    public ResponseEntity<ApiResponse<?>> handleWithDrawRequest(@RequestParam int teacher_id,@RequestParam int request_id) {
         try {
             RequestDTO requestDTO = new RequestDTO();
+            requestDTO.setRequestId((long) request_id);
             requestDTO.setItem_register_id((long) teacher_id);
-            requestDTO.setStatus("WITHDRAW");
+            requestDTO.setType("WITHDRAW");
             ResponseRequestOptions responseRequestOptions  =  requestService.createRequestOptions(requestDTO);
             if (responseRequestOptions.getStatus().equals("APPROVED")) {
                 return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>
@@ -115,7 +116,7 @@ public class AdminController {
         }
     }
     @Operation(summary = "Thay đổi trạng thái Course")
-    @PostMapping("course/status")
+    @PutMapping("course/status")
     public ResponseEntity<ApiResponse<?>> activeCourse(@RequestParam int id) {
         try {
             Long longId = (long) id;
@@ -239,6 +240,26 @@ public class AdminController {
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>
                     ("Success", "Your Info is ", null));
+        }
+    }
+
+    @Operation(summary = "Thay đổi trạng thái Request")
+    @PutMapping("request/status")
+    public ResponseEntity<ApiResponse<?>> activeRequest(@RequestParam int id) {
+        try {
+            Long longId = (long) id;
+            if (longId >0) {
+                boolean result = requestService.changeStatusRequest(longId);
+                if (result) {
+                    return createResponse(HttpStatus.ACCEPTED, "success", "The Course Status has been changed", null);
+                } else {
+                    return createResponse(HttpStatus.BAD_REQUEST, "error", "Failed to change course status", null);
+                }
+            } else {
+                return createResponse(HttpStatus.NO_CONTENT, "error", "Invalid request: Course ID is missing", null);
+            }
+        } catch (Exception e) {
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
 

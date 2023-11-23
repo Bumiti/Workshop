@@ -56,15 +56,16 @@ public class RequestServiceImpl implements RequestService {
         for(Request request : requestList)
         {
             RequestResponse requestResponse = new RequestResponse();
+
             if(request.getCourses()!=null){
-                requestResponse.setCourseName(request.getCourses().getName());
-                requestResponse.setCourseId(request.getCourses().getId());
+                requestResponse.setWorkshopName(request.getCourses().getName());
+                requestResponse.setWorkshopId(request.getCourses().getId());
             }
             if(request.getLocation() !=null){
                 requestResponse.setLocationId(request.getLocation().getId());
                 requestResponse.setLocationName(request.getLocation().getName());
             }
-            requestResponse.setId(request.getId())
+            requestResponse.setId(request.getId()).setValue(request.getValue())
                     .setStatus(String.valueOf(request.getStatus()))
                     .setType(String.valueOf(request.getType()))
                     .setUserId(request.getUser().getId()).setUserName(request.getUser().getUser_name())
@@ -76,7 +77,6 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public ResponseRequestOptions  createRequestOptions(RequestDTO requestDTO) {
         try {
-            String result = "";
             User user = userService.getCurrentUserDetails();
             Request request = new Request();
             Transaction transaction = new Transaction();
@@ -85,10 +85,10 @@ public class RequestServiceImpl implements RequestService {
             ResponseRequestOptions responseRequestOptions =new ResponseRequestOptions();
             switch (requestDTO.getType()) {
                 case "DEPOSIT":
+                    //for request deposit of teacher
                     responseRequestOptions = (handleDepositRequest(user, requestDTO, request, transaction, paymentMethod));
                     break;
                 case "WITHDRAW":
-                    //with this function requestDTO.getItem_register_id() is teacherId
                      responseRequestOptions =(CheckWithDrawRequest( requestDTO, request, transaction, paymentMethod));
                 break;
                 case "HANDLE_WITHDRAW":
@@ -110,9 +110,10 @@ public class RequestServiceImpl implements RequestService {
     public boolean changeStatusRequest(Long request_id) {
         return false;
     }
-    private ResponseRequestOptions handleWithDrawRequest(User user, RequestDTO requestDTO, Request request){
+    private ResponseRequestOptions handleWithDrawRequest(User user, RequestDTO requestDTO, Request request)
+    {
         if(requestDTO.getAmount() < user.getBalance() && (user.getBalance() - requestDTO.getAmount()) >10){
-            request.setUser(user).setStatus(Request.RequestStatus.PENDING).setType(Request.RequestType.valueOf(requestDTO.getType()));
+            request.setValue(requestDTO.getAmount()).setUser(user).setStatus(Request.RequestStatus.PENDING).setType(Request.RequestType.valueOf(requestDTO.getType()));
             requestRepository.save(request);
             ResponseRequestOptions responseRequestOptions = new ResponseRequestOptions();
             responseRequestOptions.setStatus("PENDING");
@@ -175,22 +176,26 @@ public class RequestServiceImpl implements RequestService {
             return responseRequestOptions;
         }
     }
-    private ResponseRequestOptions CheckWithDrawRequest( RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod){
+    private ResponseRequestOptions CheckWithDrawRequest( RequestDTO requestDTO, Request request, Transaction transaction, PaymentMethod paymentMethod)
+    {
         Long teacher_id = requestDTO.getItem_register_id();
         Optional<User> TeacherOption = userRepository.findById(teacher_id);
-      if(TeacherOption.isPresent()){
+        Long request_id = requestDTO.getRequestId();
+        Optional<Request> requestOption = requestRepository.findById(request_id);
+      if(TeacherOption.isPresent() && requestOption.isPresent()){
           User Teacher = TeacherOption.get();
-          if(requestDTO.getAmount() < Teacher.getBalance() && (Teacher.getBalance() - requestDTO.getAmount()) >10)
+          Request requestExit = requestOption.get();
+          if(requestExit.getValue() < Teacher.getBalance() && (Teacher.getBalance() - requestExit.getValue()) >10)
           {
               request.setUser(Teacher).setStatus(Request.RequestStatus.APPROVED).setType(Request.RequestType.valueOf(requestDTO.getType()));
               paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
-              Double newBalance = Teacher.getBalance() - requestDTO.getAmount();
+              Double newBalance = Teacher.getBalance() - requestExit.getValue();
               Long id = Teacher.getId();
               paymentRepository.save(paymentMethod);
               userRepository.updateBalanceAccountById(id,newBalance);
               requestRepository.save(request);
               transaction.setRequest(request).setUser(Teacher).setPaymentMethod(paymentMethod)
-                      .setAmount(requestDTO.getAmount())
+                      .setAmount(requestExit.getValue() )
                       .setType(Transaction.Type.valueOf(requestDTO.getType()))
                       .setStatus(Transaction.Status.COMPLETED)
                       .setTransactionDate(LocalDateTime.now());
@@ -198,13 +203,13 @@ public class RequestServiceImpl implements RequestService {
               ResponseRequestOptions responseRequestOptions = new ResponseRequestOptions();
               responseRequestOptions.setStatus("APPROVED");
               return responseRequestOptions;
-          }else if(requestDTO.getAmount() < Teacher.getBalance() && (Teacher.getBalance() - requestDTO.getAmount()) <10){
+          }else if(requestExit.getValue()  < Teacher.getBalance() && (Teacher.getBalance() - requestExit.getValue() ) <10){
               request.setUser(Teacher).setStatus(Request.RequestStatus.REJECTED).setType(Request.RequestType.valueOf(requestDTO.getType()));
               paymentMethod.setDescription(requestDTO.getType()).setName(requestDTO.getPaymentName());
               paymentRepository.save(paymentMethod);
               requestRepository.save(request);
               transaction.setRequest(request).setUser(Teacher).setPaymentMethod(paymentMethod)
-                      .setAmount(requestDTO.getAmount())
+                      .setAmount(requestExit.getValue())
                       .setType(Transaction.Type.valueOf(requestDTO.getType()))
                       .setStatus(Transaction.Status.CANCELED)
                       .setTransactionDate(LocalDateTime.now());
@@ -218,7 +223,7 @@ public class RequestServiceImpl implements RequestService {
               paymentRepository.save(paymentMethod);
               requestRepository.save(request);
               transaction.setRequest(request).setUser(Teacher).setPaymentMethod(paymentMethod)
-                      .setAmount(requestDTO.getAmount())
+                      .setAmount(requestExit.getValue())
                       .setType(Transaction.Type.valueOf(requestDTO.getType()))
                       .setStatus(Transaction.Status.FAILED)
                       .setTransactionDate(LocalDateTime.now());
@@ -308,7 +313,7 @@ public class RequestServiceImpl implements RequestService {
                 objContent.setStatus(true).setName(user.getFull_name()).setEmail(user.getEmail());
                 String urlCorCode =  uploadQrCodeImage(objContent).toString();
                 QrToken qrToken = new QrToken();
-                qrToken.setCourse(course).setUser(user).setName(user.getFull_name()).setEmail(user.getEmail()).setStatus(true);
+                qrToken.setCourse(course).setUser(user).setUrlQrCode(urlCorCode).setName(user.getFull_name()).setEmail(user.getEmail()).setStatus(true);
                 qrCodeTickerRepository.save(qrToken);
                 ResponseRequestOptions responseRequestOptions = new ResponseRequestOptions();
                 responseRequestOptions.setUrlQrCode(urlCorCode).setStatus("APPROVED").setUser_name(user.getFull_name()).setEmail(user.getEmail());
@@ -338,6 +343,7 @@ public class RequestServiceImpl implements RequestService {
                     .setContentType("image/png")
                     .build();
             Blob blob =  storage.create(blobInfo, qrCodeImageData);
+            System.out.println("getMediaLink: " + blob.getMediaLink());
             long duration = 2221;
             TimeUnit unit = TimeUnit.HOURS;
             URL signedUrl = blob.signUrl(duration, unit);

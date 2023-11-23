@@ -485,7 +485,6 @@ public class CourseServiceImpl implements CourseService {
            return false;
        }
     }
-
     @Override
     public boolean UpdateLocationToLocationCourse(Long CourseLocation_id, Long Location_Id) {
         try{
@@ -493,9 +492,6 @@ public class CourseServiceImpl implements CourseService {
             Location location = locationRepository.findLocationById(Location_Id);
             if(courseLocation!=null && location!=null){
                 courseLocationRepository.updateLocationToLocationCourse(CourseLocation_id,Location_Id);
-             Course course =   courseRepository.findCourseByCourseLocationId(CourseLocation_id);
-             Long course_id = course.getId();
-              courseRepository.chanceStatusCourseById(course_id);
                 return true;
             }else{
                 return false;

@@ -181,7 +181,18 @@ class ApiService {
     async changeStatusCourse(id: number) {
         try {
             if (this.session?.user.accessToken) {
-                const response = await this.customAxios.post(`/admin/course/status?id=${id}`);
+                const response = await this.customAxios.put(`/admin/course/status?id=${id}`);
+                return response.data;
+            }
+            return null;
+        } catch (error) {
+            throw error;
+        }
+    }
+    async changeStatusRequest(id: number) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.put(`/admin/request/status?id=${id}`);
                 return response.data;
             }
             return null;
@@ -196,7 +207,6 @@ class ApiService {
                 return response.data;
             }
             return null;
-
         } catch (error) {
             throw error;
         }
@@ -213,11 +223,22 @@ class ApiService {
             throw error;
         }
     }
-
     async UpdateLocation(course_location_id: number, location_id: number) {
         try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.put(`admin/course/locationUpdate?course_location_Id=${course_location_id}&location_id=${location_id}`);
+                return response.data;
+            }
+            return null;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async UpdateRequest(request_id: number, user_id: number) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get(`admin/teacher/withdraw?teacher_id=${user_id}&request_id=${request_id}`);
                 return response.data;
             }
             return null;

@@ -11,6 +11,7 @@ import { useSession } from 'next-auth/react';
 import { BiCheckCircle, BiXCircle } from 'react-icons/bi';
 import { Modal, Card } from 'react-bootstrap';
 import Style from "./workshop.module.css";
+import { useRouter } from "next/navigation";
 
 interface CoursesData {
   id: number;
@@ -68,8 +69,7 @@ const CoursesPage = () => {
   const [selectedUser, setSelectedUser] = useState<CoursesData | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [coursesPerPage] = useState<number>(5);
-
-
+const route = useRouter();
   useEffect(() => {
     if (session) {
       const fetchData = async () => {
@@ -105,6 +105,8 @@ const CoursesPage = () => {
   }, [session]);
 
   const handleTogglePublicStatus = (id: number) => {
+    console.log("vao2 ham2 handleTogglePublicStatus");
+    
     apiService.changeStatusCourse(id).then(() => {
       setCourses((prevUsers) => {
         return prevUsers.map((course) => {
@@ -128,9 +130,11 @@ const CoursesPage = () => {
   };
 
   const UpdateLocationWorkshop = async (course_location_id: number, location_id: number) => {
+    console.log("UpdateLocationWorkshop");
     const updatelocationResponse = await apiService.UpdateLocation(course_location_id, location_id);
     console.log('updatelocationResponse', updatelocationResponse);
     console.log('location_id', location_id);
+    route.refresh();
 
   }
 
@@ -182,12 +186,6 @@ const CoursesPage = () => {
                       <button className={`${styles.button} ${styles.view}`} onClick={() => handleUserDetails(course)}>
                         View
                       </button>
-                      {/* <form action={deleteProduct}>
-                    <input type="hidden" name="id" value={product.id} />
-                    <button className={`${styles.button} ${styles.delete}`}>
-                      Delete
-                    </button>
-                  </form> */}
                     </div>
                   </td>
                 </tr>

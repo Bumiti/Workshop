@@ -60,14 +60,6 @@ const handler = NextAuth({
             }
 
             console.log(token.exp);
-            if (token && token.exp > 0) {
-
-                const expireTime = fromUnixTime(token.exp);
-
-                const isTokenExpired = isAfter(expireTime, new Date());
-
-                console.log("isTokenExpired", isTokenExpired);
-            }
 
             return { ...token, ...user }
         },

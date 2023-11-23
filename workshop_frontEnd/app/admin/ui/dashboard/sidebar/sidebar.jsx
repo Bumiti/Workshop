@@ -106,7 +106,6 @@ const Sidebar = () => {
         setShowProfileDropdown(false);
       }
     };
-
     document.addEventListener("mousedown", handler)
   })
 
