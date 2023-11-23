@@ -257,6 +257,18 @@ class ApiService {
             throw error;
         }
     }
+
+    async listTransactionAdmin() {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get('/admin/transaction/list');
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
     //-------------------------------------------------Web API-------------------------------------------------//
     async listCoursePublic() {
         try {
