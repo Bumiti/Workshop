@@ -12,7 +12,6 @@ class LoginController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Future<void> loginWithEmail() async {
- 
     try {
       var user = await apiService.loginWebAccount(
         emailController.text.trim(),
@@ -39,7 +38,6 @@ class LoginController extends GetxController {
       } else if (roleString == 'SELLER') {
         Get.off(const TeacherHomeScreen());
       } else {
-        Get.back();
         showDialog(
           context: Get.context!,
           builder: (context) {
@@ -55,7 +53,7 @@ class LoginController extends GetxController {
         );
       }
     } catch (error) {
-      Get.back();
+   
       showDialog(
         context: Get.context!,
         builder: (context) {

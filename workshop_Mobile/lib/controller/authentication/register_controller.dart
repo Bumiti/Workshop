@@ -1,12 +1,7 @@
 import 'package:get/get.dart';
 import 'package:workshop_mobi/api/api_service.dart';
-import 'package:workshop_mobi/screens/auth/login_or_register.dart';
-import 'package:workshop_mobi/screens/auth/widgets/login_page.dart';
-import 'package:workshop_mobi/screens/teacherLayout/teacher_home.dart';
-import 'package:workshop_mobi/screens/userLayout/user_home.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class RegisterController extends GetxController {
   var isPasswordVisible = false.obs;
@@ -37,6 +32,7 @@ class RegisterController extends GetxController {
       );
   
       if (responese['status'] == 'Success') {
+
         showDialog(
           context: Get.context!,
           builder: (context) {
@@ -62,7 +58,7 @@ class RegisterController extends GetxController {
       }
     } catch (error) {
       print(error);
-      Get.back();
+     
       showDialog(
         context: Get.context!,
         builder: (context) {

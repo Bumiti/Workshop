@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:workshop_mobi/controller/register_controller.dart';
+import 'package:workshop_mobi/controller/authentication/register_controller.dart';
+
 import 'package:workshop_mobi/screens/auth/components/my_button.dart';
 import 'package:workshop_mobi/screens/auth/components/my_email_textfield.dart';
 import 'package:workshop_mobi/screens/auth/components/my_emailconfirm_textfield.dart';
