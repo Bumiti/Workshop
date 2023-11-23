@@ -1,5 +1,5 @@
 import {
-  IconBoxMultiple, IconCircleDot, IconHome, IconInfoCircle, IconLayout, IconLayoutGrid, IconPhoto, IconPoint, IconStar, IconTable, IconUser
+  IconBoxMultiple, IconCircleDot,IconMoneybag, IconHome, IconInfoCircle, IconLayout, IconLayoutGrid, IconPhoto, IconPoint, IconStar, IconTable, IconUser
 } from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
@@ -37,8 +37,8 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: "Library",
-    icon: IconPhoto,
+    title: "Deposit",
+    icon: IconMoneybag,
     href: "/user/ui-components/images",
   },
   // {

@@ -52,6 +52,25 @@ class ApiService {
         }
     }
 
+    async Deposit(data: {
+        type: string;
+        status: string;
+        item_register_id: number;
+        locationId: number;
+        amount: number;
+        discountAmount: number;
+        discountCode: string;
+        paymentName: string;
+        paymentStatus: string;
+
+    }) {
+        try {
+            const response = await this.customAxios.post('/user/deposit', data);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
     async getUserDetails() {
         try {
             if (this.session?.user.accessToken) {

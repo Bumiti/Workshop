@@ -3,7 +3,8 @@ import ApiService from "@/app/services/ApiService";
 import { Grid, Typography, TextField, Button, Card, CardContent, Box } from "@mui/material";import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from "react";
 import styles from './withdraw.module.css';
-
+import { toast,ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const WithdrawPage = () => {
   const [amount, setAmount] = useState(0);
@@ -46,18 +47,23 @@ const WithdrawPage = () => {
         if (updatedUserData && updatedUserData.data) {
           setUserData(updatedUserData.data);
           console.log('User data updated successfully:', updatedUserData.data);
+          toast.success('Withdrawal request successful!');
         }
         } else {
-          console.log('Rút tiền thất bại!');
+          console.log('Yeu cau rut tien thanh cong');
           // Thực hiện các hành động cần thiết khi rút tiền thất bại
+          toast.error('Withdrawal request failed. Please try again.');
         }
       } else {
-        console.log('Số tiền không hợp lệ!');
+        console.log('Yeu cau rut tien khong thanh cong');
         // Thực hiện xử lý khi số tiền không hợp lệ
+        toast.error('Withdrawal request failed. Please try again.');
+
       }
     } catch (error) {
       // Xử lý lỗi nếu cần
       console.error('Lỗi khi thực hiện yêu cầu rút tiền:', error);
+      toast.error('An error occurred. Please try again.');
     }
   };
 
@@ -83,6 +89,8 @@ console.log(userData);
 
 return (
   <Grid container spacing={0} className={styles.container}>
+  <ToastContainer />
+
     <Card className={styles.pricingItemRegular}>
       <CardContent>
         <Typography variant="h2">Withdraw Money</Typography>

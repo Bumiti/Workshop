@@ -22,19 +22,20 @@ const Card = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if(session){
         const result = await apiService.listCoursePublic();
         if (Array.isArray(result.data)) {
           setCourses(result.data);
         } else {
           console.error('Data is not an array:', result.data);
-        }
+        }}
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
 
     fetchData();
-  }, [apiService]);
+  }, [session]);
 
 
   const chunkArray = (arr: CourseType[], chunkSize: number) => {
