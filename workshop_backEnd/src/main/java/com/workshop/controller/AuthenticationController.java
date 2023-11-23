@@ -2,6 +2,7 @@ package com.workshop.controller;
 
 import com.workshop.authentication.*;
 import com.workshop.config.ApiResponse;
+import com.workshop.dao.UserServiceImpl;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserRegisterRequest;
 import com.workshop.event.RegisterCompleteEvent;
@@ -76,15 +77,25 @@ public class AuthenticationController {
     @Operation(summary = "Đăng ký User bằng Role")
     @PostMapping("user/register")
     public ResponseEntity<ApiResponse<?>> registerUser(@RequestBody UserRegisterRequest userRegisterRequest, final HttpServletRequest request) {
-        if (userRegisterRequest != null) {
-            User user = userService.SaveUser(userRegisterRequest);
-            publisher.publishEvent(new RegisterCompleteEvent(user, applicationUrl(request)));
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
-                    ("Success", "please check your Email to complete your registration", null));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
-                    ("Error", "please check your Email Again", null));
-        }
+       try {
+           if (userRegisterRequest != null) {
+               User user = userService.SaveUser(userRegisterRequest);
+               publisher.publishEvent(new RegisterCompleteEvent(user, applicationUrl(request)));
+               return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
+                       ("Success", "please check your Email to complete your registration", null));
+           } else {
+               return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
+                       ("Error", "please check your Email Again", null));
+           }
+       }catch (UserServiceImpl.UserAlreadyExistsException ex) {
+           // Handle user already exists
+           return ResponseEntity.status(HttpStatus.FOUND).body(new ApiResponse<>
+                   ("failed", ex.getMessage(), null));
+       } catch (Exception e) {
+           // Handle other exceptions
+           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>
+                   ("failed",HttpStatus.BAD_REQUEST.toString(), null));
+       }
     }
 
     @Operation(summary = "Sửa thông tin User")

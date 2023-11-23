@@ -1,5 +1,6 @@
 package com.workshop.repositories.User;
 
+import com.workshop.model.Transaction;
 import com.workshop.model.courseModel.Course;
 import com.workshop.model.userModel.User;
 import org.springframework.data.jpa.repository.*;
@@ -7,14 +8,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
+    List<User> findByCreatedDateBetween(Timestamp createdDate, Timestamp createdDate2);
     @Query("select u from User u where u.email =:email and u.isEnable =true")
     Optional<User> findByEmail(String email);
+    @Query("select u from User u where u.email =:email ")
+    Optional<User> findAllByEmail(String email);
     @Query("select u from User u where u.email =:email and u.isEnable =true")
     User getUserEditByMail(String email);
     @Query("select u from User u left join fetch u.userAddresses ua where u.email = :email and u.isEnable = true")

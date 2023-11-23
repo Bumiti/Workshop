@@ -4,11 +4,14 @@ import com.workshop.config.ApiResponse;
 import com.workshop.config.cloud.ResponseRequestOptions;
 import com.workshop.dto.CourseDTO.CourseResponses;
 import com.workshop.dto.DashBoardDTO.DashboardDTO;
+import com.workshop.dto.DashBoardDTO.WeeklyRecapDTo;
 import com.workshop.dto.LocationDTO;
 import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.RequestResponse;
+import com.workshop.dto.TransactionDTO;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
+import com.workshop.model.Transaction;
 import com.workshop.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -33,6 +36,9 @@ public class AdminController {
     private final UserService userService;
     private final LocationService locationService;
     private final DashboardService dashboardService;
+    private final TransactionService transactionService;
+
+
     private ResponseEntity<ApiResponse<?>> createResponse(HttpStatus httpStatus, String status, String message, Object data) {
         return ResponseEntity.status(httpStatus).body(new ApiResponse<>(status, message, data));
     }
@@ -45,6 +51,20 @@ public class AdminController {
                 return createResponse(HttpStatus.ACCEPTED, "error", "DashBoard is empty", null);
             } else {
                 return createResponse(HttpStatus.ACCEPTED, "success", "get DashBoard success", dtos);
+            }
+        } catch (Exception e) {
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
+    }
+    @Operation(summary = "Week Recap")
+    @GetMapping("WeekRecap")
+    public ResponseEntity<ApiResponse<?>> WeekRecap() {
+        try {
+            List<WeeklyRecapDTo> dtos = dashboardService.WEEKLY_RECAP_D_TO_LIST();
+            if (dtos==null) {
+                return createResponse(HttpStatus.ACCEPTED, "error", "WeeklyRecap is empty", null);
+            } else {
+                return createResponse(HttpStatus.ACCEPTED, "success", "get WeeklyRecap success", dtos);
             }
         } catch (Exception e) {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
@@ -73,7 +93,7 @@ public class AdminController {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
         }
     }
-    @Operation(summary = "Danh Sách Course")
+    @Operation(summary = "Danh Sách Workshop")
     @GetMapping("course/list")
     public ResponseEntity<ApiResponse<?>> listCourse() {
         try {
@@ -82,6 +102,20 @@ public class AdminController {
                 return createResponse(HttpStatus.NOT_FOUND, "error", "List Courses is empty", null);
             } else {
                 return createResponse(HttpStatus.ACCEPTED, "success", "List of courses", courses);
+            }
+        } catch (Exception e) {
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
+    }
+    @Operation(summary = "Danh Sách listTransaction")
+    @GetMapping("transaction/list")
+    public ResponseEntity<ApiResponse<?>> listTransactionDTO() {
+        try {
+            List<TransactionDTO> transactionDTOS = transactionService.TRANSACTION_DTO_LIST();
+            if (transactionDTOS.isEmpty()) {
+                return createResponse(HttpStatus.NOT_FOUND, "error", "List transactionList is empty", null);
+            } else {
+                return createResponse(HttpStatus.ACCEPTED, "success", "List of transactionList", transactionDTOS);
             }
         } catch (Exception e) {
             return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
@@ -229,7 +263,6 @@ public class AdminController {
                     ("Error", "An error occurred: " + e.getMessage(), null));
         }
     }
-
     @Operation(summary = "Lấy thông tin cá nhân Admin")
     @GetMapping("/detail")
     public ResponseEntity<ApiResponse<?>> UserDetail() {

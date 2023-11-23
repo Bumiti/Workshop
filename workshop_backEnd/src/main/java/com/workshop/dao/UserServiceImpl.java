@@ -27,13 +27,18 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserAddressRepository userAddressRepository;
     private final UserBankRepository userBankRepository;
+    public class UserAlreadyExistsException extends RuntimeException {
+        public UserAlreadyExistsException(String email) {
+            super("User with email " + email + " already exists");
+        }
+    }
     @Override
     @Transactional
     public User SaveUser(UserRegisterRequest user) {
         MapperGeneric<User, UserRegisterRequest> mapper = new MapperGeneric<>();
-        Optional<User> userExist = userRepository.findByEmail(user.getEmail());
+        Optional<User> userExist = userRepository.findAllByEmail(user.getEmail());
         if (userExist.isPresent()) {
-            throw new RuntimeException("User with email: " + user.getEmail() + "already exists");
+            throw new UserAlreadyExistsException(user.getEmail());
         }
         User userMapper = mapper.DTOmapToModel(user, User.class);
         userMapper.setPassword(passwordEncoder.encode(user.getPassword()));
