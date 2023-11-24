@@ -242,7 +242,7 @@ public class TeacherController {
     @PostMapping("course/addListStudent/{id}/")
     public ResponseEntity<ApiResponse<?>> SendDiscountToListStudent(@PathVariable Long id, @RequestBody List<Long> studentIds) {
         try {
-            boolean result = courseService.AddEnrolledStudentsToCourseById(id, studentIds);
+            boolean result = courseService.addDiscountToStudent(id, studentIds);
             if (result) {
                 return ResponseEntity.status(HttpStatus.CREATED)
                         .body(new ApiResponse<>("success", "List of Students has been added to the Course", result));

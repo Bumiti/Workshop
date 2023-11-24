@@ -16,7 +16,7 @@ public interface CourseService {
     boolean settingStatusCourse(Long id);
     List<UserInfoResponse> listStudentByCourse(Long id);
     List<CourseResponses> listCourseTeacher();
-    boolean AddEnrolledStudentsToCourseById(Long Course_id,List<Long> List_Student_id);
+    boolean addDiscountToStudent(Long Course_id,List<Long> List_Student_id);
     List<CourseResponses> listCourseTeacherById(Long id);
     //Layer Website
     List<CourseResponses>listCourseEnable();

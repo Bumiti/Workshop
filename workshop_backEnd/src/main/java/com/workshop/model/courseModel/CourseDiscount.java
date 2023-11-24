@@ -2,10 +2,7 @@ package com.workshop.model.courseModel;
 
 import com.workshop.model.BaseModel;
 import com.workshop.model.Discount;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,12 +22,19 @@ public class CourseDiscount extends BaseModel {
     private Date redemptionDate;
     private int quantity;
     private String code;
-    // Quan hệ một nhiều với khóa học
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
-    // Quan hệ một nhiều với ưu đãi
     @ManyToOne
     @JoinColumn(name = "discount_id")
     private Discount discount;
+
+    public enum Status{
+        NotAvailable,
+        Available,
+        Email_Sent
+    }
+
 }

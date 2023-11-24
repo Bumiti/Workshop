@@ -59,7 +59,7 @@ public class SeedDatabase {
             addServiceManager();
             addRandomTeachers();
             addLocation();
-            addCourse();
+//            addCourse();
             createSeedStatusFile();
         }
 
@@ -79,13 +79,15 @@ public class SeedDatabase {
         rolesSetSeller.add(rolesSeller);
         rolesSetAdmin.add(rolesAdmin);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedAdminPassword = passwordEncoder.encode("admin64@gmail.com");
-        String encodedManagerPassword = passwordEncoder.encode("han2000@gmail.com");
-        String encodedUserPassword = passwordEncoder.encode("lethanhhieu@gmail.com");
-
-        Manager.setFull_name("Nguyễn Hồng Quân").setBalance(5000.0).setUser_name("HongQuan").setEmail("admin64@gmail.com").setPassword(encodedAdminPassword).setPhoneNumber("0383334196").setGender("male").setRoles(rolesSetAdmin).setEnable(true);
-        Seller.setFull_name("Phan Huỳnh Hồng Hân").setBalance(5000.0).setUser_name("Hồng Hân").setEmail("han2000@gmail.com").setPassword(encodedManagerPassword).setPhoneNumber("097865848").setGender("female").setRoles(rolesSetSeller).setEnable(true);
-        User.setFull_name("Lê Thanh Hiếu").setBalance(5000.0).setUser_name("Thanh Hiếu").setEmail("lethanhhieu@gmail.com").setPassword(encodedUserPassword).setPhoneNumber("9833241764").setGender("male").setRoles(rolesSetUser).setEnable(true);
+//        String encodedAdminPassword = passwordEncoder.encode("admin64@gmail.com");
+//        String encodedManagerPassword = passwordEncoder.encode("han2000@gmail.com");
+//        String encodedUserPassword = passwordEncoder.encode("lethanhhieu@gmail.com");
+        String encodedAdminPassword = passwordEncoder.encode("lactuong64@gmail.com");
+        String encodedManagerPassword = passwordEncoder.encode("shopqh95@gmail.com");
+        String encodedUserPassword = passwordEncoder.encode("workshopproject04@gmail.com");
+        Manager.setFull_name("Nguyễn Hồng Quân").setBalance(5000.0).setUser_name("HongQuan").setEmail("lactuong64@gmail.com").setPassword(encodedAdminPassword).setPhoneNumber("0383334196").setGender("male").setRoles(rolesSetAdmin).setEnable(true);
+        Seller.setFull_name("Phan Huỳnh Hồng Hân").setBalance(5000.0).setUser_name("Hồng Hân").setEmail("shopqh95@gmail.com").setPassword(encodedManagerPassword).setPhoneNumber("097865848").setGender("female").setRoles(rolesSetSeller).setEnable(true);
+        User.setFull_name("Lê Thanh Hiếu").setBalance(5000.0).setUser_name("Thanh Hiếu").setEmail("workshopproject04@gmail.com").setPassword(encodedUserPassword).setPhoneNumber("9833241764").setGender("male").setRoles(rolesSetUser).setEnable(true);
         userRepository.save( Manager);
         userRepository.save( Seller);
         userRepository.save( User);
@@ -256,7 +258,7 @@ public class SeedDatabase {
                 }
                 String randomName = "Discount " + i;
                 String randomDescription = "Description " + i;
-                int randomValueDiscount = random.nextInt(50) + 10;
+                int randomValueDiscount = random.nextInt(10) + 5;
                 int randomRemainingUses = random.nextInt(10);
                 Discount discount = new Discount();
                 discount.setRemainingUses(randomRemainingUses)
@@ -273,7 +275,7 @@ public class SeedDatabase {
                     calendar.add(Calendar.DAY_OF_MONTH, n);
                     Date redemptionDate = calendar.getTime();
                     courseDiscount
-                            .setCode(randomDiscountCode)
+                            .setCode(randomDiscountCode).setStatus(CourseDiscount.Status.Available)
                             .setCourse(course).setDiscount(discount).setQuantity(randomValueDiscount).setRedemptionDate(redemptionDate);
                     courseDiscountRepository.save(courseDiscount);
                 }
