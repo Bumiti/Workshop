@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import axios, { AxiosInstance } from 'axios';
 import CourseData from '../teacher/ui-components/add/courseData';
+import { log } from 'console';
 
 dotenv.config();
 
@@ -144,7 +145,7 @@ class ApiService {
             throw error;
         }
     }
-   
+
     async listRequestAdmin() {
         try {
             if (this.session?.user.accessToken) {
@@ -294,6 +295,27 @@ class ApiService {
             throw error;
         }
     }
+
+    async Register(formData: {
+        full_name: string;
+        role: string;
+        email: string;
+        password: string;
+        phoneNumber: string;
+        gender: string;
+        balance: number;
+        enable: boolean;
+    }) {
+        console.log('data', formData);
+
+        try {
+            const response = await this.customAxios.post('/auth/user/register',JSON.stringify(formData)
+            );
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
     //-------------------------------------------------Web API-------------------------------------------------//
 
 
@@ -334,7 +356,7 @@ class ApiService {
             throw error;
         }
     }
-    
+
     async listCoursesFromApi() {
         try {
             const response = await this.customAxios.get('/seller/course/list');
