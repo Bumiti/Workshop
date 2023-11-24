@@ -14,6 +14,6 @@ public interface CourseMediaInfoRepository extends JpaRepository<CourseMediaInfo
 
     @Transactional
     @Modifying
-    @Query("UPDATE CourseMediaInfo c SET c.urlImage = :#{#courseMediaInfo.urlImage}, c.urlMedia = :#{#courseMediaInfo.urlMedia} WHERE c.id = :Id")
-    void updateCourse(@Param("Id") Long Id, @Param("courseMediaInfo") CourseMediaInfo courseMediaInfo);
+    @Query("UPDATE CourseMediaInfo c SET c.urlImage = :#{#courseMedia.urlImage}, c.urlMedia = :#{#courseMedia.urlMedia}, c.thumbnailSrc =:#{#courseMedia.thumbnailSrc},c.title =:#{#courseMedia.title} WHERE c.id = :Id")
+    void updateCourse(@Param("Id") Long Id, @Param("courseMedia") CourseMediaInfo courseMedia);
 }

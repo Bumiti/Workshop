@@ -110,7 +110,7 @@ public class CourseServiceImpl implements CourseService {
             if (courseMediaInfoDTOSList != null) {
                 for (CourseUpdateRequest.CourseMediaInfoDTOS mediaInfoDTOS : courseMediaInfoDTOSList) {
                     CourseMediaInfo mediaInfo = mapperMediaGeneric.DTOmapToModel(mediaInfoDTOS, CourseMediaInfo.class);
-                    Long cMda_id = mediaInfoDTOS.getCourseMedia_id();
+                    Long cMda_id = mediaInfoDTOS.getId();
                     if (cMda_id > 0) {
                         courseMediaInfoRepository.updateCourse(cMda_id, mediaInfo);
                     } else {
@@ -122,7 +122,7 @@ public class CourseServiceImpl implements CourseService {
             if (courseLocationsList != null) {
                 for (CourseUpdateRequest.CourseLocation courseLocation : courseLocationsList) {
                     CourseLocation location = mapperLocationGeneric.DTOmapToModel(courseLocation, CourseLocation.class);
-                    Long cLct_id = courseLocation.getCourseLocation_id();
+                    Long cLct_id = courseLocation.getId();
                     location.setCourses(courseExit);
                     if (cLct_id > 0) {
                         courseLocationRepository.updateCourseLocation(cLct_id, location);
@@ -132,48 +132,48 @@ public class CourseServiceImpl implements CourseService {
                     }
                 }
             }
-            if (discountDTOSList != null) {
-                for (CourseUpdateRequest.DiscountDTO discountDTO : discountDTOSList) {
-                    Discount existingDiscount = discountRepository.findById(discountDTO.getCourseDiscount_id()).orElse(null);
-                    Discount discount = mapperDiscountGeneric.DTOmapToModel(discountDTO, Discount.class);
-                    if (existingDiscount != null) {
-                        Long dCount_id = discountDTO.getCourseDiscount_id();
-                        discount.setRemainingUses(discountDTO.getQuantity());
-                        discountRepository.updateDiscount(dCount_id, discount);
-                        if (existingDiscount.getRemainingUses() > 0) {
-                            int remainingUsesInDatabase = existingDiscount.getRemainingUses();
-                            int newQuantity = discountDTO.getQuantity();
-                            int courseDiscountAdjustment = newQuantity - remainingUsesInDatabase;
-                            if (courseDiscountAdjustment > 0) {
-                                for (int i = 0; i < courseDiscountAdjustment; i++) {
-                                    CourseDiscount courseDiscount = new CourseDiscount();
-                                    UUID randomUUID = UUID.randomUUID();
-                                    String randomDiscountCode = randomUUID.toString();
-                                    courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getValueDiscount())
-                                            .setDiscount(existingDiscount).setCourse(course);
-                                    courseDiscountRepository.save(courseDiscount);
-                                }
-                            } else {
-                                for (int i = 0; i < -courseDiscountAdjustment; i++) {
-                                    courseDiscountRepository.deleteCourseDiscountByDiscount(existingDiscount);
-                                }
-                            }
-                        }
-                    } else {
-                        discount.setRemainingUses(discountDTO.getQuantity());
-                        discountRepository.save(discount);
-                        for (int i = 0; i < discountDTO.getQuantity(); i++) {
-                        CourseDiscount courseDiscount = new CourseDiscount();
-                        UUID randomUUID = UUID.randomUUID();
-                        String randomDiscountCode = randomUUID.toString();
-                        courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getValueDiscount())
-                                .setDiscount(discount).setCourse(courseExit);
-                        courseDiscountRepository.save(courseDiscount);
-
-                        }
-                    }
-                }
-            }
+//            if (discountDTOSList != null) {
+//                for (CourseUpdateRequest.DiscountDTO discountDTO : discountDTOSList) {
+//                    Discount existingDiscount = discountRepository.findById(discountDTO.getId()).orElse(null);
+//                    Discount discount = mapperDiscountGeneric.DTOmapToModel(discountDTO, Discount.class);
+//                    if (existingDiscount != null) {
+//                        Long dCount_id = discountDTO.getId();
+//                        discount.setRemainingUses(discountDTO.getQuantity());
+//                        discountRepository.updateDiscount(dCount_id, discount);
+//                        if (existingDiscount.getRemainingUses() > 0) {
+//                            int remainingUsesInDatabase = existingDiscount.getRemainingUses();
+//                            int newQuantity = discountDTO.getQuantity();
+//                            int courseDiscountAdjustment = newQuantity - remainingUsesInDatabase;
+//                            if (courseDiscountAdjustment > 0) {
+//                                for (int i = 0; i < courseDiscountAdjustment; i++) {
+//                                    CourseDiscount courseDiscount = new CourseDiscount();
+//                                    UUID randomUUID = UUID.randomUUID();
+//                                    String randomDiscountCode = randomUUID.toString();
+//                                    courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getValueDiscount())
+//                                            .setDiscount(existingDiscount).setCourse(course);
+//                                    courseDiscountRepository.save(courseDiscount);
+//                                }
+//                            } else {
+//                                for (int i = 0; i < -courseDiscountAdjustment; i++) {
+//                                    courseDiscountRepository.deleteCourseDiscountByDiscount(existingDiscount);
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        discount.setRemainingUses(discountDTO.getQuantity());
+//                        discountRepository.save(discount);
+//                        for (int i = 0; i < discountDTO.getQuantity(); i++) {
+//                        CourseDiscount courseDiscount = new CourseDiscount();
+//                        UUID randomUUID = UUID.randomUUID();
+//                        String randomDiscountCode = randomUUID.toString();
+//                        courseDiscount.setCode(randomDiscountCode).setRedemptionDate(discountDTO.getRedemptionDate()).setQuantity(discountDTO.getValueDiscount())
+//                                .setDiscount(discount).setCourse(courseExit);
+//                        courseDiscountRepository.save(courseDiscount);
+//
+//                        }
+//                    }
+//                }
+//            }
             return true;
         } catch (Exception exception) {
             System.out.println("Error: " + exception.getMessage());

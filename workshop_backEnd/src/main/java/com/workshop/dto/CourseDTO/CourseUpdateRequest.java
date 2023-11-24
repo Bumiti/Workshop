@@ -32,7 +32,7 @@ public class CourseUpdateRequest {
     private int student_count;
     @NotNull
     private String type;
-    @JsonProperty("MediaInfoList")
+    @JsonProperty("courseMediaInfos")
     @Nullable
     @Builder.Default
     private List<CourseMediaInfoDTOS> MediaInfoList = Collections.emptyList();
@@ -41,7 +41,7 @@ public class CourseUpdateRequest {
     @Builder.Default
     private List<DiscountDTO> discountDTOS = Collections.emptyList();
 
-    @JsonProperty("courseLocation")
+    @JsonProperty("courseLocations")
     @Nullable
     @Builder.Default
     private List<CourseLocation> courseLocation = Collections.emptyList();
@@ -52,7 +52,7 @@ public class CourseUpdateRequest {
     @NoArgsConstructor
     public static class CourseMediaInfoDTOS
     {
-        private Long courseMedia_id;
+        private Long id;
         private String urlMedia;
         private String urlImage;
         private String thumbnailSrc;
@@ -64,7 +64,7 @@ public class CourseUpdateRequest {
     @NoArgsConstructor
     public static class DiscountDTO {
 
-        private Long courseDiscount_id;
+        private Long id;
         //số lượng
         private int quantity;
         //ngày hết hạn
@@ -82,7 +82,7 @@ public class CourseUpdateRequest {
     @NoArgsConstructor
     public static class CourseLocation {
 
-        private Long courseLocation_id;
+        private Long id;
         private String Area;
         private Date schedule_Date;
     }
