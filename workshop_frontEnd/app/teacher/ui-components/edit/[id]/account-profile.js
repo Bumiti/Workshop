@@ -98,7 +98,7 @@ export const AccountProfile = ({ onVideoUpload, existingVideoUrl, formData }) =>
       }));
     }
   }, [existingVideoUrl]);
-  console.log(formData);
+  // console.log(formData);
   useEffect(() => {
     if (formData && formData.length > 0 && formData[0].courseMediaInfos && formData[0].courseMediaInfos.length > 0) {
       const {
@@ -124,8 +124,8 @@ export const AccountProfile = ({ onVideoUpload, existingVideoUrl, formData }) =>
   }, [formData]);
   
   
-console.log('videoData nè',videoData);
-console.log('Video URL:', videoData?.mediaInfoList[0]?.urlMedia);
+// console.log('videoData nè',videoData);
+// console.log('Video URL:', videoData?.mediaInfoList[0]?.urlMedia);
 
   return (
     <Card>

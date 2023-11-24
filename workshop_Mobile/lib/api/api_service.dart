@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:workshop_mobi/model/user.dart';
 import 'package:workshop_mobi/utils/api_endpoints.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,7 +34,7 @@ class ApiService {
       rethrow;
     }
   }
-   Future<dynamic> registerAccount(String email, String password,String roles) async {
+  Future<dynamic> registerAccount(String email, String password,String roles) async {
     var headers = {'Content-Type': 'application/json'};
     try {
       var url = Uri.parse(
@@ -53,7 +52,7 @@ class ApiService {
       };
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
-           print(response.statusCode);
+          
       if (response.statusCode == 202) {
         final json = jsonDecode(response.body);
          return json;
@@ -65,6 +64,38 @@ class ApiService {
       }
     } catch (error) {
       rethrow;
+    }
+  }
+  Future<dynamic> resetPassword( String email) async {
+    var headers = {
+      'Content-Type': 'application/json',
+    };
+    var url = Uri.parse(
+        '${ApiEndPoints.baseUrl}${ApiEndPoints.authEndpoints.resetPassword}?Email=$email');
+    var data = {
+      'Email': email,
+    };
+
+    try {
+      final http.Response response = await http.post(
+        url,
+        headers: headers,
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 202) {
+        final jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['status'] == 'Success') {
+          return jsonResponse;
+        } else {
+          throw jsonResponse['message'] ?? 'Failed to Reset Password ';
+        }
+      } else {
+        final dynamic errorResponse = jsonDecode(response.body);
+        throw errorResponse?['message'] ?? 'Unknown Error Occurred';
+      }
+    } catch (error) {
+      throw error.toString();
     }
   }
 
@@ -104,42 +135,7 @@ class ApiService {
   //   }
   // }
 
-  // Future<bool> changeUserStatusById(String token, int userId) async {
-  //   var headers = {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': 'Bearer $token',
-  //   };
-
-  //   var url = Uri.parse(
-  //       '${ApiEndPoints.baseUrl}${ApiEndPoints.adminEndpoints.updateStatusAccount}?id=$userId');
-  //   var data = {
-  //     'id': userId,
-  //   };
-  //   // print(url);
-  //   try {
-  //     final http.Response response = await http.put(
-  //       url,
-  //       headers: headers,
-  //       body: jsonEncode(data),
-  //     );
-
-  //     if (response.statusCode == 202) {
-  //       final dynamic jsonResponse = jsonDecode(response.body);
-
-  //       if (jsonResponse['status'] == 'success') {
-  //         // Thay đổi trạng thái thành công
-  //         return true;
-  //       } else {
-  //         throw jsonResponse['message'] ?? 'Failed to change status';
-  //       }
-  //     } else {
-  //       final dynamic errorResponse = jsonDecode(response.body);
-  //       throw errorResponse?['message'] ?? 'Unknown Error Occurred';
-  //     }
-  //   } catch (error) {
-  //     throw error.toString();
-  //   }
-  // }
+  
 
   // Future<bool> deleteUserAddress(
   //     String token, int userId, int userAddressId) async {

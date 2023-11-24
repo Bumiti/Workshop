@@ -31,6 +31,7 @@ public class TeacherController {
     private final CourseService courseService;
     private final UserService userService;
     private final RequestService requestService;
+
     @Operation(summary = "Đổi mật khẩu")
     @PutMapping("chancePassword")
     public ResponseEntity<ApiResponse<?>> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
@@ -45,18 +46,20 @@ public class TeacherController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>(authException.getMessage(), "Authentication service error", null));
         }
     }
+
     @Operation(summary = "Lấy thông tin cá nhân Teacher")
     @GetMapping("/detail")
     public ResponseEntity<ApiResponse<?>> UserDetail() {
         UserInfoResponse userInfoResponse = userService.userDetail();
-        if(userInfoResponse !=null){
+        if (userInfoResponse != null) {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
                     ("Success", "Your Info is ", userInfoResponse));
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>
                     ("Success", "Your Info is ", null));
         }
     }
+
     @Operation(summary = "Sửa thông tin cá nhân Teacher")
     @PutMapping("/edit")
     public ResponseEntity<ApiResponse<?>> editUser(@RequestBody UserEditRequest userEditRequest) {
@@ -74,6 +77,7 @@ public class TeacherController {
                     ("Error", "An error occurred: " + e.getMessage(), null));
         }
     }
+
     @Operation(summary = "Xóa Address")
     @DeleteMapping("/deleteAddress/{useAddress_id}")
     public ResponseEntity<ApiResponse<?>> deleteUserAddress(@PathVariable Long useAddress_id) {
@@ -91,6 +95,7 @@ public class TeacherController {
                     ("Error", "An error occurred: " + e.getMessage(), null));
         }
     }
+
     @Operation(summary = "Danh Sách Học Sinh Trong Khóa Học")
     @GetMapping("/course/listStudent/{id}")
     public ResponseEntity<ApiResponse<?>> ListStudentByCourser(@PathVariable Long id) {
@@ -109,19 +114,20 @@ public class TeacherController {
         }
 
     }
+
     @Operation(summary = "Gửi Yêu Cầu Rút Tiền Về Tài Khoản")
     @PostMapping("/deposit")
     public ResponseEntity<ApiResponse<?>> WithDraw(@RequestBody RequestDTO requestDTO) {
         try {
             requestDTO.setType("HANDLE_WITHDRAW");
-            ResponseRequestOptions responseRequestOptions =  requestService.createRequestOptions(requestDTO);
+            ResponseRequestOptions responseRequestOptions = requestService.createRequestOptions(requestDTO);
             if (responseRequestOptions.getStatus().equals("PENDING")) {
                 return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>
                         ("Success", "Your Request PENDING", null));
-            } else if(responseRequestOptions.getStatus().equals("REJECTED") ){
+            } else if (responseRequestOptions.getStatus().equals("REJECTED")) {
                 return ResponseEntity.status(HttpStatus.CONTINUE).body(new ApiResponse<>
                         ("pending", "Your Balance Not Enable", null));
-            }else{
+            } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>
                         ("cancel", "Your Request REJECTED", null));
             }
@@ -130,6 +136,7 @@ public class TeacherController {
                     ("Error", "An error occurred: " + e.getMessage(), null));
         }
     }
+
     @Operation(summary = "Danh Sách Khóa Học Của Giáo Viên")
     @GetMapping("course/list")
     public ResponseEntity<ApiResponse<?>> ListCourseByTeacher() {
@@ -143,6 +150,7 @@ public class TeacherController {
                     .body(new ApiResponse<>("error", exception.getMessage(), null));
         }
     }
+
     @Operation(summary = "Danh Sách Khóa Học Của Giáo Viên Theo Id")
     @GetMapping("course/list/{id}")
     public ResponseEntity<ApiResponse<?>> listCourseByTeacherId(@RequestParam Long courseId) {
@@ -174,6 +182,7 @@ public class TeacherController {
                     ("error", "The Course NO_CONTENT", null));
         }
     }
+
     @Operation(summary = "Sửa khóa Học")
     @PutMapping("course/update/{id}")
     public ResponseEntity<ApiResponse<?>> UpdateCourse(@PathVariable Long id, @RequestBody CourseUpdateRequest courseUpdateRequest) {
@@ -184,7 +193,7 @@ public class TeacherController {
                         .body(new ApiResponse<>(HttpStatus.CREATED.name(), "The Course has been Update ", null));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>
-                        ("error", "The Course cant been Update", null));
+                        ("error", "The Course cant been Update", courseUpdateRequest));
             }
         } else {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse<>
@@ -209,11 +218,31 @@ public class TeacherController {
                     ("error", "The Course NO_CONTENT", null));
         }
     }
-    @Operation(summary = "Thêm Học Sinh Vào khóa Học")
+    //    @Operation(summary = "Thêm Học Sinh Vào khóa Học")
+//    @PostMapping("course/addListStudent/{id}/")
+//    public ResponseEntity<ApiResponse<?>> AddEStudentCourse(@PathVariable Long id, @RequestBody List<Long> studentIds) {
+//        try {
+//            boolean result = courseService.AddEnrolledStudentsToCourseById(id, studentIds);
+//            if (result) {
+//                return ResponseEntity.status(HttpStatus.CREATED)
+//                        .body(new ApiResponse<>("success", "List of Students has been added to the Course", result));
+//            } else {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                        .body(new ApiResponse<>("error", "No Students Found", null));
+//            }
+//        } catch (RuntimeException ex) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body(new ApiResponse<>("error", ex.getMessage(), null));
+//        } catch (Exception ex) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ApiResponse<>("error", "An error occurred while adding students to the course", null));
+//        }
+//    }
+    @Operation(summary = "Gửi ngẩu Nhiên Discount Workshop kế tiếp cho list Student")
     @PostMapping("course/addListStudent/{id}/")
-    public ResponseEntity<ApiResponse<?>> AddEStudentCourse(@PathVariable Long id, @RequestBody List<Long> studentIds) {
+    public ResponseEntity<ApiResponse<?>> SendDiscountToListStudent(@PathVariable Long id, @RequestBody List<Long> studentIds) {
         try {
-            boolean result = courseService.AddEnrolledStudentsToCourseById(id, studentIds);
+            boolean result = courseService.addDiscountToStudent(id, studentIds);
             if (result) {
                 return ResponseEntity.status(HttpStatus.CREATED)
                         .body(new ApiResponse<>("success", "List of Students has been added to the Course", result));
@@ -229,7 +258,6 @@ public class TeacherController {
                     .body(new ApiResponse<>("error", "An error occurred while adding students to the course", null));
         }
     }
-
 
 }
 
