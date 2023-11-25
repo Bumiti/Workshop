@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:workshop_mobi/controller/authentication/resetPassword_controller.dart';
+
+
 import 'package:workshop_mobi/screens/auth/components/my_button.dart';
 import 'package:workshop_mobi/screens/auth/components/my_email_textfield.dart';
-import 'package:workshop_mobi/screens/auth/components/my_emailconfirm_textfield.dart';
 import 'package:workshop_mobi/screens/auth/login_or_register.dart';
 
-
+// ignore: must_be_immutable
 class ForgotPassword extends StatelessWidget {
   final void Function()? onTap;
-
   ForgotPassword({super.key, required this.onTap});
-  //text controllers
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPwdController = TextEditingController();
+  ResetPassWordController resetPasswordController = Get.put(ResetPassWordController());
 
-  //register method
-  void register() {}
 final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -29,18 +25,6 @@ final GlobalKey<FormState> formKey = GlobalKey<FormState>();
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              //logo
-              // Icon(
-              //   Icons.person,
-              //   size: 80,
-              //   color: Theme.of(context).colorScheme.inversePrimary,
-              // ),
-
-              // const SizedBox(
-              //   height: 25,
-              // ),
-
-              //app name
               const Text(
                 'Forgot Password',
                 style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
@@ -53,7 +37,7 @@ final GlobalKey<FormState> formKey = GlobalKey<FormState>();
               //username textfield
               MyEmailTextfield(
                   obscureText: false,
-                  controller: usernameController, formKey: formKey,),
+                  controller: resetPasswordController.emailController, formKey: formKey,),
 
               const SizedBox(
                 height: 10,
@@ -71,7 +55,9 @@ final GlobalKey<FormState> formKey = GlobalKey<FormState>();
               //register button
               MyButton(
                 text: 'Reset Password',
-                onTap: register,
+                onTap:() async{
+                   await resetPasswordController.resetPasswordAsyn();
+                },
               ),
 
               const SizedBox(

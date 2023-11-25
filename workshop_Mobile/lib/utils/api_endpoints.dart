@@ -1,5 +1,5 @@
 class ApiEndPoints {
-  static const String baseUrl = 'http://192.168.1.3:8089/';
+  static const String baseUrl = 'http://192.168.1.7:8089/';
   // ignore: library_private_types_in_public_api
   static  _AuthEndPoints authEndpoints = _AuthEndPoints();
   // ignore: library_private_types_in_public_api
@@ -10,8 +10,7 @@ class ApiEndPoints {
 class _AuthEndPoints {
   final String register = 'auth/user/register';
   final String loginWebAccount = 'auth/loginWeb';
-
- 
+  final String resetPassword = 'auth/user/forgetPassword';
 
 }
 class _AdminEndPoints{

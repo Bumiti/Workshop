@@ -130,9 +130,12 @@ public class StudentController {
             if (result>0) {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
                         ("Success", "Your Code is Active", result));
-            } else {
+            } else if(result==0) {
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
+                        ("Success", "Your Code : "+code+ " is OutDate", null));
+            }else{
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>
-                        ("not_found", "Your Code : "+code+ " is OutDate", null));
+                        ("Error", "Your Code : "+code+ " not Found", null));
             }
 
         } catch (Exception e) {

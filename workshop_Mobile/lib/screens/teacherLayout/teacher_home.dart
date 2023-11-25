@@ -36,7 +36,7 @@ class _TeacherScreenState extends State<TeacherHomeScreen> {
           },
           child: const Text(
             'logout',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
           ),
         )
       ]),

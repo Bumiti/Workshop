@@ -36,7 +36,7 @@ bool showLoginPage = true;
           },
           child: const Text(
             'logout',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Color.fromARGB(255, 14, 13, 13)),
           ),
         )
       ]),

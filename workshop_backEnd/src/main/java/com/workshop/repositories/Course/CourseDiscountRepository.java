@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,14 +18,17 @@ public interface CourseDiscountRepository extends JpaRepository<CourseDiscount,L
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM CourseDiscount cd WHERE cd.discount.id = :discountId AND cd.quantity = :newQuantity")
-    void deleteCourseDiscounts(@Param("discountId") Long discountId, @Param("newQuantity") int newQuantity);
+    @Query("UPDATE CourseDiscount cd SET cd.status = :newStatus WHERE cd.id = :discountId")
+    void updateCourseDiscountStatus(@Param("discountId") Long discountId, @Param("newStatus") CourseDiscount.Status newStatus);
 
+    @Query("SELECT cd FROM CourseDiscount cd WHERE cd.course.id = :courseId AND cd.status = :status")
+    List<CourseDiscount> findDiscountsByCourseIdAndStatus(
+            @Param("courseId") Long courseId,
+            @Param("status") CourseDiscount.Status status
+    );
 
-    void deleteCourseDiscountByDiscount(Discount discount);
     @Transactional
     void deleteByCode(String Code);
-
 
     CourseDiscount findByCode(String code);
 }

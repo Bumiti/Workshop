@@ -30,7 +30,8 @@ const Edit = ({ params, onSubmit }: EditProps) => {
 
   const router = useRouter();
   const { data: session } = useSession();
-  const [formData, setFormData] = useState<CourseData>({
+  const [formData, setFormData] = useState<CourseData>(
+    {
     id: 0,
     courseName: '',
     description: '',
@@ -60,7 +61,8 @@ const Edit = ({ params, onSubmit }: EditProps) => {
       },
     ],
     courseLocation: [],
-  });
+  }
+  );
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -68,6 +70,8 @@ const Edit = ({ params, onSubmit }: EditProps) => {
 
         const apiService = new ApiService(session);
         const response = await apiService.getCourseById(params.id);
+        console.log(response.data);
+        
         if (response.status === 'success') {
 
           setFormData(response.data);
@@ -184,22 +188,12 @@ const Edit = ({ params, onSubmit }: EditProps) => {
     });
   };
 
-  // const handleDiscountDTOSubmit = (data: any) => {
-  //   setFormData((prevData) => {
-  //     console.log('Previous Data:', prevData); // Log prevData
-  //     const newData = { ...prevData.discountDTOS[0], ...data.discountDTOS[0] };
-  //      // Log prevData
-  //   console.log(newData);
-
-  //  return newData;
-
-  //   });
-  // };
 
   console.log('formData', formData);
 
   const handleEditDataToServer = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
 
       const numericId = Number(params.id);
@@ -219,7 +213,6 @@ const Edit = ({ params, onSubmit }: EditProps) => {
       console.error('Error:', error);
     }
   };
-  console.log(handleEditDataToServer);
 
   return (
     <PageContainer>
