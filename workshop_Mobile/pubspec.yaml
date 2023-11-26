@@ -10,6 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_nav_bar: ^5.0.6
+  smooth_page_indicator: ^1.1.0
+
+
 
   cupertino_icons: ^1.0.2
   http: ^1.1.0
