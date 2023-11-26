@@ -10,6 +10,7 @@ import { BiLogoGmail } from "react-icons/bi"
 import { BsDiscord } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 type Values = {
     email: string;
@@ -31,15 +32,15 @@ const LoginForm = () => {
     const [shouldReload, setShouldReload] = useState(false);
     useEffect(() => {
         if (shouldReload) {
-          // Tăng biến đếm load lại
-          reloadCount++;
-          // Kiểm tra nếu trang đã load lại đủ lần, thì tắt cờ
-          if (reloadCount >= 2) {
-            setShouldReload(false);
-            reloadCount = 0; // Đặt lại biến đếm
-          }
+            // Tăng biến đếm load lại
+            reloadCount++;
+            // Kiểm tra nếu trang đã load lại đủ lần, thì tắt cờ
+            if (reloadCount >= 2) {
+                setShouldReload(false);
+                reloadCount = 0; // Đặt lại biến đếm
+            }
         }
-      }, [shouldReload]);
+    }, [shouldReload]);
     const handleSubmit = async (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         const requestHeaders: HeadersInit = new Headers();
         requestHeaders.set('Content-Type', 'application/json');
@@ -66,7 +67,7 @@ const LoginForm = () => {
                 </Col>
                 <Col col='4' md='6' >
                     <div className={' p-3'}>
-                        <h1 className="display-6 mb-3">Login</h1>
+                        <h1 className="display-6 mb-3 text-center">Login</h1>
                         <Formik
                             initialValues={{
                                 email: '',
@@ -85,7 +86,17 @@ const LoginForm = () => {
                                 <div className="mb-3">
                                     <Field className="form-control" id="password" name="password" placeholder="Password" type="password" />
                                 </div>
+                                <div className="mb-3 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div className={styles.custom_checkbox}>
+                                            <input type="checkbox" className="form-check-input-lg me-2" />
+                                            <label htmlFor="customCheck">Remember me</label>
+                                        </div>
+                                    </div>
+                                    <h6>Forgot password?</h6>
+                                </div>
                                 <button className="mb-4 w-100 btn btn-primary" type="submit">Login</button>
+                                <h6>Don't have an account? <Link href={'/register'}>Register</Link></h6>
                                 <h2 className="lead fw-normal mb-0 me-3 text-center">Sign in with</h2>
                                 <div className={styles.div_media}>
                                     <button onClick={() => signIn("facebook", { redirect: true, callbackUrl: callbackUrl || '/' })} className='btn btn-lg me-2'>

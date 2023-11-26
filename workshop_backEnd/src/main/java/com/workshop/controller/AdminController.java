@@ -276,5 +276,25 @@ public class AdminController {
         }
     }
 
+    @Operation(summary = "Thay đổi trạng thái Request")
+    @PutMapping("request/status")
+    public ResponseEntity<ApiResponse<?>> activeRequest(@RequestParam int id) {
+        try {
+            Long longId = (long) id;
+            if (longId >0) {
+                boolean result = requestService.changeStatusRequest(longId);
+                if (result) {
+                    return createResponse(HttpStatus.ACCEPTED, "success", "The Course Status has been changed", null);
+                } else {
+                    return createResponse(HttpStatus.BAD_REQUEST, "error", "Failed to change course status", null);
+                }
+            } else {
+                return createResponse(HttpStatus.NO_CONTENT, "error", "Invalid request: Course ID is missing", null);
+            }
+        } catch (Exception e) {
+            return createResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Internal Server Error", null);
+        }
+    }
+
 }
 
