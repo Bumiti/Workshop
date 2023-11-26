@@ -104,7 +104,7 @@ console.log('handleAccountProfileDetailsSubmit nè :',formData);
               <Typography variant="h4">New Course</Typography>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={6} lg={4}>
-                  <AccountProfile onVideoUpload={handleReceivedVideo} />
+                  <AccountProfile onMediaUpload={handleReceivedVideo} existingMediaInfos={undefined} formData={undefined} />
                 </Grid>
                 <Grid item xs={12} md={6} lg={8}>
                   <AccountProfileDetails onDataChanged={handleAccountProfileDetailsSubmit} />

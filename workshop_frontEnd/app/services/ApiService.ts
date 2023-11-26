@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import axios, { AxiosInstance } from 'axios';
 import CourseData from '../teacher/ui-components/add/courseData';
+import CourseDatas from '../teacher/ui-components/edit/[id]/courseData';
 
 dotenv.config();
 
@@ -339,6 +340,18 @@ class ApiService {
         }
     }
 
+    async addDiscountToStudent(courseId: any, studentIds: any) {
+        try {
+          const response = await this.customAxios.post(`/seller/course/addListStudent/${courseId}`, {
+            studentIds: studentIds,
+          });
+          return response.data;
+        } catch (error) {
+          throw error;
+        }
+      }
+    
+    
     async getCourseById(courseId: number) {
         try {
             if (this.session?.user.accessToken) {
@@ -356,7 +369,7 @@ class ApiService {
     }
 
 
-    async editCourse(courseId: number, courseData: CourseData) {
+    async editCourse(courseId: number, courseData: CourseDatas) {
         try {
             if (this.session?.user.accessToken) {
                 const response = await this.customAxios.put(`/seller/course/update/${courseId}`, JSON.stringify(courseData));

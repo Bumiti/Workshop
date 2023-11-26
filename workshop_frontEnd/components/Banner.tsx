@@ -4,9 +4,10 @@ import styles from '../CSS/home.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faApple, faGooglePlay } from '@fortawesome/free-brands-svg-icons';
- 
+
 export default function Banner() {
   return (
+    <div id="banner">
     <div className={`${styles.bannerImage} w-100 vh-100 d-flex justify-content-center align-items-center`}>
       <div className="content text-center">
         <div className="container">
@@ -18,11 +19,10 @@ export default function Banner() {
                     <div className="row">
                       <div className="col-lg-12">
                         <h2 className={`${styles.fontroboto} ${styles.fontsize50} ${styles.lineheight70} ${styles.custombold} text-left`}>
-                          Get The Latest App From App Stores
+                          Latest Workshop on App Development
                         </h2>
                         <p>
-                          Chain App Dev is an app landing page HTML5 template based on Bootstrap v5.1.3 CSS layout
-                          provided by TemplateMo, a great website to download free CSS templates.
+                          Join us for an exciting practices. This workshop offers a transformative learning experience for web developers. Register now to secure your spot and be part of this enriching opportunity!
                         </p>
                       </div>
 
@@ -58,6 +58,7 @@ export default function Banner() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

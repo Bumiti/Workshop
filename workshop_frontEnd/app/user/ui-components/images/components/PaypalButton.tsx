@@ -136,7 +136,6 @@ interface PayPalCheckOutButtonProps {
     onPay: () => void;
 }
 
-// ... (các import và khai báo khác)
 
 const PayPalCheckOutButton: React.FC<PayPalCheckOutButtonProps> = ({ amount, onPay }) => {
     const router = useRouter();
@@ -144,7 +143,6 @@ const PayPalCheckOutButton: React.FC<PayPalCheckOutButtonProps> = ({ amount, onP
     const apiService = new ApiService(session);
     const [error, setError] = useState(null);
     const [paidFor, setPaidFor] = useState(false);
-    // const [orderAmount, setOrderAmount] = useState(amount); // Loại bỏ dòng này nếu không sử dụng
 
     const createPaypalOrder = () => {
         console.log('orderAmount before creating order:', amount);

@@ -34,19 +34,21 @@ const Testimonials = () => {
         setRatings(updatedRatings);
     };
     return (
+  <div id="review">
+
         <div id="clients" className={`the-clients ${styles.theClients}`}>
             <div className="container">
                 <div className="row">
                     <div className="col-lg-8 offset-lg-2">
                         <div className={`section-heading ${styles.sectionHeadingService}`}>
                             <div className="d-flex justify-content-center">
-                                <h4>Check What <em className={styles.emm}>The Clients Say</em>  About Our App Dev</h4>
+                            <h4>Discover the Impact of Our <em className={styles.emm}>Creative Workshops</em></h4>
                             </div>
                             <div className="d-flex justify-content-center">
                                 <Image src="/heading-line-dec.png" alt="Ảnh" width={45} height={2} />
                             </div>
                             <p className={styles.pText}>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.
+                                Hear what our workshop participants have to say about their experiences and the skills they've gained.
                             </p>
                         </div>
                     </div>
@@ -98,8 +100,7 @@ const Testimonials = () => {
                                         <div className={styles.clientContent}>
                                             <Image src="/quote.png" alt="" width={50} height={50} />
                                             <p>
-                                                “Lorem ipsum dolor sit amet, consectetur adpiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua darwin kengan lorem ipsum dolor sit amet, consectetur picing elit massive big blasta.”
-                                            </p>
+                                            "Participating in the workshops was truly transformative. I gained invaluable skills and formed connections with like-minded individuals, enhancing both personal and professional aspects of my life. The diverse range of topics covered provided a comprehensive learning experience"                                            </p>
                                         </div>
                                         <div className="down-content">
                                             <Image src="/client-image.jpg" alt="" width={100} height={100} className={styles.downContent} />
@@ -115,6 +116,7 @@ const Testimonials = () => {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 };

@@ -13,22 +13,14 @@ function Services() {
 
             <div className={`${styles.sectionHeadingService} wow fadeInDown`} data-wow-duration="1s" data-wow-delay="0.5s">
               <h4 className="text-center custom-spacing">
-                Amazing <em className={styles.emm}>Services &amp; Features</em> for you
+              Unlock Your <em className={styles.emm}>Creativity</em> with Our <em className={styles.emm}>Inspiring</em> Workshops!
               </h4>
               <div className="d-flex justify-content-center">
                 <Image src="/heading-line-dec.png" alt="Ảnh" width={45} height={2} />
               </div>
               <p className={styles.pText}>
-                If you need the greatest collection of HTML templates for your business, please visit{' '}
-                <a rel="nofollow" href="https://www.toocss.com/" target="_blank">
-                  TooCSS
-                </a>{' '}
-                Blog. If you need to have a contact form PHP script, go to{' '}
-                <a href="https://templatemo.com/contact" target="_parent">
-                  our contact page
-                </a>{' '}
-                for more information.
-              </p>
+    Explore a world of creativity in our workshops! Join us for an immersive experience where you can unleash your artistic potential and learn new skills. Whether you're interested in design, photography, writing, or crafting, our workshops offer a diverse range of activities to spark your creativity.
+</p>
             </div>
           </div>
         </div>

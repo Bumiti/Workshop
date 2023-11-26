@@ -18,8 +18,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 const storage = getStorage();
 
-export const AccountProfile = ({ onVideoUpload, existingVideoUrl, formData }) => {
-  const [videoData, setVideoData] = useState({
+export const AccountProfile = ({ onMediaUpload, existingVideoUrl, formData }) => {
+  const [mediaData, setMediaData] = useState({
     mediaInfoList: [
       {
         id: 0,
@@ -31,15 +31,15 @@ export const AccountProfile = ({ onVideoUpload, existingVideoUrl, formData }) =>
     ],
   });
 
-  const handleVideoUpload = useCallback(async (event) => {
+  const handleMediaUpload  = useCallback(async (event) => {
     const files = event.target.files;
 
     if (files && files[0]) {
-      const selectedVideo = files[0];
-      const videoRef = ref(storage, `videos/${uuidv4()}`);
+      const selectedMedia  = files[0];
+      const mediaRef  = ref(storage, `media/${uuidv4()}`);
 
       try {
-        const uploadTask = uploadBytesResumable(videoRef, selectedVideo);
+        const uploadTask = uploadBytesResumable(mediaRef, selectedMedia);
 
         uploadTask.on(
           'state_changed',
@@ -55,23 +55,23 @@ export const AccountProfile = ({ onVideoUpload, existingVideoUrl, formData }) =>
             try {
               const url = await getDownloadURL(uploadTask.snapshot.ref);
 
-              const newVideoInfo = {
-                id: videoData.mediaInfoList.length,
+              const newMediaInfo  = {
+                id: mediaData.mediaInfoList.length,
                 thumbnailSrc: null,
                 title: '',
-                urlImage: 'https://example.com/image3',
-                urlMedia: url,
+                urlImage: selectedMedia.type.startsWith('image') ? url : '',
+                urlMedia: selectedMedia.type.startsWith('video') ? url : '',
               };
-              setVideoData((prevState) => ({
+              setMediaData((prevState) => ({
                 ...prevState,
                 mediaInfoList: [
-                  newVideoInfo,
+                  newMediaInfo,
                   ...prevState.mediaInfoList.slice(1),
                 ],
               }));
 
-              onVideoUpload(newVideoInfo);
-              console.log('Video uploaded successfully.');
+              onMediaUpload(newMediaInfo);
+              console.log('Media  uploaded successfully.');
             } catch (error) {
               console.error('Error getting download URL:', error);
             }
@@ -81,26 +81,34 @@ export const AccountProfile = ({ onVideoUpload, existingVideoUrl, formData }) =>
         console.error('Error uploading:', error);
       }
     } else {
-      console.error('No video file selected.');
+      console.error('No media  file selected.');
     }
-  }, [onVideoUpload]);
+  }, [onMediaUpload]);
   useEffect(() => {
-    // Set the existing video URL when available
-    if (existingVideoUrl) {
-      setVideoData((prevState) => ({
+    // Set existing media URLs when available
+    if (existingMediaInfos && existingMediaInfos.length > 0) {
+      const existingMediaInfo = existingMediaInfos[0];
+      setMediaData((prevState) => ({
         ...prevState,
         mediaInfoList: [
           {
-            ...prevState.mediaInfoList[0],
-            urlMedia: existingVideoUrl,
+            id: existingMediaInfo.id || 0,
+            urlMedia: existingMediaInfo.urlMedia || '',
+            urlImage: existingMediaInfo.urlImage || '',
+            thumbnailSrc: existingMediaInfo.thumbnailSrc || 0,
+            title: existingMediaInfo.title || 0,
           },
         ],
       }));
     }
-  }, [existingVideoUrl]);
-  // console.log(formData);
+  }, [existingMediaInfos]);
   useEffect(() => {
-    if (formData && formData.length > 0 && formData[0].courseMediaInfos && formData[0].courseMediaInfos.length > 0) {
+    if (
+      formData &&
+      formData.length > 0 &&
+      formData[0].courseMediaInfos &&
+      formData[0].courseMediaInfos.length > 0
+    ) {
       const {
         id,
         urlMedia,
@@ -108,8 +116,8 @@ export const AccountProfile = ({ onVideoUpload, existingVideoUrl, formData }) =>
         thumbnailSrc,
         title,
       } = formData[0].courseMediaInfos[0];
-  
-      setVideoData({
+
+      setMediaData({
         mediaInfoList: [
           {
             id: id || 0,
@@ -124,53 +132,51 @@ export const AccountProfile = ({ onVideoUpload, existingVideoUrl, formData }) =>
   }, [formData]);
   
   
-// console.log('videoData nè',videoData);
-// console.log('Video URL:', videoData?.mediaInfoList[0]?.urlMedia);
+// console.log('mediaData nè',mediaData);
+// console.log('Video URL:', mediaData?.mediaInfoList[0]?.urlMedia);
 
-  return (
-    <Card>
-      <CardContent>
-        <Box
-          sx={{
-            alignItems: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        > {videoData.mediaInfoList[0].urlMedia && (
-            <video width="320" height="240" controls>
-              <source
-                src={videoData.mediaInfoList[0].urlMedia}
-                type="video/mp4"
-              />
-              Your browser does not support the video tag.
-            </video>
+return (
+  <Card>
+    <CardContent>
+      <Box
+        sx={{
+          alignItems: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        {mediaData.mediaInfoList[0].urlMedia && (
+          <video width="320" height="240" controls>
+            <source
+              src={mediaData.mediaInfoList[0].urlMedia}
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
         )}
-
-
-        </Box>
-      </CardContent>
-      <Divider />
-      <CardActions>
-        <Button fullWidth variant="text">
-          <label htmlFor="video-upload">
-            Upload video
-          </label>
-          <input
-            type="hidden"
-            name="video_url"
-            value={videoData.mediaInfoList[0].urlMedia || ''}
-            onChange={() => { }} // A dummy function, as this value is not being used
+        {mediaData.mediaInfoList[0].urlImage && (
+          <img
+            src={mediaData.mediaInfoList[0].urlImage}
+            alt="Uploaded Image"
+            style={{ maxWidth: '100%', marginTop: '10px' }}
           />
-          <input
-            id="video-upload"
-            type="file"
-            style={{ display: 'none' }}
-            onChange={handleVideoUpload}
-            accept="video/*,image/*"
-            multiple
-          />
-        </Button>
-      </CardActions>
-    </Card>
-  );
+        )}
+      </Box>
+    </CardContent>
+    <Divider />
+    <CardActions>
+      <Button fullWidth variant="text">
+        <label htmlFor="media-upload">Upload media</label>
+        <input
+          id="media-upload"
+          type="file"
+          style={{ display: 'none' }}
+          onChange={handleMediaUpload}
+          accept="video/*,image/*"
+          multiple
+        />
+      </Button>
+    </CardActions>
+  </Card>
+);
 };

@@ -105,25 +105,7 @@ export const AccountProfileDetails = ({ onDataChanged }) => {
                 value={values.description}
               />
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="body1">Course Type</Typography>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={values.type === 'online'}
-                    onChange={() =>
-                      setValues((prevState) => ({
-                        ...prevState,
-                        type: prevState.type === 'online' ? 'offline' : 'online',
-                      }))
-                    }
-                    name="type"
-                    color="primary"
-                  />
-                }
-                label={values.type === 'online' ? 'Online' : 'Offline'}
-              />
-            </Grid>
+         
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -143,6 +125,7 @@ export const AccountProfileDetails = ({ onDataChanged }) => {
                 onChange={handleInputChange}
                 type="date"
                 value={values.startDate}
+                InputLabelProps={{ shrink: true }}
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -153,13 +136,14 @@ export const AccountProfileDetails = ({ onDataChanged }) => {
                 onChange={handleInputChange}
                 type="date"
                 value={values.endDate}
+                InputLabelProps={{ shrink: true }}
               />
             </Grid>
           </Grid>
         </Box>
       </CardContent>
       <Divider />
-      {values.type === 'offline' && ( 
+     
         <CardContent sx={{ pt: 0 }}>
           <CardHeader subheader="Please input your address for offline workshop" />
           <Box sx={{ m: -1.5 }}>
@@ -174,6 +158,7 @@ export const AccountProfileDetails = ({ onDataChanged }) => {
                       onChange={(event) => handleLocationInputChange(event, index)}
                       type="date"
                       value={location.schedule_Date}
+                      InputLabelProps={{ shrink: true }}
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -191,7 +176,7 @@ export const AccountProfileDetails = ({ onDataChanged }) => {
 
           </Box>
         </CardContent>
-      )}
+      
     </Card>
   );
 };

@@ -137,7 +137,7 @@ export const AccountProfileDetails = ({ onDataChanged, formData }) => {
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
-              label="Course name"
+              label="Workshop name"
               name="name"
               onChange={handleInputChange}
               required
@@ -155,7 +155,7 @@ export const AccountProfileDetails = ({ onDataChanged, formData }) => {
             />
           </Grid>
           <Grid item xs={12} md={6}>
-            <Typography variant="body1">Course Type</Typography>
+            <Typography variant="body1">Workshop Type</Typography>
             <FormControlLabel
               control={
                 <Switch
@@ -192,6 +192,8 @@ export const AccountProfileDetails = ({ onDataChanged, formData }) => {
               onChange={handleInputChange}
               type="date"
               value={values.startDate}
+              InputLabelProps={{ shrink: true }}
+
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -202,6 +204,8 @@ export const AccountProfileDetails = ({ onDataChanged, formData }) => {
               onChange={handleInputChange}
               type="date"
               value={values.endDate}
+              InputLabelProps={{ shrink: true }}
+
             />
           </Grid>
         </Grid>
@@ -258,6 +262,8 @@ export const AccountProfileDetails = ({ onDataChanged, formData }) => {
               onChange={(event) => handleLocationInputChange(event, index)}
               type="date"
               value={location.schedule_Date}
+              InputLabelProps={{ shrink: true }}
+
             />
           </Grid>
           <Grid item xs={12} md={6}>

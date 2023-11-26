@@ -3,6 +3,7 @@ import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIc
 import ClockIcon from '@heroicons/react/24/solid/ClockIcon';
 import { Avatar, Box, Card, CardContent, Divider, Stack, SvgIcon, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 
 export const CompanyCard = ({  courses, courseId }) => {
@@ -16,8 +17,9 @@ export const CompanyCard = ({  courses, courseId }) => {
   };
   return (
     
-    <div onClick={() => router.push(`./edit/${courseId}`)} >
+   
     <Card  sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: '300px' }}>
+       <div onClick={() => router.push(`./edit/${courseId}`)} >
       <CardContent>
         {filteredCourses[0] && (
           <Box>
@@ -33,6 +35,8 @@ export const CompanyCard = ({  courses, courseId }) => {
           </Box>
         )}
       </CardContent>
+    </div>
+
       <Box sx={{ flexGrow: 1 }} />
       <Divider />
       {filteredCourses[0] && (
@@ -49,14 +53,17 @@ export const CompanyCard = ({  courses, courseId }) => {
             <SvgIcon color="action" fontSize="small">
               <ArrowDownOnSquareIcon />
             </SvgIcon>
+            {/* <Link href="/teacher/ui-components/enrolled/${courseId}" passHref> */}
+            <div onClick={() => router.push(`./enrolled/${courseId}`)} >
             <Typography color="text.secondary" display="inline" variant="body2">
               {filteredCourses[0].studentEnrollments.length} Enrolled
             </Typography>
+            </div>
+            {/* </Link> */}
           </Stack>
         </Stack>
       )}
     </Card>
-    </div>
   );
 };
 CompanyCard.propTypes = {

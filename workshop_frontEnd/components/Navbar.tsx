@@ -6,16 +6,24 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from 'next/navigation';
-
+import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
 
 export default function Navbar() {
   const { data: session } = useSession();
 
-  const NavLink = ({ text }: { text: string }) => (
-    <li className="nav-item mr-20">
-      <Link href={`/${text.toLowerCase()}`} className="nav-link text-dark font-roboto custom-bold">
+  const NavLink = ({ text, target }: { text: string, target: string }) => (
+    <li className={`${styles.navItem} nav-item mr-20`}>
+      <ScrollLink
+        activeClass="active"
+        to={target}
+        spy={true}
+        smooth={true}
+        offset={-70} // Điều chỉnh độ lệch khi cuộn đến phần đích
+        duration={500}
+        className={`${styles.navLink} nav-link text-dark font-roboto custom-bold`}
+      >
         {text}
-      </Link>
+      </ScrollLink>
     </li>
   );
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -106,12 +114,12 @@ export default function Navbar() {
         </div>
         <div className="collapse navbar-collapse" id="navbarNav">
           <div className="container-fluid ml-auto mr-0">
-            <ul className="navbar-nav ">
-              <NavLink text="Home" />
-              <NavLink text="About" />
-              <NavLink text="Blog" />
-              <NavLink text="Pricing" />
-              <NavLink text="Contact" />
+          <ul className="navbar-nav">
+      <NavLink text="Home" target="banner" />
+      <NavLink text="About" target="about" />
+      <NavLink text="Review" target="review" />
+      <NavLink text="Workshops " target="workshops" />
+      <NavLink text="Contact" target="contact" />
               {/* <li>
                 <div className="nav-item gradient-button">
                   {session ? (

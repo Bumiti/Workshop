@@ -13,11 +13,12 @@ export default function Home() {
     <div>
       <Navbar/>
       <Banner />
-      <Services />
-      <Card />
+      <PricingCarousel />
       <About />
       <Testimonials />
-      <PricingCarousel />
+      <Services />
+      <Card type="One line" title="Online Workshop"/>
+      <Card type="Off Line" title="Offline Workshop" />
       <Footer />
     </div>
   )

@@ -106,6 +106,7 @@ export const DiscountDTOS = ({ onDataChanged }) => {
               onChange={handleInputChange}
               value={discountData.redemptionDate}
               variant="outlined"
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
         </Grid>

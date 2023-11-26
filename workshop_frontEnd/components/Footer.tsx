@@ -5,6 +5,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 function Footer() {
   return (
+  <div id="contact">
     <footer id="newsletter" className={styles.footer}>
       <div className="container">
         <div className="row">
@@ -23,7 +24,7 @@ function Footer() {
                 </div>
                 <div className="col-lg-6 col-sm-6">
                   <fieldset>
-                    <button type="submit" className="main-button">Subscribe Now <i className="fa fa-angle-right"></i></button>
+                    <button type="submit" className="main-button">Send Us Now<i className="fa fa-angle-right"></i></button>
                   </fieldset>
                 </div>
               </div>
@@ -80,8 +81,7 @@ function Footer() {
                 <Image src="/white-logo.png" alt="Company Logo" width={96} height={45} />
               </div>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.
-              </p>
+              Explore the latest trends and gain valuable insights at our interactive workshops. Our experienced instructors are dedicated to providing hands-on learning experiences that will enhance your skills. Whether you're a beginner or an advanced learner, our workshops are tailored to meet your needs</p>
             </div>
           </div>
           <div className="col-lg-12">
@@ -94,6 +94,8 @@ function Footer() {
         </div>
       </div>
     </footer>
+    </div>
+
   );
 }
 
