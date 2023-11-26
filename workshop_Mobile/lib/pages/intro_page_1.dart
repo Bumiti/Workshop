@@ -24,11 +24,14 @@ class _IntroPage1State extends State<IntroPage1>
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double targetHeight = screenHeight * 0.06;
+    
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(
-            height: 200,
+           SizedBox(
+            height: targetHeight,
           ),
           Lottie.network(
               'https://lottie.host/87baefc1-8ee1-4690-9f4d-61fdc965670d/Zyoodcd3lm.json',
@@ -89,29 +92,4 @@ class _IntroPage1State extends State<IntroPage1>
   }
 }
 
-
-
-
-
-//   Scaffold(
-        //     body: Padding(
-        //         padding: const EdgeInsets.all(10.0),
-        //         child: Column(
-        //           mainAxisAlignment: MainAxisAlignment.center,
-        //           children: [
-        //             Lottie.network(
-        //               'https://lottie.host/87baefc1-8ee1-4690-9f4d-61fdc965670d/Zyoodcd3lm.json',
-        //               width: 150,
-        //               height: 150,
-        //               fit: BoxFit.cover,
-        //             )
-        //           ],
-        //         )),
-        //   ),
-        //   const Scaffold(
-        //     body: Center(
-        //       child: Column(),
-        //     ),
-        //   )
-        // ]);
         

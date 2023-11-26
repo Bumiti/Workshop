@@ -27,11 +27,13 @@ class LoginController extends GetxController {
         // print("Roles list is empty or null");
       }
       var accessToken = user['accessToken'];
-      // print(roleString);
+      var userName = user['user_name'];
       await prefs.setString('token', accessToken);
       await storage.write(key: 'token', value: accessToken);
-       await storage.write(key: 'roles', value: roleString);
+      await storage.write(key: 'roles', value: roleString);
+      await storage.write(key: 'userName', value: userName);
       emailController.clear();
+      
       passwordController.clear();
       if (roleString == 'USER') {
         Get.off(const UserHomeScreen());

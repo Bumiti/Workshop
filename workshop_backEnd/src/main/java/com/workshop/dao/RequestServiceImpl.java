@@ -266,7 +266,7 @@ public class RequestServiceImpl implements RequestService {
                         .setTransactionDate(LocalDateTime.now());
                 Long TeacherId = course.getTeacher().getId();
                 User teacher = userRepository.findById(TeacherId).orElse(null);
-                User Admin = userRepository.findByEmail("admin64@gmail.com").orElse(null);
+                User Admin = userRepository.findByEmail("lactuong64@gmail.com").orElse(null);
                 assert Admin != null;
                 Long AdminId = Admin.getId();
                 Long StudentId = user.getId();

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:test/auth/login_or_register.dart';
-import 'package:test/pages/intro_page_1.dart';
-import 'package:test/pages/intro_page_2.dart';
-import 'package:test/pages/intro_page_3.dart';
+import 'package:workshop_mobi/pages/intro_page_1.dart';
+import 'package:workshop_mobi/pages/intro_page_2.dart';
+import 'package:workshop_mobi/pages/intro_page_3.dart';
+import 'package:workshop_mobi/screens/auth/login_or_register.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});

@@ -3,14 +3,17 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 
 class MyBottomNavBar extends StatelessWidget {
   final void Function(int)? onTabChange;
+
   MyBottomNavBar({super.key, required this.onTabChange});
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       color: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: screenHeight * 0.02),
         child: GNav(
           backgroundColor: Colors.white,
           color: Colors.black,
@@ -18,7 +21,7 @@ class MyBottomNavBar extends StatelessWidget {
           tabBackgroundColor: Colors.grey.shade600,
           onTabChange: (value) => onTabChange!(value),
           gap: 8,
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(screenHeight * 0.02),
           tabs: const [
             GButton(
               icon: Icons.home_filled,
@@ -35,6 +38,10 @@ class MyBottomNavBar extends StatelessWidget {
             GButton(
               icon: Icons.wallet,
               text: 'Wallet',
+            ),
+            GButton(
+              icon: Icons.qr_code,
+              text: 'Qr Demo',
             ),
           ],
         ),
