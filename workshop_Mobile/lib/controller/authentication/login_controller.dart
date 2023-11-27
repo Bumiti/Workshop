@@ -8,8 +8,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginController extends GetxController {
   final ApiService apiService = ApiService();
+  
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Future<void> loginWithEmail() async {
     try {

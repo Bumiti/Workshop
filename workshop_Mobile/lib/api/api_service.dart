@@ -10,21 +10,23 @@ class ApiService {
     try {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.loginWebAccount);
-          // print(url);
+          print(url);
       Map body = {
         'email': email.trim(),
         'password': password,
       };
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
-         
+              print(response.body);
       if (response.statusCode == 200) {
 
-        final json = jsonDecode(response.body);
+      
 
+        final json = jsonDecode(response.body);
+     
         if (json['status'] == 'success')
         {
-          var data = json['data']; // gán dữ liệu của json có kiểu dữ liệu thuộc tính data và biến data
+          var data = json['data']; 
           var user = data['user'];
           return user;
         } 

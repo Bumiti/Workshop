@@ -33,8 +33,8 @@ class _IntroPage1State extends State<IntroPage1>
            SizedBox(
             height: targetHeight,
           ),
-          Lottie.network(
-              'https://lottie.host/87baefc1-8ee1-4690-9f4d-61fdc965670d/Zyoodcd3lm.json',
+          Lottie.asset(
+              'lib/assets/Zyoodcd3lm.json',
               alignment: const Alignment(0, 0)),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,

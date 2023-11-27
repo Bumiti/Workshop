@@ -12,6 +12,7 @@ class LoginPage extends StatelessWidget {
   LoginPage({Key? key, required this.onTap});
 
   LoginController loginController = Get.put(LoginController());
+  
   final GlobalKey<FormState> emailformKey = GlobalKey<FormState>();
   final GlobalKey<FormState> passwordformKey = GlobalKey<FormState>();
 
