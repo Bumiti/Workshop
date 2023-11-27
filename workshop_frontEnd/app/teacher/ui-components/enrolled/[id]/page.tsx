@@ -47,7 +47,7 @@ export default function BasicRating({ params }: EditProps) {
   }, [session, id]);
 
   console.log('courseData',courseData);
-  const handleGiveCouponToAllStudents = async (studentIds: number[]) => {
+  const handleGiveCouponToAllStudents = async (initialStudentIds: number[]) => {
     try {
       // Thay đổi courseId và studentId theo logic của bạn
       const courseId = id; 

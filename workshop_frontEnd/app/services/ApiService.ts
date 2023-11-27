@@ -341,11 +341,12 @@ class ApiService {
     }
 
     async addDiscountToStudent(courseId: any, studentIds: any) {
+        
         try {
-          const response = await this.customAxios.post(`/seller/course/addListStudent/${courseId}`, {
-            studentIds: studentIds,
-          });
-          return response.data;
+          const response = await this.customAxios.post(`/seller/course/addListStudent/${courseId}/`, studentIds);
+       
+        console.log(response);
+          return response;
         } catch (error) {
           throw error;
         }

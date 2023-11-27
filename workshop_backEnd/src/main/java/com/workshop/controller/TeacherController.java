@@ -248,11 +248,11 @@ public class TeacherController {
                         .body(new ApiResponse<>("success", "List of Students has been added to the Course", result));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ApiResponse<>("error", "No Students Found", null));
+                        .body(new ApiResponse<>("error", "No Students Found", result));
             }
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>("error", ex.getMessage(), null));
+                    .body(new ApiResponse<>("error", ex.getMessage(), studentIds));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse<>("error", "An error occurred while adding students to the course", null));
