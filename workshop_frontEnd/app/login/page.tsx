@@ -60,7 +60,7 @@ const LoginForm = () => {
         }
     };
     return (
-        <Container className={styles.container_css}>
+        <Container className={styles.pricingItemRegular}>
             <Row className={' p-5 my-5'}>
                 <Col col='10' md='6'>
                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" className="img-fluid" alt="Phone image" />
@@ -95,7 +95,8 @@ const LoginForm = () => {
                                     </div>
                                     <h6>Forgot password?</h6>
                                 </div>
-                                <button className="mb-4 w-100 btn btn-primary" type="submit">Login</button>
+                                <button className={`${styles.gradientbutton} mb-4 w-100 btn btn-primary`}
+                                    type="submit">Login</button>
                                 <h6>Don't have an account? <Link href={'/register'}>Register</Link></h6>
                                 <h2 className="lead fw-normal mb-0 me-3 text-center">Sign in with</h2>
                                 <div className={styles.div_media}>

@@ -85,7 +85,7 @@ const LoginForm: React.FC = () => {
 
 
     return (
-        <Container className={styles.container_css}>
+        <Container className={styles.pricingItemRegular}>
             <Row className={' p-4 my-5'}>
                 <Col md={6}>
                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg" className="img-fluid" alt="Phone image" />
@@ -215,7 +215,7 @@ const LoginForm: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            <button className="mb-4 w-100 btn btn-primary" type="submit">Register</button>
+                            <button className={`${styles.gradientbutton} mb-4 w-100 btn btn-primary`} type="submit">Register</button>
                         </form>
                     </div>
                 </Col>
