@@ -10,7 +10,7 @@ class MyCourse extends StatelessWidget {
 
     return Container(
       width: screenWidth * 0.5, // Adjust width based on screen width
-      height: screenHeight * 0.16, // Adjust height based on screen height
+      height: screenHeight * 0.20, // Adjust height based on screen height
       decoration: ShapeDecoration(
         gradient: const LinearGradient(
           begin: Alignment(0.98, -0.18),
