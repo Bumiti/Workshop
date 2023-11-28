@@ -89,6 +89,7 @@ const WithdrawPage = () => {
   }, [session]);
   console.log(userData);
   const handlePay = () => {
+    toast.success('Payment successful!');
     // Xử lý sau khi thanh toán thành công (nếu cần)
     console.log('Payment successful!');
   };

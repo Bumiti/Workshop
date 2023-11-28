@@ -10,21 +10,27 @@ class ApiService {
     try {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.loginWebAccount);
-          // print(url);
+          print(url);
       Map body = {
         'email': email.trim(),
         'password': password,
       };
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
-         
+              print(response.body);
       if (response.statusCode == 200) {
+
+      
+
         final json = jsonDecode(response.body);
-        if (json['status'] == 'success') {
-          var data = json['data'];
+     
+        if (json['status'] == 'success')
+        {
+          var data = json['data']; 
           var user = data['user'];
           return user;
-        } else if (json['code'] == 1) {
+        } 
+        else if (json['code'] == 1) {
           throw jsonDecode(response.body)['message'];
         }
       } else {
@@ -85,6 +91,7 @@ class ApiService {
 
       if (response.statusCode == 202) {
         final jsonResponse = jsonDecode(response.body);
+        
         if (jsonResponse['status'] == 'Success') {
           return jsonResponse;
         } else {

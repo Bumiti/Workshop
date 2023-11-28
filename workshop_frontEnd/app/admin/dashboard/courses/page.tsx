@@ -65,11 +65,7 @@ const CoursesPage = () => {
       fetchData();
     }
   }, [session]);
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 0d863eee00bb51bf16662ef47be2d513d0350cd3
   const handleTogglePublicStatus = (id: number) => {
     apiService.changeStatusCourse(id).then(() => {
       setCourses((prevUsers) => {

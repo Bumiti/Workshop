@@ -9,12 +9,9 @@ import ApiService from '@/app/services/ApiService';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 
-interface CardProps {
-  type: string;
-  title: string; 
-}
 
-const Card: React.FC<CardProps> = ({ type, title }) => {
+
+const Card = () => {
 
 
   const [courses, setCourses] = useState<CourseType[]>([]); // Thay thế 'CourseType' bằng kiểu dữ liệu cụ thể bạn sử dụng
@@ -24,12 +21,10 @@ const Card: React.FC<CardProps> = ({ type, title }) => {
     name: string;
     description: string;
     link: string;
-    type: string,
-    courseMediaInfos: {
-      urlImage: string; 
-  };
-    // Các thuộc tính khác nếu có
+    courseMediaInfos: { urlImage: string; }[];
   }
+  console.log('courses', courses);
+
   const { data: session } = useSession();
   const apiService = new ApiService(session);
   useEffect(() => {
@@ -37,10 +32,10 @@ const Card: React.FC<CardProps> = ({ type, title }) => {
       try {
         if (session) {
           const result = await apiService.listCoursePublic();
-          
+
           if (Array.isArray(result.data)) {
-            const filteredCourses = result.data.filter((course: CourseType) => course.type === type);
-            setCourses(filteredCourses);
+            // const filteredCourses = result.data.filter);
+            setCourses(result.data);
 
           } else {
             console.error('Data is not an array:', result.data);
@@ -52,7 +47,7 @@ const Card: React.FC<CardProps> = ({ type, title }) => {
     };
 
     fetchData();
-  }, [session, type]);
+  }, [session]);
 
   const chunkArray = (arr: CourseType[], chunkSize: number) => {
     const groups = [];
@@ -64,34 +59,34 @@ const Card: React.FC<CardProps> = ({ type, title }) => {
   const randomToken = uuidv4();
   return (
     <div id="workshops">
-    <h2 className={styles.titleCard}> {title}</h2> 
-    <Carousel>
-      {chunkArray(courses, 4).map((chunk, chunkIndex) => (
-        <Carousel.Item key={chunkIndex}>
-          <div className="card-group">
-            {chunk.map((course, index) => (
-              <div key={index} className={`card ${styles.cardCustom}`}>
-                <div className="card-body">
-                  <div className={`${styles.serviceItem}`}>
-                  <h2>{course.id}</h2>
-                    <h4>{course.name}</h4>
-                    <div className="icon">
-                  <Image src={course.courseMediaInfos.urlImage} width={100} height={100} alt="" />
-                                            </div>
-                    <p>{course.description}</p>
-                    <div className={`textButton ${styles.textButton}`}>
-                      <Link href={`/courseDemo/[id]`} as={`/courseDemo/${course.id}`}>
-                        Đăng kí nhanh
-                      </Link>
+      <Carousel>
+        {chunkArray(courses, 4).map((chunk, chunkIndex) => (
+          <Carousel.Item key={chunkIndex}>
+            <div className="card-group">
+              {chunk.map((course, index) => (
+                <div key={index} className={`card ${styles.cardCustom}`}>
+                  <div className="card-body">
+                    <div className={`${styles.serviceItem}`}>
+                      <h4>{course.name}</h4>
+                      <div className="icon">
+                        {course.courseMediaInfos.length > 0 && (
+                          <Image src={course.courseMediaInfos[0].urlImage} width={100} height={100} alt="" />
+                        )}
+                      </div>
+                      <p>{course.description}</p>
+                      <div className={`textButton ${styles.textButton}`}>
+                        <Link href={`/courseDemo/[id]`} as={`/courseDemo/${course.id}`}>
+                          Đăng kí nhanh
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </Carousel.Item>
-      ))}
-    </Carousel>
+              ))}
+            </div>
+          </Carousel.Item>
+        ))}
+      </Carousel>
     </div>
   );
 };

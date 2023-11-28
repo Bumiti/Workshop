@@ -10,8 +10,9 @@ import Head from 'next/head';
 import { Box, Grid, Stack, TextField, Typography, Container, Card, CardContent, CardHeader, FormControlLabel, Switch, Divider, CardActions, Button, CircularProgress } from '@mui/material';
 import { FirebaseDb } from '../../../../../utils/FireBase/Config';
 import { format } from 'date-fns';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import styles from './edit.module.css';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ClearIcon from '@mui/icons-material/Clear';
 interface EditProps {
   params: {
     id: number;
@@ -35,7 +36,7 @@ const EditCoursePage = ({ params }: EditProps) => {
         id: 0,
         urlMedia: '',
         urlImage: '',
-        thumbnailSrc: '',
+        thumbnailSrc: '' || null,
         title: '',
       },
     ],
@@ -48,6 +49,12 @@ const EditCoursePage = ({ params }: EditProps) => {
         name: '',
         description: '',
         remainingUses: 0,
+        // locationDTO:[{
+        //   name: '', 
+        //   statusAvailable: '',
+        //    address: '', 
+        //    description: ''
+        // }]
       },
     ],
     courseLocations: [
@@ -145,7 +152,7 @@ const EditCoursePage = ({ params }: EditProps) => {
               const url = await getDownloadURL(uploadTask.snapshot.ref);
 
               const newImageInfo = {
-                id: courseData.courseMediaInfos.length,
+                id: courseData.courseMediaInfos[0]?.id,
                 urlImage: url,
               };
 
@@ -185,6 +192,7 @@ const EditCoursePage = ({ params }: EditProps) => {
       ],
     }));
   };
+  console.log('courseData.courseMediaInfos[0]?.id', courseData.courseMediaInfos[0]?.id);
 
   const handleVideoUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -210,7 +218,7 @@ const EditCoursePage = ({ params }: EditProps) => {
               const url = await getDownloadURL(uploadTask.snapshot.ref);
 
               const newVideoInfo = {
-                id: courseData.courseMediaInfos.length,
+                id: courseData.courseMediaInfos[0]?.id,
                 thumbnailSrc: null,
                 title: '',
                 urlImage: courseData.courseMediaInfos.length > 0 ? courseData.courseMediaInfos[0].urlImage : '',
@@ -491,37 +499,21 @@ const EditCoursePage = ({ params }: EditProps) => {
                                 value={courseData?.courseLocations?.[0]?.locationDTO?.description || ''}
                               />
                             </Grid>
-                          </Grid>
-                          <Grid item xs={12} md={6}>
-                            {courseData?.courseLocations?.[0]?.locationDTO?.statusAvailable === "available" && (
-                             <div >
-                             <svg className="star" height="19" viewBox="0 0 19 19" width="19" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M8.296.747c.532-.972 1.393-.973 1.925 0l2.665 4.872 4.876 2.66c.974.532.975 1.393 0 1.926l-4.875 2.666-2.664 4.876c-.53.972-1.39.973-1.924 0l-2.664-4.876L.76 10.206c-.972-.532-.973-1.393 0-1.925l4.872-2.66L8.296.746z" >
-                                 </path></svg>
-                             <svg className="star" height="19" viewBox="0 0 19 19" width="19" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M8.296.747c.532-.972 1.393-.973 1.925 0l2.665 4.872 4.876 2.66c.974.532.975 1.393 0 1.926l-4.875 2.666-2.664 4.876c-.53.972-1.39.973-1.924 0l-2.664-4.876L.76 10.206c-.972-.532-.973-1.393 0-1.925l4.872-2.66L8.296.746z" >
-                                 </path></svg>
-                             <svg className="star" height="19" viewBox="0 0 19 19" width="19" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M8.296.747c.532-.972 1.393-.973 1.925 0l2.665 4.872 4.876 2.66c.974.532.975 1.393 0 1.926l-4.875 2.666-2.664 4.876c-.53.972-1.39.973-1.924 0l-2.664-4.876L.76 10.206c-.972-.532-.973-1.393 0-1.925l4.872-2.66L8.296.746z" >
-                                 </path></svg>
-                             <svg className="star" height="19" viewBox="0 0 19 19" width="19" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M8.296.747c.532-.972 1.393-.973 1.925 0l2.665 4.872 4.876 2.66c.974.532.975 1.393 0 1.926l-4.875 2.666-2.664 4.876c-.53.972-1.39.973-1.924 0l-2.664-4.876L.76 10.206c-.972-.532-.973-1.393 0-1.925l4.872-2.66L8.296.746z" >
-                                 </path></svg>
-                             <svg className="star" height="19" viewBox="0 0 19 19" width="19" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M8.296.747c.532-.972 1.393-.973 1.925 0l2.665 4.872 4.876 2.66c.974.532.975 1.393 0 1.926l-4.875 2.666-2.664 4.876c-.53.972-1.39.973-1.924 0l-2.664-4.876L.76 10.206c-.972-.532-.973-1.393 0-1.925l4.872-2.66L8.296.746z" >
-                                 </path></svg>
-                             <svg className="star" height="19" viewBox="0 0 19 19" width="19" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M8.296.747c.532-.972 1.393-.973 1.925 0l2.665 4.872 4.876 2.66c.974.532.975 1.393 0 1.926l-4.875 2.666-2.664 4.876c-.53.972-1.39.973-1.924 0l-2.664-4.876L.76 10.206c-.972-.532-.973-1.393 0-1.925l4.872-2.66L8.296.746z" >
-                                 </path></svg>
-                             <svg className="checkmark__check" height="36" viewBox="0 0 48 36" width="48" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M47.248 3.9L43.906.667a2.428 2.428 0 0 0-3.344 0l-23.63 23.09-9.554-9.338a2.432 2.432 0 0 0-3.345 0L.692 17.654a2.236 2.236 0 0 0 .002 3.233l14.567 14.175c.926.894 2.42.894 3.342.01L47.248 7.128c.922-.89.922-2.34 0-3.23">
-                                 </path></svg>
-                             <svg className="checkmark__background" height="115" viewBox="0 0 120 115" width="120" xmlns="http://www.w3.org/2000/svg">
-                                 <path d="M107.332 72.938c-1.798 5.557 4.564 15.334 1.21 19.96-3.387 4.674-14.646 1.605-19.298 5.003-4.61 3.368-5.163 15.074-10.695 16.878-5.344 1.743-12.628-7.35-18.545-7.35-5.922 0-13.206 9.088-18.543 7.345-5.538-1.804-6.09-13.515-10.696-16.877-4.657-3.398-15.91-.334-19.297-5.002-3.356-4.627 3.006-14.404 1.208-19.962C10.93 67.576 0 63.442 0 57.5c0-5.943 10.93-10.076 12.668-15.438 1.798-5.557-4.564-15.334-1.21-19.96 3.387-4.674 14.646-1.605 19.298-5.003C35.366 13.73 35.92 2.025 41.45.22c5.344-1.743 12.628 7.35 18.545 7.35 5.922 0 13.206-9.088 18.543-7.345 5.538 1.804 6.09 13.515 10.696 16.877 4.657 3.398 15.91.334 19.297 5.002 3.356 4.627-3.006 14.404-1.208 19.962C109.07 47.424 120 51.562 120 57.5c0 5.943-10.93 10.076-12.668 15.438z" >
-                                 </path></svg>
-                         </div>
+                            <Grid item xs={12} md={6}>
+                            {courseData?.courseLocations?.[0]?.locationDTO?.statusAvailable === 'available' ? (
+                              <div>
+                                <CheckCircleIcon fontSize="small" style={{ color: 'green' }} /> 
+                                <span style={{ marginLeft: '5px', color: 'green' }}>Available Now</span>
+                              </div>
+                            ) : (
+                              <div>
+                                <ClearIcon fontSize="small" style={{ color: 'red' }} />
+                                <span style={{ marginLeft: '5px', color: 'red' }}>Not Available Now</span>
+                              </div>
                             )}
                           </Grid>
+                          </Grid>
+                        
 
                         </Box>
 

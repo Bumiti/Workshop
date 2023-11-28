@@ -17,8 +17,7 @@ export default function Home() {
       <About />
       <Testimonials />
       <Services />
-      <Card type="One line" title="Online Workshop"/>
-      <Card type="Off Line" title="Offline Workshop" />
+      <Card/>
       <Footer />
     </div>
   )

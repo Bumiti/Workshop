@@ -105,7 +105,7 @@ public class StudentController {
 
             requestDTO.setType("BUY_COURSE");
             ResponseRequestOptions responseRequestOptions =  requestService.createRequestOptions(requestDTO);
-            publisher.publishEvent((new SendQrCodeEvent(responseRequestOptions.getUrlQrCode(),responseRequestOptions.getUser_name(),responseRequestOptions.getEmail())));
+            publisher.publishEvent((new SendQrCodeEvent(responseRequestOptions.getUser_name(),responseRequestOptions.getEmail(),responseRequestOptions.getUrlQrCode())));
             if (responseRequestOptions.getStatus().equals("APPROVED")) {
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiResponse<>
                         ("Success", "Your Request ACCEPTED", null));

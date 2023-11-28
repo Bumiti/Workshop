@@ -14,6 +14,8 @@ public interface DiscountRepository extends JpaRepository<Discount,Long> {
     @Transactional
     @Modifying
     @Query("UPDATE Discount d SET d.name = :#{#discount.name}," +
-            " d.description = :#{#discount.description},d.valueDiscount = :#{#discount.valueDiscount},d.remainingUses = :#{#discount.remainingUses} WHERE d.id = :Id")
+            " d.description = :#{#discount.description}," +
+            "d.valueDiscount = :#{#discount.valueDiscount}," +
+            "d.remainingUses = :#{#discount.remainingUses} WHERE d.id = :Id")
     void updateDiscount(@Param("Id") Long Id, @Param("discount") Discount discount);
 }

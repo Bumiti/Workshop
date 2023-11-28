@@ -10,11 +10,13 @@ import PageContainer from '@/app/teacher/components/container/PageContainer';
 import ApiService from '@/app/services/ApiService';
 import { useSession } from 'next-auth/react';
 import CourseData from './courseData';
+import { useRouter } from 'next/navigation';
 
 interface AddProps {
   onSubmit: (data: CourseData) => void;
 }
 const Add = ({ onSubmit }: AddProps) => {
+  const router = useRouter();
   const { data: session } = useSession();
   const [formData, setFormData] = useState<CourseData>({
     courseName: '',
@@ -80,17 +82,19 @@ console.log('handleAccountProfileDetailsSubmit nè :',formData);
   };
 
   const handleSubmitDataToServer = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
     try {
-      const apiService = new ApiService(session); 
+      const apiService = new ApiService(session);
       const response = await apiService.createCourse(formData);
-      console.log('handleSubmitDataToServer nè ',response);
-      
-      onSubmit(response);
-      
+      if (response && response.status === 'CREATED') {
+        router.push(`/teacher/ui-components/buttons`);
+      }
     } catch (error) {
       console.error('Error:', error);
     }
   };
+  
   
   return (
     <PageContainer>

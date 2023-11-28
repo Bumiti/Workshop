@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import axios, { AxiosInstance } from 'axios';
 import CourseData from '../teacher/ui-components/add/courseData';
 import CourseDatas from '../teacher/ui-components/edit/[id]/courseData';
+import { log } from 'console';
 
 dotenv.config();
 
@@ -164,7 +165,7 @@ class ApiService {
             throw error;
         }
     }
-   
+
     async listRequestAdmin() {
         try {
             if (this.session?.user.accessToken) {
@@ -220,6 +221,17 @@ class ApiService {
             throw error;
         }
     }
+    async changeStatusRequest(id: number) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.put(`/admin/request/status?id=${id}`);
+                return response.data;
+            }
+            return null;
+        } catch (error) {
+            throw error;
+        }
+    }
     async EditAdmin(id: any) {
         try {
             if (this.session?.user.accessToken) {
@@ -254,6 +266,30 @@ class ApiService {
             throw error;
         }
     }
+
+    async UpdateRequest(request_id: number, user_id: number) {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get(`admin/teacher/withdraw?teacher_id=${user_id}&request_id=${request_id}`);
+                return response.data;
+            }
+            return null;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async listTransactionAdmin() {
+        try {
+            if (this.session?.user.accessToken) {
+                const response = await this.customAxios.get('/admin/transaction/list');
+                return response.data;
+            }
+            return [];
+        } catch (error) {
+            throw error;
+        }
+    }
     //-------------------------------------------------Web API-------------------------------------------------//
     async listCoursePublic() {
         try {
@@ -274,6 +310,27 @@ class ApiService {
     async checkUserInCourse(user_email: string, courseId: number) {
         try {
             const response = await this.customAxios.get(`/web/course/checkedUser?user_email=${user_email}&course_id=${courseId}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async Register(formData: {
+        full_name: string;
+        role: string;
+        email: string;
+        password: string;
+        phoneNumber: string;
+        gender: string;
+        balance: number;
+        enable: boolean;
+    }) {
+        console.log('data', formData);
+
+        try {
+            const response = await this.customAxios.post('/auth/user/register',JSON.stringify(formData)
+            );
             return response.data;
         } catch (error) {
             throw error;
@@ -319,7 +376,7 @@ class ApiService {
             throw error;
         }
     }
-    
+
     async listCoursesFromApi() {
         try {
             const response = await this.customAxios.get('/seller/course/list');

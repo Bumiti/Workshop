@@ -2,7 +2,6 @@ package com.workshop.model.userModel;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.workshop.model.*;
-
 import com.workshop.model.courseModel.Course;
 import com.workshop.model.courseModel.CourseEnrollment;
 import com.workshop.model.courseModel.QrToken;

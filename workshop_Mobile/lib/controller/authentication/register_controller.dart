@@ -16,14 +16,12 @@ class RegisterController extends GetxController {
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
-
   Future<void> RegisterUserAsyn() async {
     if (isSeller) {
       role = "SELLER";
     } else {
       role = "USER";
     }
-
     try {
       var responese = await apiService.registerAccount(
         emailController.text.trim(),

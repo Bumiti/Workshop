@@ -5,6 +5,7 @@ import styles from "./sidebar.module.css";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { SiGoogleclassroom } from "react-icons/si";
 import * as React from 'react';
+
 import {
   MdDashboard,
   MdSupervisedUserCircle,
@@ -18,6 +19,7 @@ import {
   MdLogout,
   MdRequestQuote
 } from "react-icons/md";
+import Link from "next/link";
 
 const menuItems = [
   {
@@ -44,8 +46,8 @@ const menuItems = [
         icon: <MdRequestQuote />,
       },
       {
-        title: "Transactions",
-        path: "/admin/dashboard/transactions",
+        title: "Transaction",
+        path: "/admin/dashboard/transaction",
         icon: <MdAttachMoney />,
       },
     ],
@@ -90,12 +92,30 @@ const menuItems = [
 const Sidebar = () => {
   const { data: session } = useSession();
   console.log(session?.user);
+  const [showProfileDropdown, setShowProfileDropdown] = React.useState(false);
+
+  const handleProfileClick = () => {
+    setShowProfileDropdown(!showProfileDropdown);
+  };
+
+  let menuRef = React.useRef();
+
+  React.useEffect(() => {
+    let handler = (e) => {
+      if (!menuRef.current.contains(e.target)) {
+        setShowProfileDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handler)
+  })
+
+
   return (
-    <div className={styles.container}>
-      <div className={styles.user}>
+    <div className={styles.container} ref={menuRef}>
+      <div className={styles.user} onClick={handleProfileClick}>
         <Image
           className={styles.userImage}
-          src={session?.user?.image ||session?.user?.picture ||"/noavatar.png" }
+          src={session?.user?.image || session?.user?.picture || "/noavatar.png"}
           alt=""
           width="50"
           height="50"
@@ -104,6 +124,17 @@ const Sidebar = () => {
           <span className={styles.username}>{session?.user?.full_name}</span>
           <span className={styles.userTitle}>Administrator</span>
         </div>
+        {showProfileDropdown && (
+          <div className={styles.profileDropdown}>
+            <Link href={'/admin/profile'}>Profile</Link>
+            <br />
+            <Link href={'/admin/settings'}>Setting</Link>
+            <br />
+            <Link href={'/'} onClick={() => session ? signOut() : signIn()}>
+              Logout
+            </Link>
+          </div>
+        )}
       </div>
       <ul className={styles.list}>
         {menuItems.map((cat) => (
@@ -115,10 +146,10 @@ const Sidebar = () => {
           </li>
         ))}
       </ul>
-        <button className={styles.logout} onClick={() => session ? signOut() : signIn()}>
-          <MdLogout />
-          Logout
-        </button>
+      <button className={styles.logout} onClick={() => session ? signOut() : signIn()}>
+        <MdLogout />
+        Logout
+      </button>
     </div>
   );
 };

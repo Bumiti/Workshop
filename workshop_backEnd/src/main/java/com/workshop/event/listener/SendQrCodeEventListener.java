@@ -37,8 +37,8 @@ public void sendQrCode(String url,String user,String email) throws MessagingExce
         String senderName = "WorkShop";
 
         Map<String, String> variables = new HashMap<>();
-        variables.put("user", url);
-        variables.put("url", user);
+        variables.put("buyer",user );
+        variables.put("urlCode",url );
 
         String htmlContent = readHtmlTemplate("sendQrCode.html");
         for (Map.Entry<String, String> entry : variables.entrySet()) {

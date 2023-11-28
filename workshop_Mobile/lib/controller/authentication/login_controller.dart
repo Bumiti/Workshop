@@ -8,8 +8,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginController extends GetxController {
   final ApiService apiService = ApiService();
+  
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Future<void> loginWithEmail() async {
     try {
@@ -27,11 +29,13 @@ class LoginController extends GetxController {
         // print("Roles list is empty or null");
       }
       var accessToken = user['accessToken'];
-      // print(roleString);
+      var userName = user['user_name'];
       await prefs.setString('token', accessToken);
       await storage.write(key: 'token', value: accessToken);
-       await storage.write(key: 'roles', value: roleString);
+      await storage.write(key: 'roles', value: roleString);
+      await storage.write(key: 'userName', value: userName);
       emailController.clear();
+      
       passwordController.clear();
       if (roleString == 'USER') {
         Get.off(const UserHomeScreen());
