@@ -5,6 +5,7 @@ import 'package:workshop_mobi/screens/auth/components/my_pw_textfield.dart';
 import 'package:workshop_mobi/screens/auth/components/my_email_textfield.dart';
 import 'package:get/get.dart';
 import 'package:workshop_mobi/screens/auth/widgets/forgot_password.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class LoginPage extends StatelessWidget {
   final void Function()? onTap;
@@ -12,7 +13,7 @@ class LoginPage extends StatelessWidget {
   LoginPage({Key? key, required this.onTap});
 
   LoginController loginController = Get.put(LoginController());
-  
+
   final GlobalKey<FormState> emailformKey = GlobalKey<FormState>();
   final GlobalKey<FormState> passwordformKey = GlobalKey<FormState>();
 
@@ -32,7 +33,9 @@ class LoginPage extends StatelessWidget {
               children: [
                 Text(
                   'Sign In',
-                  style: TextStyle(fontSize: screenHeight * 0.05, fontWeight: FontWeight.w700), // Adjust font size
+                  style: TextStyle(
+                      fontSize: screenHeight * 0.05,
+                      fontWeight: FontWeight.w700), // Adjust font size
                 ),
                 SizedBox(
                   height: screenHeight * 0.1,
@@ -104,6 +107,32 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+                // Nút đăng nhập bằng Facebook
+                SignInButton(
+                  Buttons.Google,
+                  onPressed: () {
+                    // Xử lý sự kiện khi nhấn nút Google
+                    // Ví dụ: loginController.loginWithGoogle();
+                  },
+                ),
+
+                // Nút đăng nhập bằng GitHub
+                SignInButton(
+                  Buttons.GitHub,
+                  onPressed: () {
+                    // Xử lý sự kiện khi nhấn nút GitHub
+                    // Ví dụ: loginController.loginWithGitHub();
+                  },
+                ),
+
+                // Nút đăng nhập bằng Facebook
+                SignInButton(
+                  Buttons.Facebook,
+                  onPressed: () {
+                    // Xử lý sự kiện khi nhấn nút Facebook
+                    // Ví dụ: loginController.loginWithFacebook();
+                  },
                 )
               ],
             ),

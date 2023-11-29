@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   google_nav_bar: ^5.0.6
   smooth_page_indicator: ^1.1.0
-
+  flutter_signin_button: ^2.0.0
 
 
   cupertino_icons: ^1.0.2
@@ -27,6 +27,7 @@ dependencies:
   lottie: ^2.7.0
   qr_code_scanner: ^1.0.1
   url_launcher: ^6.2.1
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
