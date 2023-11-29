@@ -5,13 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workshop_mobi/screens/auth/login_or_register.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/app_bar.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/bottom_nav_bar_user.dart';
-import 'package:workshop_mobi/screens/userLayout/widgets/custom_logo_appbar.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/drawer.dart';
-import 'package:workshop_mobi/screens/teacherLayout/widgets/home_page.dart';
-import 'package:workshop_mobi/screens/teacherLayout/widgets/manage_page.dart';
-import 'package:workshop_mobi/screens/teacherLayout/widgets/qr_scan.dart';
-import 'package:workshop_mobi/screens/teacherLayout/widgets/wallet_page.dart';
-import 'package:workshop_mobi/screens/teacherLayout/widgets/workshop_page.dart';
+import 'package:workshop_mobi/screens/home_page.dart';
+import 'package:workshop_mobi/screens/userLayout/widgets/manage_page.dart';
+import 'package:workshop_mobi/screens/userLayout/widgets/wallet_page.dart';
+import 'package:workshop_mobi/screens/userLayout/widgets/workshop_page.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -39,7 +37,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       bottomNavigationBar: MyBottomNavBar(
         onTabChange: (index) => navigateBottomBar(index),
       ),
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       drawer: MyDrawer(onLogout: () async {
         final SharedPreferences prefs = await _prefs;
         prefs.clear();
@@ -48,19 +46,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       body: pages[selectedIndex],
     );
   }
-
   //pages to display
   final List<Widget> pages = [
     //Home page
-    const HomePage(),
-
+    const PublicHomeLanding(),
     //Manage page
     const ManagePage(),
-
     // //Workshop page
-    const WorkshopPage(),
-
+    const WorkshopManagerStudent(),
     // //Wallet page
-    const WalletPage(),
+    const StudentWalletPage(),
   ];
 }

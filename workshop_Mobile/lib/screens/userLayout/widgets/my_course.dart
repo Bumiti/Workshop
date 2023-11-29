@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MyCourse extends StatelessWidget {
-  const MyCourse({Key? key});
+class WorkshopStudentManager extends StatelessWidget {
+  const WorkshopStudentManager({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +10,7 @@ class MyCourse extends StatelessWidget {
 
     return Container(
       width: screenWidth * 0.8, // Adjust width based on screen width
-      height: screenHeight * 0.17, // Adjust height based on screen height
+      height: screenHeight * 0.235, // Adjust height based on screen height
       decoration: ShapeDecoration(
         gradient: const LinearGradient(
           begin: Alignment(0.98, -0.18),
@@ -24,86 +24,6 @@ class MyCourse extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
         child: Column(
-            // children: [
-            //   SizedBox(
-            //     height: screenHeight * 0.04,  // Adjust height based on screen height
-            //   ),
-            //   Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       const Text(
-            //         'Acoustic Guitar',
-            //         style: TextStyle(
-            //           fontWeight: FontWeight.bold,
-            //           fontSize: 20,
-            //           color: Colors.white,
-            //         ),
-            //       ),
-            //       const SizedBox(
-            //         height: 10,
-            //       ),
-            //       const Text(
-            //         'The course will make you a master guitarist in less than 3 weeks.',
-            //         style: TextStyle(
-            //           color: Colors.white,
-            //           fontSize: 9.5,
-            //           fontWeight: FontWeight.w300,
-            //         ),
-            //       ),
-            //       const Text(
-            //         'Keep your energy and stamina hyped up in every note you play...',
-            //         style: TextStyle(
-            //           color: Colors.white,
-            //           fontSize: 9.5,
-            //           fontWeight: FontWeight.w300,
-            //         ),
-            //       ),
-            //       SizedBox(
-            //         height: screenHeight * 0.06,  // Adjust height based on screen height
-            //       ),
-            //       Row(
-            //         children: [
-            //           const Text(
-            //             '10/10/2023',
-            //             style: TextStyle(
-            //               color: Colors.white,
-            //               fontWeight: FontWeight.bold,
-            //               fontSize: 11,
-            //             ),
-            //           ),
-            //           const Spacer(),
-            //           Container(
-            //             decoration: BoxDecoration(
-            //               borderRadius: BorderRadius.circular(16),
-            //               color: Colors.white,
-            //             ),
-            //             alignment: Alignment.centerLeft,
-            //             height: screenHeight * 0.028,  // Adjust height based on screen height
-            //             width: screenWidth * 0.2,  // Adjust width based on screen width
-            //             child: TextButton(
-            //               onPressed: () {
-            //                 print('Yoyo');
-            //               },
-            //               child: Row(
-            //                 mainAxisAlignment: MainAxisAlignment.center,
-            //                 children: [
-            //                   Text(
-            //                     'Explore',
-            //                     style: TextStyle(
-            //                       fontWeight: FontWeight.bold,
-            //                       color: Colors.black,
-            //                       fontSize: 10,
-            //                     ),
-            //                   ),
-            //                 ],
-            //               ),
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ],
             children: [
               Padding(
                 padding:

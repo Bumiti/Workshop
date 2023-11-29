@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workshop_mobi/components/bottom_nav_bar.dart';
 import 'package:workshop_mobi/screens/auth/login_or_register.dart';
-import 'package:workshop_mobi/screens/teacherLayout/widgets/home_page.dart';
+import 'package:workshop_mobi/screens/home_page.dart';
 import 'package:workshop_mobi/screens/teacherLayout/widgets/manage_page.dart';
 import 'package:workshop_mobi/screens/teacherLayout/widgets/qr_scan.dart';
 import 'package:workshop_mobi/screens/teacherLayout/widgets/wallet_page.dart';
@@ -30,7 +30,7 @@ class _TeacherHomeScreenState extends State<TeacherHomeScreen> {
   //pages to display
   final List<Widget> pages = [
     //Home page
-    const HomePage(),
+    const PublicHomeLanding(),
 
     //Manage page
     const ManagePage(),

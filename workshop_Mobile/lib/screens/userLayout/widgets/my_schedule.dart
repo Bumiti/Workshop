@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class MySchedule extends StatefulWidget {
-  MySchedule({Key? key});
+class MyStudentSchedule extends StatefulWidget {
+  MyStudentSchedule({Key? key});
 
   @override
-  State<MySchedule> createState() => _MyScheduleState();
+  State<MyStudentSchedule> createState() => _MyScheduleState();
 }
 
-class _MyScheduleState extends State<MySchedule> {
+class _MyScheduleState extends State<MyStudentSchedule> {
   DateTime today = DateTime.now();
 
   void _onDaySelected(DateTime day, DateTime focusedDay) {

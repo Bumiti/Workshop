@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:workshop_mobi/screens/teacherLayout/widgets/my_course.dart';
-import 'package:workshop_mobi/screens/teacherLayout/widgets/my_schedule.dart';
+
+import 'package:workshop_mobi/screens/userLayout/widgets/my_course.dart';
+import 'package:workshop_mobi/screens/userLayout/widgets/my_schedule.dart';
 
 class ManagePage extends StatefulWidget {
   const ManagePage({super.key});
@@ -21,7 +22,7 @@ class _ManagePageState extends State<ManagePage> {
   }
 
   Future<String?> _getUserName() async {
-    final FlutterSecureStorage storage = FlutterSecureStorage();
+    final FlutterSecureStorage storage = const FlutterSecureStorage();
     String? userName = await storage.read(key: 'userName');
     print(userName);
     return userName;
@@ -74,10 +75,10 @@ class _ManagePageState extends State<ManagePage> {
             ),
             child: Column(
               children: [
-                Row(
+                const Row(
                   children: [
                     Text(
-                      'Your trending course',
+                      'Your Buyed Workshop',
                     ),
                   ],
                 ),
@@ -92,19 +93,19 @@ class _ManagePageState extends State<ManagePage> {
                         padding: EdgeInsets.symmetric(
                           horizontal: convertWidth(0.015),
                         ),
-                        child: MyCourse(),
+                        child: const WorkshopStudentManager(),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: convertWidth(0.015),
                         ),
-                        child: MyCourse(),
+                        child: const WorkshopStudentManager(),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: convertWidth(0.015),
                         ),
-                        child: MyCourse(),
+                        child: const WorkshopStudentManager(),
                       ),
                     ],
                   ),
@@ -119,17 +120,14 @@ class _ManagePageState extends State<ManagePage> {
             ),
             child: Column(
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
                       'Your schedule',
                     ),
                   ],
-                ),
-                SizedBox(
-                  height: convertHeight(0.025),
-                ),
+                ),              
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -138,19 +136,19 @@ class _ManagePageState extends State<ManagePage> {
                         padding: EdgeInsets.symmetric(
                           horizontal: convertWidth(0.015),
                         ),
-                        child: MySchedule(),
+                        child: MyStudentSchedule(),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: convertWidth(0.015),
                         ),
-                        child: MySchedule(),
+                        child: MyStudentSchedule(),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: convertWidth(0.015),
                         ),
-                        child: MySchedule(),
+                        child: MyStudentSchedule(),
                       ),
                     ],
                   ),
