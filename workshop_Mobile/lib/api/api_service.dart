@@ -10,20 +10,42 @@ class ApiService {
     try {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.loginWebAccount);
-          print(url);
       Map body = {
         'email': email.trim(),
         'password': password,
       };
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
-              print(response.body);
       if (response.statusCode == 200) {
-
-      
-
         final json = jsonDecode(response.body);
-     
+        if (json['status'] == 'success')
+        {
+          var data = json['data']; 
+          var user = data['user'];
+          return user;
+        } 
+        else if (json['code'] == 1) {
+          throw jsonDecode(response.body)['message'];
+        }
+      } else {
+        throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+  Future<dynamic> login0AuthenAccount(String email) async {
+    var headers = {'Content-Type': 'application/json'};
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.loginOAuthen);
+      Map body = {
+        'email': email.trim(),
+      };
+      http.Response response =
+          await http.post(url, body: jsonEncode(body), headers: headers);
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
         if (json['status'] == 'success')
         {
           var data = json['data']; 

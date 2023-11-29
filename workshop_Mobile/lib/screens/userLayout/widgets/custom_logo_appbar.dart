@@ -2,13 +2,14 @@
 
 import 'package:flutter/material.dart';
 
+// ignore: use_key_in_widget_constructors
 class CustomLogoAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
         style: DefaultTextStyle.of(context).style,
-        children: <TextSpan>[
+        children: const <TextSpan>[
           TextSpan(
             text: 'Infinity ',
             style: TextStyle(

@@ -8,7 +8,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final FlutterSecureStorage storage =  FlutterSecureStorage();
+  const FlutterSecureStorage storage =  FlutterSecureStorage();
   String? token = await storage.read(key: 'token');
   String? roles = await storage.read(key: 'roles');
   runApp(MyApp(token,roles));

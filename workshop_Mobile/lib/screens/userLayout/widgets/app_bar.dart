@@ -60,7 +60,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               // Perform logout
             }
           },
-          icon: CircleAvatar(
+          icon: const CircleAvatar(
             backgroundImage: AssetImage(
                 'lib/assets/Logo.png'), // Replace with your image path
           ),

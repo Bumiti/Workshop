@@ -49,7 +49,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     onTap: () {
                       controller.jumpToPage(2);
                     },
-                    child: Text('Skip')),
+                    child: const Text('Skip')),
 
                 const SizedBox(
                   width: 50,
@@ -71,14 +71,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             return const LoginOrReg();
                           }));
                         },
-                        child: Text('Done'))
+                        child: const Text('Done'))
                     : GestureDetector(
                         onTap: () {
                           controller.nextPage(
-                              duration: Duration(milliseconds: 500),
+                              duration: const Duration(milliseconds: 500),
                               curve: Curves.easeIn);
                         },
-                        child: Text('Next')),
+                        child: const Text('Next')),
               ],
             )),
       ],

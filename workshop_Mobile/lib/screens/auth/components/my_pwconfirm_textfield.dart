@@ -13,6 +13,7 @@ class _MyConfirmPwTextfieldState extends State<MyConfirmPwTextfield> {
   bool obscureText = true;
   String? _validatePasswordConfirmation(String? value) {
     final String password = widget.passwordController.text;
+    // ignore: unnecessary_null_comparison
     if (widget.passwordController.text == null) {
       return 'Password is null';
     } else {}

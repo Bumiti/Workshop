@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:workshop_mobi/controller/authentication/resetPassword_controller.dart';
-
-
+import 'package:workshop_mobi/controller/authentication/reset_password_controller.dart';
 import 'package:workshop_mobi/screens/auth/components/my_button.dart';
 import 'package:workshop_mobi/screens/auth/components/my_email_textfield.dart';
 import 'package:workshop_mobi/screens/auth/login_or_register.dart';
@@ -78,7 +76,7 @@ final GlobalKey<FormState> formKey = GlobalKey<FormState>();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LoginOrReg()),
+                            builder: (context) => const LoginOrReg()),
                       );
                     },
                     child: const Text(

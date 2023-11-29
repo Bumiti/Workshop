@@ -7,9 +7,11 @@ import 'package:get/get.dart';
 import 'package:workshop_mobi/screens/auth/widgets/forgot_password.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
+// ignore: must_be_immutable
 class LoginPage extends StatelessWidget {
   final void Function()? onTap;
 
+  // ignore: use_key_in_widget_constructors
   LoginPage({Key? key, required this.onTap});
 
   LoginController loginController = Get.put(LoginController());
@@ -68,9 +70,10 @@ class LoginPage extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         "Forgot password?",
-                        style: TextStyle(
+                        // ignore: unnecessary_const
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF00AEEF),
                         ),
@@ -93,13 +96,13 @@ class LoginPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Don't have an account? ",
                       style: TextStyle(color: Colors.black),
                     ),
                     GestureDetector(
                       onTap: onTap,
-                      child: Text(
+                      child: const Text(
                         "Register here",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -111,9 +114,8 @@ class LoginPage extends StatelessWidget {
                 // Nút đăng nhập bằng Facebook
                 SignInButton(
                   Buttons.Google,
-                  onPressed: () {
-                    // Xử lý sự kiện khi nhấn nút Google
-                    // Ví dụ: loginController.loginWithGoogle();
+                  onPressed: ()  {
+                      loginController.loginWithGoogle();
                   },
                 ),
 

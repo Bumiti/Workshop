@@ -16,6 +16,7 @@ class RegisterController extends GetxController {
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
+  // ignore: non_constant_identifier_names
   Future<void> RegisterUserAsyn() async {
     if (isSeller) {
       role = "SELLER";
@@ -36,7 +37,7 @@ class RegisterController extends GetxController {
           builder: (context) {
             return SimpleDialog(
               title: Text(responese['status']),
-              contentPadding: EdgeInsets.all(20),
+              contentPadding: const EdgeInsets.all(20),
               children: [Text(responese['message'])],
             );
           },
@@ -48,14 +49,14 @@ class RegisterController extends GetxController {
           builder: (context) {
             return SimpleDialog(
               title: Text(responese['status']),
-              contentPadding: EdgeInsets.all(20),
+              contentPadding: const EdgeInsets.all(20),
               children: [Text(responese['message'])],
             );
           },
         );
       }
     } catch (error) {
-      print(error);
+    
      
       showDialog(
         context: Get.context!,

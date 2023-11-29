@@ -33,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           height: screenHeight,
           child: Center(
             child: Padding(
@@ -41,7 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Sign up',
                     style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                   ),
@@ -82,7 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
+                      const Text(
                         "I am a Workshop Leader",
                         style: TextStyle(color: Colors.black),
                       ),
@@ -111,13 +111,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
+                      const Text(
                         "Already have an account? ",
                         style: TextStyle(color: Colors.black),
                       ),
                       GestureDetector(
                         onTap: widget.onTap,
-                        child: Text(
+                        child: const Text(
                           "Login here",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,

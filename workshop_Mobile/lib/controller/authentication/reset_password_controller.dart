@@ -1,5 +1,3 @@
-// ignore: file_names
-
 import 'package:get/get.dart';
 import 'package:workshop_mobi/api/api_service.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +25,7 @@ class ResetPassWordController extends GetxController {
           builder: (context) {
             return SimpleDialog(
               title: Text(responese['status']),
-              contentPadding: EdgeInsets.all(20),
+              contentPadding: const EdgeInsets.all(20),
               children: [Text(responese['message'])],
             );
           },
@@ -39,14 +37,13 @@ class ResetPassWordController extends GetxController {
           builder: (context) {
             return SimpleDialog(
               title: Text(responese['status']),
-              contentPadding: EdgeInsets.all(20),
+              contentPadding: const EdgeInsets.all(20),
               children: [Text(responese['message'])],
             );
           },
         );
       }
     } catch (error) {
-      print(error);
       Get.back();
       showDialog(
         context: Get.context!,

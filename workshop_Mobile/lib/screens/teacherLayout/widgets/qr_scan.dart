@@ -76,6 +76,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                               builder: (context, snapshot) {
                                 if (snapshot.data != null) {
                                   return Text(
+                                      // ignore: deprecated_member_use
                                       'Camera facing ${describeEnum(snapshot.data!)}');
                                 } else {
                                   return const Text('loading');

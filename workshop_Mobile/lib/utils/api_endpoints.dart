@@ -1,21 +1,42 @@
+// ignore_for_file: library_private_types_in_public_api
 
 class ApiEndPoints {
   static const String baseUrl = 'http://192.168.1.21:8089/';
-  // ignore: library_private_types_in_public_api
-  static  _AuthEndPoints authEndpoints = _AuthEndPoints();
-  // ignore: library_private_types_in_public_api
-  static _AdminEndPoints adminEndpoints = _AdminEndPoints();
+  
+  static _AuthEndPoints authEndpoints = _AuthEndPoints();
+  static _TeacherEndPoints teacherEndPoints = _TeacherEndPoints();
+  static _HomePageEndPoints homePageEndPoints = _HomePageEndPoints();
+
 
 }
 
 class _AuthEndPoints {
   final String register = 'auth/user/register';
   final String loginWebAccount = 'auth/loginWeb';
-  final String resetPassword = 'auth/user/forgetPassword';
+  final String loginOAuthen = 'auth/loginOAuthentication';
 
+  final String resetPassword = 'auth/user/forgetPassword';
 }
-class _AdminEndPoints{
- final String listUserbyAdmin = 'admin/user/listUser';
-  final String updateStatusAccount= 'admin/user/changeStatus';
-  final String deleteAddressAccount= 'admin/user/deleteAddress';
+// class _AdminEndPoints {
+//   final String listUserbyAdmin = 'admin/user/listUser';
+//   final String updateStatusAccount = 'admin/user/changeStatus';
+//   final String deleteAddressAccount = 'admin/user/deleteAddress';
+// }
+class _HomePageEndPoints {
+  final String listWorkshop = 'web/course/list';
+  final String workShopById = 'web/course/detail';
+  final String checkUserInCourse = 'web/course/checkedUser';
+}
+
+class _TeacherEndPoints {
+  final String listWorshop = 'seller/course/list';
+  final String addWorshop = 'seller/course/add';
+  final String editWorshop = 'seller/course/update';
+  final String deleteWorshop = 'seller/course/delete';
+  final String sendDiscountToListStudent = 'seller/course/addListStudent';
+  final String teacherDetail = 'seller/detail';
+  final String teacherDetailEdit = 'seller/edit';
+  final String deleteAddressAccount = 'seller/deleteAddress';
+  final String listStudentInWorkshop = 'seller/course/listStudent';
+  final String deposit = 'seller/deposit';
 }

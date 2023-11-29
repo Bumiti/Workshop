@@ -16,38 +16,43 @@ class MyDrawer extends StatelessWidget {
             currentAccountPicture: CircleAvatar(
               child: ClipOval(child: Image.asset('lib/assets/Logo.png')),
             ),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.pinkAccent,
-                image: DecorationImage(
+                // ignore: unnecessary_const
+                image: const DecorationImage(
                     image: AssetImage('lib/assets/background.jpg'),
                     fit: BoxFit.cover)),
           ),
           ListTile(
-            leading: Icon(Icons.file_upload),
-            title: Text('Upload shot'),
+            leading: const Icon(Icons.file_upload),
+            title: const Text('Upload shot'),
+            // ignore: avoid_print
             onTap: () => print('Upload tapped'),
           ),
           ListTile(
-            leading: Icon(Icons.share),
-            title: Text('Share'),
+            leading: const Icon(Icons.share),
+            title: const Text('Share'),
+            // ignore: avoid_print
             onTap: () => print('Upload tapped'),
           ),
           ListTile(
-            leading: Icon(Icons.notifications),
-            title: Text('Notifications'),
+            leading: const Icon(Icons.notifications),
+            title: const Text('Notifications'),
+            // ignore: avoid_print
             onTap: () => print('Upload tapped'),
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            // ignore: avoid_print
             onTap: () => print('Upload tapped'),
           ),
-          Spacer(), // Add Spacer to push "Sign Out" to the bottom
+          const Spacer(), // Add Spacer to push "Sign Out" to the bottom
           Align(
             alignment: Alignment.bottomLeft,
             child: ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Sign Out'),
+              leading: const Icon(Icons.logout),
+              title: const Text('Sign Out'),
               onTap: onLogout,
             ),
           ),

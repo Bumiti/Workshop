@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class MyStudentSchedule extends StatefulWidget {
-  MyStudentSchedule({Key? key});
+  // ignore: use_key_in_widget_constructors
+  const MyStudentSchedule({Key? key});
 
   @override
   State<MyStudentSchedule> createState() => _MyScheduleState();

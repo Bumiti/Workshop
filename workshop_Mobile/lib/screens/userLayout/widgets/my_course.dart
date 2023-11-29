@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class WorkshopStudentManager extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   const WorkshopStudentManager({Key? key});
 
   @override
@@ -83,9 +84,10 @@ class WorkshopStudentManager extends StatelessWidget {
                             width: screenWidth * 0.2,
                             child: TextButton(
                               onPressed: () {
+                                // ignore: avoid_print
                                 print('Yoyo');
                               },
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(

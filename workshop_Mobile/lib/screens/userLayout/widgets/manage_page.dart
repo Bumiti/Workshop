@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import 'package:workshop_mobi/screens/userLayout/widgets/my_course.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/my_schedule.dart';
 
@@ -22,9 +20,8 @@ class _ManagePageState extends State<ManagePage> {
   }
 
   Future<String?> _getUserName() async {
-    final FlutterSecureStorage storage = const FlutterSecureStorage();
+    const FlutterSecureStorage storage = FlutterSecureStorage();
     String? userName = await storage.read(key: 'userName');
-    print(userName);
     return userName;
   }
 
@@ -36,6 +33,7 @@ class _ManagePageState extends State<ManagePage> {
     return MediaQuery.of(context).size.width * width;
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFD7D7D7),
@@ -136,19 +134,19 @@ class _ManagePageState extends State<ManagePage> {
                         padding: EdgeInsets.symmetric(
                           horizontal: convertWidth(0.015),
                         ),
-                        child: MyStudentSchedule(),
+                        child: const MyStudentSchedule(),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: convertWidth(0.015),
                         ),
-                        child: MyStudentSchedule(),
+                        child: const MyStudentSchedule(),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: convertWidth(0.015),
                         ),
-                        child: MyStudentSchedule(),
+                        child: const MyStudentSchedule(),
                       ),
                     ],
                   ),

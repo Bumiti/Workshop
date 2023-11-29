@@ -27,11 +27,9 @@ import java.util.List;
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Teacher Controller", description = "Quản Lý Tác Vụ Giáo Viên")
 public class TeacherController {
-
     private final CourseService courseService;
     private final UserService userService;
     private final RequestService requestService;
-
     @Operation(summary = "Đổi mật khẩu")
     @PutMapping("chancePassword")
     public ResponseEntity<ApiResponse<?>> changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
