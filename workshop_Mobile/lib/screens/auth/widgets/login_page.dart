@@ -132,8 +132,7 @@ class LoginPage extends StatelessWidget {
                 SignInButton(
                   Buttons.Facebook,
                   onPressed: () {
-                    // Xử lý sự kiện khi nhấn nút Facebook
-                    // Ví dụ: loginController.loginWithFacebook();
+                   loginController.loginWithFacebook() ;
                   },
                 )
               ],
