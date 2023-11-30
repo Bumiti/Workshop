@@ -123,8 +123,7 @@ class LoginPage extends StatelessWidget {
                 SignInButton(
                   Buttons.GitHub,
                   onPressed: () {
-                    // Xử lý sự kiện khi nhấn nút GitHub
-                    // Ví dụ: loginController.loginWithGitHub();
+                    loginController.loginWithGitHub();
                   },
                 ),
 
