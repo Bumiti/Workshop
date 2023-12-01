@@ -29,7 +29,7 @@ class _MyScheduleState extends State<MyStudentSchedule> {
           width: screenWidth * 0.9,
           child: TableCalendar(
             locale: 'en_US',
-            rowHeight: 38,
+            rowHeight: 35,
             headerStyle:
                 const HeaderStyle(formatButtonVisible: false, titleCentered: true),
             availableGestures: AvailableGestures.all,

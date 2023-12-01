@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:workshop_mobi/screens/course_screen.dart';
 import 'package:workshop_mobi/widgets/card_section.dart';
-import 'package:workshop_mobi/widgets/search_bar.dart';
 import 'package:workshop_mobi/widgets/title_course.dart';
+import 'package:workshop_mobi/widgets/top_mentors.dart';
+import 'package:workshop_mobi/widgets/top_mentors.dart';
 
 class PublicHomeLanding extends StatefulWidget {
   const PublicHomeLanding({super.key});
@@ -52,13 +53,11 @@ class _HomePageState extends State<PublicHomeLanding> {
     return Scaffold(
       body: ListView(
         children: [
-          //thanh search
-          SearchBarContainer(),
 
           //card
           Container(
-            margin:
-                EdgeInsets.only(top: 16), // Adjust the bottom margin as needed
+            padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+ // Adjust the bottom margin as needed
             child: Row(
               children: [
                 Expanded(
@@ -89,6 +88,8 @@ class _HomePageState extends State<PublicHomeLanding> {
             catIcons: catIcons,
             imgList: imgList,
           ),
+
+          TopMentorsSection(),
         ],
       ),
     );

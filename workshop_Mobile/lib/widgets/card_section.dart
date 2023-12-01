@@ -4,7 +4,7 @@ class Pngwing1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 149,
+      width: 119,
       height: 140,
       decoration: ShapeDecoration(
         image: DecorationImage(
