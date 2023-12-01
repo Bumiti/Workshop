@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:workshop_mobi/api/api_service.dart';
 import 'package:workshop_mobi/api/facebook_sigin_api.dart';
+import 'package:workshop_mobi/api/github_sigin_api.dart';
 import 'package:workshop_mobi/api/google_signin_api.dart';
 import 'package:workshop_mobi/screens/teacherLayout/teacher_home.dart';
 import 'package:workshop_mobi/screens/userLayout/user_home.dart';
@@ -7,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:oauth2/oauth2.dart' as oauth2;
+
+import '../../api/github_oauth_credentials.dart';
 
 class LoginController extends GetxController {
   final ApiService apiService = ApiService();
@@ -186,5 +192,16 @@ class LoginController extends GetxController {
         },
       );
     }
+  }
+
+  Future<void> loginWithGitHub() async {
+    final oauthClient = await GitHubSignInApi.handleLogin();
+
+    // if (oauthClient != null) {
+    //   // final user = await GitHubSignInApi.getViewerDetails(oauthClient);
+    //   // print('User Details: $user');
+    // } else {
+    //   print('GitHub sign-in failed.');
+    // }
   }
 }

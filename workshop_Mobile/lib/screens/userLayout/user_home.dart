@@ -53,7 +53,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     //Manage page
     const ManagePage(),
     // //Workshop page
-    const WorkshopManagerStudent(),
+     WorkshopManagerStudent(),
     // //Wallet page
     const StudentWalletPage(),
   ];
