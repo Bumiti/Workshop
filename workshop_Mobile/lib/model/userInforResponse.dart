@@ -8,11 +8,11 @@ class UserInfoResponse {
   final String user_name;
   final String email;
   final String phoneNumber;
-  final String image_url;
+  final String? image_url;
   final double balance;
   final String gender;
   final List<String> roles;
-  final bool isEnable;
+  final bool? isEnable;
   final List<UserAddress> userAddresses;
   final List<UserBank> userBanks;
 
@@ -34,6 +34,7 @@ class UserInfoResponse {
    factory UserInfoResponse.fromJson(Map<String, dynamic> json) => _$UserInfoResponseFromJson(json);
   Map<String, dynamic> toJson() => _$UserInfoResponseToJson(this);
 }
+
 @JsonSerializable()
 class UserAddress {
   final int id;

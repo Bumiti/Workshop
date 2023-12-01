@@ -44,27 +44,6 @@ class _ManagePageState extends State<ManagePage> {
               vertical: convertHeight(0.00),
               horizontal: convertWidth(0.025),
             ),
-            // child: Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   children: [
-            //     FutureBuilder<String?>(
-            //       future: userName,
-            //       builder: (context, snapshot) {
-            //         if (snapshot.connectionState == ConnectionState.done)
-            //         {
-            //           return Text(
-            //             'Welcome back, ${snapshot.data}',
-            //             style: TextStyle(fontWeight: FontWeight.bold, ),
-            //           );
-            //         } else if (snapshot.hasError) {
-            //           return Text('Error: ${snapshot.error}');
-            //         } else {
-            //           return CircularProgressIndicator();
-            //         }
-            //       },
-            //     ),
-            //   ],
-            // ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(

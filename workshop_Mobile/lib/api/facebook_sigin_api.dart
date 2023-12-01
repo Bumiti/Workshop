@@ -14,8 +14,8 @@ class FacebookSignInApi {
       final userData = await FacebookAuth.instance.getUserData();
       _userData = userData;
     } else {
-      // print(result);
-      // // print(result.message);
+      print(result);
+       print(result.message);
     }
      return _userData;
   }

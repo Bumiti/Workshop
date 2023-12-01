@@ -14,6 +14,7 @@ UserEditRequest _$UserEditRequestFromJson(Map<String, dynamic> json) =>
       phoneNumber: json['phoneNumber'] as String,
       balance: (json['balance'] as num).toDouble(),
       image_url: json['image_url'] as String,
+      isEnable:json['isEnable'] as bool? ?? false,
       userAddresses: (json['userAddresses'] as List<dynamic>)
           .map((e) => UserAddress.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -30,6 +31,7 @@ Map<String, dynamic> _$UserEditRequestToJson(UserEditRequest instance) =>
       'phoneNumber': instance.phoneNumber,
       'balance': instance.balance,
       'image_url': instance.image_url,
+      'isEnable': instance.isEnable,
       'userAddresses': instance.userAddresses,
       'userBanks': instance.userBanks,
     };

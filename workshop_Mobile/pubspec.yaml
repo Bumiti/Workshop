@@ -15,7 +15,7 @@ dependencies:
   flutter_signin_button: ^2.0.0
   qr_flutter: ^4.1.0
   cupertino_icons: ^1.0.2
-  http: ^1.1.1
+  http: 1.1.0
   get: ^4.6.6
   shared_preferences: ^2.2.2
   json_annotation: ^4.8.1
@@ -33,6 +33,7 @@ dependencies:
   oauth2: ^2.0.2
   github: ^9.20.0
   webview_flutter: ^4.4.2
+  provider: ^6.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
