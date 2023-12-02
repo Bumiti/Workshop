@@ -246,14 +246,12 @@ class WorkshopManagerStudent extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          left:80 * widthRatio, 
-                          top: 220 * widthRatio, 
+                          left: 80 * widthRatio,
+                          top: 220 * widthRatio,
                           child: Image.asset(
                             'lib/assets/qr.jpg',
-                            width: 250 *
-                                widthRatio, 
-                            height: 250 *
-                                widthRatio, 
+                            width: 250 * widthRatio,
+                            height: 250 * widthRatio,
                           ),
                         ),
                       ],
@@ -387,39 +385,43 @@ class WorkshopManagerStudent extends StatelessWidget {
                     ),
                   ),
                 ),
+
+                //quả bóng
                 Positioned(
                   left: 13,
                   top: 24,
+                  
                   child: SizedBox(
                     width: 40,
-                    height: 39.98,
+                    height: 40,
                     child: Stack(
+                      alignment: Alignment.center,
                       children: [
-                        Positioned(
-                          left: 0,
-                          top: 0,
-                          child: Container(
-                            width: 40 * widthRatio,
-                            height: 39.98 * widthRatio,
-                            decoration: const ShapeDecoration(
-                              color: Colors.white,
-                              shape: OvalBorder(),
+                        
+                        Container(
+                          width: 40 * widthRatio,
+                          height: 40 * widthRatio,
+                          decoration: const ShapeDecoration(
+                            color: Color.fromARGB(255, 161, 52, 52),
+                            shape: CircleBorder(),
+                          ),
+                        ),
+                        Container(
+                          width: 32.52 * widthRatio,
+                          height: 32.52 * heightRatio,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40),
                             ),
                           ),
                         ),
-                        Positioned(
-                          left: 3,
-                          top: 4,
-                          child: Container(
-                            width: 32.52 * widthRatio,
-                            height: 32.50 * heightRatio,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40),
-                              ),
-                            ),
-                            child: const Stack(children: [Center()]),
+                        Container(
+                          child: IconButton(
+                            icon: Icon(Icons.arrow_back, color: Colors.white),
+                            onPressed: () {
+                              // Xử lý khi nút quay lại được nhấn
+                            },
                           ),
                         ),
                       ],

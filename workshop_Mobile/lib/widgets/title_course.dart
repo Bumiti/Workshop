@@ -102,7 +102,7 @@ class CoursesSection extends StatelessWidget {
                           EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Color(0xFFF5F3FF),
+                        color: Color.fromARGB(94, 94, 94, 94),
                       ),
                       child: Column(
                         children: [
