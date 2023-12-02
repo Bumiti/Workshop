@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:workshop_mobi/app_state.dart';
+
 import 'package:workshop_mobi/pages/boarding_screen.dart';
 import 'package:workshop_mobi/screens/auth/login_or_register.dart';
 import 'package:workshop_mobi/screens/teacherLayout/teacher_home.dart';
@@ -7,18 +10,23 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-  const FlutterSecureStorage storage =  FlutterSecureStorage();
+  const FlutterSecureStorage storage = FlutterSecureStorage();
   String? token = await storage.read(key: 'token');
   String? roles = await storage.read(key: 'roles');
-  runApp(MyApp(token,roles));
+  runApp
+  (
+      ChangeNotifierProvider(
+        create: (context) => AppState(),
+         child:MyApp(token, roles)
+      )
+    );
 }
 
 class MyApp extends StatelessWidget {
   final String? token;
   final String? roles;
-  const MyApp(this.token,this.roles, {super.key});
+  const MyApp(this.token, this.roles, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +37,11 @@ class MyApp extends StatelessWidget {
   }
 
   Widget getHomeScreen() {
-    if (token!=null && roles == 'USER') {
+    if (token != null && roles == 'USER') {
       return const UserHomeScreen();
-    } else if (token!=null && roles == 'SELLER') {
+    } else if (token != null && roles == 'SELLER') {
       return const TeacherHomeScreen();
     } else {
-
       return const LoginOrReg();
     }
   }

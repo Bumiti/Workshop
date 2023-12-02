@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:workshop_mobi/model/userInforResponse.dart';
 import 'package:workshop_mobi/utils/api_endpoints.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
   ApiService();
-
   Future<dynamic> loginWebAccount(String email, String password) async {
     var headers = {'Content-Type': 'application/json'};
     try {
@@ -18,13 +18,11 @@ class ApiService {
           await http.post(url, body: jsonEncode(body), headers: headers);
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        if (json['status'] == 'success')
-        {
-          var data = json['data']; 
+        if (json['status'] == 'success') {
+          var data = json['data'];
           var user = data['user'];
           return user;
-        } 
-        else if (json['code'] == 1) {
+        } else if (json['code'] == 1) {
           throw jsonDecode(response.body)['message'];
         }
       } else {
@@ -34,6 +32,7 @@ class ApiService {
       rethrow;
     }
   }
+
   Future<dynamic> login0AuthenAccount(String email) async {
     var headers = {'Content-Type': 'application/json'};
     try {
@@ -46,13 +45,11 @@ class ApiService {
           await http.post(url, body: jsonEncode(body), headers: headers);
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-        if (json['status'] == 'success')
-        {
-          var data = json['data']; 
+        if (json['status'] == 'success') {
+          var data = json['data'];
           var user = data['user'];
           return user;
-        } 
-        else if (json['code'] == 1) {
+        } else if (json['code'] == 1) {
           throw jsonDecode(response.body)['message'];
         }
       } else {
@@ -62,39 +59,42 @@ class ApiService {
       rethrow;
     }
   }
-  Future<dynamic> registerAccount(String email, String password,String roles) async {
+
+  Future<dynamic> registerAccount(
+      String email, String password, String roles) async {
     var headers = {'Content-Type': 'application/json'};
     try {
-      var url = Uri.parse(
-          ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.register);
+      var url =
+          Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.authEndpoints.register);
       Map body = {
-        'full_name':email.trim(),
-        'balance':0,
-        'user_name':email.trim(),
+        'full_name': email.trim(),
+        'balance': 0,
+        'user_name': email.trim(),
         'email': email.trim(),
         'password': password,
-        'phoneNumber':'string',
-        'gender':'string',
-        'role':roles,
-         "enable": true
+        'phoneNumber': 'string',
+        'gender': 'string',
+        'role': roles,
+        "enable": true
       };
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
-          
+
       if (response.statusCode == 202) {
         final json = jsonDecode(response.body);
-         return json;
-      }else if(response.statusCode == 302){
+        return json;
+      } else if (response.statusCode == 302) {
         final json = jsonDecode(response.body);
-         return json;
-      }else {
+        return json;
+      } else {
         throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
       }
     } catch (error) {
       rethrow;
     }
   }
-  Future<dynamic> resetPassword( String email) async {
+
+  Future<dynamic> resetPassword(String email) async {
     var headers = {
       'Content-Type': 'application/json',
     };
@@ -113,7 +113,7 @@ class ApiService {
 
       if (response.statusCode == 202) {
         final jsonResponse = jsonDecode(response.body);
-        
+
         if (jsonResponse['status'] == 'Success') {
           return jsonResponse;
         } else {
@@ -128,43 +128,38 @@ class ApiService {
     }
   }
 
-  // Future<List<User>> getListUserbyAdmin(String token) async {
-  //   var headers = {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': 'Bearer $token',
-  //   };
-  //   try {
-  //     var url = Uri.parse(
-  //         ApiEndPoints.baseUrl + ApiEndPoints.adminEndpoints.listUserbyAdmin);
-  //     final http.Response response = await http.get(url, headers: headers);
-
-  //     if (response.statusCode == 202) {
-  //       final dynamic jsonResponse = jsonDecode(response.body);
-  //     // print(jsonResponse);
-  //       if (jsonResponse['status'] == 'success') {
-  //         final List<dynamic> userDataList = jsonResponse['data'];
-    
-  //         final List<User> users = userDataList
-  //             .map(
-  //                 (userData) => User.fromJson(userData as Map<String, dynamic>))
-  //             .toList();
-          
-  //         return users;
-  //       } else {
-  //         // Use the null-aware operator to check for a message
-  //         throw jsonResponse['message'] ?? 'Unknown Error Occurred';
-  //       }
-  //     } else {
-  //       final dynamic errorResponse = jsonDecode(response.body);
-  //       // Use the null-aware operator to check for a Message property
-  //       throw errorResponse?['Message'] ?? 'Unknown Error Occurred';
-  //     }
-  //   } catch (error) {
-  //     throw error.toString(); // Convert the error to a string
-  //   }
-  // }
-
-  
+  Future<UserInfoResponse> getinforStudent(String token) async {
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.studentEndPoints.studentInfo);
+      final http.Response response = await http.get(url, headers: headers);
+ 
+      if (response.statusCode == 202) {
+        final dynamic jsonResponse = jsonDecode(response.body);
+        
+        if (jsonResponse['status'] == 'Success') {
+          final Map<String, dynamic> userData = jsonResponse['data'];
+           print(userData);
+          final UserInfoResponse user = UserInfoResponse.fromJson(userData);
+         
+          return user;
+        } else {
+          // Use the null-aware operator to check for a message
+          throw jsonResponse['message'] ?? 'Unknown Error Occurred';
+        }
+      } else {
+        final dynamic errorResponse = jsonDecode(response.body);
+        // Use the null-aware operator to check for a Message property
+        throw errorResponse?['Message'] ?? 'Unknown Error Occurred';
+      }
+    } catch (error) {
+      throw error.toString(); // Convert the error to a string
+    }
+  }
 
   // Future<bool> deleteUserAddress(
   //     String token, int userId, int userAddressId) async {
@@ -201,5 +196,4 @@ class ApiService {
   //     throw error.toString();
   //   }
   // }
-
 }

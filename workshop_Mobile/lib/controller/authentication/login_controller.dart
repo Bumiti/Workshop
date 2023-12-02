@@ -10,9 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:oauth2/oauth2.dart' as oauth2;
-
-import '../../api/github_oauth_credentials.dart';
 
 class LoginController extends GetxController {
   final ApiService apiService = ApiService();
@@ -20,6 +17,9 @@ class LoginController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  RxString imageUrl = "".obs;
+  RxString? image0AuthenUrl = "".obs;
+  
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Future<void> loginWithEmail() async {
     try {
@@ -34,10 +34,14 @@ class LoginController extends GetxController {
       if (roles != null && roles.isNotEmpty) {
         roleString = roles[0];
       } else {
-        // print("Roles list is empty or null");
+      
       }
+  
       var accessToken = user['accessToken'];
       var userName = user['user_name'];
+       imageUrl.value = user['image'];
+      
+       
       await prefs.setString('token', accessToken);
       await storage.write(key: 'token', value: accessToken);
       await storage.write(key: 'roles', value: roleString);
@@ -80,14 +84,13 @@ class LoginController extends GetxController {
 
   Future<void> loginWithGoogle() async {
     final user = await GoogleSignInApi.login();
-    // print(user);
-    // print(user?.email);
+
+    image0AuthenUrl?.value = user!.photoUrl!;
     String? email = user?.email;
     try {
       var user = await apiService.login0AuthenAccount(
         email!,
       );
-      print(user);
       final SharedPreferences prefs = await _prefs;
       var roles = user['roles'];
       const storage = FlutterSecureStorage();
@@ -97,6 +100,7 @@ class LoginController extends GetxController {
       } else {}
       var accessToken = user['accessToken'];
       var userName = user['user_name'];
+
       await prefs.setString('token', accessToken);
       await storage.write(key: 'token', value: accessToken);
       await storage.write(key: 'roles', value: roleString);
@@ -140,7 +144,20 @@ class LoginController extends GetxController {
     final user = await FacebookSignInApi.login();
 
     String? email = user?['email'];
-    print(email);
+dynamic imageUrl = user?['picture']?['data']?['url'];
+
+  // Check if 'imageUrl' is a string
+  if (imageUrl is String) {
+    // Assign the URL to the RxString
+    image0AuthenUrl?.value = imageUrl;
+
+    // Now 'imageAuthenUrl' contains the URL if available
+    print('Image URL: $image0AuthenUrl');
+  } else {
+    // Handle the case where 'url' is not a string
+    print('Invalid image URL format');
+  }
+    print(user);
     try {
       var user = await apiService.login0AuthenAccount(
         email!,
@@ -155,6 +172,7 @@ class LoginController extends GetxController {
       } else {}
       var accessToken = user['accessToken'];
       var userName = user['user_name'];
+
       await prefs.setString('token', accessToken);
       await storage.write(key: 'token', value: accessToken);
       await storage.write(key: 'roles', value: roleString);
