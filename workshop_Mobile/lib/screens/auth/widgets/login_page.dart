@@ -123,7 +123,7 @@ class LoginPage extends StatelessWidget {
                 SignInButton(
                   Buttons.GitHub,
                   onPressed: () {
-                    loginController.loginWithGitHub();
+                    loginController.loginWithGitHub(context);
                   },
                 ),
 
