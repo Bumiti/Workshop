@@ -39,7 +39,7 @@ class LoginController extends GetxController {
   
       var accessToken = user['accessToken'];
       var userName = user['user_name'];
-       imageUrl.value = user['image'];
+      //  imageUrl.value = user['image'];
       
        
       await prefs.setString('token', accessToken);
