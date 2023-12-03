@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, file_names
 import 'package:json_annotation/json_annotation.dart';
 part 'userInforResponse.g.dart';
+
 @JsonSerializable()
 class UserInfoResponse {
   final int id;
@@ -31,8 +32,28 @@ class UserInfoResponse {
     required this.userBanks,
   });
 
-   factory UserInfoResponse.fromJson(Map<String, dynamic> json) => _$UserInfoResponseFromJson(json);
-  Map<String, dynamic> toJson() => _$UserInfoResponseToJson(this);
+  factory UserInfoResponse.fromJson(Map<String, dynamic> json) {
+    return UserInfoResponse(
+      id: json['id'] as int,
+      full_name: json['full_name'] as String,
+      user_name: json['user_name'] as String,
+      email: json['email'] as String,
+      phoneNumber: json['phoneNumber'] as String,
+      image_url: json['image_url'] as String?,
+      balance: (json['balance'] as num).toDouble(),
+      gender: json['gender'] as String,
+      roles: (json['roles'] as List<dynamic>).map((e) => e as String).toList(),
+      isEnable: json['isEnable'] as bool?,
+      userAddresses: (json['userAddresses'] as List<dynamic>?)
+              ?.map((e) => UserAddress.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      userBanks: (json['userBanks'] as List<dynamic>?)
+              ?.map((e) => UserBank.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+    );
+  }
 }
 
 @JsonSerializable()
@@ -51,10 +72,18 @@ class UserAddress {
     required this.postalCode,
   });
 
-  factory UserAddress.fromJson(Map<String, dynamic> json) =>
-      _$UserAddressFromJson(json);
-  Map<String, dynamic> toJson() => _$UserAddressToJson(this);
+  factory UserAddress.fromJson(Map<String, dynamic> json) {
+    return UserAddress(
+      id: json['id'] as int,
+      address: json['address'] as String? ??
+          '', // Kiểm tra giá trị null và cung cấp giá trị mặc định nếu cần thiết
+      city: json['city'] as String? ?? '',
+      state: json['state'] as String? ?? '',
+      postalCode: json['postalCode'] as int? ?? 0,
+    );
+  }
 }
+
 @JsonSerializable()
 class UserBank {
   final int id;
@@ -67,7 +96,12 @@ class UserBank {
     required this.bankAccount,
   });
 
-  factory UserBank.fromJson(Map<String, dynamic> json) =>
-      _$UserBankFromJson(json);
-  Map<String, dynamic> toJson() => _$UserBankToJson(this);
+  factory UserBank.fromJson(Map<String, dynamic> json) {
+    return UserBank(
+      id: json['id'] as int,
+      bankName: json['bankName'] as String? ??
+          '', // Kiểm tra giá trị null và cung cấp giá trị mặc định nếu cần thiết
+      bankAccount: json['bankAccount'] as String? ?? '',
+    );
+  }
 }

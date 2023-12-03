@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:workshop_mobi/app_localizations.dart';
 import 'package:workshop_mobi/app_state.dart';
 
 import 'package:workshop_mobi/pages/boarding_screen.dart';
@@ -23,16 +25,35 @@ void main() async {
     );
 }
 
+
+
 class MyApp extends StatelessWidget {
   final String? token;
   final String? roles;
-  const MyApp(this.token, this.roles, {super.key});
+
+  const MyApp(this.token, this.roles, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: token != null ? getHomeScreen() : const OnBoardingScreen(),
+      supportedLocales: [
+        const Locale('en', 'US'), // English
+        const Locale('vi', 'VN'), // Vietnamese
+      ],
+      localizationsDelegates: [
+        AppLocalizationsDelegate(), // Add this line
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      builder: (context, child) {
+        return Localizations.override(
+          context: context,
+          locale: Locale('vi', 'VN'), // Set the default locale
+          child: child!,
+        );
+      },
     );
   }
 
@@ -46,3 +67,4 @@ class MyApp extends StatelessWidget {
     }
   }
 }
+

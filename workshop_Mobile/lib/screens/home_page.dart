@@ -5,6 +5,7 @@ import 'package:workshop_mobi/widgets/card_section.dart';
 import 'package:workshop_mobi/widgets/title_course.dart';
 import 'package:workshop_mobi/widgets/top_mentors.dart';
 import 'package:workshop_mobi/widgets/top_mentors.dart';
+import 'package:workshop_mobi/widgets/top_rating.dart';
 
 class PublicHomeLanding extends StatefulWidget {
   const PublicHomeLanding({super.key});
@@ -57,7 +58,6 @@ class _HomePageState extends State<PublicHomeLanding> {
           //card
           Container(
             padding: EdgeInsets.only(top: 20, left: 15, right: 15),
- // Adjust the bottom margin as needed
             child: Row(
               children: [
                 Expanded(
@@ -68,7 +68,7 @@ class _HomePageState extends State<PublicHomeLanding> {
                       gradient: LinearGradient(
                         begin: Alignment(0.00, -1.00),
                         end: Alignment(0, 1),
-                        colors: [Color(0xFF86A3FF), Color(0xFF5769F8)],
+                        colors: [Color(0xFF5769F8), Color(0xFF5769F8)],
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(22),
@@ -89,7 +89,11 @@ class _HomePageState extends State<PublicHomeLanding> {
             imgList: imgList,
           ),
 
+          //top mentor
           TopMentorsSection(),
+
+          //top rating
+          TopRatingSection(),
         ],
       ),
     );

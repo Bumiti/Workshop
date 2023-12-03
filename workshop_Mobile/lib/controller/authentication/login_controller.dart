@@ -38,7 +38,7 @@ class LoginController extends GetxController {
 
       var accessToken = user['accessToken'];
       var userName = user['user_name'];
-      imageUrl.value = user['image'];
+      // imageUrl.value = user['image'];
 
       await prefs.setString('token', accessToken);
       await storage.write(key: 'token', value: accessToken);
@@ -82,8 +82,6 @@ class LoginController extends GetxController {
 
   Future<void> loginWithGoogle() async {
     final user = await GoogleSignInApi.login();
-
-    image0AuthenUrl?.value = user!.photoUrl!;
     String? email = user?.email;
     try {
       var user = await apiService.login0AuthenAccount(

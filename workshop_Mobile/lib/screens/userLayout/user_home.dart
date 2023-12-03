@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,6 +45,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       body: pages[selectedIndex],
     );
   }
+
   //pages to display
   final List<Widget> pages = [
     //Home page
@@ -53,7 +53,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     //Manage page
     const ManagePage(),
     // //Workshop page
-     WorkshopManagerStudent(),
+    WorkshopManagerStudent(),
     // //Wallet page
     const StudentWalletPage(),
   ];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workshop_mobi/screens/userLayout/widgets/workshop_page.dart';
 
 class WorkshopStudentManager extends StatelessWidget {
   // ignore: use_key_in_widget_constructors
@@ -84,8 +85,13 @@ class WorkshopStudentManager extends StatelessWidget {
                             width: screenWidth * 0.2,
                             child: TextButton(
                               onPressed: () {
-                                // ignore: avoid_print
-                                print('Yoyo');
+                                // Chuyển đến trang mới khi nhấn vào nút "Explore"
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => WorkshopManagerStudent(),
+                                ),
+                              );
                               },
                               child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: unnecessary_null_comparison, prefer_null_aware_operators
-
 part of 'userInforResponse.dart';
 
 // **************************************************************************
@@ -10,27 +8,22 @@ part of 'userInforResponse.dart';
 
 UserInfoResponse _$UserInfoResponseFromJson(Map<String, dynamic> json) =>
     UserInfoResponse(
-      id: json['id'] as int ?? 0,
-      full_name: json['full_name'] as String ?? '',
-      user_name: json['user_name'] as String ?? '',
-      email: json['email'] as String ?? '',
-      phoneNumber: json['phoneNumber'] as String ?? '',
-     image_url: json['image_url'] as String? ?? null,
-
-      balance: (json['balance'] as num).toDouble() ?? 0,
-      gender: json['gender'] as String ?? '',
-      roles: (json['roles'] as List<dynamic>)
-          .map((e) => e as String ?? '')
+      id: json['id'] as int,
+      full_name: json['full_name'] as String,
+      user_name: json['user_name'] as String,
+      email: json['email'] as String,
+      phoneNumber: json['phoneNumber'] as String,
+      image_url: json['image_url'] as String?,
+      balance: (json['balance'] as num).toDouble(),
+      gender: json['gender'] as String,
+      roles: (json['roles'] as List<dynamic>).map((e) => e as String).toList(),
+      isEnable: json['isEnable'] as bool?,
+      userAddresses: (json['userAddresses'] as List<dynamic>)
+          .map((e) => UserAddress.fromJson(e as Map<String, dynamic>))
           .toList(),
-      isEnable: json['isEnable'] as bool? ?? false,
-      userAddresses: (json['userAddresses'] as List<dynamic>?)
-              ?.map((e) => UserAddress.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-      userBanks: (json['userBanks'] as List<dynamic>?)
-              ?.map((e) => UserBank.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
+      userBanks: (json['userBanks'] as List<dynamic>)
+          .map((e) => UserBank.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$UserInfoResponseToJson(UserInfoResponse instance) =>
@@ -45,21 +38,16 @@ Map<String, dynamic> _$UserInfoResponseToJson(UserInfoResponse instance) =>
       'gender': instance.gender,
       'roles': instance.roles,
       'isEnable': instance.isEnable,
-      
-      'userAddresses': instance.userAddresses != null
-          ? instance.userAddresses.map((address) => address.toJson()).toList()
-          : null,
-      'userBanks': instance.userBanks != null
-          ? instance.userBanks.map((bank) => bank.toJson()).toList()
-          : null,
+      'userAddresses': instance.userAddresses,
+      'userBanks': instance.userBanks,
     };
 
 UserAddress _$UserAddressFromJson(Map<String, dynamic> json) => UserAddress(
-      id: json['id'] as int ?? 0,
-      address: json['address'] as String ?? '',
-      city: json['city'] as String ?? '',
-      state: json['state'] as String ?? '',
-      postalCode: json['postalCode'] as int ?? 0,
+      id: json['id'] as int,
+      address: json['address'] as String,
+      city: json['city'] as String,
+      state: json['state'] as String,
+      postalCode: json['postalCode'] as int,
     );
 
 Map<String, dynamic> _$UserAddressToJson(UserAddress instance) =>
