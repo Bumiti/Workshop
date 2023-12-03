@@ -139,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
         for (var address in addresses)
           ListTile(
             title: Text(
-              'Address: ${address.address}, City: ${address.city}, State: ${address.state}, Postal Code: ${address.postalCode.toString()}',
+              'Address: ${address.Address}, City: ${address.City}, State: ${address.State}, Postal Code: ${address.PostalCode.toString()}',
             ),
           ),
       ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:workshop_mobi/screens/course_screen.dart';
 
 class VideoSetion extends StatelessWidget {
+   final CourseScreen widget;
   List videoList = [
     'Introduction to Flutter',
     'Installing Flutter on Windows',
@@ -8,10 +10,12 @@ class VideoSetion extends StatelessWidget {
     'Creating Our First App',
   ];
 
+  VideoSetion({super.key, required this.widget});
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: videoList.length,
+      itemCount: widget.courseResponses.courseMediaInfos.length,
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, index) {
@@ -38,7 +42,7 @@ class VideoSetion extends StatelessWidget {
                 ),
               ),
               title: Text(
-                videoList[index],
+                widget.courseResponses.courseMediaInfos[index].title,
                 style: TextStyle(
                   color: index == 0 ? Colors.white : Colors.black,
                   fontWeight: FontWeight.bold,

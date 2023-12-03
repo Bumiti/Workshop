@@ -59,27 +59,26 @@ class UserInfoResponse {
 @JsonSerializable()
 class UserAddress {
   final int id;
-  final String address;
-  final String city;
-  final String state;
-  final int postalCode;
+  final String Address;
+  final String City;
+  final String State;
+  final int PostalCode;
 
   UserAddress({
     required this.id,
-    required this.address,
-    required this.city,
-    required this.state,
-    required this.postalCode,
+    required this.Address,
+    required this.City,
+    required this.State,
+    required this.PostalCode,
   });
 
   factory UserAddress.fromJson(Map<String, dynamic> json) {
     return UserAddress(
       id: json['id'] as int,
-      address: json['address'] as String? ??
-          '', // Kiểm tra giá trị null và cung cấp giá trị mặc định nếu cần thiết
-      city: json['city'] as String? ?? '',
-      state: json['state'] as String? ?? '',
-      postalCode: json['postalCode'] as int? ?? 0,
+      Address: json['Address'] as String? ?? '',
+      City: json['City'] as String? ?? '',
+      State: json['State'] as String? ?? '',
+      PostalCode: json['PostalCode'] as int? ?? 0,
     );
   }
 }
@@ -99,8 +98,7 @@ class UserBank {
   factory UserBank.fromJson(Map<String, dynamic> json) {
     return UserBank(
       id: json['id'] as int,
-      bankName: json['bankName'] as String? ??
-          '', // Kiểm tra giá trị null và cung cấp giá trị mặc định nếu cần thiết
+      bankName: json['bankName'] as String? ?? '',
       bankAccount: json['bankAccount'] as String? ?? '',
     );
   }

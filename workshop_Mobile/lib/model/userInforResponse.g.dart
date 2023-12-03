@@ -44,19 +44,19 @@ Map<String, dynamic> _$UserInfoResponseToJson(UserInfoResponse instance) =>
 
 UserAddress _$UserAddressFromJson(Map<String, dynamic> json) => UserAddress(
       id: json['id'] as int,
-      address: json['address'] as String,
-      city: json['city'] as String,
-      state: json['state'] as String,
-      postalCode: json['postalCode'] as int,
+      Address: json['Address'] as String,
+      City: json['City'] as String,
+      State: json['State'] as String,
+      PostalCode: json['PostalCode'] as int,
     );
 
 Map<String, dynamic> _$UserAddressToJson(UserAddress instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'address': instance.address,
-      'city': instance.city,
-      'state': instance.state,
-      'postalCode': instance.postalCode,
+      'Address': instance.Address,
+      'City': instance.City,
+      'State': instance.State,
+      'PostalCode': instance.PostalCode,
     };
 
 UserBank _$UserBankFromJson(Map<String, dynamic> json) => UserBank(
