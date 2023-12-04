@@ -6,6 +6,8 @@ class ApiEndPoints {
   static _AuthEndPoints authEndpoints = _AuthEndPoints();
   static _TeacherEndPoints teacherEndPoints = _TeacherEndPoints();
   static _HomePageEndPoints homePageEndPoints = _HomePageEndPoints();
+  static _StudentEndPoints studentEndPoints = _StudentEndPoints();
+
 
 
 }
@@ -14,7 +16,6 @@ class _AuthEndPoints {
   final String register = 'auth/user/register';
   final String loginWebAccount = 'auth/loginWeb';
   final String loginOAuthen = 'auth/loginOAuthentication';
-
   final String resetPassword = 'auth/user/forgetPassword';
 }
 // class _AdminEndPoints {
@@ -27,7 +28,10 @@ class _HomePageEndPoints {
   final String workShopById = 'web/course/detail';
   final String checkUserInCourse = 'web/course/checkedUser';
 }
-
+class _StudentEndPoints {
+   final String studentInfo = 'user/detail';
+   final String studentByWorkshop = 'user/byCourse';
+}
 class _TeacherEndPoints {
   final String listWorshop = 'seller/course/list';
   final String addWorshop = 'seller/course/add';

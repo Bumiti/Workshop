@@ -10,6 +10,7 @@ class UserEditRequest {
   String phoneNumber;
   double balance;
   String image_url;
+  bool isEnable;
   List<UserAddress> userAddresses;
   List<UserBank> userBanks;
 
@@ -22,6 +23,7 @@ class UserEditRequest {
     required this.image_url,
     required this.userAddresses,
     required this.userBanks,
+    required this.isEnable,
   });
 
    factory UserEditRequest.fromJson(Map<String, dynamic> json) => _$UserEditRequestFromJson(json);
