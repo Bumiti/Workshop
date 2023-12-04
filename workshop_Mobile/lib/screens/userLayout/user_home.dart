@@ -9,7 +9,8 @@ import 'package:workshop_mobi/screens/home_page.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/manage_page.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/wallet_page.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/workshop_page.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import  'package:workshop_mobi/api/api_service.dart';
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
 
@@ -19,6 +20,7 @@ class UserHomeScreen extends StatefulWidget {
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
   // List<User> userList = [];
   bool showLoginPage = true;
   int selectedIndex = 0;
@@ -30,7 +32,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
+     final apiService = ApiService();
+
+    
+   
     return Scaffold(
       backgroundColor: Colors.grey[300],
       bottomNavigationBar: MyBottomNavBar(
@@ -42,19 +49,38 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         prefs.clear();
         Get.offAll(const LoginOrReg());
       }),
-      body: pages[selectedIndex],
+      body: pagesBuilder()[selectedIndex],
     );
   }
+  
+
 
   //pages to display
-  final List<Widget> pages = [
-    //Home page
-    const PublicHomeLanding(),
-    //Manage page
-    const ManagePage(),
-    // //Workshop page
-    WorkshopManagerStudent(),
-    // //Wallet page
-    const StudentWalletPage(),
-  ];
+ // Function to asynchronously create the list of pages
+  List<Widget> pagesBuilder() {
+    // Use this function to fetch the token asynchronously
+    Future<String> getToken() async {
+      return await _secureStorage.read(key: 'token') ?? '';
+    }
+
+    return [
+      // Home page
+      const PublicHomeLanding(),
+      // Manage page
+      FutureBuilder<String>(
+        future: getToken(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else {
+            return ManagePage(token: snapshot.data ?? '');
+          }
+        },
+      ),
+      // Workshop page
+      WorkshopManagerStudent(),
+      // Wallet page
+      const StudentWalletPage(),
+    ];
+  }
 }

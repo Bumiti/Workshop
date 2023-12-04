@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, camel_case_types
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'workshopResponses.g.dart';
@@ -35,23 +37,23 @@ class CourseResponses {
     required this.courseLocations,
     required this.discountDTOS,
   }) {
-    studentEnrollments ??= [];
-    courseMediaInfos ??= [];
-    courseLocations ??= [];
-    discountDTOS ??= [];
+    // studentEnrollments ??= [];
+    // courseMediaInfos ??= [];
+    // courseLocations ??= [];
+    // discountDTOS ??= [];
   }
 
   factory CourseResponses.fromJson(Map<String, dynamic> json) {
     return CourseResponses(
       id: json['id'] as int? ?? 0,
-      name: json['name'] as String? ?? '',
-      description: json['description'] as String? ?? '',
+      name: json['name'] as String? ?? 'empty',
+      description: json['description'] as String? ?? 'empty',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      startDate: DateTime.parse(json['startDate'] as String? ?? ''),
-      endDate: DateTime.parse(json['endDate'] as String? ?? ''),
+      startDate: DateTime.parse(json['startDate'] as String? ?? 'empty'),
+      endDate: DateTime.parse(json['endDate'] as String? ?? 'empty'),
       student_count: json['student_count'] as int? ?? 0,
-      type: json['type'] as String? ?? '',
-      teacher: json['teacher'] as String? ?? '',
+      type: json['type'] as String? ?? 'empty',
+      teacher: json['teacher'] as String? ?? 'empty',
       isPublic: json['isPublic'] as bool? ?? false,
       studentEnrollments: (json['studentEnrollments'] as List<dynamic>?)
               ?.map(
@@ -88,7 +90,7 @@ class StudentEnrollment {
   factory StudentEnrollment.fromJson(Map<String, dynamic> json) {
     return StudentEnrollment(
       id: json['id'] as int? ?? 0,
-      name: json['name'] as String? ?? '',
+      name: json['name'] as String? ?? 'empty',
     );
   }
 
@@ -114,10 +116,10 @@ class CourseMediaInfo {
   factory CourseMediaInfo.fromJson(Map<String, dynamic> json) {
     return CourseMediaInfo(
       id: json['id'] as int? ?? 0,
-      urlMedia: json['urlMedia'] as String? ?? '',
-      urlImage: json['urlImage'] as String? ?? '',
-      thumbnailSrc: json['thumbnailSrc'] as String? ?? '',
-      title: json['title'] as String? ?? '',
+      urlMedia: json['urlMedia'] as String? ?? 'empty',
+      urlImage: json['urlImage'] as String? ?? 'empty',
+      thumbnailSrc: json['thumbnailSrc'] as String? ?? 'empty',
+      title: json['title'] as String? ?? 'empty',
     );
   }
   Map<String, dynamic> toJson() => _$CourseMediaInfoToJson(this);
@@ -140,7 +142,7 @@ class CourseLocation {
   factory CourseLocation.fromJson(Map<String, dynamic> json) {
     return CourseLocation(
       id: json['id'] as int? ?? 0,
-      Area: json['Area'] as String? ?? '',
+      Area: json['Area'] as String? ?? 'empty',
       schedule_Date: DateTime.parse(json['schedule_Date'] as String),
       locationDTO: locationResponse.fromJson(
         json['locationDTO'] as Map<String, dynamic>,
@@ -170,10 +172,10 @@ class locationResponse {
   factory locationResponse.fromJson(Map<String, dynamic> json) {
     return locationResponse(
       id: json['id'] as int? ?? 0,
-      name: json['name'] as String? ?? '',
-      statusAvailable: json['statusAvailable'] as String? ?? '',
-      address: json['address'] as String? ?? '',
-      description: json['description'] as String? ?? '',
+      name: json['name'] as String? ?? 'empty',
+      statusAvailable: json['statusAvailable'] as String? ?? 'empty',
+      address: json['address'] as String? ?? 'empty',
+      description: json['description'] as String? ?? 'empty',
     );
   }
 
@@ -206,8 +208,8 @@ class DiscountDTO {
       quantity: json['quantity'] as int? ?? 0,
       redemptionDate: DateTime.parse(json['redemptionDate'] as String),
       valueDiscount: json['valueDiscount'] as int? ?? 0,
-      name: json['name'] as String? ?? '',
-      description: json['description'] as String? ?? '',
+      name: json['name'] as String? ?? 'empty',
+      description: json['description'] as String? ?? 'empty',
       remainingUses: json['remainingUses'] as int? ?? 0,
     );
   }

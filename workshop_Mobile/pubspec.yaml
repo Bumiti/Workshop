@@ -30,14 +30,15 @@ dependencies:
   url_launcher: ^6.2.1
   google_fonts: any
   table_calendar: ^3.0.9
-  google_sign_in: ^6.1.6
+  google_sign_in: any
   flutter_facebook_auth: any
   oauth2: ^2.0.2
-  # github: ^9.20.0
   webview_flutter: ^4.4.2
   provider: ^6.1.1
-  # github_signin_promax: ^0.0.7+2
+
   flutter_inappwebview: ^5.8.0
+  video_player: ^2.6.0
+  chewie: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

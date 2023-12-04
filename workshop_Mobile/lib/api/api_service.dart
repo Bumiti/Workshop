@@ -17,6 +17,7 @@ class ApiService {
       };
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
+
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['status'] == 'success') {
@@ -188,12 +189,27 @@ class ApiService {
       // print(response.body);
 
       List<CourseResponses> workshopList = parseWorkshopList(response.body);
-      print(workshopList[0].name);
-      print(workshopList[1].name);
-      print(workshopList[2].name);
-      print(workshopList[3].name);
-      print(workshopList[4].name);
-      print(workshopList[5].name);
+      // print(workshopList[4].name);
+      // print(workshopList[4].description);
+      // print(workshopList[4].endDate);
+      // print(workshopList[4].id);
+      // print(workshopList[4].isPublic);
+      // print(workshopList[4].price);
+      //  print(workshopList[4].startDate);
+      //   print(workshopList[4].teacher);
+      //    print(workshopList[4].student_count);
+      //    print(workshopList[4].courseLocations[0].id);
+      //     print(workshopList[4].courseLocations[0].Area);
+
+      //    print(workshopList[4].courseMediaInfos[0].id);
+      //     print(workshopList[4].courseMediaInfos[0].thumbnailSrc);
+      //        print(workshopList[4].courseMediaInfos[0].title);
+      //        print(workshopList[4].courseMediaInfos[0].urlImage);
+      //         print(workshopList[4].courseMediaInfos[0].urlMedia);
+
+      //    print(workshopList[4].discountDTOS[0].id);
+
+
       return workshopList;
 
       // if (response.statusCode == 200)

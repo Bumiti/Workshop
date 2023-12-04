@@ -40,12 +40,7 @@ class _HomePageState extends State<PublicHomeLanding> {
     Icon(Icons.emoji_events, color: Colors.white, size: 30),
   ];
 
-  List imgList = [
-    'Flutter',
-    'React Native',
-    'Python',
-    'C#',
-  ];
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +92,7 @@ class _HomePageState extends State<PublicHomeLanding> {
                   catNames: catNames,
                   catColors: catColors,
                   catIcons: catIcons,
-                   imgList: imgList,
+                
                   workshopList: snapshot.data!,
                 ),
 

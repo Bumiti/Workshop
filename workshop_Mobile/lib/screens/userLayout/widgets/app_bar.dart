@@ -16,8 +16,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     LoginController loginController = Get.put(LoginController());
+
     final apiService = ApiService();
+
     const storage = FlutterSecureStorage();
+    
     final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     return AppBar(
       backgroundColor: Colors.white,

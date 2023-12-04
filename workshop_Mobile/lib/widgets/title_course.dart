@@ -6,14 +6,14 @@ class CoursesSection extends StatelessWidget {
   final List catNames;
   final List<Color> catColors;
   final List<Icon> catIcons;
-  final List imgList;
+  
   final List<CourseResponses> workshopList;
   
   CoursesSection({
     required this.catNames,
     required this.catColors,
     required this.catIcons,
-    required this.imgList,
+
     required this.workshopList,
   });
 
@@ -92,7 +92,7 @@ class CoursesSection extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CourseScreen(imgList[index],workshopList[index]),
+                        builder: (context) => CourseScreen(workshopList[index]),
                       ),
                     );
                   },

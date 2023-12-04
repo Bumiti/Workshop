@@ -1,4 +1,3 @@
-
 import 'package:workshop_mobi/api/api_service.dart';
 import 'package:workshop_mobi/api/facebook_sigin_api.dart';
 import 'package:workshop_mobi/api/github_sigin_api.dart';
@@ -28,7 +27,7 @@ class LoginController extends GetxController {
       );
       final SharedPreferences prefs = await _prefs;
       var roles = user['roles'];
-      const storage = FlutterSecureStorage();
+
       String roleString = '';
       if (roles != null && roles.isNotEmpty) {
         roleString = roles[0];
@@ -37,7 +36,7 @@ class LoginController extends GetxController {
       var accessToken = user['accessToken'];
       var userName = user['user_name'];
       // imageUrl.value = user['image'];
-
+      const storage = FlutterSecureStorage();
       await prefs.setString('token', accessToken);
       await storage.write(key: 'token', value: accessToken);
       await storage.write(key: 'roles', value: roleString);

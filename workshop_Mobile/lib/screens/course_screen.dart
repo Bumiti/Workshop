@@ -1,19 +1,48 @@
+// ignore_for_file: must_be_immutable, avoid_print, deprecated_member_use
+
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'package:workshop_mobi/app_localizations.dart';
 import 'package:workshop_mobi/model/workshopResponses.dart';
 import 'package:workshop_mobi/widgets/description_section.dart';
 import 'package:workshop_mobi/widgets/videos_section.dart';
 
 class CourseScreen extends StatefulWidget {
-  String img;
   CourseResponses courseResponses;
-  CourseScreen(this.img, this.courseResponses);
+  CourseScreen(this.courseResponses);
+
   @override
   State<CourseScreen> createState() => _CourseScreenState();
 }
 
 class _CourseScreenState extends State<CourseScreen> {
+  late VideoPlayerController _videoPlayerController;
+  late Future<void> _initializeVideoPlayerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _videoPlayerController = VideoPlayerController.network(
+      widget.courseResponses.courseMediaInfos[0].urlMedia,
+    );
+
+    // Initialize the controller and store the Future for later use.
+    _initializeVideoPlayerFuture = _videoPlayerController.initialize();
+
+    // Use the controller to loop the video.
+    _videoPlayerController.setLooping(true);
+  }
+
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    super.dispose();
+    _videoPlayerController.play();
+  }
+
   bool isVideosSection = true;
+  bool isPlaying = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,14 +52,14 @@ class _CourseScreenState extends State<CourseScreen> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          widget.img,
+          widget.courseResponses.name,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             letterSpacing: 1,
           ),
         ),
-        actions: [
-          const Padding(
+        actions: const [
+          Padding(
             padding: EdgeInsets.only(right: 10),
             child: Icon(
               Icons.notifications,
@@ -44,31 +73,51 @@ class _CourseScreenState extends State<CourseScreen> {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: ListView(
           children: [
-            Container(
-              padding: const EdgeInsets.all(5),
-              width: MediaQuery.of(context).size.width,
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.white,
-                image: DecorationImage(
-                  image: AssetImage("${widget.img}"),
-                ),
-              ),
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.play_arrow_rounded,
-                    color: Color(0xFF674AEF),
-                    size: 45,
-                  ),
-                ),
-              ),
+            FutureBuilder(
+              future: _initializeVideoPlayerFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return // Thêm biến để theo dõi trạng thái play/pause
+
+                      AspectRatio(
+                    aspectRatio: _videoPlayerController.value.aspectRatio,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        VideoPlayer(_videoPlayerController),
+                        if (!isPlaying)
+                          IconButton(
+                            icon: Icon(
+                              Icons.play_circle_fill,
+                              size: 50,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                isPlaying =
+                                    true; 
+                                if (_videoPlayerController.value.isPlaying) 
+                                {
+                                  
+                                  _videoPlayerController.pause();
+                                  isPlaying = false;
+                                } else {
+                                  _videoPlayerController.play();
+                                  isPlaying = true;
+                                }
+                              });
+                            },
+                          ),
+                      ],
+                    ),
+                  );
+                  ;
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
             const SizedBox(height: 15),
             WorkshopName(widget: widget),
@@ -100,8 +149,8 @@ class _CourseScreenState extends State<CourseScreen> {
                         });
                       },
                       child: Container(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 15, horizontal: 35),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 35),
                         child: const Text(
                           "Videos",
                           style: TextStyle(
@@ -126,8 +175,8 @@ class _CourseScreenState extends State<CourseScreen> {
                         });
                       },
                       child: Container(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 15, horizontal: 35),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 15, horizontal: 35),
                         child: const Text(
                           "Decriptions",
                           style: TextStyle(
@@ -143,7 +192,13 @@ class _CourseScreenState extends State<CourseScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            isVideosSection ? VideoSetion(widget: widget,) : DescriptionSection(widget: widget,),
+            isVideosSection
+                ? VideoSetion(
+                    widget: widget,
+                  )
+                : DescriptionSection(
+                    widget: widget,
+                  ),
           ],
         ),
       ),
