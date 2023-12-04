@@ -16,26 +16,26 @@ class VideoSetion extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: widget.courseResponses.courseMediaInfos.length,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return Column(
           children: [
             ListTile(
               tileColor: index == 0
-                  ? Color.fromARGB(255, 60, 120, 230)
-                  : Color.fromARGB(140, 90, 145, 230),
-              contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  ? const Color.fromARGB(255, 60, 120, 230)
+                  : const Color.fromARGB(140, 90, 145, 230),
+              contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
               leading: Container(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: index == 0 ? Color(0xFF674AEF) : Color(0xFF674AEF).withOpacity(0.6),
+                  color: index == 0 ? const Color(0xFF674AEF) : const Color(0xFF674AEF).withOpacity(0.6),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.play_arrow_rounded,
                   color: Colors.white,
                   size: 30,
@@ -55,7 +55,7 @@ class VideoSetion extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 10), // Điều chỉnh giá trị này để thêm khoảng cách giữa các ListTile
+            const SizedBox(height: 10), // Điều chỉnh giá trị này để thêm khoảng cách giữa các ListTile
           ],
         );
       },
