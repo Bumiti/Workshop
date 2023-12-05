@@ -4,7 +4,8 @@ import 'package:workshop_mobi/screens/userLayout/widgets/my_course.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/my_schedule.dart';
 
 class ManagePage extends StatefulWidget {
-  const ManagePage({super.key});
+  final String? token;
+  const ManagePage({required this.token, Key? key}) : super(key: key);
 
   @override
   State<ManagePage> createState() => _ManagePageState();
@@ -13,13 +14,16 @@ class ManagePage extends StatefulWidget {
 class _ManagePageState extends State<ManagePage> {
   double targetHeightFactor = 0.06; // Tỉ lệ bạn muốn sử dụng
   late Future<String?> userName;
+ 
   @override
   void initState() {
+    print(widget.token );
     super.initState();
     userName = _getUserName();
   }
 
   Future<String?> _getUserName() async {
+    
     const FlutterSecureStorage storage = FlutterSecureStorage();
     String? userName = await storage.read(key: 'userName');
     return userName;
@@ -35,6 +39,7 @@ class _ManagePageState extends State<ManagePage> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: const Color(0xFFD7D7D7),
       body: Column(

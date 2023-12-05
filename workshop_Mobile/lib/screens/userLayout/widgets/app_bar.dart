@@ -8,14 +8,19 @@ import 'package:workshop_mobi/screens/auth/login_or_register.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/custom_logo_appbar.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/studen_info.dart';
 
+
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  
   const CustomAppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     LoginController loginController = Get.put(LoginController());
+
     final apiService = ApiService();
+
     const storage = FlutterSecureStorage();
+    
     final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
     return AppBar(
       backgroundColor: Colors.white,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class DetailWorkshop extends StatelessWidget {
   @override
@@ -385,14 +384,14 @@ class DetailWorkshop extends StatelessWidget {
                           height: 48 * widthRatio,
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(),
-                          child: Stack(children: [
-                            SvgPicture.asset(
-                              'lib/assets/Frame.svg', // Replace with your vector image path
-                              width: 214 * widthRatio,
-                              height: 48 * widthRatio,
-                              fit: BoxFit.cover,
-                            ) // Adjust as needed
-                          ]),
+                          // child: Stack(children: [
+                          //   // SvgPicture.asset(
+                          //   //   'lib/assets/Frame.svg', // Replace with your vector image path
+                          //   //   width: 214 * widthRatio,
+                          //   //   height: 48 * widthRatio,
+                          //   //   fit: BoxFit.cover,
+                          //   // ) // Adjust as needed
+                          // ]),
                         ),
                       ],
                     ),

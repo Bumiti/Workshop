@@ -59,7 +59,7 @@ public class SeedDatabase {
             addServiceManager();
             addRandomTeachers();
             addLocation();
-//           addCourse();
+           addCourse();
             createSeedStatusFile();
         }
 
@@ -190,18 +190,19 @@ public class SeedDatabase {
                 "Python", "Ruby", "PHP", "Swift", "Kotlin", "Go", "Rust", "Scala", "TypeScript", "SQL", "HTML/CSS", "R", "Perl", "Haskell"
         };
         String [] listVideo ={
-                "https://youtu.be/R6plN3FvzFY",
-                "https://youtu.be/zwsPND378OQ",
-                "https://youtu.be/ZotVkQDC6mU",
-                "https://youtu.be/LYnrFSGLCl8",
-                "https://youtu.be/JG0pdfdKjgQ",
-                "https://youtu.be/AzmdwZ6e_aM",
-                "https://youtu.be/UYpIh5pIkSA",
-                "https://youtu.be/NsSsJTg29oE",
-                "https://youtu.be/4J6d8cr0X48",
-                "https://youtu.be/AgZ0PX28bnA",
-                "https://youtu.be/x9fnxVTkpP4",
-                "https://youtu.be/pcUiTt6eBk0",
+//                "https://youtu.be/R6plN3FvzFY",
+//                "https://youtu.be/zwsPND378OQ",
+//                "https://youtu.be/ZotVkQDC6mU",
+//                "https://youtu.be/LYnrFSGLCl8",
+//                "https://youtu.be/JG0pdfdKjgQ",
+//                "https://youtu.be/AzmdwZ6e_aM",
+//                "https://youtu.be/UYpIh5pIkSA",
+//                "https://youtu.be/NsSsJTg29oE",
+//                "https://youtu.be/4J6d8cr0X48",
+//                "https://youtu.be/AgZ0PX28bnA",
+//                "https://youtu.be/x9fnxVTkpP4",
+//                "https://youtu.be/pcUiTt6eBk0",
+                "https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/videos%2F03b48628-cd39-4713-b0ae-f0669031f122?alt=media&token=7c1ac6bf-7414-497e-9805-cb5142734270"
         };
         String[] courseDescriptions = {"DESCRIPTION FOR", "HOW CAN LEARN", "HOT COURSE", "BEGIN FOR DEVELOPER", "WHAT YOU CAN LEARN"};
         String[] type = {"One line", "Off Line"};

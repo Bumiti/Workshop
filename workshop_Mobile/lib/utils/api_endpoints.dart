@@ -18,11 +18,7 @@ class _AuthEndPoints {
   final String loginOAuthen = 'auth/loginOAuthentication';
   final String resetPassword = 'auth/user/forgetPassword';
 }
-// class _AdminEndPoints {
-//   final String listUserbyAdmin = 'admin/user/listUser';
-//   final String updateStatusAccount = 'admin/user/changeStatus';
-//   final String deleteAddressAccount = 'admin/user/deleteAddress';
-// }
+
 class _HomePageEndPoints {
   final String listWorkshop = 'web/course/list';
   final String workShopById = 'web/course/detail';

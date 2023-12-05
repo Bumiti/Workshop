@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:workshop_mobi/model/userInforResponse.dart';
+import 'package:workshop_mobi/model/workshopResponses.dart';
 import 'package:workshop_mobi/utils/api_endpoints.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,6 +17,7 @@ class ApiService {
       };
       http.Response response =
           await http.post(url, body: jsonEncode(body), headers: headers);
+
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         if (json['status'] == 'success') {
@@ -137,15 +139,15 @@ class ApiService {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.studentEndPoints.studentInfo);
       final http.Response response = await http.get(url, headers: headers);
- 
+
       if (response.statusCode == 202) {
         final dynamic jsonResponse = jsonDecode(response.body);
-        
+
         if (jsonResponse['status'] == 'Success') {
           final Map<String, dynamic> userData = jsonResponse['data'];
-           print(userData);
+          print(userData);
           final UserInfoResponse user = UserInfoResponse.fromJson(userData);
-         
+
           return user;
         } else {
           // Use the null-aware operator to check for a message
@@ -161,6 +163,72 @@ class ApiService {
     }
   }
 
+  /// Home Landing APi
+  ///
+  // Hàm để chuyển đổi dữ liệu JSON thành danh sách đối tượng CourseResponses
+  List<CourseResponses> parseWorkshopList(String responseBody) {
+    // Assuming your API response is in JSON format
+    Map<String, dynamic> jsonResponse = json.decode(responseBody);
+    // Assuming the actual workshop data is under the key 'data'
+    List<dynamic> workshopData = jsonResponse['data'];
+    // Convert each workshop data into a CourseResponses object
+    List<CourseResponses> workshopList = workshopData
+        .map((workshopJson) => CourseResponses.fromJson(workshopJson))
+        .toList();
+
+    return workshopList;
+  }
+
+  Future<List<CourseResponses>> listworkshop() async {
+    var headers = {'Content-Type': 'application/json'};
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.homePageEndPoints.listWorkshop);
+
+      http.Response response = await http.get(url, headers: headers);
+      // print(response.body);
+
+      List<CourseResponses> workshopList = parseWorkshopList(response.body);
+      // print(workshopList[4].name);
+      // print(workshopList[4].description);
+      // print(workshopList[4].endDate);
+      // print(workshopList[4].id);
+      // print(workshopList[4].isPublic);
+      // print(workshopList[4].price);
+      //  print(workshopList[4].startDate);
+      //   print(workshopList[4].teacher);
+      //    print(workshopList[4].student_count);
+      //    print(workshopList[4].courseLocations[0].id);
+      //     print(workshopList[4].courseLocations[0].Area);
+
+      //    print(workshopList[4].courseMediaInfos[0].id);
+      //     print(workshopList[4].courseMediaInfos[0].thumbnailSrc);
+      //        print(workshopList[4].courseMediaInfos[0].title);
+      //        print(workshopList[4].courseMediaInfos[0].urlImage);
+      //         print(workshopList[4].courseMediaInfos[0].urlMedia);
+
+      //    print(workshopList[4].discountDTOS[0].id);
+
+
+      return workshopList;
+
+      // if (response.statusCode == 200)
+      // {
+      //   final json = jsonDecode(response.body);
+      //   if (json['status'] == 'success') {
+      //     var data = json['data'];
+      //     var user = data['user'];
+      //     return user;
+      //   } else if (json['code'] == 1) {
+      //     throw jsonDecode(response.body)['message'];
+      //   }
+      // } else {
+      //   throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
+      // }
+    } catch (error) {
+      rethrow;
+    }
+  }
   // Future<bool> deleteUserAddress(
   //     String token, int userId, int userAddressId) async {
   //   var headers = {

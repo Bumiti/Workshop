@@ -1,6 +1,7 @@
 // ignore_for_file: sort_child_properties_last, prefer_interpolation_to_compose_strings
 
 import 'package:flutter/material.dart';
+import 'package:workshop_mobi/app_localizations.dart';
 import 'package:workshop_mobi/model/userInforResponse.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -50,7 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
             // User Name
             Text(
-              widget.userInfoResponse.full_name,
+              AppLocalizations.translateFullName(
+                  context, widget.userInfoResponse.full_name),
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -137,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
         for (var address in addresses)
           ListTile(
             title: Text(
-              'Address: ${address.address}, City: ${address.city}, State: ${address.state}, Postal Code: ${address.postalCode.toString()}',
+              'Address: ${address.Address}, City: ${address.City}, State: ${address.State}, Postal Code: ${address.PostalCode.toString()}',
             ),
           ),
       ],

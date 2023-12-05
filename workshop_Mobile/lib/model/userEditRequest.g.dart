@@ -14,13 +14,13 @@ UserEditRequest _$UserEditRequestFromJson(Map<String, dynamic> json) =>
       phoneNumber: json['phoneNumber'] as String,
       balance: (json['balance'] as num).toDouble(),
       image_url: json['image_url'] as String,
-      isEnable:json['isEnable'] as bool? ?? false,
       userAddresses: (json['userAddresses'] as List<dynamic>)
           .map((e) => UserAddress.fromJson(e as Map<String, dynamic>))
           .toList(),
       userBanks: (json['userBanks'] as List<dynamic>)
           .map((e) => UserBank.fromJson(e as Map<String, dynamic>))
           .toList(),
+      isEnable: json['isEnable'] as bool,
     );
 
 Map<String, dynamic> _$UserEditRequestToJson(UserEditRequest instance) =>

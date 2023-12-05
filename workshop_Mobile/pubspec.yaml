@@ -10,12 +10,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   google_nav_bar: ^5.0.6
   smooth_page_indicator: ^1.1.0
   flutter_signin_button: ^2.0.0
   qr_flutter: ^4.1.0
   cupertino_icons: ^1.0.2
-  http: 1.1.0
+  http: any
   get: ^4.6.6
   shared_preferences: ^2.2.2
   json_annotation: ^4.8.1
@@ -26,14 +28,17 @@ dependencies:
   lottie: ^2.7.0
   qr_code_scanner: ^1.0.1
   url_launcher: ^6.2.1
-  google_fonts: ^6.1.0
+  google_fonts: any
   table_calendar: ^3.0.9
-  google_sign_in: ^6.1.6
-  flutter_facebook_auth: ^6.0.3
+  google_sign_in: any
+  flutter_facebook_auth: any
   oauth2: ^2.0.2
-  github: ^9.20.0
   webview_flutter: ^4.4.2
   provider: ^6.1.1
+
+  flutter_inappwebview: ^5.8.0
+  video_player: ^2.6.0
+  chewie: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
