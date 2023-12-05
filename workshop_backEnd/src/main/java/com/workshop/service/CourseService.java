@@ -3,6 +3,7 @@ package com.workshop.service;
 import com.workshop.dto.CourseDTO.CourseRequest;
 import com.workshop.dto.CourseDTO.CourseResponses;
 import com.workshop.dto.CourseDTO.CourseUpdateRequest;
+import com.workshop.dto.mobile.CourseResponsesMobi;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,7 @@ public interface CourseService {
     List<CourseResponses> listCourseTeacher();
     boolean addDiscountToStudent(Long Course_id,List<Long> List_Student_id);
     List<CourseResponses> listCourseTeacherById(Long id);
+    List<CourseResponsesMobi> listCourseStudentById();
     //Layer Website
     List<CourseResponses>listCourseEnable();
     int checkCodeDiscount(String discountCode);

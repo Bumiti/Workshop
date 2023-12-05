@@ -2,7 +2,9 @@ package com.workshop.controller;
 
 import com.workshop.config.ApiResponse;
 import com.workshop.config.cloud.ResponseRequestOptions;
+import com.workshop.dto.CourseDTO.CourseResponses;
 import com.workshop.dto.RequestDTO.RequestDTO;
+import com.workshop.dto.mobile.CourseResponsesMobi;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.event.RenewPasswordEvent;
@@ -22,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user/")
@@ -141,6 +144,19 @@ public class StudentController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse<>
                     ("Error", "An error occurred: " + e.getMessage(), null));
+        }
+    }
+    @Operation(summary = "Danh Sách Khóa Học đã đăng kí Của Học Sinh ")
+    @GetMapping("course/list/{id}")
+    public ResponseEntity<ApiResponse<?>> listWorkShopStudent() {
+        try {
+            List<CourseResponsesMobi> listCourse = courseService.listCourseStudentById();
+            System.out.print(listCourse);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>("success", "List of Courses", listCourse));
+        } catch (RuntimeException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>("error", exception.getMessage(), null));
         }
     }
 }

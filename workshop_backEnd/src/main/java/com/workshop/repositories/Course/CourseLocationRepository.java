@@ -1,5 +1,6 @@
 package com.workshop.repositories.Course;
 
+import com.workshop.model.courseModel.Course;
 import com.workshop.model.courseModel.CourseLocation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,7 +14,7 @@ import java.util.List;
 @Repository
 public interface CourseLocationRepository extends JpaRepository<CourseLocation,Long> {
 
-
+    List<CourseLocation> findCourseLocationsByCourses(Course course);
     CourseLocation findCourseLocationById(Long id);
 
     @Transactional

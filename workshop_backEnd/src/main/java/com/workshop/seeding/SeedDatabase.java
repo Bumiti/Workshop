@@ -59,7 +59,7 @@ public class SeedDatabase {
             addServiceManager();
             addRandomTeachers();
             addLocation();
-           addCourse();
+//           addCourse();
             createSeedStatusFile();
         }
 

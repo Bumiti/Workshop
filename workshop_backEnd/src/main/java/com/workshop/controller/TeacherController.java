@@ -216,26 +216,6 @@ public class TeacherController {
                     ("error", "The Course NO_CONTENT", null));
         }
     }
-    //    @Operation(summary = "Thêm Học Sinh Vào khóa Học")
-//    @PostMapping("course/addListStudent/{id}/")
-//    public ResponseEntity<ApiResponse<?>> AddEStudentCourse(@PathVariable Long id, @RequestBody List<Long> studentIds) {
-//        try {
-//            boolean result = courseService.AddEnrolledStudentsToCourseById(id, studentIds);
-//            if (result) {
-//                return ResponseEntity.status(HttpStatus.CREATED)
-//                        .body(new ApiResponse<>("success", "List of Students has been added to the Course", result));
-//            } else {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                        .body(new ApiResponse<>("error", "No Students Found", null));
-//            }
-//        } catch (RuntimeException ex) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body(new ApiResponse<>("error", ex.getMessage(), null));
-//        } catch (Exception ex) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body(new ApiResponse<>("error", "An error occurred while adding students to the course", null));
-//        }
-//    }
     @Operation(summary = "Gửi ngẩu Nhiên Discount Workshop kế tiếp cho list Student")
     @PostMapping("course/addListStudent/{id}/")
     public ResponseEntity<ApiResponse<?>> SendDiscountToListStudent(@PathVariable Long id, @RequestBody List<Long> studentIds) {

@@ -13,6 +13,7 @@ import { format } from 'date-fns';
 import styles from './edit.module.css';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ClearIcon from '@mui/icons-material/Clear';
+
 interface EditProps {
   params: {
     id: number;
@@ -500,20 +501,20 @@ const EditCoursePage = ({ params }: EditProps) => {
                               />
                             </Grid>
                             <Grid item xs={12} md={6}>
-                            {courseData?.courseLocations?.[0]?.locationDTO?.statusAvailable === 'available' ? (
-                              <div>
-                                <CheckCircleIcon fontSize="small" style={{ color: 'green' }} /> 
-                                <span style={{ marginLeft: '5px', color: 'green' }}>Available Now</span>
-                              </div>
-                            ) : (
-                              <div>
-                                <ClearIcon fontSize="small" style={{ color: 'red' }} />
-                                <span style={{ marginLeft: '5px', color: 'red' }}>Not Available Now</span>
-                              </div>
-                            )}
+                              {courseData?.courseLocations?.[0]?.locationDTO?.statusAvailable === 'available' ? (
+                                <div>
+                                  <CheckCircleIcon fontSize="small" style={{ color: 'green' }} />
+                                  <span style={{ marginLeft: '5px', color: 'green' }}>Available Now</span>
+                                </div>
+                              ) : (
+                                <div>
+                                  <ClearIcon fontSize="small" style={{ color: 'red' }} />
+                                  <span style={{ marginLeft: '5px', color: 'red' }}>Not Available Now</span>
+                                </div>
+                              )}
+                            </Grid>
                           </Grid>
-                          </Grid>
-                        
+
 
                         </Box>
 
@@ -536,7 +537,7 @@ const EditCoursePage = ({ params }: EditProps) => {
                             label="Discount Name"
                             name="name"
                             onChange={handleInputChange}
-                            value={courseData.discountDTOS[0].name}
+                            value={courseData.discountDTOS[0]?.name}
                             variant="outlined"
                             disabled
 
@@ -548,7 +549,7 @@ const EditCoursePage = ({ params }: EditProps) => {
                             label="Description"
                             name="description"
                             onChange={(e) => handleDiscountInputChange(e, 'description')}
-                            value={courseData.discountDTOS[0].description}
+                            value={courseData.discountDTOS[0]?.description}
                             variant="outlined"
                             disabled
 
@@ -560,7 +561,7 @@ const EditCoursePage = ({ params }: EditProps) => {
                             label="Quantity"
                             name="quantity"
                             onChange={(e) => handleDiscountInputChange(e, 'quantity')}
-                            value={courseData.discountDTOS[0].quantity}
+                            value={courseData.discountDTOS[0]?.quantity}
                             type="number"
                             variant="outlined"
                             disabled
@@ -573,7 +574,7 @@ const EditCoursePage = ({ params }: EditProps) => {
                             label="Value Discount"
                             name="valueDiscount"
                             onChange={(e) => handleDiscountInputChange(e, 'valueDiscount')}
-                            value={courseData.discountDTOS[0].valueDiscount}
+                            value={courseData.discountDTOS[0]?.valueDiscount}
                             type="number"
                             variant="outlined"
                             disabled
@@ -586,7 +587,7 @@ const EditCoursePage = ({ params }: EditProps) => {
                             label="Remaining Uses"
                             name="remainingUses"
                             onChange={(e) => handleDiscountInputChange(e, 'remainingUses')}
-                            value={courseData.discountDTOS[0].remainingUses}
+                            value={courseData.discountDTOS[0]?.remainingUses}
                             type="number"
                             variant="outlined"
                             disabled
@@ -600,7 +601,10 @@ const EditCoursePage = ({ params }: EditProps) => {
                             name="redemptionDate"
                             type="datetime-local"
                             onChange={(e) => handleDiscountInputChange(e, 'redemptionDate')}
-                            value={format(new Date(courseData.discountDTOS[0].redemptionDate), 'yyyy-MM-dd\'T\'HH:mm')} InputLabelProps={{ shrink: true }}
+                            value={courseData.discountDTOS[0]?.redemptionDate
+                              ? format(new Date(courseData.discountDTOS[0].redemptionDate), 'yyyy-MM-dd\'T\'HH:mm')
+                              : format(new Date(), 'yyyy-MM-dd\'T\'HH:mm')}
+                            InputLabelProps={{ shrink: true }}
                             disabled
                             variant="outlined"
                           />
