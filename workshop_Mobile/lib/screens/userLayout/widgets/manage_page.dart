@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:workshop_mobi/api/api_service.dart';
+import 'package:workshop_mobi/model/student/workshop_endroll.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/my_course.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/my_schedule.dart';
 
 class ManagePage extends StatefulWidget {
   final String? token;
-  const ManagePage({required this.token, Key? key}) : super(key: key);
+
+  ManagePage({required this.token, Key? key}) : super(key: key);
 
   @override
   State<ManagePage> createState() => _ManagePageState();
 }
 
 class _ManagePageState extends State<ManagePage> {
-  double targetHeightFactor = 0.06; // Tỉ lệ bạn muốn sử dụng
+  double targetHeightFactor = 0.06;
   late Future<String?> userName;
- 
+
   @override
   void initState() {
-    print(widget.token );
     super.initState();
     userName = _getUserName();
   }
 
   Future<String?> _getUserName() async {
-    
     const FlutterSecureStorage storage = FlutterSecureStorage();
     String? userName = await storage.read(key: 'userName');
     return userName;
@@ -37,12 +38,25 @@ class _ManagePageState extends State<ManagePage> {
     return MediaQuery.of(context).size.width * width;
   }
 
+  Future<List<workshopEndrollResponses>> fetchWorkshopEndroll(String token) async {
+    try {
+      if (token.isNotEmpty) {
+        final apiService = ApiService();
+        final workshopEndroll = await apiService.listWorkShopByStudent(token);
+        return workshopEndroll ?? [];
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching workshopEndroll: $e');
+      return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    
-    return Scaffold(
-      backgroundColor: const Color(0xFFD7D7D7),
-      body: Column(
+    return SingleChildScrollView(
+      child: Column(
         children: [
           Padding(
             padding: EdgeInsets.symmetric(
@@ -60,37 +74,37 @@ class _ManagePageState extends State<ManagePage> {
                 const Row(
                   children: [
                     Text(
-                      'Your Buyed Workshop',
+                      'Your Bought Workshops',
                     ),
                   ],
                 ),
                 SizedBox(
                   height: convertHeight(0.015),
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: convertWidth(0.015),
+                FutureBuilder<List<workshopEndrollResponses>>(
+                  future: fetchWorkshopEndroll(widget.token ?? ''),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return const Text('Error fetching workshopEndroll');
+                    } else {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            for (var workshop in snapshot.data ?? [])
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: convertWidth(0.015),
+                                ),
+                                child: WorkshopStudentManager(workshopEndroll: workshop),
+                              ),
+                          ],
                         ),
-                        child: const WorkshopStudentManager(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: convertWidth(0.015),
-                        ),
-                        child: const WorkshopStudentManager(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: convertWidth(0.015),
-                        ),
-                        child: const WorkshopStudentManager(),
-                      ),
-                    ],
-                  ),
+                      );
+                    }
+                  },
                 ),
               ],
             ),
@@ -109,23 +123,11 @@ class _ManagePageState extends State<ManagePage> {
                       'Your schedule',
                     ),
                   ],
-                ),              
+                ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: convertWidth(0.015),
-                        ),
-                        child: const MyStudentSchedule(),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: convertWidth(0.015),
-                        ),
-                        child: const MyStudentSchedule(),
-                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: convertWidth(0.015),

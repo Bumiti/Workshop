@@ -18,17 +18,17 @@ CourseResponses _$CourseResponsesFromJson(Map<String, dynamic> json) =>
       type: json['type'] as String,
       teacher: json['teacher'] as String,
       isPublic: json['isPublic'] as bool,
-      studentEnrollments: (json['studentEnrollments'] as List<dynamic>)
-          .map((e) => StudentEnrollment.fromJson(e as Map<String, dynamic>))
+      studentEnrollments: (json['studentEnrollments'] as List<dynamic>?)
+          ?.map((e) => StudentEnrollment.fromJson(e as Map<String, dynamic>))
           .toList(),
-      courseMediaInfos: (json['courseMediaInfos'] as List<dynamic>)
-          .map((e) => CourseMediaInfo.fromJson(e as Map<String, dynamic>))
+      courseMediaInfos: (json['courseMediaInfos'] as List<dynamic>?)
+          ?.map((e) => CourseMediaInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
-      courseLocations: (json['courseLocations'] as List<dynamic>)
-          .map((e) => CourseLocation.fromJson(e as Map<String, dynamic>))
+      courseLocations: (json['courseLocations'] as List<dynamic>?)
+          ?.map((e) => CourseLocation.fromJson(e as Map<String, dynamic>))
           .toList(),
-      discountDTOS: (json['discountDTOS'] as List<dynamic>)
-          .map((e) => DiscountDTO.fromJson(e as Map<String, dynamic>))
+      discountDTOS: (json['discountDTOS'] as List<dynamic>?)
+          ?.map((e) => DiscountDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

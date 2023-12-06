@@ -147,7 +147,7 @@ public class StudentController {
         }
     }
     @Operation(summary = "Danh Sách Khóa Học đã đăng kí Của Học Sinh ")
-    @GetMapping("course/list/{id}")
+    @GetMapping("course/list")
     public ResponseEntity<ApiResponse<?>> listWorkShopStudent() {
         try {
             List<CourseResponsesMobi> listCourse = courseService.listCourseStudentById();

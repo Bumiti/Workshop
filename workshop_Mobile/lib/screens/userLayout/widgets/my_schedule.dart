@@ -25,8 +25,8 @@ class _MyScheduleState extends State<MyStudentSchedule> {
     return Column(
       children: [
         SizedBox(
-           height: screenHeight * 0.4,
-          width: screenWidth * 0.9,
+          height: screenHeight * 0.8 , // Adjusted height to avoid bottom overflow
+          width: screenWidth * 0.8,
           child: TableCalendar(
             locale: 'en_US',
             rowHeight: 35,

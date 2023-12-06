@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:workshop_mobi/model/student/workshop_endroll.dart';
 import 'package:workshop_mobi/model/userInforResponse.dart';
 import 'package:workshop_mobi/model/workshopResponses.dart';
 import 'package:workshop_mobi/utils/api_endpoints.dart';
@@ -163,105 +164,50 @@ class ApiService {
     }
   }
 
-  /// Home Landing APi
-  ///
-  // Hàm để chuyển đổi dữ liệu JSON thành danh sách đối tượng CourseResponses
   List<CourseResponses> parseWorkshopList(String responseBody) {
-    // Assuming your API response is in JSON format
     Map<String, dynamic> jsonResponse = json.decode(responseBody);
-    // Assuming the actual workshop data is under the key 'data'
     List<dynamic> workshopData = jsonResponse['data'];
-    // Convert each workshop data into a CourseResponses object
     List<CourseResponses> workshopList = workshopData
         .map((workshopJson) => CourseResponses.fromJson(workshopJson))
         .toList();
-
     return workshopList;
   }
-
+ List<workshopEndrollResponses> parseWorkshopEndroll(String responseBody) {
+    Map<String, dynamic> jsonResponse = json.decode(responseBody);
+    List<dynamic> workshopData = jsonResponse['data'];
+    List<workshopEndrollResponses> workshopList = workshopData
+        .map((workshopJson) => workshopEndrollResponses.fromJson(workshopJson))
+        .toList();
+    return workshopList;
+  }
   Future<List<CourseResponses>> listworkshop() async {
     var headers = {'Content-Type': 'application/json'};
     try {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.homePageEndPoints.listWorkshop);
-
       http.Response response = await http.get(url, headers: headers);
-      // print(response.body);
 
       List<CourseResponses> workshopList = parseWorkshopList(response.body);
-      // print(workshopList[4].name);
-      // print(workshopList[4].description);
-      // print(workshopList[4].endDate);
-      // print(workshopList[4].id);
-      // print(workshopList[4].isPublic);
-      // print(workshopList[4].price);
-      //  print(workshopList[4].startDate);
-      //   print(workshopList[4].teacher);
-      //    print(workshopList[4].student_count);
-      //    print(workshopList[4].courseLocations[0].id);
-      //     print(workshopList[4].courseLocations[0].Area);
-
-      //    print(workshopList[4].courseMediaInfos[0].id);
-      //     print(workshopList[4].courseMediaInfos[0].thumbnailSrc);
-      //        print(workshopList[4].courseMediaInfos[0].title);
-      //        print(workshopList[4].courseMediaInfos[0].urlImage);
-      //         print(workshopList[4].courseMediaInfos[0].urlMedia);
-
-      //    print(workshopList[4].discountDTOS[0].id);
-
 
       return workshopList;
-
-      // if (response.statusCode == 200)
-      // {
-      //   final json = jsonDecode(response.body);
-      //   if (json['status'] == 'success') {
-      //     var data = json['data'];
-      //     var user = data['user'];
-      //     return user;
-      //   } else if (json['code'] == 1) {
-      //     throw jsonDecode(response.body)['message'];
-      //   }
-      // } else {
-      //   throw jsonDecode(response.body)["Message"] ?? "Unknown Error Occurred";
-      // }
     } catch (error) {
       rethrow;
     }
   }
-  // Future<bool> deleteUserAddress(
-  //     String token, int userId, int userAddressId) async {
-  //   var headers = {
-  //     'Content-Type': 'application/json',
-  //     'Authorization': 'Bearer $token',
-  //   };
+  Future<List<workshopEndrollResponses>> listWorkShopByStudent(String token) async {
+      var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+     try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.studentEndPoints.workshopEndroll);
+      final http.Response response = await http.get(url, headers: headers);
 
-  //   var url = Uri.parse(
-  //       '${ApiEndPoints.baseUrl}${ApiEndPoints.adminEndpoints.deleteAddressAccount}?id=$userId&idAddress=$userAddressId');
-  //   var data = {'id': userId, 'idAddress': userAddressId};
-  //   // print(url);
-  //   try {
-  //     final http.Response response = await http.delete(
-  //       url,
-  //       headers: headers,
-  //       body: jsonEncode(data),
-  //     );
-
-  //     if (response.statusCode == 202) {
-  //       final dynamic jsonResponse = jsonDecode(response.body);
-
-  //       if (jsonResponse['status'] == 'success') {
-  //         // Thay đổi trạng thái thành công
-  //         return true;
-  //       } else {
-  //         throw jsonResponse['message'] ?? 'Failed to Delete status';
-  //       }
-  //     } else {
-  //       final dynamic errorResponse = jsonDecode(response.body);
-  //       throw errorResponse?['message'] ?? 'Unknown Error Occurred';
-  //     }
-  //   } catch (error) {
-  //     throw error.toString();
-  //   }
-  // }
+        List<workshopEndrollResponses> workshopList = parseWorkshopEndroll(response.body);
+      return workshopList;
+    } catch (error) {
+      throw error.toString(); // Convert the error to a string
+    }
+  }
 }

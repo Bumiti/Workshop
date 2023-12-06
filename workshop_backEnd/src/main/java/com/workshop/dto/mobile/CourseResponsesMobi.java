@@ -32,8 +32,6 @@ public class CourseResponsesMobi {
     @NotNull
     private int student_endroll;
     @NotNull
-    private String type;
-    @NotNull
     private String Teacher;
     @NotNull
     private boolean isPublic;

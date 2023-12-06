@@ -8,12 +8,11 @@ import 'package:workshop_mobi/screens/userLayout/widgets/drawer.dart';
 import 'package:workshop_mobi/screens/home_page.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/manage_page.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/wallet_page.dart';
-import 'package:workshop_mobi/screens/userLayout/widgets/workshop_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import  'package:workshop_mobi/api/api_service.dart';
+
+
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
-
   @override
   State<UserHomeScreen> createState() => _UserHomeScreenState();
 }
@@ -21,10 +20,8 @@ class UserHomeScreen extends StatefulWidget {
 class _UserHomeScreenState extends State<UserHomeScreen> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
-  // List<User> userList = [];
   bool showLoginPage = true;
   int selectedIndex = 0;
-
   void navigateBottomBar(int index) {
     setState(() {
       selectedIndex = index;
@@ -32,12 +29,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   @override
-  Widget build(BuildContext context)
-  {
-     final apiService = ApiService();
-
-    
-   
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       bottomNavigationBar: MyBottomNavBar(
@@ -52,17 +44,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       body: pagesBuilder()[selectedIndex],
     );
   }
-  
 
-
-  //pages to display
- // Function to asynchronously create the list of pages
   List<Widget> pagesBuilder() {
-    // Use this function to fetch the token asynchronously
     Future<String> getToken() async {
       return await _secureStorage.read(key: 'token') ?? '';
     }
 
+   
     return [
       // Home page
       const PublicHomeLanding(),
@@ -73,13 +61,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           } else {
-            return ManagePage(token: snapshot.data ?? '');
+            return ManagePage(
+              token: snapshot.data ?? '',
+            );
           }
         },
       ),
-      // Workshop page
-      WorkshopManagerStudent(),
-      // Wallet page
+      // WorkshopManagerStudent(),
       const StudentWalletPage(),
     ];
   }
