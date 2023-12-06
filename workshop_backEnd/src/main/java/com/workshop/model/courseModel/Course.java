@@ -30,12 +30,10 @@ public class Course extends BaseModel {
     private boolean isPublic = false;
     private String type;
 
-    // Quan hệ nhiều một với giáo viên
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     private User teacher;
 
-    // Quan hệ một nhiều với học sinh đã đăng ký
     @OneToMany(mappedBy = "courses")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<CourseEnrollment> enrolledStudents;

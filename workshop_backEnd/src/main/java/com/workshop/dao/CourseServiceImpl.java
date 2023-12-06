@@ -2,9 +2,9 @@ package com.workshop.dao;
 
 import com.workshop.config.MapperGeneric;
 import com.workshop.dto.CourseDTO.*;
+import com.workshop.dto.mobile.CourseResponsesMobi;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.event.SendDiscountCodeEvent;
-import com.workshop.event.SendQrCodeEvent;
 import com.workshop.model.*;
 import com.workshop.model.courseModel.*;
 import com.workshop.model.userModel.User;
@@ -33,7 +33,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseEnrollmentRepository courseEnrollmentRepository;
     private final LocationRepository locationRepository;
     private final ApplicationEventPublisher publisher;
-
+    private final QrCodeTickerRepository qrCodeTickerRepository;
     boolean isCourse(Long Id) {
         Course course_exit = courseRepository.findCourseById(Id);
         return course_exit != null;
@@ -300,33 +300,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public boolean addDiscountToStudent(Long Course_id, List<Long> studentIds) {
         try {
-//            Course course_exit = courseRepository.findCourseById(Course_id);
-//            if (course_exit!=null && course_exit.isPublic()){
-//                long course_id = course_exit.getId();
-//                List<CourseDiscount> courseDiscountsList = courseDiscountRepository.findDiscountsByCourseIdAndStatus(course_id,CourseDiscount.Status.Available);
-//                List<CourseDiscount> selectedDiscounts = new ArrayList<>();
-//                for(Long id : studentIds){
-//
-//                    Random random = new Random();
-//                    Optional<User> user = userRepository.findById(id);
-//                    if(user.isPresent()){
-//                        User UserExit = user.get();
-//                        CourseDiscount selectedDiscount = getRandomAndNotRepeated(courseDiscountsList, selectedDiscounts, random);
-//                        assert selectedDiscount != null;
-//                        publisher.publishEvent((new SendDiscountCodeEvent(
-//                                UserExit.getUser_name(),
-//                                UserExit.getEmail(),
-//                                course_exit.getName(),
-//                                selectedDiscount.getCode(),
-//                                selectedDiscount.getDiscount().getValueDiscount())));
-//                        selectedDiscounts.add(selectedDiscount);
-//                        courseDiscountRepository.updateCourseDiscountStatus(selectedDiscount.getId(),CourseDiscount.Status.Email_Sent);
-//                    }
-//                }
-//                return true;
-//            } else {
-//                return false;
-//            }
             Course course_exit = courseRepository.findCourseById(Course_id);
             if (course_exit != null && course_exit.isPublic()) {
                 long course_id = course_exit.getId();
@@ -362,15 +335,6 @@ public class CourseServiceImpl implements CourseService {
             return false;
         }
     }
-//    private static CourseDiscount getRandomAndNotRepeated(List<CourseDiscount> availableDiscounts, List<CourseDiscount> selectedDiscounts, Random random) {
-//        List<CourseDiscount> remainingDiscounts = new ArrayList<>(availableDiscounts);
-//        remainingDiscounts.removeAll(selectedDiscounts);
-//        if (!remainingDiscounts.isEmpty()) {
-//            int randomIndex = random.nextInt(remainingDiscounts.size());
-//            return remainingDiscounts.get(randomIndex);
-//        }
-//        return null;
-//    }
     @Override
     public List<CourseResponses> listCourseEnable() {
         List<Course> coursesEntityList = courseRepository.listCoursePublic();
@@ -643,5 +607,44 @@ public class CourseServiceImpl implements CourseService {
         } catch (RuntimeException runtimeException) {
             throw new RuntimeException(runtimeException);
         }
+    }
+    @Override
+    public List<CourseResponsesMobi> listCourseStudentById()
+    {
+        User user = userService.getCurrentUserDetails();
+       if(user!=null){
+           List<CourseResponsesMobi> courseResponsesMobiList = new ArrayList<>();
+           List<Course> coursesEntityList = courseEnrollmentRepository.findEnrolledCoursesByStudent(user);
+           if((long) coursesEntityList.size() >0){
+               for (Course course : coursesEntityList)
+               {
+                   QrToken qrToken = qrCodeTickerRepository.findQrTokensByUserAndCourse(user,course);
+                   CourseResponsesMobi courseResponsesMobi = new CourseResponsesMobi();
+                   List<CourseResponsesMobi.CourseLocationMobi> courseLocationMobi =  new ArrayList<>();
+                   for(CourseLocation courseLocation : course.getCourseLocation()){
+                       CourseResponsesMobi.CourseLocationMobi locationMobi= new CourseResponsesMobi.CourseLocationMobi();
+                       locationMobi.setName(courseLocation.getLocations().getName())
+                       .setId(courseLocation.getId()).setArea(courseLocation.getArea())
+                        .setDescription(courseLocation.getLocations().getDescription())
+                         .setAddress(courseLocation.getLocations().getAddress())
+                               .setSchedule_Date(courseLocation.getSchedule_Date()).setStatusAvailable(courseLocation.getLocations().getStatusAvailable());
+                       courseLocationMobi.add(locationMobi);
+                   }
+                   long getEnrollmentCountByCourse = courseEnrollmentRepository.countEnrollmentsByCourse(course);
+
+                   courseResponsesMobi.setId(course.getId())
+                           .setDescription(course.getDescription()).setName(course.getName())
+                           .setStartDate(course.getStartDate()).setEndDate(course.getEndDate()).setCourseLocations(courseLocationMobi)
+                           .setPrice(course.getPrice()).setStudent_count(course.getStudent_count()).setStudent_endroll((int) getEnrollmentCountByCourse)
+                           .setTeacher(course.getTeacher().getFull_name()).setUrlQrCode(qrToken.getUrlQrCode());
+                   courseResponsesMobiList.add(courseResponsesMobi);
+               }
+               return courseResponsesMobiList;
+           }else{
+               return courseResponsesMobiList;
+           }
+       }else{
+           return null;
+       }
     }
 }

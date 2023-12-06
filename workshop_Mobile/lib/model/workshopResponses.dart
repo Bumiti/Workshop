@@ -32,16 +32,14 @@ class CourseResponses {
     required this.type,
     required this.teacher,
     required this.isPublic,
-    required this.studentEnrollments,
-    required this.courseMediaInfos,
-    required this.courseLocations,
-    required this.discountDTOS,
-  }) {
-    // studentEnrollments ??= [];
-    // courseMediaInfos ??= [];
-    // courseLocations ??= [];
-    // discountDTOS ??= [];
-  }
+    List<StudentEnrollment>? studentEnrollments,
+    List<CourseMediaInfo>? courseMediaInfos,
+    List<CourseLocation>? courseLocations,
+    List<DiscountDTO>? discountDTOS,
+  })  : studentEnrollments = studentEnrollments ?? [],
+        courseMediaInfos = courseMediaInfos ?? [],
+        courseLocations = courseLocations ?? [],
+        discountDTOS = discountDTOS ?? [];
 
   factory CourseResponses.fromJson(Map<String, dynamic> json) {
     return CourseResponses(
@@ -56,8 +54,7 @@ class CourseResponses {
       teacher: json['teacher'] as String? ?? 'empty',
       isPublic: json['isPublic'] as bool? ?? false,
       studentEnrollments: (json['studentEnrollments'] as List<dynamic>?)
-              ?.map(
-                  (e) => StudentEnrollment.fromJson(e as Map<String, dynamic>))
+              ?.map((e) => StudentEnrollment.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
       courseMediaInfos: (json['courseMediaInfos'] as List<dynamic>?)
@@ -74,6 +71,7 @@ class CourseResponses {
           [],
     );
   }
+  
   Map<String, dynamic> toJson() => _$CourseResponsesToJson(this);
 }
 
@@ -122,6 +120,7 @@ class CourseMediaInfo {
       title: json['title'] as String? ?? 'empty',
     );
   }
+  
   Map<String, dynamic> toJson() => _$CourseMediaInfoToJson(this);
 }
 
@@ -178,7 +177,7 @@ class locationResponse {
       description: json['description'] as String? ?? 'empty',
     );
   }
-
+  
   Map<String, dynamic> toJson() => _$locationResponseToJson(this);
 }
 
@@ -213,6 +212,6 @@ class DiscountDTO {
       remainingUses: json['remainingUses'] as int? ?? 0,
     );
   }
-
+  
   Map<String, dynamic> toJson() => _$DiscountDTOToJson(this);
 }

@@ -8,7 +8,7 @@ class CoursesSection extends StatelessWidget {
   final List<Icon> catIcons;
   
   final List<CourseResponses> workshopList;
-  
+
   CoursesSection({
     required this.catNames,
     required this.catColors,
@@ -18,7 +18,9 @@ class CoursesSection extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
+     
     return Padding(
       padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
       child: Column(
@@ -108,7 +110,7 @@ class CoursesSection extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(10),
                           child: Image.network(
-                            "${workshopList[index].courseMediaInfos[0].thumbnailSrc}",
+                            "${workshopList[index].courseMediaInfos[0].urlImage}",
                             width: 100,
                             height: 100,
                           ),

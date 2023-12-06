@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:workshop_mobi/model/student/workshop_endroll.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/workshop_page.dart';
 
 class WorkshopStudentManager extends StatelessWidget {
+    final workshopEndrollResponses workshopEndroll;
   // ignore: use_key_in_widget_constructors
-  const WorkshopStudentManager({Key? key});
+  const WorkshopStudentManager({Key? key, required this.workshopEndroll});
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
     return Container(
-      width: screenWidth * 0.8, // Adjust width based on screen width
-      height: screenHeight * 0.210, // Adjust height based on screen height
+      width: screenWidth * 0.8, 
+      height: screenHeight * 0.240,
       decoration: ShapeDecoration(
         gradient: const LinearGradient(
           begin: Alignment(0.98, -0.18),
@@ -25,96 +26,86 @@ class WorkshopStudentManager extends StatelessWidget {
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-        child: Column(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                child: Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            child: Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                   Text(
+                    '${workshopEndroll.name}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                   Text(
+                    '${workshopEndroll.description}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 9.5,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  Row(
                     children: [
-                      const Text(
-                        'Acoustic Guitar',
+                       Text(
+                        '${workshopEndroll.courseLocations[0].schedule_Date}',
                         style: TextStyle(
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          color: Colors.white,
+                          fontSize: 11,
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const Text(
-                        'The course will make you a master guitarist in less than 3 weeks.',
-                        style: TextStyle(
+                      const Spacer(),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
                           color: Colors.white,
-                          fontSize: 9.5,
-                          fontWeight: FontWeight.w300,
                         ),
-                      ),
-                      const Text(
-                        'Keep your energy and stamina hyped up in every note you play...',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 9.5,
-                          fontWeight: FontWeight.w300,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                      Row(
-                        children: [
-                          const Text(
-                            '10/10/2023',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 11,
-                            ),
-                          ),
-                          const Spacer(),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              color: Colors.white,
-                            ),
-                            alignment: Alignment.centerLeft,
-                            height: 28,
-                            width: screenWidth * 0.2,
-                            child: TextButton(
-                              onPressed: () {
-                                // Chuyển đến trang mới khi nhấn vào nút "Explore"
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => WorkshopManagerStudent(),
-                                ),
-                              );
-                              },
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Explore',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                ],
+                        alignment: Alignment.centerLeft,
+                        height: 28,
+                        width: screenWidth * 0.2,
+                        child: TextButton(
+                          onPressed: () {
+                            // Chuyển đến trang mới khi nhấn vào nút "Explore"
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => WorkshopManagerStudent(workshopEndroll: workshopEndroll,),
                               ),
-                            ),
+                            );
+                          },
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Explore',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
-                ),
+                ],
               ),
-            ]),
+            ),
+          ),
+        ]),
       ),
     );
   }

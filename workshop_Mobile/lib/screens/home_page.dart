@@ -7,7 +7,7 @@ import 'package:workshop_mobi/widgets/top_mentors.dart';
 import 'package:workshop_mobi/widgets/top_rating.dart';
 
 class PublicHomeLanding extends StatefulWidget {
-  const PublicHomeLanding({super.key});
+  const PublicHomeLanding({Key? key});
 
   @override
   State<PublicHomeLanding> createState() => _HomePageState();
@@ -40,8 +40,6 @@ class _HomePageState extends State<PublicHomeLanding> {
     Icon(Icons.emoji_events, color: Colors.white, size: 30),
   ];
 
- 
-
   @override
   Widget build(BuildContext context) {
     final apiService = ApiService();
@@ -49,21 +47,22 @@ class _HomePageState extends State<PublicHomeLanding> {
     // Use FutureBuilder to handle asynchronous operations
     return Scaffold(
       body: FutureBuilder<List<CourseResponses>>(
+        
         future: apiService.listworkshop(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // If the Future is still running, show a loading indicator
-            return CircularProgressIndicator();
+              
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             // If there's an error, display an error message
             return Text('Error: ${snapshot.error}');
           } else {
-            // If the Future is complete and successful, display the data
+
             return ListView(
               children: [
                 // card
                 Container(
-                  padding: EdgeInsets.only(top: 20, left: 15, right: 15),
+                  padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
                   child: Row(
                     children: [
                       Expanded(
@@ -71,7 +70,7 @@ class _HomePageState extends State<PublicHomeLanding> {
                         child: Container(
                           clipBehavior: Clip.antiAlias,
                           decoration: ShapeDecoration(
-                            gradient: LinearGradient(
+                            gradient: const LinearGradient(
                               begin: Alignment(0.00, -1.00),
                               end: Alignment(0, 1),
                               colors: [Color(0xFF5769F8), Color(0xFF5769F8)],
@@ -89,11 +88,13 @@ class _HomePageState extends State<PublicHomeLanding> {
 
                 // title courses
                 CoursesSection(
+                  
                   catNames: catNames,
                   catColors: catColors,
                   catIcons: catIcons,
-                
-                  workshopList: snapshot.data!,
+                  workshopList: snapshot.hasData
+                      ? snapshot.data!
+                      : [],
                 ),
 
                 // top mentor

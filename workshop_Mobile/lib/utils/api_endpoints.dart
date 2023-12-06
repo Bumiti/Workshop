@@ -26,7 +26,9 @@ class _HomePageEndPoints {
 }
 class _StudentEndPoints {
    final String studentInfo = 'user/detail';
-   final String studentByWorkshop = 'user/byCourse';
+   final String studentBuyWorkshop = 'user/byCourse';
+   final String workshopEndroll = 'user/course/list';
+
 }
 class _TeacherEndPoints {
   final String listWorshop = 'seller/course/list';
