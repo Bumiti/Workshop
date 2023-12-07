@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'package:flutter/material.dart';
 import 'package:workshop_mobi/model/workshopResponses.dart';
 import 'package:workshop_mobi/screens/course_screen.dart';
@@ -13,24 +15,24 @@ class CoursesSection extends StatelessWidget {
     required this.catNames,
     required this.catColors,
     required this.catIcons,
-
     required this.workshopList,
   });
 
   @override
-  Widget build(BuildContext context) 
-  {
-     
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Padding(
-      padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+      padding: EdgeInsets.only(top: screenHeight * 0.025, left: screenWidth * 0.05, right: screenWidth * 0.05),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GridView.builder(
             itemCount: catNames.length,
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 1.1,
             ),
@@ -38,19 +40,19 @@ class CoursesSection extends StatelessWidget {
               return Column(
                 children: [
                   Container(
-                    height: 60,
-                    width: 60,
+                    height: screenWidth * 0.15,
+                    width: screenWidth * 0.15,
                     decoration: BoxDecoration(
                       color: catColors[index],
                       shape: BoxShape.circle,
                     ),
                     child: Center(child: catIcons[index]),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: screenHeight * 0.01),
                   Text(
                     catNames[index],
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: screenHeight * 0.022,
                       fontWeight: FontWeight.w500,
                       color: Colors.black.withOpacity(0.7),
                     ),
@@ -59,32 +61,32 @@ class CoursesSection extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: 10),
-          const Row(
+          SizedBox(height: screenHeight * 0.01),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Courses",
+                "Workshop",
                 style: TextStyle(
-                  fontSize: 23,
+                  fontSize: screenHeight * 0.028,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
                 "See All",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: screenHeight * 0.022,
                   fontWeight: FontWeight.w500,
                   color: Color(0xFF674AEF),
                 ),
               ),
             ],
           ),
-          const SizedBox(
-            height: 10,
+          SizedBox(
+            height: screenHeight * 0.015,
           ),
           SizedBox(
-            height: 230,
+            height: screenHeight * 0.37,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: workshopList.length,
@@ -99,36 +101,36 @@ class CoursesSection extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                    margin: EdgeInsets.only(right: screenWidth * 0.02),
+                    padding: EdgeInsets.symmetric(vertical: screenHeight * 0.04, horizontal: screenWidth * 0.02),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(screenWidth * 0.04),
                       color: const Color.fromARGB(94, 94, 94, 94),
                     ),
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: EdgeInsets.all(screenWidth * 0.02),
                           child: Image.network(
                             "${workshopList[index].courseMediaInfos[0].urlImage}",
-                            width: 100,
-                            height: 100,
+                            width: screenWidth * 0.2,
+                            height: screenWidth * 0.2,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: screenHeight * 0.01),
                         Text(
                           workshopList[index].name,
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: screenHeight * 0.028,
                             fontWeight: FontWeight.w600,
                             color: Colors.black.withOpacity(0.6),
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        const Text(
+                        SizedBox(height: screenHeight * 0.01),
+                        Text(
                           "55 Videos",
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: screenHeight * 0.022,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

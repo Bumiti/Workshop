@@ -4,10 +4,10 @@ class Pngwing1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 119,
+      width: MediaQuery.of(context).size.width*0.19,
       height: 140,
       decoration: ShapeDecoration(
-        image: DecorationImage(
+        image: const DecorationImage(
           image: AssetImage('lib/assets/card.png'),
           fit: BoxFit.fill,
         ),
@@ -23,7 +23,7 @@ class YourTextAndImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,7 +32,7 @@ class YourTextAndImageWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Get Last Workshop',
                 style: TextStyle(
                   fontSize: 18,
@@ -40,8 +40,8 @@ class YourTextAndImageWidget extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 6),
-              Text(
+              const SizedBox(height: 6),
+              const Text(
                 'Access largest set of courses',
                 style: TextStyle(
                   fontSize: 16,
@@ -49,7 +49,7 @@ class YourTextAndImageWidget extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              Text(
+              const Text(
                 'provided by us on your',
                 style: TextStyle(
                   fontSize: 16,
@@ -57,7 +57,7 @@ class YourTextAndImageWidget extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              Text(
+              const Text(
                 'interest',
                 style: TextStyle(
                   fontSize: 16,
@@ -65,16 +65,16 @@ class YourTextAndImageWidget extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(250, 246, 121, 105),
+                  color: const Color.fromARGB(250, 246, 121, 105),
                   borderRadius: BorderRadius.circular(20.0), // Adjust the border radius
                 ),
                 child: Container(
                   padding: const EdgeInsets.all(8.0),
                   margin:  const EdgeInsets.only( left: 25, right: 25),
-                  child: Text(
+                  child: const Text(
                     'Get Now',
                     style: TextStyle(
                       fontSize: 16,

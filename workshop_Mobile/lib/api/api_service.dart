@@ -181,19 +181,26 @@ class ApiService {
     return workshopList;
   }
   Future<List<CourseResponses>> listworkshop() async {
-    var headers = {'Content-Type': 'application/json'};
-    try {
-      var url = Uri.parse(
-          ApiEndPoints.baseUrl + ApiEndPoints.homePageEndPoints.listWorkshop);
-      http.Response response = await http.get(url, headers: headers);
+  var headers = {'Content-Type': 'application/json'};
+  try {
+    var url = Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.homePageEndPoints.listWorkshop);
+    http.Response response = await http.get(url, headers: headers);
 
+    if (response.statusCode == 202) {
       List<CourseResponses> workshopList = parseWorkshopList(response.body);
-
       return workshopList;
-    } catch (error) {
-      rethrow;
+    } else {
+      // Xử lý mã lỗi cụ thể nếu có
+      print('Error: ${response.statusCode}');
+      return []; 
     }
+  } catch (error) {
+    // Xử lý lỗi nếu có
+    print('Error: $error');
+    rethrow;
   }
+}
+
   Future<List<workshopEndrollResponses>> listWorkShopByStudent(String token) async {
       var headers = {
       'Content-Type': 'application/json',

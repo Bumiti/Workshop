@@ -5,13 +5,16 @@ import com.workshop.config.cloud.ResponseRequestOptions;
 import com.workshop.dto.CourseDTO.CourseResponses;
 import com.workshop.dto.RequestDTO.RequestDTO;
 import com.workshop.dto.mobile.CourseResponsesMobi;
+import com.workshop.dto.mobile.walletResponsesMobi;
 import com.workshop.dto.useDTO.UserEditRequest;
 import com.workshop.dto.useDTO.UserInfoResponse;
 import com.workshop.event.RenewPasswordEvent;
 import com.workshop.event.SendQrCodeEvent;
 import com.workshop.model.Request;
+import com.workshop.repositories.TransactionRepository;
 import com.workshop.service.CourseService;
 import com.workshop.service.RequestService;
+import com.workshop.service.TransactionService;
 import com.workshop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -36,6 +39,7 @@ public class StudentController {
     private final UserService userService;
     private final RequestService requestService;
     private final CourseService courseService;
+    private final TransactionService transactionService;
     @Operation(summary = "Lấy thông tin cá nhân Học Sinh")
     @GetMapping("/detail")
     public ResponseEntity<ApiResponse<?>> UserDetail() {
@@ -147,13 +151,26 @@ public class StudentController {
         }
     }
     @Operation(summary = "Danh Sách Khóa Học đã đăng kí Của Học Sinh ")
-    @GetMapping("course/list")
+    @GetMapping("user/list")
     public ResponseEntity<ApiResponse<?>> listWorkShopStudent() {
         try {
             List<CourseResponsesMobi> listCourse = courseService.listCourseStudentById();
             System.out.print(listCourse);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse<>("success", "List of Courses", listCourse));
+        } catch (RuntimeException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>("error", exception.getMessage(), null));
+        }
+    }
+    @Operation(summary = "Thông tin Ví tiền ")
+    @GetMapping("wallet")
+    public ResponseEntity<ApiResponse<?>> detailWallet() {
+        try {
+            walletResponsesMobi walletResponsesMobi = transactionService.walletResponsesMobi();
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>("success", "walletResponsesMobi", walletResponsesMobi));
         } catch (RuntimeException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse<>("error", exception.getMessage(), null));

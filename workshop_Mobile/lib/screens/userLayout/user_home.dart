@@ -67,7 +67,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           }
         },
       ),
-      // WorkshopManagerStudent(),
+       const StudentWalletPage(),
       const StudentWalletPage(),
     ];
   }

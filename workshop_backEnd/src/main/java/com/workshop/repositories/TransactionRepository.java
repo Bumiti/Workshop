@@ -1,6 +1,7 @@
 package com.workshop.repositories;
 
 import com.workshop.model.Transaction;
+import com.workshop.model.userModel.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,14 +15,11 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction,Long> {
 
     List<Transaction> findByCreatedDateBetween(Timestamp createdDate, Timestamp createdDate2);
-
+    List<Transaction> findByUser(User user);
     @Query("SELECT COUNT(t) FROM Transaction t WHERE t.status = 'COMPLETED'")
     long countSuccessfulTransactions();
     @Query("SELECT COUNT(t) FROM Transaction t WHERE t.status = 'FAILED'")
     long countFailedTransactions();
-
-    @Query("SELECT t FROM Transaction t WHERE t.status = 'COMPLETED' AND t.type = 'BUY_COURSE'")
-    List<Transaction> findCompletedBuyCourseTransactions();
 
     @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.status = 'COMPLETED' AND t.type = 'BUY_COURSE'")
     long getTotalAmountOfCompletedBuyCourseTransactions();

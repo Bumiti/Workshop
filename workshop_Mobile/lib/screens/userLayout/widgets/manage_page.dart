@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:workshop_mobi/api/api_service.dart';
 import 'package:workshop_mobi/model/student/workshop_endroll.dart';
-import 'package:workshop_mobi/screens/userLayout/widgets/my_course.dart';
+import 'package:workshop_mobi/screens/userLayout/widgets/detail_worskshop.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/my_schedule.dart';
 
 class ManagePage extends StatefulWidget {
@@ -98,7 +98,7 @@ class _ManagePageState extends State<ManagePage> {
                                 padding: EdgeInsets.symmetric(
                                   horizontal: convertWidth(0.015),
                                 ),
-                                child: WorkshopStudentManager(workshopEndroll: workshop),
+                                child: DetailWorkshop(workshopEndroll: workshop),
                               ),
                           ],
                         ),

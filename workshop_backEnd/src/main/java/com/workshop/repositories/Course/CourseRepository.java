@@ -41,7 +41,6 @@ public interface CourseRepository extends JpaRepository<Course,Long>
     @Modifying
     @Query("UPDATE Course c SET c.isPublic = CASE WHEN c.isPublic = true THEN false ELSE true END WHERE c.id = :id")
     int chanceStatusCourseById(Long id);
-
     @Query("SELECT c FROM Course c WHERE c.createdDate >= :startOfMonth AND c.createdDate <= :endOfMonth")
     List<Course> getCoursesCreatedBetween(@Param("startOfMonth") LocalDateTime startOfMonth, @Param("endOfMonth") LocalDateTime endOfMonth);
 
