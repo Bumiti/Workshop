@@ -81,7 +81,7 @@ class _CourseScreenState extends State<CourseScreen> {
                           VideoPlayer(_videoPlayerController),
                           if (!isPlaying)
                             IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.play_circle_fill,
                                 size: 50,
                                 color: Colors.white,

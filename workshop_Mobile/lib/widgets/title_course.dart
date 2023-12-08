@@ -128,7 +128,7 @@ class CoursesSection extends StatelessWidget {
                         ),
                         SizedBox(height: screenHeight * 0.01),
                         Text(
-                          "55 Videos",
+                          "${workshopList[index].courseMediaInfos.length} Videos",
                           style: TextStyle(
                             fontSize: screenHeight * 0.022,
                             fontWeight: FontWeight.w500,

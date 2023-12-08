@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:workshop_mobi/screens/course_screen.dart';
+import 'package:workshop_mobi/widgets/video_play.dart';
 
 class VideoSetion extends StatelessWidget {
-   final CourseScreen widget;
+  final CourseScreen widget;
   List videoList = [
     'Introduction to Flutter',
     'Installing Flutter on Windows',
@@ -21,44 +22,80 @@ class VideoSetion extends StatelessWidget {
       itemBuilder: (context, index) {
         return Column(
           children: [
-            ListTile(
-              tileColor: index == 0
-                  ? const Color.fromARGB(255, 60, 120, 230)
-                  : const Color.fromARGB(140, 90, 145, 230),
-              contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              leading: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: index == 0 ? const Color(0xFF674AEF) : const Color(0xFF674AEF).withOpacity(0.6),
-                  shape: BoxShape.circle,
+            GestureDetector(
+              onTap: () {
+                // Navigating to video player screen, passing the video URL
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VideoPlayerScreen(
+                      videoUrl: widget.courseResponses.courseMediaInfos[index].urlMedia,
+                    ),
+                  ),
+                );
+              },
+              child: ListTile(
+                tileColor: index == 0
+                    ? const Color.fromARGB(255, 60, 120, 230)
+                    : const Color.fromARGB(140, 90, 145, 230),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: const Icon(
-                  Icons.play_arrow_rounded,
-                  color: Colors.white,
-                  size: 30,
+                leading: Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: index == 0
+                        ? const Color(0xFF674AEF)
+                        : const Color(0xFF674AEF).withOpacity(0.6),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.play_arrow_rounded,
+                    color: Colors.white,
+                    size: 30,
+                  ),
                 ),
-              ),
-              title: Text(
-                widget.courseResponses.courseMediaInfos[index].title,
-                style: TextStyle(
-                  color: index == 0 ? Colors.white : Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              subtitle: Text(
-                "20 min 50 sec",
-                style: TextStyle(
-                  color: index == 0 ? Colors.white : Colors.black,
+                title: Text(
+                  widget.courseResponses.courseMediaInfos[index].title,
+                  style: TextStyle(
+                    color: index == 0 ? Colors.white : Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 10), // Điều chỉnh giá trị này để thêm khoảng cách giữa các ListTile
+            const SizedBox(
+                height:
+                    10), // Điều chỉnh giá trị này để thêm khoảng cách giữa các ListTile
           ],
         );
       },
+    );
+  }
+}
+
+// Tạo một màn hình phát video đơn giản
+class VideoPlayerScreen extends StatelessWidget {
+  final String videoUrl;
+
+  VideoPlayerScreen({required this.videoUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Video Player"),
+      ),
+      body:
+       Container(
+        color: Colors.black, // Đặt màu nền là màu đen
+         child: Center(
+               
+          child: VideoPlayerWidget(videoUrl: videoUrl),
+               ),
+       ),
     );
   }
 }

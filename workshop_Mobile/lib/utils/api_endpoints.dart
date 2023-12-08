@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 class ApiEndPoints {
-  static const String baseUrl = 'http://192.168.1.10:8089/';
+  static const String baseUrl = 'http://192.168.56.2:8089/';
   
   static _AuthEndPoints authEndpoints = _AuthEndPoints();
   static _TeacherEndPoints teacherEndPoints = _TeacherEndPoints();

@@ -17,6 +17,8 @@ import com.workshop.service.UserService;
 import java.io.*;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -34,6 +36,7 @@ public class SeedDatabase {
     private final CourseEnrollmentRepository courseEnrollmentRepository;
     private final DiscountRepository discountRepository;
     private final CourseDiscountRepository courseDiscountRepository;
+    private final LocationRepository locationRepository;
     private static final String SEED_STATUS_FILE_PATH = "seed_status.txt";
 
     private boolean isSeedCompleted() {
@@ -45,7 +48,8 @@ public class SeedDatabase {
             writer.write("Seed has run and completed");
             System.out.println("Seed status file created successfully");
         } catch (IOException e) {
-            System.out.println(e.getMessage());        }
+            System.out.println(e.getMessage());
+        }
     }
 
     @PostConstruct
@@ -60,17 +64,22 @@ public class SeedDatabase {
             addRandomTeachers();
             addLocation();
 //           addCourse();
+            addWorkshopGuitar();
+            addWorkshopArt();
+            addWorkshopPottery();
+            addWorkshopFlowerArrangement();
             createSeedStatusFile();
         }
 
     }
-    private void addServiceManager(){
+
+    private void addServiceManager() {
         User Manager = new User();
         User Seller = new User();
         User User = new User();
         List<Roles> rolesList = roleRepository.findAll();
         Roles rolesUser = rolesList.get(0);
-        Roles rolesSeller= rolesList.get(1);
+        Roles rolesSeller = rolesList.get(1);
         Roles rolesAdmin = rolesList.get(2);
         Set<Roles> rolesSetUser = new HashSet<>();
         Set<Roles> rolesSetSeller = new HashSet<>();
@@ -88,10 +97,11 @@ public class SeedDatabase {
         Manager.setFull_name("Nguyễn Hồng Quân").setBalance(5000.0).setUser_name("HongQuan").setEmail("lactuong64@gmail.com").setPassword(encodedAdminPassword).setPhoneNumber("0383334196").setGender("male").setRoles(rolesSetAdmin).setEnable(true);
         Seller.setFull_name("Phan Huỳnh Hồng Hân").setBalance(5000.0).setUser_name("Hồng Hân").setEmail("shopqh95@gmail.com").setPassword(encodedManagerPassword).setPhoneNumber("097865848").setGender("female").setRoles(rolesSetSeller).setEnable(true);
         User.setFull_name("Lê Thanh Hiếu").setBalance(5000.0).setUser_name("Thanh Hiếu").setEmail("workshopproject04@gmail.com").setPassword(encodedUserPassword).setPhoneNumber("9833241764").setGender("male").setRoles(rolesSetUser).setEnable(true);
-        userRepository.save( Manager);
-        userRepository.save( Seller);
-        userRepository.save( User);
+        userRepository.save(Manager);
+        userRepository.save(Seller);
+        userRepository.save(User);
     }
+
     private void addRandomTeachers() {
         String[] names = {"John", "Alice", "Bob", "Emily", "Michael", "Sarah", "David", "Olivia", "Daniel", "Sophia", "William", "Emma", "James", "Ava", "Matthew", "Chloe", "Jacob", "Mia", "Ethan", "Lily"};
         String[] genders = {"male", "female"};
@@ -146,142 +156,339 @@ public class SeedDatabase {
             }
         }
     }
+
     private void addLocation() {
-        locationService.AddLocation(new Location("Adora Plaza", "Quận 1", "Trung Tâm 1","pending",null,null));
-        locationService.AddLocation(new Location("Diamond Center", "Quận 1", "Trung Tâm 2","available", null,null));
-        locationService.AddLocation(new Location("Vin-com Center", "Quận 1", "Trung Tâm 3","pending",  null,null));
-        locationService.AddLocation(new Location("BlackPear Plaza", "Quận 2", "Trung Tâm 1","available",  null,null));
-        locationService.AddLocation(new Location("Mega Mall", "Quận 2", "Trung Tâm 2","pending",  null, null));
-        locationService.AddLocation(new Location("Riverside Shopping", "Quận 2", "Trung Tâm 3","available", null,null));
-        locationService.AddLocation(new Location("VinCom Plaza", "Quận 3", "Trung Tâm 1","available",  null,null));
-        locationService.AddLocation(new Location("Crescent Mall", "Quận 3", "Trung Tâm 2","available",  null,null));
-        locationService.AddLocation(new Location("Takayoshi", "Quận 3", "Trung Tâm 3","available",  null,null));
-        locationService.AddLocation(new Location("Now Zone", "Quận 4", "Trung Tâm 1","pending",  null,null));
-        locationService.AddLocation(new Location("Pearl Plaza", "Quận 4", "Trung Tâm 2","available",  null,null));
-        locationService.AddLocation(new Location("Saigon Paragon Mall", "Quận 4", "Trung Tâm 3","available", null,null));
-        locationService.AddLocation(new Location("Lotte Mart", "Quận 5", "Trung Tâm 1","pending",  null,null));
-        locationService.AddLocation(new Location("Pandora City", "Quận 5", "Trung Tâm 2","available", null,null));
-        locationService.AddLocation(new Location("An Dong Plaza", "Quận 5", "Trung Tâm 3","disable", null,null));
-        locationService.AddLocation(new Location("Now Mega Mall", "Quận 6", "Trung Tâm 1","disable",  null,null));
-        locationService.AddLocation(new Location("Parks CT Plaza", "Quận 6", "Trung Tâm 2","disable",  null,null));
-        locationService.AddLocation(new Location("CitiMart Shopping", "Quận 6", "Trung Tâm 3","disable",  null,null));
-        locationService.AddLocation(new Location("SC VivCity", "Quận 7", "Trung Tâm 1","available",  null, null));
-        locationService.AddLocation(new Location("Crescent Mall 2", "Quận 7", "Trung Tâm 2","available",  null, null));
-        locationService.AddLocation(new Location("Lotte Mart 2", "Quận 7", "Trung Tâm 3","available",  null, null));
-        locationService.AddLocation(new Location("AEON Mall Tan Phu Celadon", "Quận 8","pending", "Trung Tâm 1",  null,null));
-        locationService.AddLocation(new Location("The Garden Mall", "Quận 8", "Trung Tâm 2","disable",  null, null));
-        locationService.AddLocation(new Location("Dragon Mall", "Quận 8", "Trung Tâm 3","disable",  null, null));
-        locationService.AddLocation(new Location("Vin-com Mega Mall", "Quận 9", "Trung Tâm 1","available",  null, null));
-        locationService.AddLocation(new Location("Crescent Mall 3", "Quận 9", "Trung Tâm 2","available",  null, null));
-        locationService.AddLocation(new Location("Takayoshi 2", "Quận 9", "Trung Tâm 3","available",  null, null));
-        locationService.AddLocation(new Location("Now Zone 2", "Quận 10", "Trung Tâm 1","available",  null, null));
-        locationService.AddLocation(new Location("Parks Shopping", "Quận 10", "Trung Tâm 2","available",  null, null));
-        locationService.AddLocation(new Location("Central Square", "Quận 10", "Trung Tâm 3","available",  null, null));
-        locationService.AddLocation(new Location("Lotte Mart 3", "Quận 11", "Trung Tâm 1","available",  null, null));
-        locationService.AddLocation(new Location("AEON Mall 2", "Quận 11", "Trung Tâm 2","available",  null, null));
-        locationService.AddLocation(new Location("Mega Plaza", "Quận 11", "Trung Tâm 3","available",  null, null));
-        locationService.AddLocation(new Location("Vin-com Mega Mall 2", "Quận 12", "Trung Tâm 1","available", null, null));
-        locationService.AddLocation(new Location("CitiMart 2", "Quận 12", "Trung Tâm 2","available",  null, null));
-        locationService.AddLocation(new Location("Super Plaza", "Quận 12", "Trung Tâm 3","available",  null, null));
+        locationService.AddLocation(new Location("Adora Plaza", "Quận 1", "Trung Tâm 1", "pending", null, null));
+        locationService.AddLocation(new Location("Diamond Center", "Quận 1", "Trung Tâm 2", "available", null, null));
+        locationService.AddLocation(new Location("Vin-com Center", "Quận 1", "Trung Tâm 3", "pending", null, null));
+        locationService.AddLocation(new Location("BlackPear Plaza", "Quận 2", "Trung Tâm 1", "available", null, null));
+        locationService.AddLocation(new Location("Mega Mall", "Quận 2", "Trung Tâm 2", "pending", null, null));
+        locationService.AddLocation(new Location("Riverside Shopping", "Quận 2", "Trung Tâm 3", "available", null, null));
+        locationService.AddLocation(new Location("VinCom Plaza", "Quận 3", "Trung Tâm 1", "available", null, null));
+        locationService.AddLocation(new Location("Crescent Mall", "Quận 3", "Trung Tâm 2", "available", null, null));
+        locationService.AddLocation(new Location("Takayoshi", "Quận 3", "Trung Tâm 3", "available", null, null));
+        locationService.AddLocation(new Location("Now Zone", "Quận 4", "Trung Tâm 1", "pending", null, null));
+        locationService.AddLocation(new Location("Pearl Plaza", "Quận 4", "Trung Tâm 2", "available", null, null));
+        locationService.AddLocation(new Location("Saigon Paragon Mall", "Quận 4", "Trung Tâm 3", "available", null, null));
+        locationService.AddLocation(new Location("Lotte Mart", "Quận 5", "Trung Tâm 1", "pending", null, null));
+        locationService.AddLocation(new Location("Pandora City", "Quận 5", "Trung Tâm 2", "available", null, null));
+        locationService.AddLocation(new Location("An Dong Plaza", "Quận 5", "Trung Tâm 3", "disable", null, null));
+        locationService.AddLocation(new Location("Now Mega Mall", "Quận 6", "Trung Tâm 1", "disable", null, null));
+        locationService.AddLocation(new Location("Parks CT Plaza", "Quận 6", "Trung Tâm 2", "disable", null, null));
+        locationService.AddLocation(new Location("CitiMart Shopping", "Quận 6", "Trung Tâm 3", "disable", null, null));
+        locationService.AddLocation(new Location("SC VivCity", "Quận 7", "Trung Tâm 1", "available", null, null));
+        locationService.AddLocation(new Location("Crescent Mall 2", "Quận 7", "Trung Tâm 2", "available", null, null));
+        locationService.AddLocation(new Location("Lotte Mart 2", "Quận 7", "Trung Tâm 3", "available", null, null));
+        locationService.AddLocation(new Location("AEON Mall Tan Phu Celadon", "Quận 8", "pending", "Trung Tâm 1", null, null));
+        locationService.AddLocation(new Location("The Garden Mall", "Quận 8", "Trung Tâm 2", "disable", null, null));
+        locationService.AddLocation(new Location("Dragon Mall", "Quận 8", "Trung Tâm 3", "disable", null, null));
+        locationService.AddLocation(new Location("Vin-com Mega Mall", "Quận 9", "Trung Tâm 1", "available", null, null));
+        locationService.AddLocation(new Location("Crescent Mall 3", "Quận 9", "Trung Tâm 2", "available", null, null));
+        locationService.AddLocation(new Location("Takayoshi 2", "Quận 9", "Trung Tâm 3", "available", null, null));
+        locationService.AddLocation(new Location("Now Zone 2", "Quận 10", "Trung Tâm 1", "available", null, null));
+        locationService.AddLocation(new Location("Parks Shopping", "Quận 10", "Trung Tâm 2", "available", null, null));
+        locationService.AddLocation(new Location("Central Square", "Quận 10", "Trung Tâm 3", "available", null, null));
+        locationService.AddLocation(new Location("Lotte Mart 3", "Quận 11", "Trung Tâm 1", "available", null, null));
+        locationService.AddLocation(new Location("AEON Mall 2", "Quận 11", "Trung Tâm 2", "available", null, null));
+        locationService.AddLocation(new Location("Mega Plaza", "Quận 11", "Trung Tâm 3", "available", null, null));
+        locationService.AddLocation(new Location("Vin-com Mega Mall 2", "Quận 12", "Trung Tâm 1", "available", null, null));
+        locationService.AddLocation(new Location("CitiMart 2", "Quận 12", "Trung Tâm 2", "available", null, null));
+        locationService.AddLocation(new Location("Super Plaza", "Quận 12", "Trung Tâm 3", "available", null, null));
     }
-    private void addCourse() {
-        String[] courseNames = {
-                "C#", "C++", "Java", "JavaScript", "ASP.NET", "Sound Effect",
-                "Python", "Ruby", "PHP", "Swift", "Kotlin", "Go", "Rust", "Scala", "TypeScript", "SQL", "HTML/CSS", "R", "Perl", "Haskell"
-        };
-        String [] listVideo ={
-//                "https://youtu.be/R6plN3FvzFY",
-//                "https://youtu.be/zwsPND378OQ",
-//                "https://youtu.be/ZotVkQDC6mU",
-//                "https://youtu.be/LYnrFSGLCl8",
-//                "https://youtu.be/JG0pdfdKjgQ",
-//                "https://youtu.be/AzmdwZ6e_aM",
-//                "https://youtu.be/UYpIh5pIkSA",
-//                "https://youtu.be/NsSsJTg29oE",
-//                "https://youtu.be/4J6d8cr0X48",
-//                "https://youtu.be/AgZ0PX28bnA",
-//                "https://youtu.be/x9fnxVTkpP4",
-//                "https://youtu.be/pcUiTt6eBk0",
-                "https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/videos%2F03b48628-cd39-4713-b0ae-f0669031f122?alt=media&token=7c1ac6bf-7414-497e-9805-cb5142734270"
-        };
-        String[] courseDescriptions = {"DESCRIPTION FOR", "HOW CAN LEARN", "HOT COURSE", "BEGIN FOR DEVELOPER", "WHAT YOU CAN LEARN"};
-        String[] type = {"One line", "Off Line"};
-        double[] coursePrices = {100.0, 200.0, 150.0, 250.0, 180.0};
-        Timestamp[] startDates = {Timestamp.valueOf("2023-11-01 00:00:00"), Timestamp.valueOf("2023-11-15 00:00:00"), Timestamp.valueOf("2023-12-01 00:00:00"), Timestamp.valueOf("2023-12-15 00:00:00"), Timestamp.valueOf("2024-01-01 00:00:00")};
-        Timestamp[] endDates = {Timestamp.valueOf("2024-03-01 00:00:00"), Timestamp.valueOf("2024-03-15 00:00:00"), Timestamp.valueOf("2024-04-01 00:00:00"), Timestamp.valueOf("2024-04-15 00:00:00"), Timestamp.valueOf("2024-05-01 00:00:00")};
-        int min = 1;
-        int max = 100;
-        Random random = new Random();
+    private void addWorkshopFlowerArrangement() {
         List<User> teachers = userRepository.findUsersByRoleName("SELLER");
         List<User> students = userRepository.findUsersByRoleName("USER");
-        for (int i = 0; i < 20; i++) {
-            int randomNumber = (int) (Math.random() * (max - min + 5) + min);
-            String randomCourseName = courseNames[random.nextInt(courseNames.length)];
-            boolean randomBoolean = random.nextBoolean();
-            String randomCourseDescriptions = courseDescriptions[random.nextInt(courseDescriptions.length)];
-            String randomType = type[random.nextInt(type.length)];
-            double randomCoursePrice = coursePrices[random.nextInt(coursePrices.length)];
-            Timestamp courseStartDate = startDates[random.nextInt(startDates.length)];
-            Timestamp courseEndDate = endDates[random.nextInt(endDates.length)];
-            User randomTeacher = teachers.get(new Random().nextInt(teachers.size()));
-            String nameTeacher = randomTeacher.getUsername().toLowerCase();
-            Course course = new Course();
-            course.setName(randomCourseName).setStudent_count(randomNumber).setPublic(randomBoolean).setType(randomType)
-                    .setDescription(randomCourseDescriptions + " " + randomCourseName)
-                    .setPrice(randomCoursePrice + (i * randomNumber))
-                    .setStartDate(courseStartDate)
-                    .setEndDate(courseEndDate)
-                    .setTeacher(randomTeacher).setCreatedBy(nameTeacher);
-            courseRepository.save(course);
-            for (int j = 0; j < 3; j++) {
-                String randomUrlMedia = listVideo[random.nextInt(listVideo.length)];
-                String randomUrlImage = "https://example.com/image" + j;
-                String randomTitle = "Video Title " + j;
-                CourseMediaInfo courseMediaInfo = new CourseMediaInfo();
-                courseMediaInfo.setUrlMedia(randomUrlMedia).setTitle(randomTitle)
-                        .setUrlImage(randomUrlImage).setThumbnailSrc("https://drive.google.com/uc?id=1Ydevpx_dppORdtxEPW-ZGJVYyWMBy20S")
-                        .setCourse(course);
-                courseMediaInfoRepository.save(courseMediaInfo);
-                CourseLocation courseLocation = new CourseLocation();
-                courseLocation.setCourses(course).setArea("District " + i).setSchedule_Date(courseStartDate);
-                courseLocationRepository.save(courseLocation);
-                User randomStudents;
-                boolean studentFound = false;
-                while (!studentFound) {
-                    randomStudents = students.get(new Random().nextInt(students.size()));
-                    CourseEnrollment existingEnrollment = courseEnrollmentRepository.findByCoursesAndEnrolledStudent(course, randomStudents);
-                    if (existingEnrollment == null) {
-                        studentFound = true;
-                        CourseEnrollment courseEnrollment = new CourseEnrollment();
-                        courseEnrollment.setCourses(course).setEnrollmentDate(courseStartDate).setEnrolledStudent(randomStudents);
-                        courseEnrollmentRepository.save(courseEnrollment);
-                    }
-                }
-                String randomName = "Discount " + i;
-                String randomDescription = "Description " + i;
-                int randomValueDiscount = random.nextInt(10) + 5;
-                int randomRemainingUses = random.nextInt(10);
-                Discount discount = new Discount();
-                discount.setRemainingUses(randomRemainingUses)
-                        .setValueDiscount(randomValueDiscount).
-                        setName(randomName).setDescription(randomDescription);
-                discountRepository.save(discount);
-                for (int f = 0; f < randomValueDiscount; f++) {
-                    UUID randomUUID = UUID.randomUUID();
-                    String randomDiscountCode = randomUUID.toString();
-                    CourseDiscount courseDiscount = new CourseDiscount();
-                    int n = random.nextInt(30);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(new Date());
-                    calendar.add(Calendar.DAY_OF_MONTH, n);
-                    Date redemptionDate = calendar.getTime();
-                    courseDiscount
-                            .setCode(randomDiscountCode).setStatus(CourseDiscount.Status.Available)
-                            .setCourse(course).setDiscount(discount).setQuantity(randomValueDiscount).setRedemptionDate(redemptionDate);
-                    courseDiscountRepository.save(courseDiscount);
-                }
-
+        User randomTeacher = teachers.get(new Random().nextInt(teachers.size()));
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        Timestamp startDate = Timestamp.valueOf(currentDateTime);
+        LocalDateTime endDate = currentDateTime.plus(4, ChronoUnit.DAYS);
+        Timestamp endDateTimestamp = Timestamp.valueOf(endDate);
+        String[] ListTitle = {
+                "Learn the basics of floral design for beginners.",
+                "Create beautiful flower arrangements for different seasons.",
+                "Explore the art of floral design for weddings and events.",
+                "Master the ancient Japanese art of Ikebana flower arranging.",
+        };
+        Random random = new Random();
+        Course course = new Course();
+        course.setName("SeasonalArrangements")
+                .setDescription("Create beautiful flower arrangements for different seasons")
+                .setPrice(2)
+                .setPublic(true)
+                .setType("offline").setTeacher(randomTeacher)
+                .setStartDate(startDate).setEndDate(endDateTimestamp);
+        courseRepository.save(course);
+        for (int j = 0; j < 3; j++) {
+            String randomTitle = ListTitle[random.nextInt(ListTitle.length)];
+            CourseMediaInfo courseMediaInfo = new CourseMediaInfo();
+            courseMediaInfo.setUrlMedia("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fvideo%2Fworkshophoa.mp4?alt=media&token=02d0bbf6-c5b7-4007-a740-373c8001ee51")
+                    .setTitle(randomTitle)
+                    .setUrlImage("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fimage%2Fworkshop%20cam%20hoa.png?alt=media&token=4b67b688-5d7d-42d5-a05a-763ddd0d2caf")
+                    .setThumbnailSrc("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fimage%2Fworkshop%20cam%20hoa.png?alt=media&token=4b67b688-5d7d-42d5-a05a-763ddd0d2caf")
+                    .setCourse(course);
+            courseMediaInfoRepository.save(courseMediaInfo);
+        }
+        List<Location> location = locationRepository.findAll();
+        Location randomlocation = location.get(new Random().nextInt(location.size()));
+        CourseLocation courseLocation = new CourseLocation();
+        courseLocation.setCourses(course).setArea(randomlocation.getAddress()).setSchedule_Date(startDate).setLocations(randomlocation);
+        courseLocationRepository.save(courseLocation);
+        User randomStudents;
+        boolean studentFound = false;
+        while (!studentFound) {
+            randomStudents = students.get(new Random().nextInt(students.size()));
+            CourseEnrollment existingEnrollment = courseEnrollmentRepository.findByCoursesAndEnrolledStudent(course, randomStudents);
+            if (existingEnrollment == null) {
+                studentFound = true;
+                CourseEnrollment courseEnrollment = new CourseEnrollment();
+                courseEnrollment.setCourses(course).setEnrollmentDate(endDateTimestamp).setEnrolledStudent(randomStudents);
+                courseEnrollmentRepository.save(courseEnrollment);
             }
+        }
+        String randomName = "Discount WeddingFloralWorkshop ";
+        String randomDescription = "Master the ancient Japanese art of Ikebana flower arranging";
+        int randomValueDiscount = random.nextInt(10) + 5;
+        int randomRemainingUses = random.nextInt(10);
+        Discount discount = new Discount();
+        discount.setRemainingUses(randomRemainingUses)
+                .setValueDiscount(randomValueDiscount).
+                setName(randomName).setDescription(randomDescription);
+        discountRepository.save(discount);
+        for (int f = 0; f < randomValueDiscount; f++) {
+            UUID randomUUID = UUID.randomUUID();
+            String randomDiscountCode = randomUUID.toString();
+            CourseDiscount courseDiscount = new CourseDiscount();
+            int n = random.nextInt(30);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DAY_OF_MONTH, n);
+            Date redemptionDate = calendar.getTime();
+            courseDiscount
+                    .setCode(randomDiscountCode).setStatus(CourseDiscount.Status.Available)
+                    .setCourse(course).setDiscount(discount).setQuantity(randomValueDiscount).setRedemptionDate(redemptionDate);
+            courseDiscountRepository.save(courseDiscount);
+        }
+    }
+    private void addWorkshopPottery() {
+        List<User> teachers = userRepository.findUsersByRoleName("SELLER");
+        List<User> students = userRepository.findUsersByRoleName("USER");
+        User randomTeacher = teachers.get(new Random().nextInt(teachers.size()));
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        Timestamp startDate = Timestamp.valueOf(currentDateTime);
+        LocalDateTime endDate = currentDateTime.plus(4, ChronoUnit.DAYS);
+        Timestamp endDateTimestamp = Timestamp.valueOf(endDate);
+        String[] ListTitle = {
+                "Introduction to basic handbuilding techniques in ceramics.",
+                "Master the art of wheel throwing to create pottery.",
+                "Experience the unique and exciting Raku firing process.",
+                "Create sculptural pieces using advanced ceramics techniques.",
+        };
+        Random random = new Random();
+        Course course = new Course();
+        course.setName("WheelThrowingWorkshop")
+                .setDescription("Master the art of wheel throwing to create pottery")
+                .setPrice(2)
+                .setPublic(true)
+                .setType("offline").setTeacher(randomTeacher)
+                .setStartDate(startDate).setEndDate(endDateTimestamp);
+        courseRepository.save(course);
+        for (int j = 0; j < 3; j++) {
+            String randomTitle = ListTitle[random.nextInt(ListTitle.length)];
+            CourseMediaInfo courseMediaInfo = new CourseMediaInfo();
+            courseMediaInfo.setUrlMedia("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fvideo%2Fworkshop%20art.mp4?alt=media&token=11276c48-ab9c-44d4-b403-12569cbddf1a")
+                    .setTitle(randomTitle)
+                    .setUrlImage("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fimage%2Fworkshop%20lam%20gom.png?alt=media&token=aaee9a63-4bd7-4afb-900e-bfa4d2de052a")
+                    .setThumbnailSrc("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fimage%2Fworkshop%20lam%20gom.png?alt=media&token=aaee9a63-4bd7-4afb-900e-bfa4d2de052a")
+                    .setCourse(course);
+            courseMediaInfoRepository.save(courseMediaInfo);
+        }
+        List<Location> location = locationRepository.findAll();
+        Location randomlocation = location.get(new Random().nextInt(location.size()));
+        CourseLocation courseLocation = new CourseLocation();
+        courseLocation.setCourses(course).setArea(randomlocation.getAddress()).setSchedule_Date(startDate).setLocations(randomlocation);
+        courseLocationRepository.save(courseLocation);
+        User randomStudents;
+        boolean studentFound = false;
+        while (!studentFound) {
+            randomStudents = students.get(new Random().nextInt(students.size()));
+            CourseEnrollment existingEnrollment = courseEnrollmentRepository.findByCoursesAndEnrolledStudent(course, randomStudents);
+            if (existingEnrollment == null) {
+                studentFound = true;
+                CourseEnrollment courseEnrollment = new CourseEnrollment();
+                courseEnrollment.setCourses(course).setEnrollmentDate(endDateTimestamp).setEnrolledStudent(randomStudents);
+                courseEnrollmentRepository.save(courseEnrollment);
+            }
+        }
+        String randomName = "Discount Handbuilding101 ";
+        String randomDescription = "Create sculptural pieces using advanced ceramics techniques";
+        int randomValueDiscount = random.nextInt(10) + 5;
+        int randomRemainingUses = random.nextInt(10);
+        Discount discount = new Discount();
+        discount.setRemainingUses(randomRemainingUses)
+                .setValueDiscount(randomValueDiscount).
+                setName(randomName).setDescription(randomDescription);
+        discountRepository.save(discount);
+        for (int f = 0; f < randomValueDiscount; f++) {
+            UUID randomUUID = UUID.randomUUID();
+            String randomDiscountCode = randomUUID.toString();
+            CourseDiscount courseDiscount = new CourseDiscount();
+            int n = random.nextInt(30);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DAY_OF_MONTH, n);
+            Date redemptionDate = calendar.getTime();
+            courseDiscount
+                    .setCode(randomDiscountCode).setStatus(CourseDiscount.Status.Available)
+                    .setCourse(course).setDiscount(discount).setQuantity(randomValueDiscount).setRedemptionDate(redemptionDate);
+            courseDiscountRepository.save(courseDiscount);
+        }
+    }
+    private void addWorkshopArt() {
+        List<User> teachers = userRepository.findUsersByRoleName("SELLER");
+        List<User> students = userRepository.findUsersByRoleName("USER");
+        User randomTeacher = teachers.get(new Random().nextInt(teachers.size()));
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        Timestamp startDate = Timestamp.valueOf(currentDateTime);
+        LocalDateTime endDate = currentDateTime.plus(4, ChronoUnit.DAYS);
+        Timestamp endDateTimestamp = Timestamp.valueOf(endDate);
+        String[] ListTitle = {
+                "Learn the techniques of abstract painting.",
+                "Hands-on experience in creating sculptures.",
+                "Master the world of digital art and graphic design.",
+                "Discover the beauty of oil painting on canvas.",
+        };
+        Random random = new Random();
+        Course course = new Course();
+        course.setName("AbstractPainting")
+                .setDescription("Learn the techniques of abstract painting")
+                .setPrice(2)
+                .setPublic(true)
+                .setType("offline").setTeacher(randomTeacher)
+                .setStartDate(startDate).setEndDate(endDateTimestamp);
+        courseRepository.save(course);
+        for (int j = 0; j < 3; j++) {
+            String randomTitle = ListTitle[random.nextInt(ListTitle.length)];
+            CourseMediaInfo courseMediaInfo = new CourseMediaInfo();
+            courseMediaInfo.setUrlMedia("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fvideo%2Fworkshop%20art.mp4?alt=media&token=11276c48-ab9c-44d4-b403-12569cbddf1a")
+                    .setTitle(randomTitle)
+                    .setUrlImage("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fimage%2Fworkshop%20ve%20tranh.png?alt=media&token=4b4624cd-3b97-4228-8337-41f1e19b4f27")
+                    .setThumbnailSrc("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fimage%2Fworkshop%20ve%20tranh.png?alt=media&token=4b4624cd-3b97-4228-8337-41f1e19b4f27")
+                    .setCourse(course);
+            courseMediaInfoRepository.save(courseMediaInfo);
+        }
+        List<Location> location = locationRepository.findAll();
+        Location randomlocation = location.get(new Random().nextInt(location.size()));
+        CourseLocation courseLocation = new CourseLocation();
+        courseLocation.setCourses(course).setArea(randomlocation.getAddress()).setSchedule_Date(startDate).setLocations(randomlocation);
+        courseLocationRepository.save(courseLocation);
+        User randomStudents;
+        boolean studentFound = false;
+        while (!studentFound) {
+            randomStudents = students.get(new Random().nextInt(students.size()));
+            CourseEnrollment existingEnrollment = courseEnrollmentRepository.findByCoursesAndEnrolledStudent(course, randomStudents);
+            if (existingEnrollment == null) {
+                studentFound = true;
+                CourseEnrollment courseEnrollment = new CourseEnrollment();
+                courseEnrollment.setCourses(course).setEnrollmentDate(endDateTimestamp).setEnrolledStudent(randomStudents);
+                courseEnrollmentRepository.save(courseEnrollment);
+            }
+        }
+        String randomName = "Discount DigitalArtMaster ";
+        String randomDescription = "Master the world of digital art and graphic design. ";
+        int randomValueDiscount = random.nextInt(10) + 5;
+        int randomRemainingUses = random.nextInt(10);
+        Discount discount = new Discount();
+        discount.setRemainingUses(randomRemainingUses)
+                .setValueDiscount(randomValueDiscount).
+                setName(randomName).setDescription(randomDescription);
+        discountRepository.save(discount);
+        for (int f = 0; f < randomValueDiscount; f++) {
+            UUID randomUUID = UUID.randomUUID();
+            String randomDiscountCode = randomUUID.toString();
+            CourseDiscount courseDiscount = new CourseDiscount();
+            int n = random.nextInt(30);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DAY_OF_MONTH, n);
+            Date redemptionDate = calendar.getTime();
+            courseDiscount
+                    .setCode(randomDiscountCode).setStatus(CourseDiscount.Status.Available)
+                    .setCourse(course).setDiscount(discount).setQuantity(randomValueDiscount).setRedemptionDate(redemptionDate);
+            courseDiscountRepository.save(courseDiscount);
+        }
+    }
+    private void addWorkshopGuitar() {
+        List<User> teachers = userRepository.findUsersByRoleName("SELLER");
+        List<User> students = userRepository.findUsersByRoleName("USER");
+        User randomTeacher = teachers.get(new Random().nextInt(teachers.size()));
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        Timestamp startDate = Timestamp.valueOf(currentDateTime);
+        LocalDateTime endDate = currentDateTime.plus(4, ChronoUnit.DAYS);
+        Timestamp endDateTimestamp = Timestamp.valueOf(endDate);
+        String[] ListTitle = {
+                "Introduction to Guitar Playing for Beginners",
+                "Mastering Advanced Guitar Techniques and Solos.",
+                "Deep Dive into Acoustic Guitar Playing and Songwriting.",
+                "Explore the Blues: Techniques and Improvisation.",
+        };
+        Random random = new Random();
+        Course course = new Course();
+        course.setName("AcousticMastery")
+                .setDescription("Mastering Advanced Guitar Techniques and Solos")
+                .setPrice(2)
+                .setPublic(true)
+                .setType("offline").setTeacher(randomTeacher)
+                .setStartDate(startDate).setEndDate(endDateTimestamp);
+        courseRepository.save(course);
+        for (int j = 0; j < 3; j++) {
+            String randomTitle = ListTitle[random.nextInt(ListTitle.length)];
+            CourseMediaInfo courseMediaInfo = new CourseMediaInfo();
+            courseMediaInfo.setUrlMedia("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fvideo%2Fworkshop%20guitar.mp4?alt=media&token=86ce5f30-e39c-4560-8bb2-b06ccd8b93f7")
+                    .setTitle(randomTitle)
+                    .setUrlImage("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fimage%2Fworkshop%20guitar.png?alt=media&token=69c79783-7e85-4031-ad7d-f5ba9a307525")
+                    .setThumbnailSrc("https://firebasestorage.googleapis.com/v0/b/workshopprojec04.appspot.com/o/workshop%2Fimage%2Fworkshop%20guitar.png?alt=media&token=69c79783-7e85-4031-ad7d-f5ba9a307525")
+                    .setCourse(course);
+            courseMediaInfoRepository.save(courseMediaInfo);
+        }
+        List<Location> location = locationRepository.findAll();
+        Location randomlocation = location.get(new Random().nextInt(location.size()));
+        CourseLocation courseLocation = new CourseLocation();
+        courseLocation.setCourses(course).setArea(randomlocation.getAddress()).setSchedule_Date(startDate).setLocations(randomlocation);
+        courseLocationRepository.save(courseLocation);
+        User randomStudents;
+        boolean studentFound = false;
+        while (!studentFound) {
+            randomStudents = students.get(new Random().nextInt(students.size()));
+            CourseEnrollment existingEnrollment = courseEnrollmentRepository.findByCoursesAndEnrolledStudent(course, randomStudents);
+            if (existingEnrollment == null) {
+                studentFound = true;
+                CourseEnrollment courseEnrollment = new CourseEnrollment();
+                courseEnrollment.setCourses(course).setEnrollmentDate(endDateTimestamp).setEnrolledStudent(randomStudents);
+                courseEnrollmentRepository.save(courseEnrollment);
+            }
+        }
+        String randomName = "Discount Beginner ";
+        String randomDescription = "Explore the Blues: Techniques and Improvisation. ";
+        int randomValueDiscount = random.nextInt(10) + 5;
+        int randomRemainingUses = random.nextInt(10);
+        Discount discount = new Discount();
+        discount.setRemainingUses(randomRemainingUses)
+                .setValueDiscount(randomValueDiscount).
+                setName(randomName).setDescription(randomDescription);
+        discountRepository.save(discount);
+        for (int f = 0; f < randomValueDiscount; f++) {
+            UUID randomUUID = UUID.randomUUID();
+            String randomDiscountCode = randomUUID.toString();
+            CourseDiscount courseDiscount = new CourseDiscount();
+            int n = random.nextInt(30);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DAY_OF_MONTH, n);
+            Date redemptionDate = calendar.getTime();
+            courseDiscount
+                    .setCode(randomDiscountCode).setStatus(CourseDiscount.Status.Available)
+                    .setCourse(course).setDiscount(discount).setQuantity(randomValueDiscount).setRedemptionDate(redemptionDate);
+            courseDiscountRepository.save(courseDiscount);
         }
     }
 }
