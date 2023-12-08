@@ -5,9 +5,9 @@ import 'package:workshop_mobi/model/student/workshop_endroll.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/detail_worskshop.dart';
 import 'package:workshop_mobi/screens/userLayout/widgets/my_schedule.dart';
 
-class ManagePage extends StatefulWidget {
+class ManagePage extends StatefulWidget 
+{
   final String? token;
-
   ManagePage({required this.token, Key? key}) : super(key: key);
 
   @override

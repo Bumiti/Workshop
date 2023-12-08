@@ -39,6 +39,8 @@ dependencies:
   flutter_inappwebview: ^5.8.0
   video_player: ^2.6.0
   chewie: ^1.0.0
+  intl: ^0.18.1
+  timeago: ^3.6.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

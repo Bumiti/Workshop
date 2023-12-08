@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:workshop_mobi/model/student/wallet.dart';
 import 'package:workshop_mobi/model/student/workshop_endroll.dart';
 import 'package:workshop_mobi/model/userInforResponse.dart';
 import 'package:workshop_mobi/model/workshopResponses.dart';
@@ -172,7 +173,8 @@ class ApiService {
         .toList();
     return workshopList;
   }
- List<workshopEndrollResponses> parseWorkshopEndroll(String responseBody) {
+
+  List<workshopEndrollResponses> parseWorkshopEndroll(String responseBody) {
     Map<String, dynamic> jsonResponse = json.decode(responseBody);
     List<dynamic> workshopData = jsonResponse['data'];
     List<workshopEndrollResponses> workshopList = workshopData
@@ -180,39 +182,77 @@ class ApiService {
         .toList();
     return workshopList;
   }
+
   Future<List<CourseResponses>> listworkshop() async {
-  var headers = {'Content-Type': 'application/json'};
-  try {
-    var url = Uri.parse(ApiEndPoints.baseUrl + ApiEndPoints.homePageEndPoints.listWorkshop);
-    http.Response response = await http.get(url, headers: headers);
+    var headers = {'Content-Type': 'application/json'};
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.homePageEndPoints.listWorkshop);
+      http.Response response = await http.get(url, headers: headers);
 
-    if (response.statusCode == 202) {
-      List<CourseResponses> workshopList = parseWorkshopList(response.body);
-      return workshopList;
-    } else {
-      // Xử lý mã lỗi cụ thể nếu có
-      print('Error: ${response.statusCode}');
-      return []; 
+      if (response.statusCode == 202) {
+        List<CourseResponses> workshopList = parseWorkshopList(response.body);
+        return workshopList;
+      } else {
+        // Xử lý mã lỗi cụ thể nếu có
+        print('Error: ${response.statusCode}');
+        return [];
+      }
+    } catch (error) {
+      // Xử lý lỗi nếu có
+      print('Error: $error');
+      rethrow;
     }
-  } catch (error) {
-    // Xử lý lỗi nếu có
-    print('Error: $error');
-    rethrow;
   }
-}
 
-  Future<List<workshopEndrollResponses>> listWorkShopByStudent(String token) async {
-      var headers = {
+  Future<List<workshopEndrollResponses>> listWorkShopByStudent(
+      String token) async {
+    var headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
     };
-     try {
+    try {
       var url = Uri.parse(
           ApiEndPoints.baseUrl + ApiEndPoints.studentEndPoints.workshopEndroll);
       final http.Response response = await http.get(url, headers: headers);
-
-        List<workshopEndrollResponses> workshopList = parseWorkshopEndroll(response.body);
+      print(response.body);
+      List<workshopEndrollResponses> workshopList =
+          parseWorkshopEndroll(response.body);
       return workshopList;
+    } catch (error) {
+      throw error.toString();
+    }
+  }
+
+  Future<walletResponses> walletStudent(String token) async {
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      var url = Uri.parse(
+          ApiEndPoints.baseUrl + ApiEndPoints.studentEndPoints.wallet);
+      final http.Response response = await http.get(url, headers: headers);
+      // print(response.body);
+      // print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        final dynamic jsonResponse = jsonDecode(response.body);
+        // print(jsonResponse);
+
+        if (jsonResponse['status'] == 'success') {
+          final Map<String, dynamic> Data = jsonResponse['data'];
+         
+          final walletResponses wallet = walletResponses.fromJson(Data);
+          print(wallet);
+          return wallet;
+        } else {
+          throw jsonResponse['message'] ?? 'Unknown Error Occurred';
+        }
+      } else {
+        final dynamic errorResponse = jsonDecode(response.body);
+        throw errorResponse?['Message'] ?? 'Unknown Error Occurred';
+      }
     } catch (error) {
       throw error.toString(); // Convert the error to a string
     }

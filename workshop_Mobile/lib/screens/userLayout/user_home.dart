@@ -67,8 +67,19 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           }
         },
       ),
-       const StudentWalletPage(),
-      const StudentWalletPage(),
+       const StudentWalletPage(token: '',),
+       FutureBuilder<String>(
+        future: getToken(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else {
+            return StudentWalletPage(
+              token: snapshot.data ?? '',
+            );
+          }
+        },
+      ),
     ];
   }
 }
